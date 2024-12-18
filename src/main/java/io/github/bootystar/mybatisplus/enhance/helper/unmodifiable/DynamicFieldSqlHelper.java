@@ -48,7 +48,7 @@ public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
                         break;
                     }
                 }
-                log.warn("condition field [{}] not exist in fieldMap , it will be removed and put into paramMap", field);
+                log.info("condition field [{}] not exist in fieldMap , it will be removed and put into paramMap", field);
                 this.map.putIfAbsent(field, conditionO.getValue());
                 continue;
             }

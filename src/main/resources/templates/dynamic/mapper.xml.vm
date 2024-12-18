@@ -11,7 +11,7 @@
         <if test="param1 != null">
             <foreach collection="param1" item="gen">
                 <if test="gen.conditions != null and gen.conditions.size() > 0">
-                    <trim prefix="AND ( " suffix=" )" prefixOverrides="AND|OR" suffixOverrides="AND|OR">
+                    <trim prefix="AND ( " suffix=" )" prefixOverrides="AND|OR">
                         <foreach collection="gen.conditions" item="item">
                             <choose>
                                 <when test="item.isOr()">
@@ -104,22 +104,27 @@
         FROM
 ##         ${schemaName} ${table.name} a
         ${table.name} a
-        <trim prefix="WHERE" prefixOverrides="AND|OR" suffixOverrides="AND|OR">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <include refid="selectFragment"/>
             #foreach($field in ${table.fields})
                 #if(${field.logicDeleteField})
                     #if(${field.metaInfo.defaultValue})
-            a.${field.columnName} = ${field.metaInfo.defaultValue}
+            AND a.${field.columnName} = ${field.metaInfo.defaultValue}
                     #else
-            a.${field.columnName} IS NULL
+            AND a.${field.columnName} IS NULL
                     #end
                     #break
                 #end
             #end
-            <include refid="selectFragment"/>
+##            <!--额外参数-->
+##            <if test="param1.map != null and param1.map.size() > 0">
+##            </if>
         </trim>
         <trim prefix="ORDER BY" suffixOverrides=",">
             <include refid="sortFragment"/>
+            #if(${orderBySql})
             $!{orderBySql}
+            #end
         </trim>
     </select>
 

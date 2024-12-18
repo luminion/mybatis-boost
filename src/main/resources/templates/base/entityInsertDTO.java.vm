@@ -10,14 +10,14 @@ import com.alibaba.excel.annotation.ExcelProperty;
 #if(${validated})
 ## ---字段非空验证---
     #foreach($field in ${table.fields})
-        #if(${field.metaInfo.nullable}==false && !${field.keyFlag} &&${field.propertyType}!="String")
+        #if(!${field.metaInfo.nullable} && !${field.metaInfo.defaultValue} && !${field.keyFlag} &&${field.propertyType}!="String")
 import ${javaApiPackage}.validation.constraints.NotNull;
             #break
         #end
     #end
 ## ---字符串非空验证---
     #foreach($field in ${table.fields})
-        #if(${field.metaInfo.nullable}==false && !${field.keyFlag} &&${field.propertyType}=="String")
+        #if(!${field.metaInfo.nullable} && !${field.metaInfo.defaultValue} && !${field.keyFlag} &&${field.propertyType}=="String")
 import ${javaApiPackage}.validation.constraints.NotBlank;
             #break
         #end
@@ -77,6 +77,7 @@ public class ${entity}InsertDTO {
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
 #if(${field.keyFlag})
+#elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
 #elseif(${field.versionField})
 #elseif(${field.logicDeleteField})
 #elseif($editExcludeColumns.contains(${field.columnName}))
@@ -94,7 +95,7 @@ public class ${entity}InsertDTO {
         #end
     #end
     #if(${validated})## 参数校验
-        #if(!${field.metaInfo.nullable})## 非空
+        #if(!${field.metaInfo.nullable} && !${field.metaInfo.defaultValue})## 非空
             #if(${field.propertyType} == "String")
     @NotBlank(message = "${field.comment}为必填项")
                 #else
@@ -115,6 +116,7 @@ public class ${entity}InsertDTO {
 #if(!${entityLombokModel})
   #foreach($field in ${table.fields})
   #if(${field.keyFlag})
+  #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
   #elseif(${field.versionField})
   #elseif(${field.logicDeleteField})
   #elseif($editExcludeColumns.contains(${field.columnName}))
@@ -151,6 +153,7 @@ public class ${entity}InsertDTO {
         return "${entity}{" +
   #foreach($field in ${table.fields})
     #if(${field.keyFlag})
+    #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
     #elseif(${field.versionField})
     #elseif(${field.logicDeleteField})
     #elseif($editExcludeColumns.contains(${field.columnName}))

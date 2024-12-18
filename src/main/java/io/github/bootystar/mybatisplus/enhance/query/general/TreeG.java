@@ -4,7 +4,7 @@ import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.LinkedHashSet;
 
 /**
  * 条件树
@@ -16,7 +16,7 @@ import java.util.*;
 public class TreeG implements ISqlTree {
 
     /**
-     * 条件
+     * 查询条件列表
      */
     protected LinkedHashSet<ConditionG> conditions;
 

@@ -8,6 +8,7 @@ import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.DynamicFieldSqlHelper;
+import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.UnmodifiableSqlHelper;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author bootystar
  */
-public abstract class DynamicFieldServiceImpl<M extends DynamicMapper<T, V, DynamicFieldSqlHelper<T>>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
+public abstract class DynamicFieldServiceImpl<M extends DynamicMapper<T, V, UnmodifiableSqlHelper<T>>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
 
     protected FieldSuffixBuilder suffixBuilder;
 

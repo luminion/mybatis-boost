@@ -14,7 +14,7 @@ public interface ISqlCondition {
     boolean isOr();
 
     /**
-     * 字段/属性名
+     * 属性名
      *
      * @return {@link String }
      */

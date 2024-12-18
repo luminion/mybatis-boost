@@ -7,6 +7,7 @@ import io.github.bootystar.mybatisplus.enhance.core.DynamicMapper;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.DynamicSqlSqlHelper;
+import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.UnmodifiableSqlHelper;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author bootystar
  */
-public abstract class DynamicSqlServiceImpl<M extends DynamicMapper<T, V, DynamicSqlSqlHelper<T>>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
+public abstract class DynamicSqlServiceImpl<M extends DynamicMapper<T, V, UnmodifiableSqlHelper<T>>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
 
     @Override
     @SuppressWarnings("unchecked")

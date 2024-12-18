@@ -45,7 +45,7 @@ public interface DynamicService<T, V> extends IService<T> {
     }
 
     @SuppressWarnings("unchecked")
-    default <R> R toId(Object source) {
+    default <R> R toId(T source) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
         if (tableInfo == null) return null;
         String keyProperty = tableInfo.getKeyProperty();

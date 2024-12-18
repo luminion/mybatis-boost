@@ -18,7 +18,7 @@ public class FieldSuffixBuilder {
             throw new IllegalArgumentException("suffix can't be null");
         }
         if (!suffix.matches(SUFFIX_PATTERN)) {
-            throw new IllegalArgumentException("illegal suffix [" + suffix + "] , field names cannot contain special characters");
+            throw new IllegalArgumentException("illegal suffix [" + suffix + "] , field name cannot contain special characters");
 //                throw new IllegalArgumentException("illegal suffix [" + suffix + "] , it does not match the regular expression:" + SUFFIX_PATTERN);
         }
     }

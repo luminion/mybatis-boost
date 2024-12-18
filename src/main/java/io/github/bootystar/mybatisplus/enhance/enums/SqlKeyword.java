@@ -75,7 +75,7 @@ public enum SqlKeyword {
         if (CONDITION_CONNECTORS.contains(connector)) {
             return connector;
         }
-        throw new IllegalArgumentException("illegal argument ,  connector can't be : " + connector);
+        throw new IllegalArgumentException("illegal operator: " + connector);
     }
 
     public static String replaceOperator(String operator) {
@@ -89,7 +89,7 @@ public enum SqlKeyword {
             }
             return operator;
         }
-        throw new IllegalArgumentException("illegal argument ,  operator can't be : " + operator);
+        throw new IllegalArgumentException("illegal operator: " + operator);
     }
 
     public static boolean isNoneArgOperator(String operator) {

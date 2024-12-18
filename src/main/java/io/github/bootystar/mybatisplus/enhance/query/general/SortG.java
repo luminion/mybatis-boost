@@ -16,12 +16,12 @@ import lombok.NoArgsConstructor;
 public class SortG implements ISqlSort {
 
     /**
-     * 字段/属性名
+     * 属性名
      */
     protected String field;
 
     /**
-     * 是否为倒序
+     * 是否倒序(默认否, 为否时无需填写)
      */
     protected boolean desc;
 

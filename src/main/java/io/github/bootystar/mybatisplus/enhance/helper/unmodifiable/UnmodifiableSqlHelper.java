@@ -73,7 +73,7 @@ public abstract class UnmodifiableSqlHelper<T> extends TreeU {
                 String s = Optional.ofNullable(sqlTree.getConditions()).orElse(Collections.emptyList()).stream()
                         .map(e -> String.format("isOr:[%s] , field:[%s] , operator:[%s] ,value:[%s]", e.isOr(), e.getField(), e.getOperator(), e.getValue()))
                         .reduce((e1, e2) -> e1 + "\n" + e2).orElse("null");
-                throw new ParamMappingException("mapped condition is empty, but sub-condition is not empty !!!\ncurrent condition source:\n %s",  s);
+                throw new ParamMappingException("mapped condition is empty, but sub-condition is not empty !!!\ncurrent condition source:\n%s",  s);
             }
             return null;
         }

@@ -17,17 +17,20 @@ import lombok.NoArgsConstructor;
 public class ConditionG implements ISqlCondition {
 
     /**
-     * 和上一个条件的关系是否为or
+     * 和上一个条件的关系是否为or(默认否, 为否时无需填写)
      */
     protected boolean or;
 
     /**
-     * 字段/属性名
+     * 属性名
      */
     protected String field;
 
     /**
-     * 运算符(=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN),默认=
+     * 运算符(默认=,为=时无需填写)
+     * <p>
+     * (=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
+     * <p/>
      */
     protected String operator = SqlKeyword.EQ.keyword;
 

@@ -19,7 +19,7 @@ public interface ISqlTree extends Iterable<ISqlTree> {
     @Override
     @SuppressWarnings("all")
     default Iterator<ISqlTree> iterator() {
-        return new ISqlTree.Itr(this);
+        return new Itr(this);
     }
 
     class Itr implements Iterator<ISqlTree> {

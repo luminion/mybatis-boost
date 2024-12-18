@@ -7,7 +7,7 @@ package io.github.bootystar.mybatisplus.enhance.query;
 public interface ISqlSort {
 
     /**
-     * 字段/属性名
+     * 属性名
      *
      * @return {@link String }
      */

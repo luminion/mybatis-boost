@@ -76,6 +76,7 @@ public class ${entity}UpdateDTO {
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
 #if(($editExcludeColumns.contains(${field.columnName})))
+#elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE"))
 #elseif(${field.logicDeleteField})
 #else
 
@@ -114,6 +115,7 @@ public class ${entity}UpdateDTO {
 #if(!${entityLombokModel})
 #foreach($field in ${table.fields})
 #if($editExcludeColumns.contains(${field.columnName}))
+#elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE"))
 #elseif(${field.logicDeleteField})
 #else
   #if(${field.propertyType.equals("boolean")})
@@ -149,6 +151,7 @@ public class ${entity}UpdateDTO {
         return "${entity}{" +
   #foreach($field in ${table.fields})
   #if($editExcludeColumns.contains(${field.columnName}))
+  #elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE"))
   #elseif(${field.logicDeleteField})
   #else
     #if($!{foreach.index}==0)
