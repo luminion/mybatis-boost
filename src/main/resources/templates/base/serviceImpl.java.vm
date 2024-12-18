@@ -1,0 +1,193 @@
+package ${package.ServiceImpl};
+
+## ------参数设置----start
+#set($entityInsertDTO = "${entity}InsertDTO")
+#set($entityUpdateDTO = "${entity}UpdateDTO")
+#set($entityVO = "${entity}VO")
+#if(${selectDTO.classFullName})
+##import ${selectDTO.classFullName};
+    #set($entitySelectDTO = ${selectDTO.clazz("${entity}")})
+#else
+##import ${basePackage}.${package4DTO}.${entity}SelectDTO;
+    #set($entitySelectDTO = "${entity}SelectDTO")
+#end
+## ------参数设置----end
+#if(${generateImport}||${generateExport})
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+#end
+#if(${generateSelect}||${generateExport})
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+#if(${generateInsert}||${generateSelect})
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+#end
+import ${superServiceImplClassPackage};
+import ${package.Service}.${table.serviceName};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Entity}.${entity};
+#if(${generateSelect}||${generateExport})
+import ${basePackage}.${package4VO}.${entityVO};
+#end
+import org.springframework.stereotype.Service;
+#if(${generateInsert}||${generateUpdate}||${generateImport})
+import org.springframework.beans.BeanUtils;
+#end
+
+#if(${generateSelect}||${generateDelete})
+import java.io.Serializable;
+#end
+#if(${generateImport})
+import java.io.InputStream;
+#end
+#if(${generateImport}||${generateExport})
+import java.io.OutputStream;
+#end
+#if(${generateImport})
+import java.util.stream.Collectors;
+#end
+import java.util.*;
+#if(${generateSelect}||${generateExport})
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+#end
+
+/**
+ * $!{table.comment} 服务实现类
+ *
+ * @author ${author}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>() implements ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+    #if(${generateInsert})
+
+    @Override
+    public <S, R> R insertByDTO(S s) {
+//        ${entityInsertDTO} dto = (${entityInsertDTO}) s;
+        ${entity} entity = new ${entity}();
+        BeanUtils.copyProperties(s, entity);
+        save(entity);
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
+        if (tableInfo == null) return null;
+        String keyProperty = tableInfo.getKeyProperty();
+        if (keyProperty == null) return null;
+        Object propertyValue = tableInfo.getPropertyValue(entity, keyProperty);
+        if (propertyValue == null) return null;
+        return (R) propertyValue;
+    }
+    #end
+    #if(${generateUpdate})
+
+    @Override
+    public <S> boolean updateByDTO(S s) {
+        // ${entityUpdateDTO} dto = (${entityUpdateDTO}) s;
+        ${entity} entity = new ${entity}();
+        BeanUtils.copyProperties(s, entity);
+        return super.updateById(entity);
+    }
+    #end
+    #if(${generateDelete})
+
+    @Override
+    public boolean removeById(Serializable id) {
+        return super.removeById(id);
+    }
+    #end
+    #if(${generateSelect}||${generateExport})
+
+    public <S> List<${entityVO}> doSelect(S s, IPage<${entityVO}> page) {
+//        ${entitySelectDTO} dto = (${entitySelectDTO}) s;
+        Map<Object, Object> map = null;
+        if (s == null || s instanceof Map) {
+            map = s == null ? new HashMap<>() : (Map<Object, Object>) s;
+        } else {
+            map = new HashMap<>();
+            List<Field> fields = new ArrayList<>();
+            Class<?> currentClass = s.getClass();
+            while (currentClass != null && currentClass != Object.class && !currentClass.isInterface()) {
+                Arrays.stream(currentClass.getDeclaredFields()).filter(f -> !Modifier.isStatic(f.getModifiers()))
+                        .filter(f -> !Modifier.isFinal(f.getModifiers())).filter(f -> !Modifier.isNative(f.getModifiers()))
+                        .peek(f -> f.setAccessible(true)).forEach(fields::add);
+                currentClass = currentClass.getSuperclass();
+            }
+            try {
+                for (Field field : fields) {
+                    Object key = field.getName();
+                    Object value = field.get(s);
+                    if (value != null) map.put(key, value);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return getBaseMapper().listByDTO(map, page);
+    }
+
+    @Override
+    public ${entityVO} oneById(Serializable id) {
+        if (id == null) throw new IllegalArgumentException("id can't be null");
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
+        if (tableInfo == null) throw new IllegalArgumentException("there is no id field in entity");
+        String keyProperty = tableInfo.getKeyProperty();
+        if (keyProperty == null) throw new IllegalArgumentException("there is no id field in entity");
+        HashMap<String, Object> s = new HashMap<>();
+        s.put(keyProperty, id);
+        List<${entityVO}> vs = listByDTO(s);
+        if (vs == null || vs.isEmpty()) return null;
+        if(vs.size() > 1) throw new RuntimeException("error query => required 1 but found " + vs.size());
+        return vs.get(0);
+    }
+
+    @Override
+    public <S> List<${entityVO}> listByDTO(S s) {
+        return doSelect(s, null);
+    }
+
+    @Override
+    public <S> IPage<${entityVO}> pageByDTO(S s, Long current, Long size) {
+        if (current == null || current < 1) current = 1L;
+        if (size == null) size = 10L;
+        Page<${entityVO}> page = new Page<>(current, size);
+        List<${entityVO}> voList = doSelect(s, page);
+        page.setRecords(voList);
+        return page;
+    }
+    #end
+    #if(${generateImport})
+
+    @Override
+    public <U> void excelTemplate(OutputStream os, Class<U> clazz) {
+        EasyExcel.write(os, clazz).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).sheet().doWrite(Collections.emptyList());
+    }
+
+    @Override
+    public <U> int excelImport(InputStream is, Class<U> clazz) {
+//        ${entityInsertDTO} dto = (${entityInsertDTO}) s;
+        List<U> cachedDataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
+        List<${entity}> entityList = cachedDataList.stream().map(e->{
+                ${entity} entity = new ${entity}();
+                BeanUtils.copyProperties(e, entity);
+                return entity;
+            }).collect(Collectors.toList());
+        super.saveBatch(entityList);
+        return entityList.size();
+    }
+    #end
+    #if(${generateExport})
+
+    @Override
+    public <S, U> void excelExport(S s, OutputStream os, Class<U> clazz, Long current, Long size, String... includeFields) {
+        List<${entityVO}> voList = pageByDTO(s, current, size).getRecords();
+        EasyExcel.write(os, clazz).includeColumnFieldNames(Arrays.asList(includeFields)).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).sheet().doWrite(voList);
+    }
+    #end
+
+}
+#end

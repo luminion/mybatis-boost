@@ -1,0 +1,31 @@
+package ${package.Mapper};
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ${superMapperClassPackage};
+##import org.apache.ibatis.annotations.Param;
+#if(${mapperAnnotationClass})
+import ${mapperAnnotationClass.name};
+#end
+import ${basePackage}.${package4VO}.${entity}VO;
+import ${package.Entity}.${entity};
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * $!{table.comment} Mapper 接口
+ *
+ * @author ${author}
+ */
+#if(${mapperAnnotationClass})
+@${mapperAnnotationClass.simpleName}
+#end
+#if(${kotlin})
+interface ${table.mapperName} : ${superMapperClass}<${entity}>
+#else
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+
+    List<${entity}VO> listByDTO(Map<?, ?> s, IPage<${entity}VO> page);
+
+}
+#end
