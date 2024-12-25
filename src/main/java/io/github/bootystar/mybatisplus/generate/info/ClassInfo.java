@@ -12,12 +12,14 @@ import java.util.Collections;
 @Getter
 @NoArgsConstructor
 public class ClassInfo {
+    protected Class<?> clazz;
     protected String classPackage;
     protected String classSimpleName;
     protected String classFullName;
     protected int classGenericTypeCount;
 
     public ClassInfo(Class<?> clazz) {
+        this.clazz = clazz;
         this.classPackage = clazz.getPackage().getName();
         this.classSimpleName = clazz.getSimpleName();
         this.classFullName = clazz.getName();

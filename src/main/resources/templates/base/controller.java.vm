@@ -31,6 +31,9 @@ import ${package.Entity}.${entity};
 import ${basePackage}.${package4DTO}.${entity}SelectDTO;
         #end
 #end
+#if(${isMapSelectDTO} && (!${postQuery} || !${requestBody}))
+#set($entitySelectDTO = "@RequestParam ${entitySelectDTO}")
+#end
 #set($requestMethod4Select = "#if(${postQuery})@PostMapping#else@GetMapping#end")
 ##set($pagePathParams = "@PathVariable(value = ""current"", required = false) Long current, @PathVariable(value = ""size"", required = false) Long size")
 #set($pagePathParams = "@PathVariable(""current"") Long current, @PathVariable(""size"") Long size")

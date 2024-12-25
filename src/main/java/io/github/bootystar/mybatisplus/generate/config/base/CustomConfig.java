@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
+import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
@@ -180,7 +181,10 @@ public abstract class CustomConfig {
         } else {
             data.remove("swaggerUUID");
         }
+        if (selectDTO!=null && selectDTO.getClazz() != null) {
 
+        }
+        data.put("isMapSelectDTO", selectDTO!=null && selectDTO.getClazz() != null && Map.class.isAssignableFrom(selectDTO.getClazz()));
         return data;
     }
 
