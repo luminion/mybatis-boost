@@ -140,7 +140,7 @@ GeneratorHelper
                 .disableRestful() // 禁用restful
                 .disableRequestBody() // 禁用请求体
                 .disableValidated() // 禁用参数校验
-                .disablePostQuery() // 复杂查询不使用post请求
+                .disablePostQuery() // 复杂查询不使用post请求(使用get请求, 并关闭@RequestBody)
                 // mapper额外生成项
                 .sortColumnClear() // 清空排序
                 .sortColumn("create_time",true) // 添加排序(字段,是否倒序)

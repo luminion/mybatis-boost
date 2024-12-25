@@ -264,7 +264,7 @@ public class ${table.controllerName} {
     @ResponseBody
     #end
     ${requestMethod4Select}("/list")
-    public ${returnMethod.clazz("List<${entityVO}>")} selectList($!{optionalBodyStr}${entitySelectDTO} s) {
+    public ${returnMethod.clazz("List<${entityVO}>")} selectList(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s) {
         return ${returnMethod.method("baseService.listByDTO(s)")};
     }
 
@@ -287,7 +287,7 @@ public class ${table.controllerName} {
     @ResponseBody
     #end
     ${requestMethod4Select}("/page/{current}/{size}")
-    public ${returnMethod.clazz(${pageClazz4return})} selectPage($!{optionalBodyStr}${entitySelectDTO} s, $!{pagePathParams}) {
+    public ${returnMethod.clazz(${pageClazz4return})} selectPage(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s, $!{pagePathParams}) {
         return ${returnMethod.method(${pageMethod.method("baseService.pageByDTO(s, current, size)")})};
     }
 #end
@@ -349,7 +349,7 @@ public class ${table.controllerName} {
      */
     #end
     ${requestMethod4Select}("/excelExport/{current}/{size}")
-    public void excelExport($!{optionalBodyStr}${entitySelectDTO} s, ${pagePathParams}, HttpServletResponse response) throws IOException {
+    public void excelExport(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s, ${pagePathParams}, HttpServletResponse response) throws IOException {
         response.setHeader("Content-disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         response.setContentType("application/vnd.ms-excel");
         baseService.excelExport(s, response.getOutputStream(), ${entityVO}.class, current, size);
