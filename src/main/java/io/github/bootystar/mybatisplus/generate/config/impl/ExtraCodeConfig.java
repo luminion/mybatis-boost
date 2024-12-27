@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 /**
  * 默认配置类
- *
+ * todo 修改Like查询的setter
  * @author bootystar
  */
 public class ExtraCodeConfig extends CustomConfig {
