@@ -5,7 +5,8 @@ import com.baomidou.mybatisplus.generator.config.builder.Controller;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.builder.Service;
-import io.github.bootystar.mybatisplus.generate.config.base.CustomConfig;
+import io.github.bootystar.mybatisplus.generate.config.builder.BaseBuilder;
+import io.github.bootystar.mybatisplus.generate.config.core.CustomConfig;
 
 import java.util.function.Consumer;
 
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
  * mybatis-plus增强生成器
  * @author bootystar
  */
-public interface EnhanceGenerator<B extends CustomConfig.Builder<?, B>> {
+public interface EnhanceGenerator<B extends BaseBuilder<B>> {
 
     void execute(String... tableNames);
 

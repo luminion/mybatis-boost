@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.*;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import io.github.bootystar.mybatisplus.generate.config.base.CustomConfig;
+import io.github.bootystar.mybatisplus.generate.config.builder.BaseBuilder;
 import io.github.bootystar.mybatisplus.generate.engine.EnhanceVelocityTemplateEngine;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 @Getter
 @Slf4j
 @SuppressWarnings("unused")
-public abstract class AbstractGenerator<C extends CustomConfig, B extends CustomConfig.Builder<C, B>> implements EnhanceGenerator<B> {
+public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements EnhanceGenerator<B> {
     protected DataSourceConfig.Builder dataSourceConfigBuilder;
     protected GlobalConfig.Builder globalConfigBuilder = new GlobalConfig.Builder();
     protected PackageConfig.Builder packageConfigBuilder = new PackageConfig.Builder();
@@ -220,7 +220,7 @@ public abstract class AbstractGenerator<C extends CustomConfig, B extends Custom
 //                .mapperAnnotation(org.apache.ibatis.annotations.Mapper.class)
         ;
         strategyConfigBuilder.serviceBuilder()
-//                .formatServiceFileName("%sService")
+                .formatServiceFileName("%sService")
         ;
         strategyConfigBuilder.controllerBuilder()
                 .enableRestStyle()

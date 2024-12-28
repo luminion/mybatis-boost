@@ -3,7 +3,7 @@ package io.github.bootystar.mybatisplus.generate.generator.impl;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicMapper;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhance.core.impl.DynamicSqlServiceImpl;
-import io.github.bootystar.mybatisplus.generate.config.impl.DynamicSqlConfig;
+import io.github.bootystar.mybatisplus.generate.config.builder.DynamicSqlBuilder;
 import io.github.bootystar.mybatisplus.generate.generator.core.AbstractGenerator;
 
 /**
@@ -11,10 +11,10 @@ import io.github.bootystar.mybatisplus.generate.generator.core.AbstractGenerator
  *
  * @author bootystar
  */
-public class DynamicSqlGenerator extends AbstractGenerator<DynamicSqlConfig, DynamicSqlConfig.Builder> {
+public class DynamicSqlGenerator extends AbstractGenerator<DynamicSqlBuilder> {
 
     public DynamicSqlGenerator(String url, String username, String password) {
-        super(url, username, password, new DynamicSqlConfig.Builder());
+        super(url, username, password, new DynamicSqlBuilder());
         this.strategyConfigBuilder.serviceBuilder()
                 .serviceTemplate("/templates/dynamic/service.java" )
                 .serviceImplTemplate("/templates/dynamic/serviceImpl.java" )

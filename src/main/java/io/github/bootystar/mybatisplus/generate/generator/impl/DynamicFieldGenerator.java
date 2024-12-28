@@ -4,7 +4,7 @@ package io.github.bootystar.mybatisplus.generate.generator.impl;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicMapper;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhance.core.impl.DynamicFieldServiceImpl;
-import io.github.bootystar.mybatisplus.generate.config.impl.DynamicFieldConfig;
+import io.github.bootystar.mybatisplus.generate.config.builder.DynamicFieldBuilder;
 import io.github.bootystar.mybatisplus.generate.generator.core.AbstractGenerator;
 
 /**
@@ -13,10 +13,10 @@ import io.github.bootystar.mybatisplus.generate.generator.core.AbstractGenerator
  *
  * @author booty
  */
-public class DynamicFieldGenerator extends AbstractGenerator<DynamicFieldConfig, DynamicFieldConfig.Builder> {
+public class DynamicFieldGenerator extends AbstractGenerator<DynamicFieldBuilder> {
 
     public DynamicFieldGenerator(String url, String username, String password) {
-        super(url, username, password, new DynamicFieldConfig.Builder());
+        super(url, username, password, new DynamicFieldBuilder());
         this.strategyConfigBuilder.serviceBuilder()
                 .serviceTemplate("/templates/dynamic/service.java" )
                 .serviceImplTemplate("/templates/dynamic/serviceImpl.java")
