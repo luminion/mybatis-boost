@@ -26,9 +26,4 @@ public class TreeG implements ISqlTree {
      */
     protected TreeG child;
 
-    /**
-     * 排序条件列表
-     */
-    protected LinkedHashSet<SortG> sorts;
-
 }

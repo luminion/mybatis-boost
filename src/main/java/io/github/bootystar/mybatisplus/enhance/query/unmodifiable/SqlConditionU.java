@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
-public class ConditionU implements ISqlCondition {
+public class SqlConditionU implements ISqlCondition {
 
     /**
      * 和上一个条件的关系是否为or
@@ -36,7 +36,7 @@ public class ConditionU implements ISqlCondition {
      */
     protected Object value;
 
-    public ConditionU(boolean or, String field, String operator, Object value) {
+    public SqlConditionU(boolean or, String field, String operator, Object value) {
         this.or = or;
         this.field = field;
         this.operator = SqlKeyword.replaceOperator(operator);

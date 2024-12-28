@@ -2,13 +2,11 @@ package io.github.bootystar.mybatisplus.enhance.helper.unmodifiable;
 
 import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
-import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.ConditionU;
+import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlConditionU;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 
 /**
  * @author bootystar
@@ -22,11 +20,11 @@ public class DynamicSqlSqlHelper<T> extends UnmodifiableSqlHelper<T> {
     }
 
     @Override
-    protected Collection<ConditionU> wrapConditions(Collection<? extends ISqlCondition> conditions) {
+    protected Collection<SqlConditionU> wrapConditions(Collection<? extends ISqlCondition> conditions) {
         if (conditions == null || conditions.isEmpty()) {
             return null;
         }
-        ArrayList<ConditionU> result = new ArrayList<>(conditions.size());
+        ArrayList<SqlConditionU> result = new ArrayList<>(conditions.size());
         for (ISqlCondition conditionO : conditions) {
             wrap2JdbcColumnCondition(conditionO).ifPresent(result::add);
         }

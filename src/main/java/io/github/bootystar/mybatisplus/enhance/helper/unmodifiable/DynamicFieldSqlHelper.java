@@ -4,7 +4,7 @@ import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
-import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.ConditionU;
+import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlConditionU;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -30,11 +30,11 @@ public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
 
 
     @Override
-    protected Collection<ConditionU> wrapConditions(Collection<? extends ISqlCondition> conditions) {
+    protected Collection<SqlConditionU> wrapConditions(Collection<? extends ISqlCondition> conditions) {
         if (conditions == null || conditions.isEmpty()) {
             return null;
         }
-        ArrayList<ConditionU> result = new ArrayList<>();
+        ArrayList<SqlConditionU> result = new ArrayList<>();
         Set<String> suffixes = suffix2OperatorMap.keySet();
         for (ISqlCondition conditionO : conditions) {
             String field = conditionO.getField();

@@ -12,8 +12,6 @@ public interface ISqlTree extends Iterable<ISqlTree> {
 
     Collection<? extends ISqlCondition> getConditions();
 
-    Collection<? extends ISqlSort> getSorts();
-
     ISqlTree getChild();
 
     @Override

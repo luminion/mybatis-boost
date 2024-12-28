@@ -2,6 +2,7 @@ package io.github.bootystar.mybatisplus.enhance.helper;
 
 import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
+import io.github.bootystar.mybatisplus.enhance.query.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
 import io.github.bootystar.mybatisplus.enhance.query.general.ConditionG;
@@ -85,9 +86,11 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
             helper.getConditions().addAll(conditions1.stream().map(ConditionG::of).collect(Collectors.toList()));
         }
         if (copySorts) {
-            Collection<? extends ISqlSort> treeSorts = tree.getSorts();
-            if (treeSorts != null && !treeSorts.isEmpty()) {
-                helper.getSorts().addAll(treeSorts.stream().map(SortG::of).collect(Collectors.toList()));
+            if (tree instanceof ISqlEntity) {
+                Collection<? extends ISqlSort> treeSorts = ((ISqlEntity) tree).getSorts();
+                if (treeSorts != null && !treeSorts.isEmpty()) {
+                    helper.getSorts().addAll(treeSorts.stream().map(SortG::of).collect(Collectors.toList()));
+                }
             }
         }
         ISqlTree child = tree.getChild();

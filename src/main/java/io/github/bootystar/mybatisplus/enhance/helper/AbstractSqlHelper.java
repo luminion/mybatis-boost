@@ -7,6 +7,7 @@ import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
 import io.github.bootystar.mybatisplus.enhance.query.general.ConditionG;
+import io.github.bootystar.mybatisplus.enhance.query.general.EntityG;
 import io.github.bootystar.mybatisplus.enhance.query.general.SortG;
 import io.github.bootystar.mybatisplus.enhance.query.general.TreeG;
 import org.apache.ibatis.reflection.property.PropertyNamer;
@@ -20,7 +21,7 @@ import java.util.LinkedHashSet;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Child>> extends TreeG {
+public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Child>> extends EntityG {
     protected boolean orNext;
 
     {

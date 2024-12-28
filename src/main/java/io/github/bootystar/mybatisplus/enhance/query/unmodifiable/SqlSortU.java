@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class SortU implements ISqlSort {
+public class SqlSortU implements ISqlSort {
     /**
      * 字段
      */

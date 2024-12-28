@@ -3,11 +3,12 @@ package io.github.bootystar.mybatisplus.enhance.helper.unmodifiable;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhance.expception.ParamMappingException;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
+import io.github.bootystar.mybatisplus.enhance.query.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
-import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.ConditionU;
-import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SortU;
-import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.TreeU;
+import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlConditionU;
+import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlEntityU;
+import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlSortU;
 import io.github.bootystar.mybatisplus.util.MybatisPlusReflectHelper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import java.util.*;
  * @author bootystar
  */
 @Slf4j
-public abstract class UnmodifiableSqlHelper<T> extends TreeU {
+public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
 
     /**
      * 实体类
@@ -53,7 +54,7 @@ public abstract class UnmodifiableSqlHelper<T> extends TreeU {
 
     protected void initProperties(ISqlTree sqlTree) {
         // 不在迭代时直接赋值, 保留扩展空间
-        TreeU tree = recursionTree(sqlTree);
+        SqlEntityU tree = recursionTree(sqlTree);
         if (tree == null) {
             return;
         }
@@ -62,30 +63,34 @@ public abstract class UnmodifiableSqlHelper<T> extends TreeU {
         this.sorts = tree.getSorts();
     }
 
-    protected TreeU recursionTree(ISqlTree sqlTree) {
+    protected SqlEntityU recursionTree(ISqlTree sqlTree) {
         if (sqlTree == null) {
             return null;
         }
-        Collection<ConditionU> conditions = wrapConditions(sqlTree.getConditions());
+        Collection<SqlConditionU> conditions = wrapConditions(sqlTree.getConditions());
         ISqlTree child = sqlTree.getChild();
         if (conditions == null || conditions.isEmpty()) {
             if (child != null) {
                 String s = Optional.ofNullable(sqlTree.getConditions()).orElse(Collections.emptyList()).stream()
                         .map(e -> String.format("isOr:[%s] , field:[%s] , operator:[%s] ,value:[%s]", e.isOr(), e.getField(), e.getOperator(), e.getValue()))
                         .reduce((e1, e2) -> e1 + "\n" + e2).orElse("null");
-                throw new ParamMappingException("mapped condition is empty, but sub-condition is not empty !!!\ncurrent condition source:\n%s",  s);
+                throw new ParamMappingException("mapped condition is empty, but sub-condition is not empty !!!\ncurrent condition source:\n%s", s);
             }
             return null;
         }
-        TreeU newChild = recursionTree(child);
-        return new TreeU(conditions, validatedSorts(sqlTree.getSorts()), newChild);
+        SqlEntityU newChild = recursionTree(child);
+        return new SqlEntityU(conditions, newChild, validatedSorts(sqlTree));
     }
 
-    protected Collection<SortU> validatedSorts(Collection<? extends ISqlSort> sorts) {
+    protected Collection<SqlSortU> validatedSorts(ISqlTree sqlTree) {
+        if (!(sqlTree instanceof ISqlEntity)) {
+            return null;
+        }
+        Collection<? extends ISqlSort> sorts = ((ISqlEntity) sqlTree).getSorts();
         if (sorts == null || sorts.isEmpty()) {
             return null;
         }
-        ArrayList<SortU> validatedSorts = new ArrayList<>(sorts.size());
+        ArrayList<SqlSortU> validatedSorts = new ArrayList<>(sorts.size());
         for (ISqlSort sortO : sorts) {
             String field = sortO.getField();
             boolean desc = sortO.isDesc();
@@ -98,15 +103,15 @@ public abstract class UnmodifiableSqlHelper<T> extends TreeU {
                 log.info("sort field [{}] not exist in fieldMap , it will be removed", field);
                 continue;
             }
-            validatedSorts.add(new SortU(jdbcColumn, desc));
+            validatedSorts.add(new SqlSortU(jdbcColumn, desc));
         }
         return validatedSorts;
     }
 
     // 由子类实现
-    protected abstract Collection<ConditionU> wrapConditions(Collection<? extends ISqlCondition> conditions);
+    protected abstract Collection<SqlConditionU> wrapConditions(Collection<? extends ISqlCondition> conditions);
 
-    public Optional<ConditionU> wrap2JdbcColumnCondition(ISqlCondition conditionO) {
+    public Optional<SqlConditionU> wrap2JdbcColumnCondition(ISqlCondition conditionO) {
         boolean or = conditionO.isOr();
         String operator = SqlKeyword.replaceOperator(conditionO.getOperator());
         String field = conditionO.getField();
@@ -114,7 +119,7 @@ public abstract class UnmodifiableSqlHelper<T> extends TreeU {
         return wrap2JdbcColumnCondition(or, field, operator, value);
     }
 
-    public Optional<ConditionU> wrap2JdbcColumnCondition(boolean isOr, String field, String operator, Object value) {
+    public Optional<SqlConditionU> wrap2JdbcColumnCondition(boolean isOr, String field, String operator, Object value) {
         if (field == null || field.isEmpty()) {
             return Optional.empty();
         }
@@ -153,7 +158,7 @@ public abstract class UnmodifiableSqlHelper<T> extends TreeU {
         if (SqlKeyword.isLikeOperator(operator)) {
             value = "%" + value + "%";
         }
-        return Optional.of(new ConditionU(isOr, jdbcColumn, operator, value));
+        return Optional.of(new SqlConditionU(isOr, jdbcColumn, operator, value));
     }
 
 }
