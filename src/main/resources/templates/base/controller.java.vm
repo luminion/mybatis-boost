@@ -322,7 +322,7 @@ public class ${table.controllerName} {
     /**
      * excel文件导入
      *
-     * @param file excel文件
+     * @param excel excel文件
      * @return 导入条数
      * @author ${author}
      */

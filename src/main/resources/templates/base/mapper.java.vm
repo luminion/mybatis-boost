@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * $!{table.comment} Mapper 接口
+ * $!{table.comment}Mapper
  *
  * @author ${author}
  */

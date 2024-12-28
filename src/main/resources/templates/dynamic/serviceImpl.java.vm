@@ -39,7 +39,7 @@ import java.io.OutputStream;
 #end
 
 /**
- * $!{table.comment} 服务实现类
+ * $!{table.comment}服务实现类
  *
  * @author ${author}
  */

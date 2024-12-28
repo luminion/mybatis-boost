@@ -30,10 +30,10 @@ import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 #end
-###if(${generateInsert}||${generateSelect})
-##import com.baomidou.mybatisplus.core.metadata.TableInfo;
-##import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-###end
+#if(${generateInsert}||${generateSelect})
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+#end
 import ${superServiceImplClassPackage};
 import ${package.Service}.${table.serviceName};
 import ${package.Mapper}.${table.mapperName};
@@ -67,7 +67,7 @@ import java.util.stream.Collectors;
 import java.util.*;
 
 /**
- * $!{table.comment} 服务实现类
+ * $!{table.comment}服务实现类
  *
  * @author ${author}
  */
@@ -84,14 +84,9 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     public ${primaryKeyPropertyType} insertByDTO(${entityInsertDTO} s) {
         ${entity} entity = new ${entity}();
         BeanUtils.copyProperties(s, entity);
-        save(entity);
+        super.save(entity);
         TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
-        if (tableInfo == null) return null;
-        String keyProperty = tableInfo.getKeyProperty();
-        if (keyProperty == null) return null;
-        Object propertyValue = tableInfo.getPropertyValue(entity, keyProperty);
-        if (propertyValue == null) return null;
-        return (${primaryKeyPropertyType}) propertyValue;
+        return (${primaryKeyPropertyType}) tableInfo.getPropertyValue(entity, tableInfo.getKeyProperty());
     }
     #end
     #if(${generateUpdate})
@@ -142,7 +137,9 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 
     @Override
     public ${entityVO} oneById(Serializable id) {
-        ${entity} entity = getById(id);
+        ${entity} entity = new ${entity}();
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
+        tableInfo.setPropertyValue(entity, tableInfo.getKeyProperty(), id);
         ${entitySelectDTO} s = new ${entitySelectDTO}();
         BeanUtils.copyProperties(entity, s);
         return oneByDTO(s);
@@ -181,12 +178,12 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public int excelImport(InputStream is, Class<?> clazz) {
 //        ${entityInsertDTO} dto = (${entityInsertDTO}) s;
-        List<U> cachedDataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
-        List<${entity}> entityList = cachedDataList.stream().map(e->{
-                ${entity} entity = new ${entity}();
-                BeanUtils.copyProperties(e, entity);
-                return entity;
-            }).collect(Collectors.toList());
+        List<?> cachedDataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
+        List<${entity}> entityList = cachedDataList.stream().map(e -> {
+            ${entity} entity = new ${entity}();
+            BeanUtils.copyProperties(e, entity);
+            return entity;
+        }).collect(Collectors.toList());
         super.saveBatch(entityList);
         return entityList.size();
     }
@@ -201,7 +198,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
         if (current == null || current < 1) current = 1L;
         if (size == null) size = 10L;
         Page<${entityVO}> page = new Page<>(current, size);
-        List<${entityVO}> voList = getBaseMapper().listByDTO(s, page)
+        List<${entityVO}> voList = getBaseMapper().listByDTO(s, page);
         #end
         EasyExcel.write(os, clazz).includeColumnFieldNames(Arrays.asList(includeFields)).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).sheet().doWrite(voList);
     }

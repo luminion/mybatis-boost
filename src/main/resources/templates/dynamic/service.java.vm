@@ -5,7 +5,7 @@ import ${basePackage}.${package4VO}.${entity}VO;
 import ${superServiceClassPackage};
 
 /**
- * $!{table.comment} 服务类
+ * $!{table.comment}服务类
  *
  * @author ${author}
  */

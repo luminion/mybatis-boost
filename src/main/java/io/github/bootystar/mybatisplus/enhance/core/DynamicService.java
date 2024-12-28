@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public interface DynamicService<T, V> extends IService<T> {
 
     @SuppressWarnings("unchecked")
-    default Class<V> getVoClass() {
+    default Class<V> getVOClass() {
         return (Class<V>) Objects.requireNonNull(MybatisPlusReflectHelper.resolveTypeArguments(getClass(), DynamicService.class))[1];
     }
 
@@ -41,7 +41,7 @@ public interface DynamicService<T, V> extends IService<T> {
     }
 
     default V toVO(Object source) {
-        return MybatisPlusReflectHelper.toTarget(source, getVoClass());
+        return MybatisPlusReflectHelper.toTarget(source, getVOClass());
     }
 
     @SuppressWarnings("unchecked")
@@ -55,7 +55,7 @@ public interface DynamicService<T, V> extends IService<T> {
         return (R) propertyValue;
     }
 
-    default <S, R> R insertByDTO(S s) {
+    default <S, R> R insertByDTO(Object s) {
         T entity = toEntity(s);
         save(entity);
         return toId(entity);
