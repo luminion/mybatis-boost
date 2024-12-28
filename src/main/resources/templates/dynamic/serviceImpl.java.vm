@@ -145,7 +145,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     #if(${generateExport})
 
     @Override
-    public <S,U> void excelExport(S s, OutputStream os, Class<U> clazz, Long current, Long size, String... includeFields) {
+    public <S, U> void excelExport(S s, OutputStream os, Class<U> clazz, Long current, Long size, String... includeFields) {
         super.excelExport(s, os, clazz, current, size, includeFields);
     }
     #end
