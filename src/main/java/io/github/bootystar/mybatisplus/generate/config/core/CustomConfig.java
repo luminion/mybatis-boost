@@ -70,7 +70,7 @@ public class CustomConfig extends BaseConfig {
             customFiles.add(builder.build());
         }
 
-        if ((generateSelect || generateExport) && selectDTO == null) {
+        if (selectDTO == null) {
             String fileName = "SelectDTO.java";
             String path = path4DTO + File.separator + entityName + fileName;
             CustomFile.Builder builder = new CustomFile.Builder()

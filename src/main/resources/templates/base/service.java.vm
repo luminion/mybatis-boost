@@ -66,7 +66,7 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
 
     boolean updateByDTO(${entityUpdateDTO} s);
     #end
-    #if(${generateSelect}||${generateExport})
+    #if(${generateSelect})
 
     ${entityVO} oneById(Serializable id);
 

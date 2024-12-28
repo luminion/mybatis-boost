@@ -22,11 +22,11 @@ public abstract class BaseConfig {
     protected boolean fileOverride;
 
     /**
-     * 新增DTO
+     * 生成新增方法
      */
     protected boolean generateInsert = true;
     /**
-     * 更新DTO
+     * 生成更新方法
      */
     protected boolean generateUpdate = true;
     /**
@@ -34,15 +34,15 @@ public abstract class BaseConfig {
      */
     protected boolean generateDelete = true;
     /**
-     * 查询DTO
+     * 生成查询方法
      */
     protected boolean generateSelect = true;
     /**
-     * 导入DTO
+     * 生成导入方法
      */
     protected boolean generateImport = true;
     /**
-     * 导出DTO
+     * 生成导出方法
      */
     protected boolean generateExport = true;
 

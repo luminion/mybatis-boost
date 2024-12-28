@@ -110,7 +110,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
         return super.removeById(id);
     }
     #end
-    #if(${generateSelect}||${generateExport})
+    #if(${generateSelect})
 
     public List<${entityVO}> doSelect(${entitySelectDTO} s, IPage<${entityVO}> page) {
 ##//        ${entitySelectDTO} dto = (${entitySelectDTO}) s;
@@ -195,7 +195,14 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 
     @Override
     public void excelExport(${entitySelectDTO} s, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
+        #if(${generateSelect})
         List<${entityVO}> voList = pageByDTO(s, current, size).getRecords();
+            #else
+        if (current == null || current < 1) current = 1L;
+        if (size == null) size = 10L;
+        Page<${entityVO}> page = new Page<>(current, size);
+        List<${entityVO}> voList = getBaseMapper().listByDTO(s, page)
+        #end
         EasyExcel.write(os, clazz).includeColumnFieldNames(Arrays.asList(includeFields)).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).sheet().doWrite(voList);
     }
     #end
