@@ -8,23 +8,23 @@ import java.util.NoSuchElementException;
  * SQL树
  * @author bootystar
  */
-public interface ISqlTree extends Iterable<ISqlTree> {
+public interface SqlTree extends Iterable<SqlTree> {
 
-    Collection<? extends ISqlCondition> getConditions();
+    Collection<? extends SqlCondition> getConditions();
 
-    ISqlTree getChild();
+    SqlTree getChild();
 
     @Override
     @SuppressWarnings("all")
-    default Iterator<ISqlTree> iterator() {
+    default Iterator<SqlTree> iterator() {
         return new Itr(this);
     }
 
-    class Itr implements Iterator<ISqlTree> {
+    class Itr implements Iterator<SqlTree> {
 
-        private ISqlTree current;
+        private SqlTree current;
 
-        public Itr(ISqlTree root) {
+        public Itr(SqlTree root) {
             current = root;
         }
 
@@ -34,11 +34,11 @@ public interface ISqlTree extends Iterable<ISqlTree> {
         }
 
         @Override
-        public ISqlTree next() {
+        public SqlTree next() {
             if (current == null) {
                 throw new NoSuchElementException();
             }
-            ISqlTree result = current;
+            SqlTree result = current;
             current = current.getChild();
             return result;
         }

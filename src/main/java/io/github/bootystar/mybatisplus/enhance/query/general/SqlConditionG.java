@@ -1,7 +1,7 @@
 package io.github.bootystar.mybatisplus.enhance.query.general;
 
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
+import io.github.bootystar.mybatisplus.enhance.query.SqlCondition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SqlConditionG implements ISqlCondition {
+public class SqlConditionG implements SqlCondition {
 
     /**
      * 和上一个条件的关系是否为or(默认否, 为否时无需填写)
@@ -51,7 +51,7 @@ public class SqlConditionG implements ISqlCondition {
     }
 
 
-    public static SqlConditionG of(ISqlCondition sqlCondition) {
+    public static SqlConditionG of(SqlCondition sqlCondition) {
         if (sqlCondition instanceof SqlConditionG) return (SqlConditionG) sqlCondition;
         return new SqlConditionG(sqlCondition.isOr(), sqlCondition.getField(), sqlCondition.getOperator(), sqlCondition.getValue());
     }

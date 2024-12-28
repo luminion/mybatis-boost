@@ -4,7 +4,7 @@ package io.github.bootystar.mybatisplus.enhance.query;
  * SQL排序
  * @author bootystar
  */
-public interface ISqlSort {
+public interface SqlSort {
 
     /**
      * 属性名

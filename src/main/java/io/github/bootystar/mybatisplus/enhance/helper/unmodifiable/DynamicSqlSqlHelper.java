@@ -1,7 +1,7 @@
 package io.github.bootystar.mybatisplus.enhance.helper.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
+import io.github.bootystar.mybatisplus.enhance.query.SqlCondition;
+import io.github.bootystar.mybatisplus.enhance.query.SqlTree;
 import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlConditionU;
 import lombok.Getter;
 
@@ -14,18 +14,18 @@ import java.util.Collection;
 @Getter
 public class DynamicSqlSqlHelper<T> extends UnmodifiableSqlHelper<T> {
 
-    public DynamicSqlSqlHelper(ISqlTree sourceTree, Class<T> entityClass) {
+    public DynamicSqlSqlHelper(SqlTree sourceTree, Class<T> entityClass) {
         super(entityClass);
         initProperties(sourceTree);
     }
 
     @Override
-    protected Collection<SqlConditionU> wrapConditions(Collection<? extends ISqlCondition> conditions) {
+    protected Collection<SqlConditionU> wrapConditions(Collection<? extends SqlCondition> conditions) {
         if (conditions == null || conditions.isEmpty()) {
             return null;
         }
         ArrayList<SqlConditionU> result = new ArrayList<>(conditions.size());
-        for (ISqlCondition conditionO : conditions) {
+        for (SqlCondition conditionO : conditions) {
             wrap2JdbcColumnCondition(conditionO).ifPresent(result::add);
         }
         return result;

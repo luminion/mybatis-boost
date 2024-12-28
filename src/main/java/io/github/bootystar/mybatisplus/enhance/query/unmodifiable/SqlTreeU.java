@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhance.query.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
+import io.github.bootystar.mybatisplus.enhance.query.SqlTree;
 import lombok.Getter;
 
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
  * @author bootystar
  */
 @Getter
-public class SqlTreeU implements ISqlTree {
+public class SqlTreeU implements SqlTree {
 
     protected Collection<SqlConditionU> conditions;
 

@@ -4,7 +4,7 @@ package io.github.bootystar.mybatisplus.enhance.query;
  * SQL条件
  * @author bootystar
  */
-public interface ISqlCondition {
+public interface SqlCondition {
 
     /**
      * 与其他条件关系是否为or

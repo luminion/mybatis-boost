@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhance.query.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhance.query.ISqlEntity;
+import io.github.bootystar.mybatisplus.enhance.query.SqlEntity;
 import lombok.Getter;
 
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
  * @author bootystar
  */
 @Getter
-public class SqlEntityU extends SqlTreeU implements ISqlEntity {
+public class SqlEntityU extends SqlTreeU implements SqlEntity {
 
     protected Collection<SqlSortU> sorts;
 

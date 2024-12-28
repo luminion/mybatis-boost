@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhance.query.general;
 
-import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
+import io.github.bootystar.mybatisplus.enhance.query.SqlSort;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SqlSortG implements ISqlSort {
+public class SqlSortG implements SqlSort {
 
     /**
      * 属性名
@@ -25,7 +25,7 @@ public class SqlSortG implements ISqlSort {
      */
     protected boolean desc;
 
-    public static SqlSortG of(ISqlSort sort) {
+    public static SqlSortG of(SqlSort sort) {
         if (sort instanceof SqlSortG) return (SqlSortG) sort;
         return new SqlSortG(sort.getField(), sort.isDesc());
     }

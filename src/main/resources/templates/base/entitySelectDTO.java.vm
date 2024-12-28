@@ -98,6 +98,12 @@ public class ${entity}SelectDTO {
                 #end
     private ${extraFieldType} ${extraFieldName};
                 #end
+                #if(${field.propertyType}=="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
+
+    public ${extraFieldType} get${field.capitalName}${key}() {
+        return ${extraFieldName} == null || ${extraFieldName}.isEmpty() ? ${extraFieldName} : "%" + ${extraFieldName} + "%";
+    }
+                #end
             #end
         #end
     #end
@@ -152,10 +158,13 @@ public class ${entity}SelectDTO {
             #if(!${existField})
                 #if(${field.propertyType}!="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
                 #else
+                    #if(${field.propertyType}=="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
+                    #else
 
     public ${extraFieldType} ${getprefix}${field.capitalName}${key}() {
         return ${extraFieldName};
     }
+                    #end
 
                 #if(${chainModel})
     public ${entity}SelectDTO set${field.capitalName}${key}(${extraFieldType} ${extraFieldName}) {

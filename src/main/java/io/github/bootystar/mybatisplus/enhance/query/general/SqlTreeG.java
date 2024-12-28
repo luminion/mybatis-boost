@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhance.query.general;
 
-import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
+import io.github.bootystar.mybatisplus.enhance.query.SqlTree;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
  */
 @Setter
 @Getter
-public class SqlTreeG implements ISqlTree {
+public class SqlTreeG implements SqlTree {
 
     /**
      * 查询条件列表

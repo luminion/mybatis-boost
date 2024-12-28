@@ -5,8 +5,8 @@ import java.util.Collection;
 /**
  * @author bootystar
  */
-public interface ISqlEntity extends ISqlTree {
+public interface SqlEntity extends SqlTree {
 
-    Collection<? extends ISqlSort> getSorts();
+    Collection<? extends SqlSort> getSorts();
 
 }

@@ -1,7 +1,7 @@
 package io.github.bootystar.mybatisplus.enhance.query.unmodifiable;
 
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
+import io.github.bootystar.mybatisplus.enhance.query.SqlCondition;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
-public class SqlConditionU implements ISqlCondition {
+public class SqlConditionU implements SqlCondition {
 
     protected boolean or;
 

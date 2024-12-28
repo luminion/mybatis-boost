@@ -1,10 +1,10 @@
 package io.github.bootystar.mybatisplus.enhance.helper;
 
 import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlEntity;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
+import io.github.bootystar.mybatisplus.enhance.query.SqlCondition;
+import io.github.bootystar.mybatisplus.enhance.query.SqlEntity;
+import io.github.bootystar.mybatisplus.enhance.query.SqlSort;
+import io.github.bootystar.mybatisplus.enhance.query.SqlTree;
 import io.github.bootystar.mybatisplus.enhance.query.general.SqlConditionG;
 import io.github.bootystar.mybatisplus.enhance.query.general.SqlSortG;
 import io.github.bootystar.mybatisplus.util.ReflectHelper;
@@ -47,15 +47,15 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
         if (s instanceof SqlHelper<?>) {
             return (SqlHelper<T>) s;
         }
-        if (s instanceof ISqlTree) {
-            return ofSqlTree((ISqlTree) s, true);
+        if (s instanceof SqlTree) {
+            return ofSqlTree((SqlTree) s, true);
         }
         SqlHelper<T> helper = new SqlHelper<>();
-        if (s instanceof ISqlCondition) {
-            helper.condition((ISqlCondition) s);
+        if (s instanceof SqlCondition) {
+            helper.condition((SqlCondition) s);
         }
-        if (s instanceof ISqlSort) {
-            helper.sort((ISqlSort) s);
+        if (s instanceof SqlSort) {
+            helper.sort((SqlSort) s);
         }
         Map<?, ?> map = ReflectHelper.objectToMap(s);
         for (Map.Entry<?, ?> next : map.entrySet()) {
@@ -75,24 +75,24 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * @return {@link SqlHelper<T> }
      * @author bootystar
      */
-    protected static <T> SqlHelper<T> ofSqlTree(ISqlTree tree, boolean copySorts) {
+    protected static <T> SqlHelper<T> ofSqlTree(SqlTree tree, boolean copySorts) {
         if (tree == null) {
             return new SqlHelper<>();
         }
         SqlHelper<T> helper = new SqlHelper<>();
-        Collection<? extends ISqlCondition> conditions1 = tree.getConditions();
+        Collection<? extends SqlCondition> conditions1 = tree.getConditions();
         if (conditions1 != null && !conditions1.isEmpty()) {
             helper.getConditions().addAll(conditions1.stream().map(SqlConditionG::of).collect(Collectors.toList()));
         }
         if (copySorts) {
-            if (tree instanceof ISqlEntity) {
-                Collection<? extends ISqlSort> treeSorts = ((ISqlEntity) tree).getSorts();
+            if (tree instanceof SqlEntity) {
+                Collection<? extends SqlSort> treeSorts = ((SqlEntity) tree).getSorts();
                 if (treeSorts != null && !treeSorts.isEmpty()) {
                     helper.getSorts().addAll(treeSorts.stream().map(SqlSortG::of).collect(Collectors.toList()));
                 }
             }
         }
-        ISqlTree child = tree.getChild();
+        SqlTree child = tree.getChild();
         if (child != null) {
             helper.setChild(ofSqlTree(child, false));
         }

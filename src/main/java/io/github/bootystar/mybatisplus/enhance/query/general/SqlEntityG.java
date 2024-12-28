@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhance.query.general;
 
-import io.github.bootystar.mybatisplus.enhance.query.ISqlEntity;
+import io.github.bootystar.mybatisplus.enhance.query.SqlEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
  */
 @Setter
 @Getter
-public class SqlEntityG extends SqlTreeG implements ISqlEntity {
+public class SqlEntityG extends SqlTreeG implements SqlEntity {
 
     /**
      * 排序条件列表

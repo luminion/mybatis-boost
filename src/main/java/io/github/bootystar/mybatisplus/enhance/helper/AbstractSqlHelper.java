@@ -3,9 +3,9 @@ package io.github.bootystar.mybatisplus.enhance.helper;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
-import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
+import io.github.bootystar.mybatisplus.enhance.query.SqlCondition;
+import io.github.bootystar.mybatisplus.enhance.query.SqlSort;
+import io.github.bootystar.mybatisplus.enhance.query.SqlTree;
 import io.github.bootystar.mybatisplus.enhance.query.general.SqlConditionG;
 import io.github.bootystar.mybatisplus.enhance.query.general.SqlEntityG;
 import io.github.bootystar.mybatisplus.enhance.query.general.SqlSortG;
@@ -248,7 +248,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @return {@link Child }
      * @author bootystar
      */
-    public Child condition(ISqlCondition condition) {
+    public Child condition(SqlCondition condition) {
         if (condition == null) {
             return returnValue();
         }
@@ -265,7 +265,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @return {@link Child }
      * @author bootystar
      */
-    public Child sort(ISqlSort sort) {
+    public Child sort(SqlSort sort) {
         if (sort == null) {
             return returnValue();
         }
@@ -282,7 +282,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @return {@link Child }
      * @author bootystar
      */
-    public Child with(ISqlTree sqlTree) {
+    public Child with(SqlTree sqlTree) {
         if (sqlTree == null || sqlTree.getConditions() == null || sqlTree.getConditions().isEmpty()) {
             return returnValue();
         }
@@ -302,7 +302,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @return {@link Child }
      * @author bootystar
      */
-    public Child withChild(ISqlTree sqlTree) {
+    public Child withChild(SqlTree sqlTree) {
         SqlTreeG tree = this;
         while (tree.getChild() != null) {
             tree = tree.getChild();
