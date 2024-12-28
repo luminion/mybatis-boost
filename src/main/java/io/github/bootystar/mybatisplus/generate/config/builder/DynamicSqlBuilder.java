@@ -2,11 +2,8 @@ package io.github.bootystar.mybatisplus.generate.config.builder;
 
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.UnmodifiableSqlHelper;
-import io.github.bootystar.mybatisplus.generate.config.core.CustomConfig;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 import lombok.Getter;
-
-import java.util.Map;
 
 /**
  * @author bootystar
@@ -20,9 +17,13 @@ public class DynamicSqlBuilder extends BaseEnhanceBuilder<DynamicSqlBuilder> {
     }
 
     @Override
+    public DynamicSqlBuilder disableOverrideMethods() {
+        return super.disableOverrideMethods();
+    }
+
+    @Override
     public DynamicSqlBuilder withMapSelectDTO() {
-        this.selectDTO = new ClassInfo(Map.class);
-        return this.getBuilder();
+        return super.withMapSelectDTO();
     }
 
 }

@@ -17,7 +17,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
     /**
      * 不生成重写的方法
      *
-     * @return {@code DynamicSqlBuilder }
+     * @return {@code B }
      * @author bootystar
      */
     protected B disableOverrideMethods() {
