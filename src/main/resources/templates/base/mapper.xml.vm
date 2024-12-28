@@ -99,14 +99,17 @@
                 #if(${value}=="IN"||${value}=="NOT IN")
                 <if test="param1.${extraFieldName} != null and param1.${extraFieldName}.size()>0">
                     AND a.${field.columnName} ${value}
-                    <foreach collection="param1.${extraFieldName}" open="("  close=")" separator="," item="val">
-                        #{val}
+                    <foreach collection="param1.${extraFieldName}" open="("  close=")" separator="," item="item">
+                        #{item}
                     </foreach>
                 </if>
                 #elseif(${value}=="LIKE"||${value}=="NOT LIKE")
                     #if(${field.propertyType}=="String")
+##                <if test="param1.${extraFieldName} != null and param1.${extraFieldName}.length()>0">
+##                    AND a.${field.columnName} ${value} '%' || #{param1.${extraFieldName}} || '%'
+##                </if>
                 <if test="param1.${extraFieldName} != null and param1.${extraFieldName}.length()>0">
-                    AND a.${field.columnName} ${value} '%' || #{param1.${extraFieldName}} || '%'
+                    AND a.${field.columnName} ${value} #{param1.${extraFieldName}}
                 </if>
                     #end
                 #elseif(${value}=="<")
