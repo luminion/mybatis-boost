@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelperWrapper;
-import io.github.bootystar.mybatisplus.enhance.query.general.ConditionG;
+import io.github.bootystar.mybatisplus.enhance.query.general.SqlConditionG;
 import io.github.bootystar.mybatisplus.util.ExcelHelper;
 import io.github.bootystar.mybatisplus.util.MybatisPlusReflectHelper;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -73,7 +73,7 @@ public interface DynamicService<T, V> extends IService<T> {
         if (tableInfo == null) throw new IllegalArgumentException("there is no id field in entity");
         String keyProperty = tableInfo.getKeyProperty();
         if (keyProperty == null) throw new IllegalArgumentException("there is no id field in entity");
-        ConditionG condition = new ConditionG(keyProperty, SqlKeyword.EQ.keyword, id);
+        SqlConditionG condition = new SqlConditionG(keyProperty, SqlKeyword.EQ.keyword, id);
         return oneByDTO(condition);
     }
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SortG implements ISqlSort {
+public class SqlSortG implements ISqlSort {
 
     /**
      * 属性名
@@ -25,9 +25,9 @@ public class SortG implements ISqlSort {
      */
     protected boolean desc;
 
-    public static SortG of(ISqlSort sort) {
-        if (sort instanceof SortG) return (SortG) sort;
-        return new SortG(sort.getField(), sort.isDesc());
+    public static SqlSortG of(ISqlSort sort) {
+        if (sort instanceof SqlSortG) return (SqlSortG) sort;
+        return new SqlSortG(sort.getField(), sort.isDesc());
     }
 
 }

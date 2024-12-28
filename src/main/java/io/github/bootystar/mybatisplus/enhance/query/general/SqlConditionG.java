@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConditionG implements ISqlCondition {
+public class SqlConditionG implements ISqlCondition {
 
     /**
      * 和上一个条件的关系是否为or(默认否, 为否时无需填写)
@@ -39,21 +39,21 @@ public class ConditionG implements ISqlCondition {
      */
     protected Object value;
 
-    public ConditionG(String field, Object value) {
+    public SqlConditionG(String field, Object value) {
         this.field = field;
         this.value = value;
     }
 
-    public ConditionG(String field, String operator, Object value) {
+    public SqlConditionG(String field, String operator, Object value) {
         this.field = field;
         this.operator = operator;
         this.value = value;
     }
 
 
-    public static ConditionG of(ISqlCondition sqlCondition) {
-        if (sqlCondition instanceof ConditionG) return (ConditionG) sqlCondition;
-        return new ConditionG(sqlCondition.isOr(), sqlCondition.getField(), sqlCondition.getOperator(), sqlCondition.getValue());
+    public static SqlConditionG of(ISqlCondition sqlCondition) {
+        if (sqlCondition instanceof SqlConditionG) return (SqlConditionG) sqlCondition;
+        return new SqlConditionG(sqlCondition.isOr(), sqlCondition.getField(), sqlCondition.getOperator(), sqlCondition.getValue());
     }
 
 

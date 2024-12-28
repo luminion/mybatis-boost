@@ -13,11 +13,11 @@ import java.util.LinkedHashSet;
  */
 @Setter
 @Getter
-public class EntityG extends TreeG implements ISqlEntity {
+public class SqlEntityG extends SqlTreeG implements ISqlEntity {
 
     /**
      * 排序条件列表
      */
-    protected LinkedHashSet<SortG> sorts;
+    protected LinkedHashSet<SqlSortG> sorts;
 
 }

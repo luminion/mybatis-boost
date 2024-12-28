@@ -14,14 +14,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class SqlSortU implements ISqlSort {
-    /**
-     * 字段
-     */
+
     protected String field;
 
-    /**
-     * 是否倒序(默认为false)
-     */
     protected boolean desc;
 
 }

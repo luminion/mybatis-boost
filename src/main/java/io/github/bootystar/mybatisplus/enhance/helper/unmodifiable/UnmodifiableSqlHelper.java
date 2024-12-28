@@ -9,6 +9,7 @@ import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
 import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlConditionU;
 import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlEntityU;
 import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlSortU;
+import io.github.bootystar.mybatisplus.enhance.query.unmodifiable.SqlTreeU;
 import io.github.bootystar.mybatisplus.util.MybatisPlusReflectHelper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -54,16 +55,16 @@ public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
 
     protected void initProperties(ISqlTree sqlTree) {
         // 不在迭代时直接赋值, 保留扩展空间
-        SqlEntityU tree = recursionTree(sqlTree);
+        SqlTreeU tree = recursionTree(sqlTree);
         if (tree == null) {
             return;
         }
         this.conditions = tree.getConditions();
         this.child = tree.getChild();
-        this.sorts = tree.getSorts();
+        this.sorts = validatedSorts(sqlTree);
     }
 
-    protected SqlEntityU recursionTree(ISqlTree sqlTree) {
+    protected SqlTreeU recursionTree(ISqlTree sqlTree) {
         if (sqlTree == null) {
             return null;
         }
@@ -78,8 +79,8 @@ public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
             }
             return null;
         }
-        SqlEntityU newChild = recursionTree(child);
-        return new SqlEntityU(conditions, newChild, validatedSorts(sqlTree));
+        SqlTreeU newChild = recursionTree(child);
+        return new SqlTreeU(conditions, newChild);
     }
 
     protected Collection<SqlSortU> validatedSorts(ISqlTree sqlTree) {

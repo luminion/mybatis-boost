@@ -6,10 +6,10 @@ import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
-import io.github.bootystar.mybatisplus.enhance.query.general.ConditionG;
-import io.github.bootystar.mybatisplus.enhance.query.general.EntityG;
-import io.github.bootystar.mybatisplus.enhance.query.general.SortG;
-import io.github.bootystar.mybatisplus.enhance.query.general.TreeG;
+import io.github.bootystar.mybatisplus.enhance.query.general.SqlConditionG;
+import io.github.bootystar.mybatisplus.enhance.query.general.SqlEntityG;
+import io.github.bootystar.mybatisplus.enhance.query.general.SqlSortG;
+import io.github.bootystar.mybatisplus.enhance.query.general.SqlTreeG;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
 import java.util.Collection;
@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Child>> extends EntityG {
+public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Child>> extends SqlEntityG {
     protected boolean orNext;
 
     {
@@ -49,8 +49,8 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public Child requiredNext() {
-        TreeG oldTree = this.getChild();
-        TreeG newTree = new TreeG();
+        SqlTreeG oldTree = this.getChild();
+        SqlTreeG newTree = new SqlTreeG();
         this.setChild(newTree);
         newTree.setChild(oldTree);
         newTree.setConditions(this.getConditions());
@@ -84,7 +84,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child eq(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.EQ.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.EQ.keyword, value));
         return returnValue();
     }
 
@@ -97,7 +97,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child ne(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.NE.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.NE.keyword, value));
         return returnValue();
     }
 
@@ -110,7 +110,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child gt(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.GT.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.GT.keyword, value));
         return returnValue();
     }
 
@@ -123,7 +123,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child ge(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.GE.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.GE.keyword, value));
         return returnValue();
     }
 
@@ -136,7 +136,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child lt(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.LT.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.LT.keyword, value));
         return returnValue();
     }
 
@@ -149,7 +149,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child le(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.LE.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.LE.keyword, value));
         return returnValue();
     }
 
@@ -162,7 +162,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child like(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.LIKE.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.LIKE.keyword, value));
         return returnValue();
     }
 
@@ -175,7 +175,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child notLike(SFunction<T, R> getter, R value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.NOT_LIKE.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.NOT_LIKE.keyword, value));
         return returnValue();
     }
 
@@ -188,7 +188,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child in(SFunction<T, R> getter, Collection<? extends R> value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.IN.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.IN.keyword, value));
         return returnValue();
     }
 
@@ -201,7 +201,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public <R> Child notIn(SFunction<T, R> getter, Collection<? extends R> value) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.NOT_IN.keyword, value));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.NOT_IN.keyword, value));
         return returnValue();
     }
 
@@ -213,7 +213,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public Child isNull(SFunction<T, ?> getter) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.IS_NULL.keyword, null));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.IS_NULL.keyword, null));
         return returnValue();
     }
 
@@ -225,17 +225,17 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public Child isNotNull(SFunction<T, ?> getter) {
-        this.condition(new ConditionG(this.getFieldName(getter), SqlKeyword.IS_NOT_NULL.keyword, null));
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.IS_NOT_NULL.keyword, null));
         return returnValue();
     }
 
     public Child orderByAsc(SFunction<T, ?> getter) {
-        this.sort(new SortG(this.getFieldName(getter), false));
+        this.sort(new SqlSortG(this.getFieldName(getter), false));
         return returnValue();
     }
 
     public Child orderByDesc(SFunction<T, ?> getter) {
-        this.sort(new SortG(this.getFieldName(getter), true));
+        this.sort(new SqlSortG(this.getFieldName(getter), true));
         return returnValue();
     }
 
@@ -252,7 +252,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
         if (condition == null) {
             return returnValue();
         }
-        ConditionG conditionG = ConditionG.of(condition);
+        SqlConditionG conditionG = SqlConditionG.of(condition);
         conditionG.setOr(this.isOrNext());
         this.getConditions().add(conditionG);
         return returnValue();
@@ -269,7 +269,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
         if (sort == null) {
             return returnValue();
         }
-        this.getSorts().add(SortG.of(sort));
+        this.getSorts().add(SqlSortG.of(sort));
         return returnValue();
     }
 
@@ -303,7 +303,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * @author bootystar
      */
     public Child withChild(ISqlTree sqlTree) {
-        TreeG tree = this;
+        SqlTreeG tree = this;
         while (tree.getChild() != null) {
             tree = tree.getChild();
         }

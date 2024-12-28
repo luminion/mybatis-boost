@@ -13,17 +13,17 @@ import java.util.LinkedHashSet;
  */
 @Setter
 @Getter
-public class TreeG implements ISqlTree {
+public class SqlTreeG implements ISqlTree {
 
     /**
      * 查询条件列表
      */
-    protected LinkedHashSet<ConditionG> conditions;
+    protected LinkedHashSet<SqlConditionG> conditions;
 
     /**
      * 子条件
      * (满足父条件后的值才会筛选子条件)
      */
-    protected TreeG child;
+    protected SqlTreeG child;
 
 }

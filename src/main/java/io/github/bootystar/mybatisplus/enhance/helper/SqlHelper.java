@@ -5,13 +5,12 @@ import io.github.bootystar.mybatisplus.enhance.query.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlSort;
 import io.github.bootystar.mybatisplus.enhance.query.ISqlTree;
-import io.github.bootystar.mybatisplus.enhance.query.general.ConditionG;
-import io.github.bootystar.mybatisplus.enhance.query.general.SortG;
+import io.github.bootystar.mybatisplus.enhance.query.general.SqlConditionG;
+import io.github.bootystar.mybatisplus.enhance.query.general.SqlSortG;
 import io.github.bootystar.mybatisplus.util.ReflectHelper;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -62,7 +61,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
         for (Map.Entry<?, ?> next : map.entrySet()) {
             Object key = next.getKey();
             Object value = next.getValue();
-            ConditionG condition = new ConditionG(key.toString(), value);
+            SqlConditionG condition = new SqlConditionG(key.toString(), value);
             helper.condition(condition);
         }
         return helper;
@@ -83,13 +82,13 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
         SqlHelper<T> helper = new SqlHelper<>();
         Collection<? extends ISqlCondition> conditions1 = tree.getConditions();
         if (conditions1 != null && !conditions1.isEmpty()) {
-            helper.getConditions().addAll(conditions1.stream().map(ConditionG::of).collect(Collectors.toList()));
+            helper.getConditions().addAll(conditions1.stream().map(SqlConditionG::of).collect(Collectors.toList()));
         }
         if (copySorts) {
             if (tree instanceof ISqlEntity) {
                 Collection<? extends ISqlSort> treeSorts = ((ISqlEntity) tree).getSorts();
                 if (treeSorts != null && !treeSorts.isEmpty()) {
-                    helper.getSorts().addAll(treeSorts.stream().map(SortG::of).collect(Collectors.toList()));
+                    helper.getSorts().addAll(treeSorts.stream().map(SqlSortG::of).collect(Collectors.toList()));
                 }
             }
         }
