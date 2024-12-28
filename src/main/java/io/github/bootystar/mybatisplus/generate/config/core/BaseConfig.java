@@ -4,10 +4,9 @@ import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 import io.github.bootystar.mybatisplus.generate.info.MethodInfo;
+import org.apache.ibatis.type.JdbcType;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author bootystar
@@ -146,6 +145,43 @@ public abstract class BaseConfig {
      */
     protected Map<String, Boolean> orderColumnMap = new LinkedHashMap<>();
 
+    // ------------------生成器运行时相关----------------
+
+    /**
+     * DTO及VO的导包
+     */
+    protected Set<String> importPackages4DTO;
+
+    /**
+     * 生成时间
+     */
+    protected String nowTime;
+
+    /**
+     * jdbc时间类型
+     */
+    protected List<JdbcType> jdbcTimeTypes;
+
+    /**
+     * mapper默认排序的sql语句
+     */
+    protected String orderBySql;
+
+    /**
+     * swagger注解的额外后缀uuid
+     */
+    protected String swaggerUUID;
+
+    /**
+     * 是否自定义了额外字段后缀
+     */
+    protected boolean extraFieldSuffixCustom;
+
+    /**
+     * 额外字段后缀映射
+     */
+    protected Map<String, String> extraFieldSuffixMap = SqlExtraSuffix.DEFAULT_MAP;
+
     // ------------------非通用相关----------------
 
     /**
@@ -164,18 +200,8 @@ public abstract class BaseConfig {
     protected ClassInfo mapperDTO;
 
     /**
-     * 额外字段后缀
-     */
-    protected Map<String, String> extraFieldSuffixMap = SqlExtraSuffix.DEFAULT_MAP;
-
-    /**
      * 额外字段后缀构建器
      */
     protected FieldSuffixBuilder extraFieldSuffixBuilder = new FieldSuffixBuilder();
-
-    /**
-     * 是否自定义后缀
-     */
-    protected boolean extraFieldSuffixCustom;
 
 }

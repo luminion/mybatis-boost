@@ -83,33 +83,6 @@ public class CustomConfig extends BaseConfig {
             }
             customFiles.add(builder.build());
         }
-//        if (generateExport && !exportOnVO) {
-//            String fileName = "ExportDTO.java";
-//            String path = path4DTO + File.separator + entityName + fileName;
-//            CustomFile.Builder builder = new CustomFile.Builder()
-//                    .fileName(fileName)
-//                    .filePath(path)
-//                    .templatePath("/templates/base/entityExportDTO.java.vm")
-//                    .packageName(pathUnderParent4DTO);
-//            if (fileOverride) {
-//                builder.enableFileOverride();
-//            }
-//            customFiles.add(builder.build());
-//
-//        }
-//        if (generateImport && !importOnVO) {
-//            String fileName = "ImportDTO.java";
-//            String path = path4DTO + File.separator + entityName + fileName;
-//            CustomFile.Builder builder = new CustomFile.Builder()
-//                    .fileName(fileName)
-//                    .filePath(path)
-//                    .templatePath("/templates/base/entityImportDTO.java.vm")
-//                    .packageName(pathUnderParent4DTO);
-//            if (fileOverride) {
-//                builder.enableFileOverride();
-//            }
-//            customFiles.add(builder.build());
-//        }
 
         String fileName = "VO.java";
         String path = path4VO + File.separator + entityName + fileName;
@@ -126,7 +99,48 @@ public class CustomConfig extends BaseConfig {
     }
 
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        HashMap<String, Object> data = new HashMap<>();
+
+        // DTO及VO导入的包
+        Set<String> importPackages = tableInfo.getImportPackages();
+        Set<String> importPackages4DTO = new HashSet<>();
+        for (String importPackage : importPackages) {
+            if (!importPackage.startsWith("com.baomidou.mybatisplus.annotation")) {
+                importPackages4DTO.add(importPackage);
+            }
+        }
+        this.importPackages4DTO = importPackages4DTO;
+
+        // 当前时间
+        this.nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        // 时间类型列表
+        // SQL Server 2008
+        // JDBC 4.2 JDK8
+        // JDBC 4.2 JDK8
+        // 对应fields[i].metaInfo.jdbcType
+        this.jdbcTimeTypes = Arrays.asList(
+                JdbcType.DATE, JdbcType.TIME, JdbcType.TIMESTAMP, JdbcType.DATETIMEOFFSET,// SQL Server 2008
+                JdbcType.TIME_WITH_TIMEZONE,// JDBC 4.2 JDK8
+                JdbcType.TIMESTAMP_WITH_TIMEZONE // JDBC 4.2 JDK8
+        );
+
+        // 排序字段sql
+        List<TableField> sortfields = tableInfo.getFields();
+        List<String> existColumnNames = sortfields.stream().map(TableField::getColumnName).collect(Collectors.toList());
+        if (orderColumnMap != null && !orderColumnMap.isEmpty()) {
+            orderColumnMap.entrySet().stream()
+                    .filter(e -> existColumnNames.contains(e.getKey()))
+                    .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : ""))
+                    .reduce((e1, e2) -> e1 + " , " + e2)
+                    .ifPresent(e -> this.orderBySql = e);
+        }
+
+        // swagger UUID相关
+        if (this.swaggerAnnotationWithUUID) {
+            String uuid = "_" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+            this.swaggerUUID = uuid;
+        }
+
         // 额外字段后缀
         LinkedHashMap<String, String> build = this.extraFieldSuffixBuilder.build();
         if (build != null && !build.isEmpty()) {
@@ -134,7 +148,8 @@ public class CustomConfig extends BaseConfig {
             this.extraFieldSuffixMap = build;
         }
 
-        // 添加自定义字段
+        // 添加自定义配置字段信息
+        HashMap<String, Object> data = new HashMap<>();
         try {
             Collection<Field> fields = MybatisPlusReflectHelper.fieldMap(getClass()).values();
             for (Field field : fields) {
@@ -143,42 +158,6 @@ public class CustomConfig extends BaseConfig {
         } catch (IllegalAccessException e) {
             log.error("Generate Injection Field Error Please Report to Developer", e);
         }
-        Set<String> importPackages = tableInfo.getImportPackages();
-        Set<String> importPackages4DTO = new HashSet<>();
-        for (String importPackage : importPackages) {
-            if (!importPackage.startsWith("com.baomidou.mybatisplus.annotation")) {
-                importPackages4DTO.add(importPackage);
-            }
-        }
-        data.put("importPackages4DTO", importPackages4DTO);
-        // 当前时间
-        data.put("nowTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-        // 时间类型列表
-        List<JdbcType> jdbcTimeTypes = Arrays.asList(JdbcType.DATE, JdbcType.TIME, JdbcType.TIMESTAMP, JdbcType.DATETIMEOFFSET,// SQL Server 2008
-                JdbcType.TIME_WITH_TIMEZONE,// JDBC 4.2 JDK8
-                JdbcType.TIMESTAMP_WITH_TIMEZONE // JDBC 4.2 JDK8
-        );
-        // 对应fields[i].metaInfo.jdbcType
-        data.put("jdbcTimeTypes", jdbcTimeTypes);
-        // 排序字段
-        List<TableField> fields = tableInfo.getFields();
-        List<String> existColumnNames = fields.stream().map(TableField::getColumnName).collect(Collectors.toList());
-        if (orderColumnMap != null && !orderColumnMap.isEmpty()) {
-            orderColumnMap.entrySet().stream()
-                    .filter(e -> existColumnNames.contains(e.getKey()))
-                    .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : ""))
-                    .reduce((e1, e2) -> e1 + " , " + e2)
-                    .ifPresent(e -> data.put("orderBySql", e));
-        }
-
-        if (this.swaggerAnnotationWithUUID) {
-            String uuid = "_" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
-            data.put("swaggerUUID", uuid);
-        } else {
-            data.remove("swaggerUUID");
-        }
-
         return data;
     }
 
