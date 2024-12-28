@@ -81,7 +81,7 @@
         <result column="${field.name}" property="${field.propertyName}" />
     #end
     #foreach($field in ${table.fields})##生成普通字段
-        #if(!${field.keyFlag})
+        #if(!${field.keyFlag} && !${field.logicDeleteField})
         <result column="${field.name}" property="${field.propertyName}" />
         #end
     #end

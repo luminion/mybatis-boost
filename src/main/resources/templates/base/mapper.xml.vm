@@ -35,7 +35,7 @@
             <result column="${field.name}" property="${field.propertyName}" />
         #end
         #foreach($field in ${table.fields})
-            #if(!${field.keyFlag})##生成普通字段
+            #if(!${field.keyFlag} && !${field.logicDeleteField})##生成普通字段
                 <result column="${field.name}" property="${field.propertyName}" />
             #end
         #end
