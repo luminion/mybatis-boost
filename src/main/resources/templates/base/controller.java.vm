@@ -46,7 +46,7 @@ import ${basePackage}.${package4DTO}.${entityInsertDTO};
 #if(${generateUpdate})
 import ${basePackage}.${package4DTO}.${entityUpdateDTO};
 #end
-#if(${generateSelect}||${generateExport}||${generateInsert})
+#if(${generateSelect}||${generateExport})
 import ${basePackage}.${package4VO}.${entityVO};
 #end
 #if(${returnMethod.classFullName})
