@@ -1,7 +1,8 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
-import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
+import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.UnmodifiableSqlHelper;
+import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 import lombok.Getter;
 
@@ -34,15 +35,19 @@ public class DynamicFieldBuilder extends BaseEnhanceBuilder<DynamicFieldBuilder>
     }
 
     @Override
-    public FieldSuffixBuilder getFieldSuffixBuilder() {
-        return super.getFieldSuffixBuilder();
+    public ExtraFieldSuffixBuilder getExtraFieldSuffixBuilder() {
+        return super.getExtraFieldSuffixBuilder();
     }
 
     @Override
-    public DynamicFieldBuilder fieldSuffixBuilder(Consumer<FieldSuffixBuilder> builderConsumer) {
-        return super.fieldSuffixBuilder(builderConsumer);
+    public DynamicFieldBuilder extraFieldSuffixBuilder(Consumer<ExtraFieldSuffixBuilder> builderConsumer) {
+        return super.extraFieldSuffixBuilder(builderConsumer);
     }
 
+    @Override
+    public DynamicFieldBuilder extraFieldStrategy(ExtraFieldStrategy strategy) {
+        return super.extraFieldStrategy(strategy);
+    }
 }
 
 

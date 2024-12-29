@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhance.helper.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
+import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.enhance.query.SqlCondition;
 import io.github.bootystar.mybatisplus.enhance.query.SqlTree;
@@ -17,7 +17,7 @@ public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
 
     private Map<String, String> suffix2OperatorMap = SqlExtraSuffix.DEFAULT_MAP;
 
-    public DynamicFieldSqlHelper(SqlTree tree, Class<T> entityClass, FieldSuffixBuilder suffixBuilder) {
+    public DynamicFieldSqlHelper(SqlTree tree, Class<T> entityClass, ExtraFieldSuffixBuilder suffixBuilder) {
         super(entityClass);
         if (tree == null) {
             throw new IllegalArgumentException("tree can't be null");

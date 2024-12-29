@@ -4,12 +4,11 @@ import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * @author bootystar
  */
-public class FieldSuffixBuilder {
+public class ExtraFieldSuffixBuilder {
     private static final String SUFFIX_PATTERN = "^[a-zA-Z0-9_$]+$";
     private final LinkedHashMap<String, String> suffix2OperatorMap = new LinkedHashMap<>();
 
@@ -27,10 +26,10 @@ public class FieldSuffixBuilder {
      * 不等于
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder ne(String suffix) {
+    public ExtraFieldSuffixBuilder ne(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.NE.keyword);
         return this;
@@ -40,10 +39,10 @@ public class FieldSuffixBuilder {
      * 大于
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder gt(String suffix) {
+    public ExtraFieldSuffixBuilder gt(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.GT.keyword);
         return this;
@@ -53,10 +52,10 @@ public class FieldSuffixBuilder {
      * 大于等于
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder ge(String suffix) {
+    public ExtraFieldSuffixBuilder ge(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.GE.keyword);
         return this;
@@ -66,10 +65,10 @@ public class FieldSuffixBuilder {
      * 小于
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder lt(String suffix) {
+    public ExtraFieldSuffixBuilder lt(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.LT.keyword);
         return this;
@@ -79,10 +78,10 @@ public class FieldSuffixBuilder {
      * 小于等于
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder le(String suffix) {
+    public ExtraFieldSuffixBuilder le(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.LE.keyword);
         return this;
@@ -92,10 +91,10 @@ public class FieldSuffixBuilder {
      * 模糊匹配
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder like(String suffix) {
+    public ExtraFieldSuffixBuilder like(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.LIKE.keyword);
         return this;
@@ -105,10 +104,10 @@ public class FieldSuffixBuilder {
      * 不模糊匹配
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder notLike(String suffix) {
+    public ExtraFieldSuffixBuilder notLike(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.NOT_LIKE.keyword);
         return this;
@@ -118,10 +117,10 @@ public class FieldSuffixBuilder {
      * in
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder in(String suffix) {
+    public ExtraFieldSuffixBuilder in(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.IN.keyword);
         return this;
@@ -131,10 +130,10 @@ public class FieldSuffixBuilder {
      * not in
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder notIn(String suffix) {
+    public ExtraFieldSuffixBuilder notIn(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.NOT_IN.keyword);
         return this;
@@ -144,10 +143,10 @@ public class FieldSuffixBuilder {
      * is null
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder isNull(String suffix) {
+    public ExtraFieldSuffixBuilder isNull(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.IS_NULL.keyword);
         return this;
@@ -157,10 +156,10 @@ public class FieldSuffixBuilder {
      * is not null
      *
      * @param suffix 后缀
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    public FieldSuffixBuilder isNotNull(String suffix) {
+    public ExtraFieldSuffixBuilder isNotNull(String suffix) {
         check(suffix);
         suffix2OperatorMap.put(suffix, SqlKeyword.IS_NOT_NULL.keyword);
         return this;

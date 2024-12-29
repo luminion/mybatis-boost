@@ -81,9 +81,7 @@ public class ${entity}SelectDTO {
                     #break
                 #end
             #end
-            #if(!${existField})
-                #if(${field.propertyType}!="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
-                #else
+            #if(!${existField} && ${extraFieldStrategy.allowGenerate(${value},${field})})
 
                 #if("$!field.comment" != "")
                     #if(${springdoc})
@@ -97,8 +95,7 @@ public class ${entity}SelectDTO {
                     #end
                 #end
     private ${extraFieldType} ${extraFieldName};
-                #end
-                #if(${field.propertyType}=="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
+                #if(${value}=="LIKE"||${value}=="NOT LIKE")
 
     public ${extraFieldType} get${field.capitalName}${key}() {
         return ${extraFieldName} == null || ${extraFieldName}.isEmpty() ? ${extraFieldName} : "%" + ${extraFieldName} + "%";
@@ -155,16 +152,14 @@ public class ${entity}SelectDTO {
                     #break
                 #end
             #end
-            #if(!${existField})
-                #if(${field.propertyType}!="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
+            #if(!${existField} && ${extraFieldStrategy.allowGenerate(${value},${field})})
+                #if(${value}=="LIKE"||${value}=="NOT LIKE")
                 #else
-                    #if(${field.propertyType}=="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
-                    #else
 
     public ${extraFieldType} ${getprefix}${field.capitalName}${key}() {
         return ${extraFieldName};
     }
-                    #end
+                #end
 
                 #if(${chainModel})
     public ${entity}SelectDTO set${field.capitalName}${key}(${extraFieldType} ${extraFieldName}) {
@@ -176,7 +171,6 @@ public class ${entity}SelectDTO {
         return this;
                 #end
     }
-                #end
             #end
         #end
 ##----------额外字段getter/setter的foreach-----------start
@@ -225,11 +219,8 @@ public class ${entity}SelectDTO {
                     #break
                 #end
             #end
-            #if(!${existField})
-              #if(${field.propertyType}!="String" && (${value}=="LIKE"||${value}=="NOT LIKE"))
-              #else
+            #if(!${existField} && ${extraFieldStrategy.allowGenerate(${value},${field})})
         ", ${extraFieldName} = " + ${extraFieldName} +
-                  #end
             #end
         #end
   #end

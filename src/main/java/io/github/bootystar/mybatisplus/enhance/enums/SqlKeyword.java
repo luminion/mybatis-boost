@@ -48,6 +48,7 @@ public enum SqlKeyword {
     public static final List<String> CONDITION_OPERATORS_MULTI;
     public static final List<String> CONDITION_OPERATORS_ALL;
     public static final List<String> CONDITION_OPERATORS_LIKE;
+    public static final List<String> CONDITION_OPERATORS_COMPARE;
 
     static {
         List<String> connector = Arrays.asList(AND.keyword, OR.keyword);
@@ -65,6 +66,8 @@ public enum SqlKeyword {
         CONDITION_OPERATORS_ALL = Collections.unmodifiableList(all);
         List<String> like = Arrays.asList(LIKE.keyword, NOT_LIKE.keyword);
         CONDITION_OPERATORS_LIKE = Collections.unmodifiableList(like);
+        List<String> compare = Arrays.asList(GT.keyword, GE.keyword, LT.keyword, LE.keyword);
+        CONDITION_OPERATORS_COMPARE = Collections.unmodifiableList(compare);
     }
 
     public static String replaceConnector(String connector) {

@@ -1,7 +1,8 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
-import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
+import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
+import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 
 import java.util.Map;
@@ -48,24 +49,36 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
     }
 
     /**
-     * 获取字段后缀生成器
+     * 获取额外字段后缀构造器
      *
-     * @return {@link FieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder }
      * @author bootystar
      */
-    protected FieldSuffixBuilder getFieldSuffixBuilder() {
+    protected ExtraFieldSuffixBuilder getExtraFieldSuffixBuilder() {
         return this.extraFieldSuffixBuilder;
     }
 
     /**
-     * 后缀生成器的消费者模式
+     * 额外字段后缀构造器的消费者模式
      *
      * @param builderConsumer builder消费者
      * @return {@link B }
      * @author bootystar
      */
-    protected B fieldSuffixBuilder(Consumer<FieldSuffixBuilder> builderConsumer) {
+    protected B extraFieldSuffixBuilder(Consumer<ExtraFieldSuffixBuilder> builderConsumer) {
         builderConsumer.accept(this.extraFieldSuffixBuilder);
+        return this.getBuilder();
+    }
+
+    /**
+     * 额外字段策略
+     *
+     * @param strategy 战略
+     * @return {@link B }
+     * @author bootystar
+     */
+    protected B extraFieldStrategy(ExtraFieldStrategy strategy) {
+        this.extraFieldStrategy = strategy;
         return this.getBuilder();
     }
 

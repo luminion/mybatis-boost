@@ -1,7 +1,9 @@
 package io.github.bootystar.mybatisplus.generate.config.core;
 
-import io.github.bootystar.mybatisplus.enhance.builder.FieldSuffixBuilder;
+import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
+import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
+import io.github.bootystar.mybatisplus.generate.handler.support.ExtraFieldStrategyDefault;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 import io.github.bootystar.mybatisplus.generate.info.MethodInfo;
 import org.apache.ibatis.type.JdbcType;
@@ -202,6 +204,11 @@ public abstract class BaseConfig {
     /**
      * 额外字段后缀构建器
      */
-    protected FieldSuffixBuilder extraFieldSuffixBuilder = new FieldSuffixBuilder();
+    protected ExtraFieldSuffixBuilder extraFieldSuffixBuilder = new ExtraFieldSuffixBuilder();
+
+    /**
+     * 额外字段策略
+     */
+    protected ExtraFieldStrategy extraFieldStrategy = new ExtraFieldStrategyDefault();
 
 }

@@ -95,7 +95,7 @@
                         #break
                     #end
                 #end
-                    #if(!${existField})##-----属性字段不包含额外字段-----start
+            #if(!${existField} && ${extraFieldStrategy.allowGenerate(${value},${field})})##-----属性字段不包含额外字段-----start
                 #if(${value}=="IN"||${value}=="NOT IN")
                 <if test="param1.${extraFieldName} != null and param1.${extraFieldName}.size()>0">
                     AND a.${field.columnName} ${value}
@@ -103,15 +103,6 @@
                         #{item}
                     </foreach>
                 </if>
-                #elseif(${value}=="LIKE"||${value}=="NOT LIKE")
-                    #if(${field.propertyType}=="String")
-##                <if test="param1.${extraFieldName} != null and param1.${extraFieldName}.length()>0">
-##                    AND a.${field.columnName} ${value} '%' || #{param1.${extraFieldName}} || '%'
-##                </if>
-                <if test="param1.${extraFieldName} != null and param1.${extraFieldName}.length()>0">
-                    AND a.${field.columnName} ${value} #{param1.${extraFieldName}}
-                </if>
-                    #end
                 #elseif(${value}=="<")
                 <if test="param1.${extraFieldName} != null">
                     AND a.${field.columnName} &lt; #{param1.${extraFieldName}}
@@ -137,7 +128,7 @@
                     AND a.${field.columnName} ${value} #{param1.${extraFieldName}}
                 </if>
                 #end
-                    #end##-----属性字段不包含额外字段-----end
+            #end##-----属性字段不包含额外字段-----end
             #end## ----------额外字段foreach-----------end
         #end
     #end
