@@ -16,7 +16,7 @@ package ${package.ServiceImpl};
 import com.baomidou.mybatisplus.core.metadata.IPage;
 #end
 import ${superServiceImplClassPackage};
-#if(${extraFieldSuffixCustom})
+#if(${overrideInitSuffixBuilder})
 import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 #end
 import ${package.Entity}.${entity};
@@ -50,7 +50,7 @@ open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperNam
 }
 #else
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}, ${entityVO}> implements ${table.serviceName} {
-#if(${extraFieldSuffixCustom})
+#if(${overrideInitSuffixBuilder})
 
     @Override
     protected ExtraFieldSuffixBuilder initSuffixBuilder() {

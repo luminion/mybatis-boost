@@ -175,9 +175,9 @@ public abstract class BaseConfig {
     protected String swaggerUUID;
 
     /**
-     * 是否自定义了额外字段后缀
+     * 是否需要重写serviceImpl中后缀构造器initSuffixBuilder()的方法
      */
-    protected boolean extraFieldSuffixCustom;
+    protected boolean overrideInitSuffixBuilder;
 
     /**
      * 额外字段后缀映射

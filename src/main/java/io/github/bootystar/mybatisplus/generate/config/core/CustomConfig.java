@@ -137,14 +137,13 @@ public class CustomConfig extends BaseConfig {
 
         // swagger UUID相关
         if (this.swaggerAnnotationWithUUID) {
-            String uuid = "_" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
-            this.swaggerUUID = uuid;
+            this.swaggerUUID = "_" + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
         }
 
         // 额外字段后缀
         LinkedHashMap<String, String> build = this.extraFieldSuffixBuilder.build();
         if (build != null && !build.isEmpty()) {
-            this.extraFieldSuffixCustom = true;
+            this.overrideInitSuffixBuilder = true;
             this.extraFieldSuffixMap = build;
         }
 
