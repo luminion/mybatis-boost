@@ -8,6 +8,13 @@ enhancer of mybatis-plus
 * 支持通过`属性`+`特殊后缀`的方式自动映射不同类型的查询
 * 支持过前端传参生成`防注入的动态sql`, 并支持条件嵌套
 
+[依赖](#maven依赖)   
+[增强型代码生成器](#代码生成器)   
+[动态Sql工具](#动态sql工具SqlHelper)  
+[IService增强](#dynamicservicet-v)   
+[BaseMapper增强](#dynamicmappert-v-s)   
+
+
 ## Maven依赖
 
 ### SpringBoot3
@@ -70,7 +77,7 @@ enhancer of mybatis-plus
 
 ### 可选项
 
-#### 分页插件
+#### 分页插件依赖
 ```xml
 <!-- (可选)分页插件 jdk11+引入 -->
 <dependency>
@@ -84,7 +91,7 @@ enhancer of mybatis-plus
 </dependency>
 ```
 
-#### 代码生成器
+#### 代码生成器依赖
 ```xml
 <!-- (可选)代码生成器 -->
 <dependency>
@@ -102,7 +109,7 @@ enhancer of mybatis-plus
 </dependency>
 ```
 
-#### Excel导入导出
+#### Excel依赖
 ```xml
 <!-- (可选)Excel导入导出 -->
 <dependency>
@@ -212,7 +219,7 @@ enhancer of mybatis-plus
 ## 代码生成器
 
 ### 代码生成(Lambda链式)
-对`Lambda表达式`不熟悉的见下文`代码生成(编码式)`
+对`Lambda表达式`不熟悉的见[代码生成(编码式)](#代码生成编码式)
 ```java
 import io.github.bootystar.mybatisplus.generate.GeneratorHelper;
 ```
