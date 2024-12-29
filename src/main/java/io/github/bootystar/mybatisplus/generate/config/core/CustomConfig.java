@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.util.MybatisPlusReflectHelper;
 import io.github.bootystar.mybatisplus.util.ReflectHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class CustomConfig extends BaseConfig {
             CustomFile.Builder builder = new CustomFile.Builder()
                     .fileName(fileName)
                     .filePath(path)
-                    .templatePath("/templates/base/entityInsertDTO.java.vm")
+                    .templatePath("/templates/base/entityInsertDTO.java.vm" )
                     .packageName(pathUnderParent4DTO);
             if (fileOverride) {
                 builder.enableFileOverride();
@@ -62,7 +63,7 @@ public class CustomConfig extends BaseConfig {
             CustomFile.Builder builder = new CustomFile.Builder()
                     .fileName(fileName)
                     .filePath(path)
-                    .templatePath("/templates/base/entityUpdateDTO.java.vm")
+                    .templatePath("/templates/base/entityUpdateDTO.java.vm" )
                     .packageName(pathUnderParent4DTO);
             if (fileOverride) {
                 builder.enableFileOverride();
@@ -76,7 +77,7 @@ public class CustomConfig extends BaseConfig {
             CustomFile.Builder builder = new CustomFile.Builder()
                     .fileName(fileName)
                     .filePath(path)
-                    .templatePath("/templates/base/entitySelectDTO.java.vm")
+                    .templatePath("/templates/base/entitySelectDTO.java.vm" )
                     .packageName(pathUnderParent4DTO);
             if (fileOverride) {
                 builder.enableFileOverride();
@@ -89,7 +90,7 @@ public class CustomConfig extends BaseConfig {
         CustomFile.Builder builder = new CustomFile.Builder()
                 .fileName(fileName)
                 .filePath(path)
-                .templatePath("/templates/base/entityVO.java.vm")
+                .templatePath("/templates/base/entityVO.java.vm" )
                 .packageName(pathUnderParent4VO);
         if (fileOverride) {
             builder.enableFileOverride();
@@ -104,14 +105,14 @@ public class CustomConfig extends BaseConfig {
         Set<String> importPackages = tableInfo.getImportPackages();
         Set<String> importPackages4DTO = new HashSet<>();
         for (String importPackage : importPackages) {
-            if (!importPackage.startsWith("com.baomidou.mybatisplus.annotation")) {
+            if (!importPackage.startsWith("com.baomidou.mybatisplus.annotation" )) {
                 importPackages4DTO.add(importPackage);
             }
         }
         this.importPackages4DTO = importPackages4DTO;
 
         // 当前时间
-        this.nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss" ));
 
         // 时间类型列表
         // SQL Server 2008
@@ -130,7 +131,7 @@ public class CustomConfig extends BaseConfig {
         if (orderColumnMap != null && !orderColumnMap.isEmpty()) {
             orderColumnMap.entrySet().stream()
                     .filter(e -> existColumnNames.contains(e.getKey()))
-                    .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : ""))
+                    .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : "" ))
                     .reduce((e1, e2) -> e1 + " , " + e2)
                     .ifPresent(e -> this.orderBySql = e);
         }
@@ -143,7 +144,9 @@ public class CustomConfig extends BaseConfig {
         // 额外字段后缀
         LinkedHashMap<String, String> build = this.extraFieldSuffixBuilder.build();
         if (build != null && !build.isEmpty()) {
-            this.overrideInitSuffixBuilder = true;
+            if (!build.equals(SqlExtraSuffix.DEFAULT_FULL_MAP) && !build.equals(SqlExtraSuffix.DEFAULT_SIMPLE_MAP)) {
+                this.overrideInitSuffixBuilder = true;
+            }
             this.extraFieldSuffixMap = build;
         }
 

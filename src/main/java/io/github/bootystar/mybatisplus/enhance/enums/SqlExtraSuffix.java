@@ -15,10 +15,10 @@ public enum SqlExtraSuffix {
     //    EQ("Eq", SqlKeyword.EQ),
 //    NE("Ne", SqlKeyword.NE),
     NE("Ne", SqlKeyword.NE2),// 使用!=便于调用者理解
-    GT("Gt", SqlKeyword.GT),
-    GE("Ge", SqlKeyword.GE),
     LT("Lt", SqlKeyword.LT),
     LE("Le", SqlKeyword.LE),
+    GT("Gt", SqlKeyword.GT),
+    GE("Ge", SqlKeyword.GE),
     LIKE("Like", SqlKeyword.LIKE),
     NOT_LIKE("NotLike", SqlKeyword.NOT_LIKE),
 

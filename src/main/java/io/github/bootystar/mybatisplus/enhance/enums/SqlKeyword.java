@@ -21,10 +21,10 @@ public enum SqlKeyword {
     EQ("="),
     NE("<>"),
     NE2("!="),
-    GT(">"),
-    GE(">="),
     LT("<"),
     LE("<="),
+    GT(">"),
+    GE(">="),
     LIKE("LIKE"),
     NOT_LIKE("NOT LIKE"),
 
