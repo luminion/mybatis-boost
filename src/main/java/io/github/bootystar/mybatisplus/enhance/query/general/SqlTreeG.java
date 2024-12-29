@@ -22,7 +22,6 @@ public class SqlTreeG implements SqlTree {
 
     /**
      * 子条件
-     * (满足父条件后的值才会筛选子条件)
      */
     protected SqlTreeG child;
 

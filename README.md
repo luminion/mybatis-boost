@@ -251,7 +251,17 @@ GeneratorHelper
         .mapperXmlResource("static/mapper") // mapper.xml文件在Resources下的路径
         .initialize() // 初始化常用配置
         .custom(custom -> {
-        // 自定义配置(见下文)
+        // 自定义配置
+            custom
+                .enableJakartaApi() // 启用Jakarta API, springboot3及以上需要开启
+                .enableFileOverride() // 文件覆盖生成(DTO、VO)
+                .disableInsert() // 不生成新增
+                .disableUpdate() // 不生成更新
+                .disableDelete() // 不生成删除
+                .disableSelect() // 不生成查询
+                .disableImport() // 不生成导入
+                .disableExport() // 不生成导出
+                // 略... 更多可配置项见下文说明
         ;})
         .dataSource(dataSource -> {
         // 数据源配置(参考mybatis-plus官方文档)
@@ -287,62 +297,60 @@ GeneratorHelper
 * 额外代码生成器特殊配置项:[ExtraCodeBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/ExtraCodeBuilder.java)
 * 动态sql生成器特殊配置项:[DynamicSqlBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/DynamicSqlBuilder.java)
 * 动态字段生成器特殊配置项:[DynamicFieldBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/DynamicFieldBuilder.java)
+
+自定义配置示例:(仅供参考, 若有变动不再更新, 详见源码)
 ```java
 custom
-                // 文件相关
-                .enableFileOverride() // 文件覆盖生成(DTO、VO)
-                .enableSwaggerModelWithAnnotation() // 启用swagger/springdoc参数类注解(默认关闭,避免swagger同名冲突)
-                .enableSwaggerAnnotationWithUUID() // 启用swagger/springdoc文档额外uuid标识(开启参数类注解时避免swagger同名冲突)
-                .class4SelectDTO(Map.class) // 使用指定类作为查询入参DTO(推荐使用Map或SqlHelper)
-                .package4DTO("dto") // DTO的包名
-                .path4DTO("C:/Project/test21/") // DTO的路径(全路径或相对路径)
-                .package4VO("vo") // VO的包名
-                .path4VO("C:/Project/test21/") // VO的路径(全路径或相对路径)
-                .editExcludeColumns("create_time", "update_time") // 新增/修改时忽略的字段
-                // controller额外生成项
-                .baseUrl("/api") // 请求url前缀
-                .enableCrossOrigins() // 启用跨域
-                .enableJakartaApi() // 启用Jakarta API, springboot3以上需要开启
-                .enableAutoWired() // 使用@Autowired替换@Resource
-                .returnMethod(R1::new) // 返回值对象封装的方法
-                .pageMethod(P1::of) // 分页对象封装的方法(需要接收IPage作为参数)
-                .disableRestful() // 禁用restful
-                .disableRequestBody() // 禁用请求体
-                .disableValidated() // 禁用参数校验
-                .disablePostQuery() // 复杂查询不使用post请求(使用get请求, 并关闭@RequestBody)
-                // mapper额外生成项
-                .sortColumnClear() // 清空排序
-                .sortColumn("create_time",true) // 添加排序(字段,是否倒序)
-                .sortColumn("id",true) // 添加排序(字段,是否倒序)
-                // 需要生成的方法
-                .disableInsert() // 不生成新增
-                .disableUpdate() // 不生成更新
-                .disableDelete() // 不生成删除
-                .disableSelect() // 不生成查询
-                .disableImport() // 不生成导入
-                .disableExport() // 不生成导出
-                // 特殊配置项, 因不同生成器而异
-                .disableOverrideMethods() // 不生成重写的父类方法
-                .withMapSelectDTO() // 使用Map作为查询入参DTO
-                .withSqlHelperSelectDTO() // 使用SqlHelper作为查询入参DTO
-                .extraFieldStrategy(new ExtraFieldStrategyDefault()) // 自定义额外字段策略(字段何时生成/不生成对应后缀的额外字段)
-                .extraFieldSuffixBuilder(builder -> { 
-                // 该项默认无需配置, 配置后, 只会根据已配置的字段生成额外后缀, 未配置的类型不会生成后缀
-                                builder
-                                    .defaultSuffix() // 添加默认的后缀字符(默认生成LIKE,IN,<=,>=的特殊后缀)
-                                    .defaultSuffixFull() // 添加所有默认的后缀字符
-                                    .ne("Ne") // 不等于字段额外后缀
-                                    .lt("Lt") // 小于字段额外后缀
-                                    .le("Le") // 小于等于字段额外后缀
-                                    .ge("Ge") // 大于等于字段额外后缀
-                                    .gt("Gt") // 大于字段额外后缀
-                                    .like("Like") // 模糊匹配字段额外后缀
-                                    .notLike("NotLike") // 反模糊匹配字段额外后缀
-                                    .in("In") // 包含字段额外后缀
-                                    .notIn("NotIn") // 不包含字段额外后缀
-                                    .isNull("IsNull") // 空字段额外后缀
-                                    .isNotNull("IsNotNull") // 非空字段额外后缀
-                    ;})// 自定义字段额外后缀
+    // 文件相关
+    .enableFileOverride() // 文件覆盖生成(DTO、VO)
+    .disableInsert() // 不生成新增
+    .disableUpdate() // 不生成更新
+    .disableDelete() // 不生成删除
+    .disableSelect() // 不生成查询
+    .disableImport() // 不生成导入
+    .disableExport() // 不生成导出
+    .package4DTO("dto") // DTO的包名
+    .path4DTO("C:/Project/test21/") // DTO的路径(全路径或相对路径)
+    .package4VO("vo") // VO的包名
+    .path4VO("C:/Project/test21/") // VO的路径(全路径或相对路径)
+    .editExcludeColumns("create_time", "update_time") // 新增/修改时忽略的字段
+    // controller额外生成项
+    .baseUrl("/api") // 请求url前缀
+    .enableCrossOrigins() // 启用跨域
+    .enableJakartaApi() // 启用Jakarta API, springboot3以上需要开启
+    .enableAutoWired() // 使用@Autowired替换@Resource
+    .returnMethod(R1::new) // 返回值对象封装的方法
+    .pageMethod(P1::of) // 分页对象封装的方法(需要接收IPage作为参数)
+    .disableRestful() // 禁用restful
+    .disableRequestBody() // 禁用请求体
+    .disableValidated() // 禁用参数校验
+    .disablePostQuery() // 复杂查询不使用post请求(使用get请求, 并关闭@RequestBody)
+    // mapper额外生成项
+    .sortColumnClear() // 清空排序
+    .sortColumn("create_time",true) // 添加排序(字段,是否倒序)
+    .sortColumn("id",true) // 添加排序(字段,是否倒序)
+    // 特殊配置项, 因不同生成器而异
+    .disableOverrideMethods() // 不生成重写的父类方法
+    .withMapSelectDTO() // 使用Map作为查询入参DTO
+    .withSqlHelperSelectDTO() // 使用SqlHelper作为查询入参DTO
+    .extraFieldStrategy(new ExtraFieldStrategyDefault()) // 自定义额外字段策略(字段何时生成/不生成对应后缀的额外字段)
+    .extraFieldSuffixBuilder(builder -> { 
+    // 该项默认无需配置, 配置后, 只会根据已配置的字段生成额外后缀, 未配置的类型不会生成后缀
+                    builder
+                        .defaultSuffix() // 添加默认的后缀字符(默认生成LIKE,IN,<=,>=的特殊后缀)
+                        .defaultSuffixFull() // 添加所有默认的后缀字符
+                        .ne("Ne") // 不等于字段额外后缀
+                        .lt("Lt") // 小于字段额外后缀
+                        .le("Le") // 小于等于字段额外后缀
+                        .ge("Ge") // 大于等于字段额外后缀
+                        .gt("Gt") // 大于字段额外后缀
+                        .like("Like") // 模糊匹配字段额外后缀
+                        .notLike("NotLike") // 反模糊匹配字段额外后缀
+                        .in("In") // 包含字段额外后缀
+                        .notIn("NotIn") // 不包含字段额外后缀
+                        .isNull("IsNull") // 空字段额外后缀
+                        .isNotNull("IsNotNull") // 非空字段额外后缀
+        ;})// 自定义字段额外后缀
 ```
 
 ### 代码生成(编码式)
@@ -391,19 +399,20 @@ generator.getStrategyConfigBuilder().controllerBuilder() // controller配置(参
 generator.execute("sys_user"); // 要生成的表(不输入为全部)
 ```
 
-### 不同生成器的区别
+### 生成器实现
 
-#### ExtraCodeGenerator
+#### 额外代码生成器`ExtraCodeGenerator`
 优点:
-* 该生成器增强方式`代码注入`(原代码基础上添加额外代码)
-* 支持通过`属性`+`特殊后缀`的方式自动映射不同类型的查询
+* 该生成器增强方式为`代码注入`, 可生成后直接复制代码到其他`mybatis-plus`项目使用,可移植性强
 * 运行时除`mybatis-plus`外无其他依赖, 依赖耦合低
-* 可生成后复制代码到其他`mybatis-plus`项目使用,可移植性强
+* 支持通过`属性`+`特殊后缀`的方式自动映射不同类型的查询
+
 缺点:
 * `Service`和`ServiceImpl`内硬编码了`DTO`,`VO`
+* `mapper.xml`内代码量较多
 * 若生成后的实体数据库模型发生变化, 需要修改对应的`mapper.xml`和`SelectDTO`
 
-#### DynamicSqlGenerator
+#### 动态sql生成器`DynamicSqlGenerator`
 优点:
 * 默认使用`SqlHelper`入参, 支持`lambda`链式调用, `灵活`性极高
 * 可动态映射`属性`和`值`为查询条件, 并支持嵌套子条件
@@ -414,12 +423,12 @@ generator.execute("sys_user"); // 要生成的表(不输入为全部)
 * `Service`继承实现, 无需实现, 无额外代码
 * `ServiceImpl`继承实现, 无需实现, 无额外代码
 * `mapper.xml`中内容`简洁`且`兼容性`强, 可无缝衔接自行编写的sql
+
 缺点:
-* 需要`mybatis-plus-enhancer`依赖
-* 部分低版本`mybatis-plus`需要升级后使用
+* 需要`mybatis-plus-enhancer`依赖, 部分低版本`mybatis-plus`需要升级后使用
 * 前端传参较复杂
 
-#### DynamicFieldGenerator
+#### 动态字段生成器`DynamicFieldGenerator`
 优点:
 * 入参为`SqlHelper`时, 兼容`DynamicSqlGenerator`的动态映射功能
 * 支持通过`属性`+`特殊后缀`的方式自动映射不同类型的查询
@@ -427,317 +436,14 @@ generator.execute("sys_user"); // 要生成的表(不输入为全部)
 * `Service`继承实现, 无需实现, 无额外代码
 * `ServiceImpl`继承实现, 无需实现, 无额外代码
 * `mapper.xml`中内容`简洁`且`兼容性`强, 可无缝衔接自行编写的sql
+
 缺点:
-* 需要`mybatis-plus-enhancer`依赖
-* 部分低版本`mybatis-plus`需要升级后使用
-
-## 
-## Controller及传参
-* controller默认会根据`代码生成器`的配置生成多个方法, 包含`新增`、`修改`、`查询`、`Excel导入`、`Excel导出`
-* 新增及修改方法会根据实体类的`@Validated`注解自动校验
-* `查询参数`可以通过生成器的`class4SelectDTO()`指定自定义的查询入参实体类
-* `查询参数`根据生成器的不同, 除了原`实体类`参数外, 还有额外有不同的`增强`形式
-
-实体类示例
-```java
-public class SysUser {
-    /**
-     * 主键
-     */
-    private Long id;
-    /**
-     * 姓名
-     */
-    private String name;
-    /**
-     * 年龄
-     */
-    private Integer age;
-    /**
-     * 生日
-     */
-    private LocalDate birthDate;
-}
-```
-
-
-## 针对`IService`的强化增强
-### `DynamicService<T, V>`
-
-该接口定义了系列增强方法, 其中`T`为数据库实体类, `V`为VO数据展示类  
-该接口大多方法都提供了`默认实现`, 实际需要实现的仅有`doSelect()`方法
-* `getVOClass()`获取VO数据展示类
-* `toEntity()`将指定对象转化为数据库实体类对象
-* `toVO()`将指定对象转化为VO数据展示类对象
-* `toId()`获取`T`对象的主键对应值
-* `insertByDTO()`新增方法, 默认返回值R为新增数据的实际主键(重写时可搭配`toId()`使用)
-* `updateByDTO()`更新方法
-* `doSelect()`查询逻辑封装方法
-* `oneById()`根据id查询单个VO
-* `oneByDTO()`查询单个VO
-* `listByDTO()`查询VO列表
-* `pageByDTO()`查询VO分页
-* `excelTemplate()`excel导入模板
-* `excelImport()`excel文件导入
-* `excelExport()`excel文件导出
-* `lambdaHelper()`获取链式动态条件构造器(见`SqlHelper`), 使用方式类似mybatis-plus中的`lambdaQuery()`
-
-源码: [DynamicService.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/DynamicService.java)
-
-#### 相关实现类
-* [DynamicSqlServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/impl/DynamicSqlServiceImpl.java)
-* [DynamicFieldServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/impl/DynamicFieldServiceImpl.java)
+* 需要`mybatis-plus-enhancer`依赖, 部分低版本`mybatis-plus`需要升级后使用
 
 ## 动态sql工具`SqlHelper`
 
-
-### 动态sql形式传参
-* 使用`ISqlTree`接口的实现动态拼接sql, 默认实现为`SqlHelper`
-* 适用于`DynamicFieldGenerator`及`DynamicSqlGenerator`
-* 使用`DynamicFieldGenerator`时, 需要指定`class4SelectDTO()`为`SqlHelper.class`
-* 使用`DynamicFieldGenerator`时, `属性特殊后缀`会映射为指定`属性对应参数`,不会放到`自定义参数map`中
-
-#### `SqlHelper`参数
-* 该类整体为树状结构, 可嵌套自身
-* `conditions`表示当前层级的查询条件
-* `sorts`表示排序(仅最高层级生效)
-* `child`表示子条件(嵌套的自身)
-
-#### `SqlHelper`中的条件参数`conditions`
-* `or`表示与当前层级其他的关系(默认无需传递, 只有关系为`或者`条件时传递为`true`)
-* `field`表示`属性`名
-* `operator`表示运算符(默认为`=`, 为`=`时无需传递), 
-* `operator`不区分大小写, 支持 `=`、`!=`、`>`、`>=`、`<`、`<=`、`in`、`not in` 、`like`、`not like`、`is null`、`is not null`
-* `value`表示属性对应的`值`
-* `value`对应的`operator`若为`in`或`not in`时,`value`需要为`["value1","value2","value3"]`的多参数形式,
-* `value`对应的`operator`若为`is null`或`is not null`时,`value`可传递不为`null`的任意值,
-
-#### `SqlHelper`中的排序参数`sorts`
-* `field`表示`属性`名
-* `desc`表示是否倒序(默认为`false`, 正序时无需传递)
-
-
-#### 前端参数基础格式示例:
-```json
-{
-  // 查询条件列表
-  "conditions": [
-    // 条件1
-    {
-      "field": "name",
-      // 属性名
-      "operator": "<",
-      // 操作符, 
-      "value": 4
-      // 值
-    },
-    // 条件2
-    {
-      "field": "name",
-      // 属性名
-      "value": "张三"
-      // 值(运算符为=时, 可省略)
-    }
-  ],
-  // 排序列表
-  "sorts": [
-    {
-      "field": "name",
-      // 排序字段
-      "desc": false
-      // 是否倒序
-    }
-  ],
-  // 子条件(只有在父条件生效后才会继续触发子条件, 
-  // 不满足父条件的数据, 即使满足子条件也会被过滤)
-  "child": {
-    // 子条件列表
-    "conditions": [
-      // 子条件1
-      {
-        "field": "age",
-        "operator": "=",
-        "value": 18
-      },
-      // 子条件2
-      {
-        // 当指定"or": true时, 该条件与该层其他条件的关系为或
-        // 即 age=18 或 age=20的数据都满足该层条件
-        "or": true,
-        "field": "age",
-        "operator": "=",
-        "value": 20
-      }
-    ],
-    // 子子条件...(可继续嵌套)
-    "child": null
-  }
-}
-```
-
-#### 动态`sql`和对应`传参`示例
-```sql
-SELECT * FROM sys_user 
-WHERE
-age > 3 AND name LIKE '%张%'  # 父条件
-AND ( id = 1 OR id = 2 ) # 子条件 
-ORDER BY 
-age DESC, id ASC
-```
-```json
-{
-  "conditions": [
-    {
-      "field": "age",
-      "operator": ">",
-      "value": 3
-    },
-    {
-      "field": "name",
-      "operator": "like",
-      "value": "张"
-    }
-  ],
-  "sorts": [
-    {
-      "field": "age",
-      "desc": true
-    },
-    {
-      "field": "id"
-    }
-  ],
-  "child": {
-    "conditions": [
-      {
-        "field": "id",
-        "operator": "=",
-        "value": 1
-      },
-      {
-        "or": true,
-        "field": "id",
-        "operator": "=",
-        "value": 2
-      }
-    ]
-  }
-}
-```
-
-
-## service接口 
-### DynamicService<T, V>
-该接口定义了动态服务的一系列增强方法, 其中`T`为数据库实体类, `V`为VO数据展示类  
-继承该接口并指定泛型即可使用下述方法
-* `getVoClass()`获取VO数据展示类
-* `toEntity()`将指定对象转化为数据库实体类对象
-* `toVO()`将指定对象转化为VO数据展示类对象
-* `toId()`将指定对象转化为主键值
-* `insertByDTO()`新增方法, 默认返回值R为新增数据的实际主键(重写时可搭配`toId()`使用)
-* `updateByDTO()`更新方法
-* `doSelect()`查询逻辑封装方法
-* `oneById()`根据id查询单个VO
-* `oneByDTO()`查询单个VO
-* `listByDTO()`查询VO列表
-* `pageByDTO()`查询VO分页
-* `excelTemplate()`excel导入模板
-* `excelImport()`excel文件导入
-* `excelExport()`excel文件导出
-* `lambdaHelper()`获取链式动态条件构造器(见`SqlHelper`), 使用方式类似mybatis-plus中的`lambdaQuery()`
-
-```java
-public interface SysUserService extends DynamicService<SysUser, SysUserVO> {
-
-}
-```
-使用示例
-```java
-    @Resource
-    private ISysUserService baseService;
-
-    public void example() {
-        // 根据dto查询列表
-        SysUserSelectDTO selectDTO = new SysUserSelectDTO();
-        selectDTO.setAge(18); // 年龄= 18
-        selectDTO.setName("张三"); // 姓名= 张三
-        selectDTO.setNameLike("张"); // 姓名模糊匹配 张
-        // 略....
-        List<SysUserVO> vos = baseService.listByDTO(selectDTO);
-
-        // 根据实体查询
-        SysUser sysUser = new SysUser();
-        sysUser.setAge(18); // 年龄= 18
-        sysUser.setName("张三"); // 姓名= 张三
-        sysUser.setNameLike("张"); // 姓名模糊匹配 张
-        // 略....
-        List<SysUserVO> vos2 = baseService.listByDTO(sysUser);
-
-        // 根据map查询
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("name","张三"); // 姓名= 张三
-        map.put("ageIn", Arrays.asList(1,2,3,4,5)); // 年龄= 1,2,3,4,5
-        // 略....
-        List<SysUserVO> vos3 = baseService.listByDTO(map); 
-        
-        
-        // lambdaHelper查询-列表
-        List<SysUserVO> vos4 =baseService.lambdaHelper()
-                .eq(SysUser::getId,1) // id=1
-                .ge(SysUser::getAge, 18) // 年龄>=18
-                .list() // 列表
-                ;
-        
-        // lambdaHelper查询-分页
-        IPage<SysUserVO> page =baseService.lambdaHelper()
-                .eq(SysUser::getId,1) // id=1
-                .ge(SysUser::getAge, 18) // 年龄>=18
-                .one() // 分页
-                ;
-
-        // lambdaHelper查询-单条
-        SysUserVO vo =baseService.lambdaHelper()
-                .eq(SysUser::getId,1) // id=1
-                .ge(SysUser::getAge, 18) // 年龄>=18
-                .one() // 单条数据
-                ;
-    }
-```
-
-## service接口实现
-
-### DynamicFieldServiceImpl<M, T, V>
-动态字段服务实现, 通过动态字段及动态sql实现嵌套增强
-* 继承该类, 指定`Mapper类`,`实体类`, `VO类`
-* 支持`SqlHelper`,`Map`,`一般类(会通过反射获取属性与值)`作为查询参数
-* 通过重写`initSuffixBuilder()`方法配置字段后缀, 若不重写该方法, 会按照默认后缀匹配, 重写后仅匹配已指定的后缀
-* 当入参为`一般实体类`或`Map`时, 会自动根据指定后缀追加相关的条件查询(例如`nameLike`字段,会转化为`name`对应的模糊查询)
-```java
-public class SysUserServiceImpl extends DynamicFieldServiceImpl<SysUserMapper, SysUser ,SysUserVO>{
-    @Override
-    protected FieldSuffixBuilder initSuffixBuilder() {
-        return new FieldSuffixBuilder()
-                .like("_like") // 当字段名以_like结尾时, 会自动将该查询转化为like查询
-                .ge("Ge") // 当字段名以Ge结尾时, 会自动将该查询转化为大于等于查询
-                // ...
-                ;
-    }
-}
-```
-
-### DynamicSqlServiceImpl<M, T, V>
-动态sql服务实现, 通过动态sql嵌套增强
-* 继承该类, 指定`Mapper类`,`实体类`, `VO类`
-* 使用`SqlHelper`,`Map`,`一般类(会通过反射获取属性与值)`作为查询参数
-* 会自动根据情况生成条件匹配sql
-```java
-public class SysUserServiceImpl extends DynamicSqlServiceImpl<SysUserMapper, SysUser ,SysUserVO>{
-    
-}
-```
-## SqlHelper<T>动态sql工具
+### 后端方法
 该工具用于生成sql片段, 支持Object入参  
-DynamicService默认通过该类生成动态sql    
 该工具条件底层为树状结构, 入参可以进行子条件的多层嵌套  
 嵌套子条件时,父条件必须为有效条件(即能映射对应字段的条件)  
 该类含以下方法用于生成sql片段
@@ -746,8 +452,8 @@ DynamicService默认通过该类生成动态sql
 * `or()`设置下一个条件与最后一个条件的关系为or
 * `eq()`等于
 * `ne()`不等于
-* `gt()`大于 
-* `ge()`大于等于 
+* `gt()`大于
+* `ge()`大于等于
 * `lt()`小于
 * `le()`小于等于
 * `like()`模糊匹配
@@ -805,6 +511,140 @@ DynamicService默认通过该类生成动态sql
     }
 
 ```
+
+### 前端参数说明
+#### 条件参数`conditions`
+* `or`表示与其他条件的关系是否为`或者`(非必填,默认false)
+* `field`表示`属性`名
+* `operator`表示运算符(默认为`=`, 为`=`时无需传递, 不区分大小写)
+* `value`表示属性对应的`值`
+
+tips:  
+* `operator`不区分大小写, 支持 `=`、`!=`、`>`、`>=`、`<`、`<=`、`in`、`not in` 、`like`、`not like`、`is null`、`is not null`   
+* `value`对应的`operator`若为`in`或`not in`时,`value`需要为`["value1","value2","value3"]`的多参数形式   
+* `value`对应的`operator`若为`is null`或`is not null`时,`value`可传递不为`null`的任意值   
+
+#### 条件参数`child`
+* 该参数实际为嵌套的子条件, 支持多重嵌套
+* 内部嵌套的实际参数为`conditions`和`子child`
+
+#### 排序参数`sorts`
+* `field`表示`属性`名
+* `desc`表示是否倒序(默认为`false`, 正序时无需传递)
+
+#### 前端参数基础格式示例:
+```json
+{
+  "conditions": [
+    {
+      "or": true, //或条件(非必填,默认false)
+      "field": "", //属性名
+      "operator": "", //运算符(非必填,默认=,可选值:=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
+      "value": {} //值(多个值时,数据为集合)
+    },
+    {
+      "field": "name", //属性名示例
+      "value": "zhangsan" //值示例
+    },
+    {
+      "field": "name", //属性名示例
+      "operator": "in", //多值运算符示例
+      "value": ["zhangsan", "lisi", "wangwu"] //多值示例
+    }
+  ],
+  "child": {
+    "conditions": [
+      {
+        "or": true, //或条件(非必填,默认false)
+        "field": "", //属性名
+        "operator": "", //运算符(非必填,默认=,可选值:=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
+        "value": {} //值(多个值时,数据为集合)
+      }
+    ], //查询条件列表
+    "child": {} //子条件
+  },
+  "sorts": [
+    {
+      "field": "", //属性名
+      "desc": true //是否倒序(默认否, 为否时无需填写)
+    }
+  ]
+}
+```
+
+#### 动态`sql`和对应`传参`示例
+```sql
+SELECT * FROM sys_user 
+WHERE
+age > 3 AND name LIKE '%张%'  # 父条件
+AND ( id = 1 OR id = 2 ) # 子条件 
+ORDER BY 
+age DESC, id ASC
+```
+```json
+{
+  "conditions": [
+    {
+      "field": "age",
+      "operator": ">",
+      "value": 3
+    },
+    {
+      "field": "name",
+      "operator": "like",
+      "value": "张"
+    }
+  ],
+  "sorts": [
+    {
+      "field": "age",
+      "desc": true
+    },
+    {
+      "field": "id"
+    }
+  ],
+  "child": {
+    "conditions": [
+      {
+        "field": "id",
+        "operator": "=",
+        "value": 1
+      },
+      {
+        "or": true,
+        "field": "id",
+        "operator": "=",
+        "value": 2
+      }
+    ]
+  }
+}
+```
+
+## `DynamicService<T, V>`
+该接口针对`IService`定义了一系列增强方法, 其中`T`为数据库实体类, `V`为VO数据展示类  
+该接口大多方法都提供了`默认实现`, 实际需要实现的仅有`doSelect()`方法
+* `getVOClass()`获取VO数据展示类
+* `toEntity()`将指定对象转化为`T`
+* `toVO()`将指定对象转化为`V`
+* `toId()`获取`T`对象的`主键id`
+* `insertByDTO()`新增方法, 默认返回值`R`为新增数据的`主键id`
+* `updateByDTO()`更新方法
+* `doSelect()`查询逻辑封装方法
+* `oneById()`根据`主键id`查询单个VO
+* `oneByDTO()`查询单个VO
+* `listByDTO()`查询VO列表
+* `pageByDTO()`查询VO分页
+* `excelTemplate()`excel导入模板
+* `excelImport()`excel文件导入
+* `excelExport()`excel文件导出
+* `lambdaHelper()`获取链式动态条件构造器(见`SqlHelper`), 使用方式类似`lambdaQuery()`
+
+源码及实现:
+* [DynamicService.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/DynamicService.java)
+* [DynamicSqlServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/impl/DynamicSqlServiceImpl.java)
+* [DynamicFieldServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/impl/DynamicFieldServiceImpl.java)
 
 
 ## DynamicMapper<T, V, S>

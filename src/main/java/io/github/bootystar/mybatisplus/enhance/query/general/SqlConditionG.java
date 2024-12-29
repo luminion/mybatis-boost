@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class SqlConditionG implements SqlCondition {
 
     /**
-     * 和上一个条件的关系是否为or(默认否, 为否时无需填写)
+     * 或条件(非必填,默认false)
      */
     protected boolean or;
 
@@ -27,15 +27,12 @@ public class SqlConditionG implements SqlCondition {
     protected String field;
 
     /**
-     * 运算符(默认=,为=时无需填写)
-     * <p>
-     * (=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
-     * <p/>
+     * 运算符(非必填,默认=,可选值:=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
      */
     protected String operator = SqlKeyword.EQ.keyword;
 
     /**
-     * 值(若是多个值,如in ,则value为集合)
+     * 值(多个值时,数据为集合)
      */
     protected Object value;
 
