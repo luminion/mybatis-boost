@@ -13,11 +13,6 @@ import java.util.function.Consumer;
 public class ExtraCodeBuilder extends BaseEnhanceBuilder<ExtraCodeBuilder> {
 
     @Override
-    public ExtraFieldSuffixBuilder getExtraFieldSuffixBuilder() {
-        return super.getExtraFieldSuffixBuilder();
-    }
-
-    @Override
     public ExtraCodeBuilder extraFieldSuffixBuilder(Consumer<ExtraFieldSuffixBuilder> builderConsumer) {
         return super.extraFieldSuffixBuilder(builderConsumer);
     }

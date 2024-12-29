@@ -35,11 +35,6 @@ public class DynamicFieldBuilder extends BaseEnhanceBuilder<DynamicFieldBuilder>
     }
 
     @Override
-    public ExtraFieldSuffixBuilder getExtraFieldSuffixBuilder() {
-        return super.getExtraFieldSuffixBuilder();
-    }
-
-    @Override
     public DynamicFieldBuilder extraFieldSuffixBuilder(Consumer<ExtraFieldSuffixBuilder> builderConsumer) {
         return super.extraFieldSuffixBuilder(builderConsumer);
     }

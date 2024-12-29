@@ -50,17 +50,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
     }
 
     /**
-     * 获取额外字段后缀构造器
-     *
-     * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
-     */
-    protected ExtraFieldSuffixBuilder getExtraFieldSuffixBuilder() {
-        return this.extraFieldSuffixBuilder;
-    }
-
-    /**
-     * 额外字段后缀构造器的消费者模式
+     * 额外字段后缀构造器
      *
      * @param builderConsumer builder消费者
      * @return {@link B }
