@@ -649,16 +649,10 @@ age DESC, id ASC
 
 ## DynamicMapper<T, V, S>
 该接口定义了动态mapper的入参查询,其中`T`为数据库实体类, `V`为VO数据展示类, `S`为查询入参类
-* 子mapper继承该类, 即可运行, 无需实现
+* 子mapper继承该类, 即可运行, 无需实现方法(需要提供对应xml文件)
 * 该mapper的参数及对应`xml`文件会由生成器自动生成
-* 所有的增强查询都会最终通过`listByDTO()`从数据库查询
 * 可在`mapper.xml`文件中添加对应的额外表及字段检索等自定义逻辑
 
-```java
-public interface SysUserMapper extends DynamicMapper<SysUser, SysUserVO, Object> {
-
-}
-```
 ### xml中额外SQL编写
 * 在`xml`文件中, 可根据自身需要进行连表或者字段检索
 * 基础表别名固定为`a`, 请勿修改
