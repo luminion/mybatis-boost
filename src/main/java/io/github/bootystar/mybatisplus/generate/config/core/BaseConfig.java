@@ -182,7 +182,7 @@ public abstract class BaseConfig {
     /**
      * 额外字段后缀映射
      */
-    protected Map<String, String> extraFieldSuffixMap = SqlExtraSuffix.DEFAULT_MAP;
+    protected Map<String, String> extraFieldSuffixMap = SqlExtraSuffix.DEFAULT_SIMPLE_MAP;
 
     // ------------------非通用相关----------------
 

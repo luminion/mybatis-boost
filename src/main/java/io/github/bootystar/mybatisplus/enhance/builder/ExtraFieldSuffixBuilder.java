@@ -1,5 +1,6 @@
 package io.github.bootystar.mybatisplus.enhance.builder;
 
+import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
 
 import java.util.HashMap;
@@ -20,6 +21,28 @@ public class ExtraFieldSuffixBuilder {
             throw new IllegalArgumentException("illegal suffix [" + suffix + "] , field name cannot contain special characters");
 //                throw new IllegalArgumentException("illegal suffix [" + suffix + "] , it does not match the regular expression:" + SUFFIX_PATTERN);
         }
+    }
+
+    /**
+     * 添加常用的默认后缀
+     *
+     * @return {@link ExtraFieldSuffixBuilder }
+     * @author bootystar
+     */
+    public ExtraFieldSuffixBuilder defaultSuffix() {
+        suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_SIMPLE_MAP);
+        return this;
+    }
+
+    /**
+     * 添加所有的默认后缀
+     *
+     * @return {@link ExtraFieldSuffixBuilder }
+     * @author bootystar
+     */
+    public ExtraFieldSuffixBuilder defaultSuffixFull() {
+        suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_FULL_MAP);
+        return this;
     }
 
     /**

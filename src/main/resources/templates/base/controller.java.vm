@@ -280,8 +280,8 @@ public class ${table.controllerName} {
      * 分页查询(页码与大小均不传时采用默认值)
      *
      * @param s 查询条件
-     * @param current 页码(非必传,默认1)
-     * @param size 每页大小(非必传,默认10)
+     * @param current 页码
+     * @param size 每页大小
      * @return 查询结果
      * @author ${author}
      */
@@ -346,8 +346,8 @@ public class ${table.controllerName} {
     /**
      * excel文件导出
      * @param s 查询条件
-     * @param current 页码(默认1)
-     * @param size 每页大小(默认10,-1为全部)
+     * @param current 页码
+     * @param size 每页大小(-1为全部)
      * @author ${author}
      */
     #end

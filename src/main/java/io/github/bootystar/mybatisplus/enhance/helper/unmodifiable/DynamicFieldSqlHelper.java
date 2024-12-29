@@ -15,7 +15,7 @@ import java.util.*;
 @Slf4j
 public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
 
-    private Map<String, String> suffix2OperatorMap = SqlExtraSuffix.DEFAULT_MAP;
+    private Map<String, String> suffix2OperatorMap = SqlExtraSuffix.DEFAULT_FULL_MAP;
 
     public DynamicFieldSqlHelper(SqlTree tree, Class<T> entityClass, ExtraFieldSuffixBuilder suffixBuilder) {
         super(entityClass);

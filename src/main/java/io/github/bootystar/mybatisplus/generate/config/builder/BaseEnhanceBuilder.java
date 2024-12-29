@@ -1,6 +1,7 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
 import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
+import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;

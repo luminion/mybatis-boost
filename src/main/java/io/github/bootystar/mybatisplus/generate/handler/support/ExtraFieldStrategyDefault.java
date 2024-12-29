@@ -57,10 +57,10 @@ public class ExtraFieldStrategyDefault implements ExtraFieldStrategy {
 
         // 是否为空
         if (SqlKeyword.CONDITION_OPERATORS_NONE.contains(keyword)) {
-            return isNullable || isKeyFlag;
+            return isNullable && !isKeyFlag;
         }
 
-        return false;
+        return true;
     }
 
 }

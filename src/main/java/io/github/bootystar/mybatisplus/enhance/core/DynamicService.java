@@ -55,7 +55,7 @@ public interface DynamicService<T, V> extends IService<T> {
         return (R) propertyValue;
     }
 
-    default <S, R> R insertByDTO(Object s) {
+    default <S, R> R insertByDTO(S s) {
         T entity = toEntity(s);
         save(entity);
         return toId(entity);

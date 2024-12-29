@@ -3,7 +3,6 @@ package io.github.bootystar.mybatisplus.enhance.enums;
 import lombok.AllArgsConstructor;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -31,14 +30,22 @@ public enum SqlExtraSuffix {
 
     public final String suffix;
     public final SqlKeyword sqlKeyword;
-    public static final Map<String, String> DEFAULT_MAP;
+    public static final Map<String, String> DEFAULT_FULL_MAP;
+    public static final Map<String, String> DEFAULT_SIMPLE_MAP;
 
     static {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         for (SqlExtraSuffix value : values()) {
             map.put(value.suffix, value.sqlKeyword.keyword);
         }
-        DEFAULT_MAP = Collections.unmodifiableMap(map);
+        DEFAULT_FULL_MAP = Collections.unmodifiableMap(map);
+
+        LinkedHashMap<String, String> simpleMap = new LinkedHashMap<>();
+        simpleMap.put(LIKE.suffix, LIKE.sqlKeyword.keyword);
+        simpleMap.put(IN.suffix, IN.sqlKeyword.keyword);
+        simpleMap.put(GE.suffix, GE.sqlKeyword.keyword);
+        simpleMap.put(LE.suffix, LE.sqlKeyword.keyword);
+        DEFAULT_SIMPLE_MAP = Collections.unmodifiableMap(simpleMap);
     }
 
 }
