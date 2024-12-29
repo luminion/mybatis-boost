@@ -71,19 +71,12 @@ enhancer of mybatis-plus
 ### 可选项
 
 #### 分页插件
-
-##### Jdk11及以上
 ```xml
 <!-- (可选)分页插件 jdk11+引入 -->
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-jsqlparser</artifactId>
 </dependency>
-```
-
-##### Jdk8-10
-```xml
-
 <!-- (可选)分页插件 jdk8+引入 -->
 <dependency>
     <groupId>com.baomidou</groupId>
