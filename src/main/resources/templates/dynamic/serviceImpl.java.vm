@@ -13,9 +13,11 @@ package ${package.ServiceImpl};
 ###end
 ## ------参数设置----end
 #if(${overrideMethods}&&${generateSelect})
+import com.baomidou.mybatisplus.core.metadata.IPage;
 #end
 import ${superServiceImplClassPackage};
 #if(${extraFieldSuffixCustom})
+import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 #end
 import ${package.Entity}.${entity};
 import ${basePackage}.${package4VO}.${entityVO};
@@ -24,11 +26,15 @@ import ${package.Service}.${table.serviceName};
 import org.springframework.stereotype.Service;
 
 #if(${overrideMethods})
-    #if(${generateDelete}||${generateSelect})
-    #end
+import java.util.List;
+#if(${generateDelete}||${generateSelect})
+import java.io.Serializable;
+#end
 #if(${generateImport})
+import java.io.InputStream;
 #end
 #if(${generateExport})
+import java.io.OutputStream;
 #end
 #end
 
@@ -47,8 +53,8 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 #if(${extraFieldSuffixCustom})
 
     @Override
-    protected FieldSuffixBuilder initSuffixBuilder() {
-        return new FieldSuffixBuilder()
+    protected ExtraFieldSuffixBuilder initSuffixBuilder() {
+        return new ExtraFieldSuffixBuilder()
                 #foreach($entry in ${extraFieldSuffixMap.entrySet()})
                     #set($key = $entry.key)
                     #set($value = $entry.value)
