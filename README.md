@@ -707,27 +707,19 @@ age DESC, id ASC
     </trim>
 </select>
 ```
-#### 映射非本实体的表字段
+
+#### 自动映射非本实体的表字段
 * 通过在属性上添加`@TableField`注解指定映射, 指定`value`为`表名.字段名`或`表别名.字段名`指定其他表字段
 * 通过实现`DynamicEntity`接口, 重写`extraFieldColumnMap()`方法指定映射
 
 ```java
+public class SysUser implements DynamicEntity {
+
     // 指定roleLevel对应的字段为b表的level字段, 并注明该字段在本表中不存在
     @TableField(exist = false, value = "b.level")
     private String roleLevel;
-```
-
-## DynamicEntity
-
-该接口定义了可被动态sql增强的实体类
-
-* 在`xml`中添加需要连接的表
-* 通过`extraFieldColumnMap()`指定额外的属性名->数据库字段名映射
-* 指定的逻辑删除字段无效, 会被过滤, 防止侵入
-* 可通过`表名.字段名`或`表别名.字段名`指定其他表字段
-
-```java
-public class SysUser implements DynamicEntity {
+    
+    
     @Override
     public Map<String, String> extraFieldColumnMap() {
         HashMap<String, String> map = new HashMap<>();
