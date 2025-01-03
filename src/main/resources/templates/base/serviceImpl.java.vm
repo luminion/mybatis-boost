@@ -48,7 +48,7 @@ import ${basePackage}.${package4DTO}.${entityInsertDTO};
 import ${basePackage}.${package4DTO}.${entityUpdateDTO};
 #end
 import org.springframework.stereotype.Service;
-#if(${generateInsert}||${generateUpdate}||${generateImport})
+#if(${generateInsert}||${generateUpdate}||${generateImport}||${generateSelect})
 import org.springframework.beans.BeanUtils;
 #end
 
