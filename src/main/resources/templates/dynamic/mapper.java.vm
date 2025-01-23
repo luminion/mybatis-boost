@@ -8,7 +8,6 @@ import ${mapperAnnotationClass.name};
 import com.baomidou.mybatisplus.core.metadata.IPage;
 #end
 import ${superMapperClassPackage};
-import ${mapperDTO.classFullName};
 import ${package.Entity}.${entity};
 import ${basePackage}.${package4VO}.${entity}VO;
 
@@ -26,13 +25,13 @@ import java.util.List;
 @${mapperAnnotationClass.simpleName}
 #end
 #if(${kotlin})
-interface ${table.mapperName} : ${superMapperClass}<${entity}, ${entity}VO, ${mapperDTO.clazz("${entity}")}>
+interface ${table.mapperName} : ${superMapperClass}<${entity}, ${entity}VO>
 #else
-public interface ${table.mapperName} extends ${superMapperClass}<${entity}, ${entity}VO, ${mapperDTO.clazz("${entity}")}> {
+public interface ${table.mapperName} extends ${superMapperClass}<${entity}, ${entity}VO> {
     #if(${overrideMethods})
 
     @Override
-    List<${entity}VO> listByDTO(${mapperDTO.clazz("${entity}")} s, IPage<${entity}VO> page);
+    List<${entity}VO> listByDTO(Object param, IPage<${entity}VO> page);
     #end
 
 }

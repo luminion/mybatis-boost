@@ -1,9 +1,7 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
 import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
-import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.UnmodifiableSqlHelper;
 import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
-import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 import lombok.Getter;
 
 import java.util.function.Consumer;
@@ -15,9 +13,9 @@ import java.util.function.Consumer;
 @Getter
 public class DynamicFieldBuilder extends BaseEnhanceBuilder<DynamicFieldBuilder> {
 
-    {
-        mapperDTO = new ClassInfo(UnmodifiableSqlHelper.class);
-    }
+//    {
+//        mapperDTO = new ClassInfo(UnmodifiableSqlHelper.class);
+//    }
 
     @Override
     public DynamicFieldBuilder disableOverrideMethods() {

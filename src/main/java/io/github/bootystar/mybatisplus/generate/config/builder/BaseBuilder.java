@@ -263,6 +263,17 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     }
 
     /**
+     * 多条件复杂查询使用post请求(使用Get请求替代)
+     *
+     * @return this
+     * @author bootystar
+     */
+    public B enablePostQuery() {
+        this.postQuery = true;
+        return this.getBuilder();
+    }
+
+    /**
      * 指定controller的返回结果包装类及方法
      *
      * @param methodReference 方法引用
@@ -316,17 +327,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      */
     public B disableValidated() {
         this.validated = false;
-        return this.getBuilder();
-    }
-
-    /**
-     * 禁止多条件复杂查询使用post请求(使用Get请求替代)
-     *
-     * @return this
-     * @author bootystar
-     */
-    public B disablePostQuery() {
-        this.postQuery = false;
         return this.getBuilder();
     }
 

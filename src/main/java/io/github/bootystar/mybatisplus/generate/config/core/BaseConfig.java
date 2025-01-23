@@ -137,7 +137,7 @@ public abstract class BaseConfig {
     /**
      * 复杂查询使用post请求
      */
-    protected boolean postQuery = true;
+    protected boolean postQuery;
 
     // ------------------mapper相关配置----------------
 

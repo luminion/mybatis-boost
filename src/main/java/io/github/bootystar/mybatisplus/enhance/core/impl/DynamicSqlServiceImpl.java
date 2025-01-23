@@ -1,13 +1,11 @@
 package io.github.bootystar.mybatisplus.enhance.core.impl;
 
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicMapper;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.DynamicSqlSqlHelper;
-import io.github.bootystar.mybatisplus.enhance.helper.unmodifiable.UnmodifiableSqlHelper;
 
 import java.util.List;
 
@@ -16,20 +14,20 @@ import java.util.List;
  *
  * @author bootystar
  */
-public abstract class DynamicSqlServiceImpl<M extends DynamicMapper<T, V, UnmodifiableSqlHelper<T>>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
+public abstract class DynamicSqlServiceImpl<M extends DynamicMapper<T, V>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <S> List<V> doSelect(S s, IPage<V> page) {
+    public List<V> doSelect(Object param, IPage<V> page) {
         DynamicSqlSqlHelper<T> sqlHelper;
-        if (s instanceof DynamicSqlSqlHelper<?>) {
-            DynamicSqlSqlHelper<?> unmodifiableSqlHelper = (DynamicSqlSqlHelper<?>) s;
+        if (param instanceof DynamicSqlSqlHelper<?>) {
+            DynamicSqlSqlHelper<?> unmodifiableSqlHelper = (DynamicSqlSqlHelper<?>) param;
             if (!super.getEntityClass().equals(unmodifiableSqlHelper.getEntityClass())) {
                 throw new UnsupportedOperationException("not support this type of sqlHelper: " + unmodifiableSqlHelper.getEntityClass().getName());
             }
-            sqlHelper = (DynamicSqlSqlHelper<T>) s;
+            sqlHelper = (DynamicSqlSqlHelper<T>) param;
         } else {
-            sqlHelper = new DynamicSqlSqlHelper<>(SqlHelper.of(s), super.getEntityClass());
+            sqlHelper = new DynamicSqlSqlHelper<>(SqlHelper.of(param), super.getEntityClass());
         }
         return getBaseMapper().listByDTO(sqlHelper, page);
     }

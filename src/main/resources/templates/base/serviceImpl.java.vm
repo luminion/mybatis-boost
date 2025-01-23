@@ -1,12 +1,12 @@
 package ${package.ServiceImpl};
 
 ## ------参数设置----start
-#foreach($field in ${table.fields})
-    #if(${field.keyFlag})
-        #set($primaryKeyPropertyType=${field.propertyType})
-        #break
-    #end
-#end
+###foreach($field in ${table.fields})
+##    #if(${field.keyFlag})
+##        #set($primaryKeyPropertyType=${field.propertyType})
+##        #break
+##    #end
+###end
 #set($entityInsertDTO = "${entity}InsertDTO")
 #set($entityUpdateDTO = "${entity}UpdateDTO")
 #set($entityVO = "${entity}VO")
@@ -81,20 +81,20 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     #if(${generateInsert})
 
     @Override
-    public ${primaryKeyPropertyType} insertByDTO(${entityInsertDTO} s) {
+    public Object insertByDTO(${entityInsertDTO} param) {
         ${entity} entity = new ${entity}();
-        BeanUtils.copyProperties(s, entity);
+        BeanUtils.copyProperties(param, entity);
         super.save(entity);
         TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
-        return (${primaryKeyPropertyType}) tableInfo.getPropertyValue(entity, tableInfo.getKeyProperty());
+        return tableInfo.getPropertyValue(entity, tableInfo.getKeyProperty());
     }
     #end
     #if(${generateUpdate})
 
     @Override
-    public boolean updateByDTO(${entityUpdateDTO} s) {
+    public boolean updateByDTO(${entityUpdateDTO} param) {
         ${entity} entity = new ${entity}();
-        BeanUtils.copyProperties(s, entity);
+        BeanUtils.copyProperties(param, entity);
         return super.updateById(entity);
     }
     #end
@@ -107,15 +107,15 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     #end
     #if(${generateSelect})
 
-    public List<${entityVO}> doSelect(${entitySelectDTO} s, IPage<${entityVO}> page) {
-##//        ${entitySelectDTO} dto = (${entitySelectDTO}) s;
+    public List<${entityVO}> doSelect(${entitySelectDTO} param, IPage<${entityVO}> page) {
+##//        ${entitySelectDTO} dto = (${entitySelectDTO}) param;
 ##        Map<Object, Object> map = null;
-##        if (s == null || s instanceof Map) {
-##            map = s == null ? new HashMap<>() : (Map<Object, Object>) s;
+##        if (param == null || param instanceof Map) {
+##            map = param == null ? new HashMap<>() : (Map<Object, Object>) param;
 ##        } else {
 ##            map = new HashMap<>();
 ##            List<Field> fields = new ArrayList<>();
-##            Class<?> currentClass = s.getClass();
+##            Class<?> currentClass = param.getClass();
 ##            while (currentClass != null && currentClass != Object.class && !currentClass.isInterface()) {
 ##                Arrays.stream(currentClass.getDeclaredFields()).filter(f -> !Modifier.isStatic(f.getModifiers()))
 ##                        .filter(f -> !Modifier.isFinal(f.getModifiers())).filter(f -> !Modifier.isNative(f.getModifiers()))
@@ -125,14 +125,14 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 ##            try {
 ##                for (Field field : fields) {
 ##                    Object key = field.getName();
-##                    Object value = field.get(s);
+##                    Object value = field.get(param);
 ##                    if (value != null) map.put(key, value);
 ##                }
 ##            } catch (Exception e) {
 ##                throw new RuntimeException(e);
 ##            }
 ##        }
-        return getBaseMapper().listByDTO(s, page);
+        return getBaseMapper().listByDTO(param, page);
     }
 
     @Override
@@ -140,30 +140,30 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
         ${entity} entity = new ${entity}();
         TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
         tableInfo.setPropertyValue(entity, tableInfo.getKeyProperty(), id);
-        ${entitySelectDTO} s = new ${entitySelectDTO}();
-        BeanUtils.copyProperties(entity, s);
-        return oneByDTO(s);
+        ${entitySelectDTO} param = new ${entitySelectDTO}();
+        BeanUtils.copyProperties(entity, param);
+        return oneByDTO(param);
     }
 
     @Override
-    public ${entityVO} oneByDTO(${entitySelectDTO} s) {
-        List<${entityVO}> vs = listByDTO(s);
+    public ${entityVO} oneByDTO(${entitySelectDTO} param) {
+        List<${entityVO}> vs = listByDTO(param);
         if (vs == null || vs.isEmpty()) return null;
         if (vs.size() > 1) throw new RuntimeException("error query => required 1 but found " + vs.size());
         return vs.get(0);
     }
 
     @Override
-    public List<${entityVO}> listByDTO(${entitySelectDTO} s) {
-        return doSelect(s, null);
+    public List<${entityVO}> listByDTO(${entitySelectDTO} param) {
+        return doSelect(param, null);
     }
 
     @Override
-    public IPage<${entityVO}> pageByDTO(${entitySelectDTO} s, Long current, Long size) {
+    public IPage<${entityVO}> pageByDTO(${entitySelectDTO} param, Long current, Long size) {
         if (current == null || current < 1) current = 1L;
         if (size == null) size = 10L;
         Page<${entityVO}> page = new Page<>(current, size);
-        List<${entityVO}> voList = doSelect(s, page);
+        List<${entityVO}> voList = doSelect(param, page);
         page.setRecords(voList);
         return page;
     }
@@ -172,14 +172,17 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 
     @Override
     public void excelTemplate(OutputStream os, Class<?> clazz) {
-        EasyExcel.write(os, clazz).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).sheet().doWrite(Collections.emptyList());
+        EasyExcel.write(os, clazz)
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+            .sheet()
+            .doWrite(Collections.emptyList());
     }
 
     @Override
     public int excelImport(InputStream is, Class<?> clazz) {
-//        ${entityInsertDTO} dto = (${entityInsertDTO}) s;
-        List<?> cachedDataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
-        List<${entity}> entityList = cachedDataList.stream().map(e -> {
+//        List<${entityInsertDTO}> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
+        List<?> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
+        List<${entity}> entityList = dataList.stream().map(e -> {
             ${entity} entity = new ${entity}();
             BeanUtils.copyProperties(e, entity);
             return entity;
@@ -200,7 +203,11 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
         Page<${entityVO}> page = new Page<>(current, size);
         List<${entityVO}> voList = getBaseMapper().listByDTO(s, page);
         #end
-        EasyExcel.write(os, clazz).includeColumnFieldNames(Arrays.asList(includeFields)).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).sheet().doWrite(voList);
+        EasyExcel.write(os, clazz)
+            .includeColumnFieldNames(Arrays.asList(includeFields))
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+            .sheet()
+            .doWrite(voList);
     }
     #end
 

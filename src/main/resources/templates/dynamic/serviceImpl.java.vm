@@ -89,16 +89,16 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     #if(${generateInsert})
 
     @Override
-    public <S, R> R insertByDTO(S s) {
-//        ${entityInsertDTO} dto = (${entityInsertDTO}) s;
+    public Object insertByDTO(Object param) {
+//        ${entityInsertDTO} dto = (${entityInsertDTO}) param;
         return super.insertByDTO(s);
     }
     #end
     #if(${generateUpdate})
 
     @Override
-    public <S> boolean updateByDTO(S s) {
-//        ${entityUpdateDTO} dto = (${entityUpdateDTO}) s;
+    public boolean updateByDTO(Object param) {
+//        ${entityUpdateDTO} dto = (${entityUpdateDTO}) param;
         return super.updateByDTO(s);
     }
     #end
@@ -110,11 +110,11 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     }
     #end
 ##    @Override
-##    public <S> List<${entityVO}> doSelect(S s, IPage<${entityVO}> page) {
+##    public List<${entityVO}> doSelect(Object param, IPage<${entityVO}> page) {
 ####        #if(${entitySelectDTO})
-####//        ${entitySelectDTO} dto = (${entitySelectDTO}) s;
+####//        ${entitySelectDTO} dto = (${entitySelectDTO}) param;
 ####        #end
-##        return super.doSelect(s, page);
+##        return super.doSelect(param, page);
 ##        #end
 ##    }
     #if(${generateSelect})
@@ -125,28 +125,28 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     }
 
     @Override
-    public <S> List<${entityVO}> listByDTO(S s) {
-        return super.listByDTO(s);
+    public List<${entityVO}> listByDTO(Object param) {
+        return super.listByDTO(param);
     }
 
     @Override
-    public <S> IPage<${entityVO}> pageByDTO(S s, Long current, Long size) {
-        return super.pageByDTO(s, current, size);
+    public IPage<${entityVO}> pageByDTO(Object param, Long current, Long size) {
+        return super.pageByDTO(param, current, size);
     }
     #end
     #if(${generateImport})
 
     @Override
-    public <U> int excelImport(InputStream is, Class<U> clazz) {
-//        ${entityInsertDTO} dto = (${entityInsertDTO}) s;
+    public int excelImport(InputStream is, Class<?> clazz) {
+//        List<${entityInsertDTO}> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
         return super.excelImport(is, clazz);
     }
     #end
     #if(${generateExport})
 
     @Override
-    public <S, U> void excelExport(S s, OutputStream os, Class<U> clazz, Long current, Long size, String... includeFields) {
-        super.excelExport(s, os, clazz, current, size, includeFields);
+    public void excelExport(Object param, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
+        super.excelExport(param, os, clazz, current, size, includeFields);
     }
     #end
 

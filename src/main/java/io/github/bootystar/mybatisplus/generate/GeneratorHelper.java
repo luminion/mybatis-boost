@@ -11,6 +11,7 @@ import io.github.bootystar.mybatisplus.generate.generator.impl.ExtraCodeGenerato
 /**
  * @author bootystar
  */
+@SuppressWarnings("unused")
 public abstract class GeneratorHelper {
 
     /**

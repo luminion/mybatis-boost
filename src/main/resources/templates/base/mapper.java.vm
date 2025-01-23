@@ -38,7 +38,7 @@ interface ${table.mapperName} : ${superMapperClass}<${entity}>
 #else
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
 
-    List<${entityVO}> listByDTO(${entitySelectDTO} s, IPage<${entity}VO> page);
+    List<${entityVO}> listByDTO(${entitySelectDTO} param, IPage<${entity}VO> page);
 
 }
 #end

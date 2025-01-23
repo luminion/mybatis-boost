@@ -5,14 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
 
-
 /**
  * mapper
  *
  * @author bootystar
  */
-public interface DynamicMapper<T, V, S> extends BaseMapper<T> {
+public interface DynamicMapper<T, V> extends BaseMapper<T> {
 
-    List<V> listByDTO(S s, IPage<V> page);
+    List<V> listByDTO(Object param, IPage<V> page);
 
 }

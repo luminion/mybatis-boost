@@ -164,7 +164,7 @@ public class ${table.controllerName} {
         #else
     @PostMapping("/insert")
     #end
-    public ${returnMethod.clazz(${primaryKeyPropertyType})} insert($!{requiredBodyStr}$!{validatedStr}${entityInsertDTO} s) {
+    public ${returnMethod.clazz("Object")} insert($!{requiredBodyStr}$!{validatedStr}${entityInsertDTO} s) {
         return ${returnMethod.method("baseService.insertByDTO(s)")};
     }
 #end
@@ -258,7 +258,7 @@ public class ${table.controllerName} {
     /**
      * 列表
      *
-     * @param s 查询条件
+     * @param param 查询条件
      * @return 查询结果
      * @author ${author}
      */
@@ -267,8 +267,8 @@ public class ${table.controllerName} {
     @ResponseBody
     #end
     ${requestMethod4Select}("/list")
-    public ${returnMethod.clazz("List<${entityVO}>")} selectList(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s) {
-        return ${returnMethod.method("baseService.listByDTO(s)")};
+    public ${returnMethod.clazz("List<${entityVO}>")} selectList(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} param) {
+        return ${returnMethod.method("baseService.listByDTO(param)")};
     }
 
     #if(${springdoc})
@@ -279,7 +279,7 @@ public class ${table.controllerName} {
     /**
      * 分页查询(页码与大小均不传时采用默认值)
      *
-     * @param s 查询条件
+     * @param param 查询条件
      * @param current 页码
      * @param size 每页大小
      * @return 查询结果
@@ -290,8 +290,8 @@ public class ${table.controllerName} {
     @ResponseBody
     #end
     ${requestMethod4Select}("/page/{current}/{size}")
-    public ${returnMethod.clazz(${pageClazz4return})} selectPage(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s, $!{pagePathParams}) {
-        return ${returnMethod.method(${pageMethod.method("baseService.pageByDTO(s, current, size)")})};
+    public ${returnMethod.clazz(${pageClazz4return})} selectPage(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} param, $!{pagePathParams}) {
+        return ${returnMethod.method(${pageMethod.method("baseService.pageByDTO(param, current, size)")})};
     }
 #end
 #if(${generateImport})
@@ -309,8 +309,9 @@ public class ${table.controllerName} {
     #end
     @GetMapping("/excelTemplate")
     public void excelTemplate(HttpServletResponse response) throws IOException {
-        response.setHeader("Content-disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         response.setContentType("application/vnd.ms-excel");
+##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         baseService.excelTemplate(response.getOutputStream(), ${entityInsertDTO}.class);
     }
 
@@ -345,17 +346,18 @@ public class ${table.controllerName} {
         #else
     /**
      * excel文件导出
-     * @param s 查询条件
+     * @param param 查询条件
      * @param current 页码
      * @param size 每页大小(-1为全部)
      * @author ${author}
      */
     #end
     ${requestMethod4Select}("/excelExport/{current}/{size}")
-    public void excelExport(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s, ${pagePathParams}, HttpServletResponse response) throws IOException {
-        response.setHeader("Content-disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
+    public void excelExport(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} param, ${pagePathParams}, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
-        baseService.excelExport(s, response.getOutputStream(), ${entityVO}.class, current, size);
+##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
+        baseService.excelExport(param, response.getOutputStream(), ${entityVO}.class, current, size);
     }
 #end
 
