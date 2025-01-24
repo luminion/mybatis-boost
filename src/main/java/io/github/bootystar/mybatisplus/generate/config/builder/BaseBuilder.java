@@ -19,7 +19,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 获取构建器
      *
-     * @return {@link B }
+     * @return this
      */
     @SuppressWarnings("unchecked")
     protected B getBuilder() {
@@ -30,7 +30,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 创建配置
      *
      * @return 模板配置对象
-     * @author bootystar
      */
     public CustomConfig build() {
         return new CustomConfig(this);
@@ -41,8 +40,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 开启文件覆盖(vo及dto)
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B enableFileOverride() {
         this.fileOverride = true;
@@ -52,8 +50,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 不生成新增方法
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B disableInsert() {
         this.generateInsert = false;
@@ -63,8 +60,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 不生成更新方法
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B disableUpdate() {
         this.generateUpdate = false;
@@ -74,8 +70,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 不生成删除方法
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B disableDelete() {
         this.generateDelete = false;
@@ -85,8 +80,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 不生成查询方法
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B disableSelect() {
         this.generateSelect = false;
@@ -96,8 +90,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 不生成导入方法
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B disableImport() {
         this.generateImport = false;
@@ -107,8 +100,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 不生成导出方法
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B disableExport() {
         this.generateExport = false;
@@ -120,8 +112,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * <p>
      * 已知swagger注解在同名时有冲突, 禁用后请确保表注释不为空且不同名
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B enableSwaggerModelWithAnnotation() {
         this.swaggerModelWithAnnotation = true;
@@ -133,8 +124,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * <p>
      * 已知swagger注解在同名时有冲突, 禁用后请确保表注释不为空且不同名
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B enableSwaggerAnnotationWithUUID() {
         this.swaggerAnnotationWithUUID = true;
@@ -148,7 +138,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      *
      * @param packageName 包名
      * @return this
-     * @author bootystar
      */
     public B package4DTO(String packageName) {
         this.package4DTO = packageName;
@@ -159,8 +148,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * DTO文件输出路径
      *
      * @param path 路径
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     @SneakyThrows
     public B path4DTO(String path) {
@@ -173,7 +161,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      *
      * @param packageName 包名
      * @return this
-     * @author bootystar
      */
     public B package4VO(String packageName) {
         this.package4VO = packageName;
@@ -184,8 +171,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * DTO文件输出路径
      *
      * @param path 路径
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     @SneakyThrows
     public B path4VO(String path) {
@@ -198,7 +184,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      *
      * @param columns 字段名称
      * @return this
-     * @author bootystar
      */
     public B editExcludeColumns(String... columns) {
         this.editExcludeColumns = Arrays.asList(columns);
@@ -212,7 +197,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      *
      * @param url url
      * @return this
-     * @author bootystar
      */
     public B baseUrl(String url) {
         if (url == null || url.isEmpty()) {
@@ -233,7 +217,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 跨域注解
      *
      * @return this
-     * @author bootystar
      */
     public B enableCrossOrigins() {
         this.crossOrigins = true;
@@ -244,7 +227,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 使用jakarta的api(springboot3及以上开启)
      *
      * @return this
-     * @author bootystar
      */
     public B enableJakartaApi() {
         this.javaApiPackage = "jakarta";
@@ -255,7 +237,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 使用@AutoWired替换@Resource
      *
      * @return this
-     * @author bootystar
      */
     public B enableAutoWired() {
         this.autoWired = true;
@@ -266,7 +247,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 多条件复杂查询使用post请求(使用Get请求替代)
      *
      * @return this
-     * @author bootystar
      */
     public B enablePostQuery() {
         this.postQuery = true;
@@ -277,8 +257,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 指定controller的返回结果包装类及方法
      *
      * @param methodReference 方法引用
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public <R> B returnMethod(SFunction<Object, R> methodReference) {
         this.returnMethod = MybatisPlusReflectHelper.lambdaMethodInfo(methodReference, Object.class);
@@ -289,8 +268,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 指定controller返回的分页包装类及方法
      *
      * @param methodReference 方法参考
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public <O, R> B pageMethod(SFunction<IPage<O>, R> methodReference) {
         this.pageMethod = MybatisPlusReflectHelper.lambdaMethodInfo(methodReference, IPage.class);
@@ -300,8 +278,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 禁止基础增删查改使用restful风格
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B disableRestful() {
         this.restful = false;
@@ -312,7 +289,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 禁用消息体接收数据
      *
      * @return this
-     * @author bootystar
      */
     public B disableRequestBody() {
         this.requestBody = false;
@@ -323,7 +299,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * 禁用参数校验注解
      *
      * @return this
-     * @author bootystar
      */
     public B disableValidated() {
         this.validated = false;
@@ -335,8 +310,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     /**
      * 清空排序字段
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     public B sortColumnClear() {
         this.orderColumnMap.clear();
@@ -349,7 +323,6 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
      * @param columnName 字段名
      * @param isDesc     是否倒排
      * @return this
-     * @author bootystar
      */
     public B sortColumn(String columnName, boolean isDesc) {
         this.orderColumnMap.put(columnName, isDesc);

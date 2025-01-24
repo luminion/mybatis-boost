@@ -45,8 +45,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * <p>
      * 运行方法后,若未添加新条件, 可能会抛出{@link io.github.bootystar.mybatisplus.enhance.expception.ParamMappingException}异常
      *
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public Child requiredNext() {
         SqlTreeG oldTree = this.getChild();
@@ -61,8 +60,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
     /**
      * 将下一个条件的链接符号设置为or
      *
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public Child or() {
         this.orNext = true;
@@ -80,8 +78,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public <R> Child eq(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.EQ.keyword, value));
@@ -93,8 +90,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }<{@link T }>
-     * @author bootystar
+     * @return this
      */
     public <R> Child ne(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.NE.keyword, value));
@@ -106,8 +102,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public <R> Child gt(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.GT.keyword, value));
@@ -119,8 +114,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public <R> Child ge(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.GE.keyword, value));
@@ -132,8 +126,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public <R> Child lt(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.LT.keyword, value));
@@ -145,8 +138,8 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
+     * 
      */
     public <R> Child le(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.LE.keyword, value));
@@ -158,8 +151,8 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
+     * 
      */
     public <R> Child like(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.LIKE.keyword, value));
@@ -171,8 +164,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public <R> Child notLike(SFunction<T, R> getter, R value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.NOT_LIKE.keyword, value));
@@ -184,8 +176,8 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
+     * 
      */
     public <R> Child in(SFunction<T, R> getter, Collection<? extends R> value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.IN.keyword, value));
@@ -197,8 +189,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      *
      * @param getter 对象getter方法
      * @param value  值
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public <R> Child notIn(SFunction<T, R> getter, Collection<? extends R> value) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.NOT_IN.keyword, value));
@@ -209,8 +200,8 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * 指定字段为空
      *
      * @param getter 对象getter方法
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
+     * 
      */
     public Child isNull(SFunction<T, ?> getter) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.IS_NULL.keyword, null));
@@ -221,8 +212,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * 指定字段不为空
      *
      * @param getter 对象getter方法
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public Child isNotNull(SFunction<T, ?> getter) {
         this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.IS_NOT_NULL.keyword, null));
@@ -245,8 +235,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * 和现有条件同等优先级
      *
      * @param condition 条件
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public Child condition(SqlCondition condition) {
         if (condition == null) {
@@ -262,8 +251,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * 添加排序
      *
      * @param sort 排序
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public Child sort(SqlSort sort) {
         if (sort == null) {
@@ -279,8 +267,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * 条件的连接符取决于原条件, 不受{@link #or()}方法影响
      *
      * @param sqlTree sql树
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public Child with(SqlTree sqlTree) {
         if (sqlTree == null || sqlTree.getConditions() == null || sqlTree.getConditions().isEmpty()) {
@@ -299,8 +286,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * 条件的连接符取决于原条件, 不受{@link #or()}方法影响
      *
      * @param sqlTree sql树
-     * @return {@link Child }
-     * @author bootystar
+     * @return this
      */
     public Child withChild(SqlTree sqlTree) {
         SqlTreeG tree = this;

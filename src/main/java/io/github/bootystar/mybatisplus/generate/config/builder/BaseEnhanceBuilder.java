@@ -19,8 +19,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
     /**
      * 不生成重写的方法
      *
-     * @return {@code B }
-     * @author bootystar
+     * @return this
      */
     protected B disableOverrideMethods() {
         this.overrideMethods = false;
@@ -30,8 +29,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
     /**
      * 使用Map作为查询方法入参DTO
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     protected B withMapSelectDTO() {
         this.selectDTO = new ClassInfo(Map.class);
@@ -41,8 +39,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
     /**
      * 使用SqlHelper作为查询方法入参DTO
      *
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     protected B withSqlHelperSelectDTO() {
         this.selectDTO = new ClassInfo(SqlHelper.class);
@@ -53,8 +50,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
      * 额外字段后缀构造器
      *
      * @param builderConsumer builder消费者
-     * @return {@link B }
-     * @author bootystar
+     * @return this
      */
     protected B extraFieldSuffixBuilder(Consumer<ExtraFieldSuffixBuilder> builderConsumer) {
         builderConsumer.accept(this.extraFieldSuffixBuilder);
@@ -64,9 +60,8 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
     /**
      * 额外字段策略
      *
-     * @param strategy 战略
-     * @return {@link B }
-     * @author bootystar
+     * @param strategy 策略
+     * @return this
      */
     protected B extraFieldStrategy(ExtraFieldStrategy strategy) {
         this.extraFieldStrategy = strategy;

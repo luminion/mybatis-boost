@@ -21,7 +21,6 @@ public abstract class GeneratorHelper {
      * @param username 用户名
      * @param password 密码
      * @return {@link EnhanceGenerator }<{@link ExtraCodeBuilder }>
-     * @author bootystar
      */
     public static EnhanceGenerator<ExtraCodeBuilder> extraCodeGenerator(String url, String username, String password) {
         return new ExtraCodeGenerator(url, username, password);
@@ -34,7 +33,6 @@ public abstract class GeneratorHelper {
      * @param username 用户名
      * @param password 密码
      * @return {@link EnhanceGenerator }<{@link DynamicFieldBuilder }>
-     * @author bootystar
      */
     public static EnhanceGenerator<DynamicFieldBuilder> dynamicFieldGenerator(String url, String username, String password) {
         return new DynamicFieldGenerator(url, username, password);
@@ -47,7 +45,6 @@ public abstract class GeneratorHelper {
      * @param username 用户名
      * @param password 密码
      * @return {@link EnhanceGenerator }<{@link DynamicSqlBuilder }>
-     * @author bootystar
      */
     public static EnhanceGenerator<DynamicSqlBuilder> dynamicSqlGenerator(String url, String username, String password) {
         return new DynamicSqlGenerator(url, username, password);

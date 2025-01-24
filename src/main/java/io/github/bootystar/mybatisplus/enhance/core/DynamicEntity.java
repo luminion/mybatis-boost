@@ -15,7 +15,6 @@ public interface DynamicEntity {
      * value为数据库字段名
      *
      * @return {@link Map }<{@link String }, {@link String }>
-     * @author bootystar
      */
     Map<String, String> extraFieldColumnMap();
 

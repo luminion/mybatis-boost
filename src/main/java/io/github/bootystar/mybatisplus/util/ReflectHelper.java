@@ -22,7 +22,6 @@ public abstract class ReflectHelper {
      *
      * @param clazz 克拉兹
      * @return boolean
-     * @author bootystar
      */
     public static boolean isJavaCoreClass(Class<?> clazz) {
         if (clazz == null) {
@@ -35,8 +34,7 @@ public abstract class ReflectHelper {
      * 新建实例
      *
      * @param clazz 克拉兹
-     * @return {@link T }
-     * @author bootystar
+     * @return target
      */
     @SneakyThrows
     public static <T> T newInstance(Class<T> clazz) {
@@ -48,7 +46,6 @@ public abstract class ReflectHelper {
      *
      * @param clazz 类
      * @return {@link Map }<{@link String }, {@link Field }>
-     * @author bootystar
      */
     public static Map<String, Field> fieldMap(Class<?> clazz) {
         if (isJavaCoreClass(clazz)) {
@@ -89,8 +86,7 @@ public abstract class ReflectHelper {
      *
      * @param source 来源
      * @param target 目标
-     * @return {@link T }
-     * @author bootystar
+     * @return target
      */
     @SneakyThrows
     public static <T> T copyFieldProperties(Object source, T target) {
@@ -113,8 +109,7 @@ public abstract class ReflectHelper {
      * 对象转map
      *
      * @param source 来源
-     * @return {@link Map }<{@link ? }, {@link ? }>
-     * @author bootystar
+     * @return {@link Map }
      */
     @SneakyThrows
     public static Map<?, ?> objectToMap(Object source) {
@@ -135,8 +130,7 @@ public abstract class ReflectHelper {
      *
      * @param source 来源
      * @param clazz  目标类
-     * @return {@link U }
-     * @author bootystar
+     * @return target
      */
     public static <U> U toTarget(Object source, Class<U> clazz) {
         return copyFieldProperties(source, newInstance(clazz));

@@ -27,7 +27,6 @@ public class ExtraFieldSuffixBuilder {
      * 添加常用的默认后缀
      *
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder defaultSuffix() {
         suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_SIMPLE_MAP);
@@ -38,7 +37,6 @@ public class ExtraFieldSuffixBuilder {
      * 添加所有的默认后缀
      *
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder defaultSuffixFull() {
         suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_FULL_MAP);
@@ -50,7 +48,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder ne(String suffix) {
         check(suffix);
@@ -63,7 +60,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder gt(String suffix) {
         check(suffix);
@@ -76,7 +72,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder ge(String suffix) {
         check(suffix);
@@ -89,7 +84,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder lt(String suffix) {
         check(suffix);
@@ -102,7 +96,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder le(String suffix) {
         check(suffix);
@@ -115,7 +108,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder like(String suffix) {
         check(suffix);
@@ -128,7 +120,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder notLike(String suffix) {
         check(suffix);
@@ -141,7 +132,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder in(String suffix) {
         check(suffix);
@@ -154,7 +144,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder notIn(String suffix) {
         check(suffix);
@@ -167,7 +156,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder isNull(String suffix) {
         check(suffix);
@@ -180,7 +168,6 @@ public class ExtraFieldSuffixBuilder {
      *
      * @param suffix 后缀
      * @return {@link ExtraFieldSuffixBuilder }
-     * @author bootystar
      */
     public ExtraFieldSuffixBuilder isNotNull(String suffix) {
         check(suffix);
@@ -192,7 +179,6 @@ public class ExtraFieldSuffixBuilder {
      * 构建
      *
      * @return {@link HashMap }<{@link String }, {@link String }>
-     * @author bootystar
      */
     public LinkedHashMap<String, String> build() {
         return suffix2OperatorMap;

@@ -25,8 +25,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     /**
      * 返回指定泛型的sql助手
      *
-     * @return {@link SqlHelper }<{@link T }>
-     * @author bootystar
+     * @return {@link SqlHelper }
      */
     public static <T> SqlHelper<T> of() {
         return new SqlHelper<>();
@@ -36,8 +35,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * 根据指定对象字段映射等于条件
      *
      * @param s s
-     * @return {@link SqlHelper<T> }
-     * @author bootystar
+     * @return {@link SqlHelper}
      */
     @SuppressWarnings("unchecked")
     public static <T> SqlHelper<T> of(Object s) {
@@ -72,8 +70,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      *
      * @param tree      树
      * @param copySorts 是否复制排序
-     * @return {@link SqlHelper<T> }
-     * @author bootystar
+     * @return {@link SqlHelper}
      */
     protected static <T> SqlHelper<T> ofSqlTree(SqlTree tree, boolean copySorts) {
         if (tree == null) {
@@ -103,8 +100,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * 包装sql助手, 添加指定服务的查询方法
      *
      * @param baseService 基础服务
-     * @return {@link SqlHelperWrapper }<{@link T },{@link V }>
-     * @author bootystar
+     * @return {@link SqlHelperWrapper }
      */
     public <V> SqlHelperWrapper<T, V> wrap(DynamicService<T, V> baseService) {
         return new SqlHelperWrapper<>(baseService).with(this);

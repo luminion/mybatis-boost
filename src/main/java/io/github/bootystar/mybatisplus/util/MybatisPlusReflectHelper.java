@@ -35,7 +35,6 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      * @param methodReference lambda方法引用
      * @param parameterClass  参数类型
      * @return {@link MethodInfo }
-     * @author bootystar
      */
     public static MethodInfo lambdaMethodInfo(SFunction<?, ?> methodReference, Class<?> parameterClass) {
         String methodName = "", className = "";
@@ -70,7 +69,6 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      * @param clazz      指定类
      * @param superClass 超类
      * @return {@link Class }
-     * @author bootystar
      */
     public static Class<?>[] resolveTypeArguments(Class<?> clazz, Class<?> superClass) {
         return GenericTypeUtils.resolveTypeArguments(clazz, superClass);
@@ -81,7 +79,6 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      *
      * @param clazz 克拉兹
      * @return {@link String }
-     * @author bootystar
      */
     public static String idFieldPropertyName(Class<?> clazz) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
@@ -96,7 +93,6 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      *
      * @param clazz 实体类
      * @return {@link Map }<{@link String }, {@link String }>
-     * @author bootystar
      */
     public static Map<String, String> filed2JdbcColumnByMybatisPlusTableInfo(Class<?> clazz) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
@@ -121,7 +117,6 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      *
      * @param clazz 克拉兹
      * @return {@link Map }<{@link String },{@link String }>
-     * @author bootystar
      */
     public static Map<String, String> field2JdbcColumnByMybatisPlusAnnotation(Class<?> clazz) {
         HashMap<String, String> result = new HashMap<>();
@@ -173,7 +168,6 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      *
      * @param entityClass 实体类
      * @return {@link Map }<{@link String }, {@link String }>
-     * @author bootystar
      */
     public static Map<String, String> field2JdbcColumnMap(Class<?> entityClass) {
         Map<String, String> map = FIELD_TO_JDBC_COLUMN_CACHE_MAP.get(entityClass);
@@ -192,7 +186,6 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      * @param columnFormat 数据库字段映射格式{@link String#format(String, Object...)}
      * @param ignoreFormat 当字段名包含该值时,不进行字段映射
      * @return {@link Map }<{@link String }, {@link String }>
-     * @author bootystar
      */
     public static Map<String, String> field2JdbcColumnMap(Class<?> entityClass, String columnFormat, String ignoreFormat) {
         String format = columnFormat == null || columnFormat.isEmpty() ? "%s" : columnFormat;

@@ -101,7 +101,6 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
      * 执行
      *
      * @param tableNames 表名(不填为全部)
-     * @author bootystar
      */
     @Override
     public void execute(String... tableNames) {
@@ -175,8 +174,7 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
      * mapper.xml文件在项目根目录/src/main/resources/下的对应目录
      *
      * @param path 目录
-     * @return {@link AbstractGenerator }<{@link B }>
-     * @author bootystar
+     * @return {@link AbstractGenerator }
      */
     @Override
     public EnhanceGenerator<B> mapperXmlResource(String path) {
@@ -191,8 +189,7 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
     /**
      * 初始化常用配置项
      *
-     * @return {@link AbstractGenerator }<{@link B }>
-     * @author bootystar
+     * @return {@link AbstractGenerator }
      */
     @Override
     public EnhanceGenerator<B> initialize() {
@@ -232,8 +229,7 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
     /**
      * 启用全局文件覆盖
      *
-     * @return {@link AbstractGenerator }<{@link B }>
-     * @author bootystar
+     * @return {@link AbstractGenerator }
      */
     @Override
     public EnhanceGenerator<B> enableGlobalFileOverwrite() {

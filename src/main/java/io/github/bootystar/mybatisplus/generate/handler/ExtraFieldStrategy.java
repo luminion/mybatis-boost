@@ -16,7 +16,6 @@ public interface ExtraFieldStrategy {
      * @param keyword     sql关键字
      * @param sourceField 源字段信息
      * @return boolean
-     * @author bootystar
      */
     boolean allowGenerate(String keyword, TableField sourceField);
 
