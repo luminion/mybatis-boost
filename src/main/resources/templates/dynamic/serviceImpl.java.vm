@@ -91,7 +91,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public Object insertByDTO(Object param) {
 //        ${entityInsertDTO} dto = (${entityInsertDTO}) param;
-        return super.insertByDTO(s);
+        return super.insertByDTO(param);
     }
     #end
     #if(${generateUpdate})
@@ -99,7 +99,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public boolean updateByDTO(Object param) {
 //        ${entityUpdateDTO} dto = (${entityUpdateDTO}) param;
-        return super.updateByDTO(s);
+        return super.updateByDTO(param);
     }
     #end
     #if(${generateDelete})
