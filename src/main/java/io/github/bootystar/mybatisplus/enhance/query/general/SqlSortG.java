@@ -21,7 +21,7 @@ public class SqlSortG implements SqlSort {
     protected String field;
 
     /**
-     * 是否倒序(默认否, 为否时无需填写)
+     * 是否倒序(非必填,默认false)
      */
     protected boolean desc;
 

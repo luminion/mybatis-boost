@@ -28,7 +28,7 @@ public class ExtraFieldSuffixBuilder {
      *
      * @return {@link ExtraFieldSuffixBuilder }
      */
-    public ExtraFieldSuffixBuilder defaultSuffix() {
+    public ExtraFieldSuffixBuilder defaultSimpleSuffix() {
         suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_SIMPLE_MAP);
         return this;
     }
@@ -38,8 +38,8 @@ public class ExtraFieldSuffixBuilder {
      *
      * @return {@link ExtraFieldSuffixBuilder }
      */
-    public ExtraFieldSuffixBuilder defaultSuffixFull() {
-        suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_FULL_MAP);
+    public ExtraFieldSuffixBuilder defaultAllSuffix() {
+        suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_ALL_MAP);
         return this;
     }
 

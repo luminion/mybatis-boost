@@ -30,7 +30,7 @@ public enum SqlExtraSuffix {
 
     public final String suffix;
     public final SqlKeyword sqlKeyword;
-    public static final Map<String, String> DEFAULT_FULL_MAP;
+    public static final Map<String, String> DEFAULT_ALL_MAP;
     public static final Map<String, String> DEFAULT_SIMPLE_MAP;
 
     static {
@@ -38,7 +38,7 @@ public enum SqlExtraSuffix {
         for (SqlExtraSuffix value : values()) {
             map.put(value.suffix, value.sqlKeyword.keyword);
         }
-        DEFAULT_FULL_MAP = Collections.unmodifiableMap(map);
+        DEFAULT_ALL_MAP = Collections.unmodifiableMap(map);
 
         LinkedHashMap<String, String> simpleMap = new LinkedHashMap<>();
         simpleMap.put(LIKE.suffix, LIKE.sqlKeyword.keyword);

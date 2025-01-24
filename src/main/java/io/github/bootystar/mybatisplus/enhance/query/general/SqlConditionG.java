@@ -27,12 +27,12 @@ public class SqlConditionG implements SqlCondition {
     protected String field;
 
     /**
-     * 运算符(非必填,默认=,可选值:=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
+     * 运算符(=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
      */
-    protected String operator = SqlKeyword.EQ.keyword;
+    protected String operator;
 
     /**
-     * 值(多个值时,数据为集合)
+     * 属性值
      */
     protected Object value;
 
