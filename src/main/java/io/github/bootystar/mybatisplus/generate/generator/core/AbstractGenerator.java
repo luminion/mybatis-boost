@@ -33,6 +33,7 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
     protected B customConfigBuilder;
 
     public AbstractGenerator(String url, String username, String password, B customConfigBuilder) {
+        // todo 转化byte及short类型开关
         this.dataSourceConfigBuilder = new DataSourceConfig.Builder(url, username, password)
                 .typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
                     // 避免byte转换成Integer

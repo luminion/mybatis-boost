@@ -80,7 +80,8 @@
 #foreach($field in ${table.fields})
     #if(${field.logicDeleteField})
     #else
-                <if test="param1.${field.propertyName} != null">
+# todo 忽略空值string
+                <if test="param1.${field.propertyName} != null#if(${field.propertyType}=="String") and param1.${field.propertyName}!=''#end">
                     AND a.${field.columnName} = #{param1.${field.propertyName}}
                 </if>
         #if(${extraFieldSuffixMap})## ----------额外字段foreach-----------start
@@ -124,7 +125,8 @@
                     AND a.${field.columnName} ${value}
                 </if>
                 #else
-                <if test="param1.${extraFieldName} != null">
+# todo 忽略空值string
+                <if test="param1.${extraFieldName} != null#if(${field.propertyType}=="String") and param1.${extraFieldName}!=''#end">
                     AND a.${field.columnName} ${value} #{param1.${extraFieldName}}
                 </if>
                 #end
