@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
  */
 @SuppressWarnings("unused")
 public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Child>> extends SqlEntityG {
-    protected boolean orNext;
+    protected transient boolean orNext;
 
     {
         this.conditions = new LinkedHashSet<>(4);

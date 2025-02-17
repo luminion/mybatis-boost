@@ -21,7 +21,7 @@ public class SqlTreeG implements SqlTree {
     protected LinkedHashSet<SqlConditionG> conditions;
 
     /**
-     * 子条件
+     * 子条件树
      */
     protected SqlTreeG child;
 
