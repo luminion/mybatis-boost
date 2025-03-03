@@ -108,7 +108,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     }
 
     /**
-     * 禁用swagger/springdoc模型实体的注解
+     * 启用swagger/springdoc模型实体的注解
      * <p>
      * 已知swagger注解在同名时有冲突, 禁用后请确保表注释不为空且不同名
      *
@@ -120,7 +120,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     }
 
     /**
-     * 禁用swagger/springdoc文档额外uuid标识
+     * 启用swagger/springdoc文档额外uuid标识
      * <p>
      * 已知swagger注解在同名时有冲突, 禁用后请确保表注释不为空且不同名
      *
@@ -132,7 +132,7 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
     }
 
     /**
-     * 额外类链接注释
+     * 添加额外类链接注释
      *
      * @return this
      */
