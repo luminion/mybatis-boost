@@ -20,8 +20,10 @@ import lombok.experimental.Accessors;
  * $!{table.comment}
  *
  * @author ${author}
+#if(${extraClassLinkComment})
  * @see ${package.Mapper}.${table.mapperName}
  * @see ${package.ServiceImpl}.${table.serviceImplName}
+#end
  */
 #if(${entityLombokModel})
 @Data

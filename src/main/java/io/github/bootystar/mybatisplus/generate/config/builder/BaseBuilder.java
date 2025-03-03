@@ -131,6 +131,17 @@ public abstract class BaseBuilder<B extends BaseBuilder<B>> extends BaseConfig {
         return this.getBuilder();
     }
 
+    /**
+     * 额外类链接注释
+     *
+     * @return this
+     */
+    public B enableExtraClassLinkComment() {
+        this.extraClassLinkComment = true;
+        return this.getBuilder();
+    }
+
+
     //------------------额外类相关配置----------------
 
     /**

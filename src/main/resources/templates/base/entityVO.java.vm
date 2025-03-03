@@ -24,9 +24,11 @@ import lombok.experimental.Accessors;
  * $!{table.comment}-VO
  *
  * @author ${author}
+#if(${extraClassLinkComment})
  * @see ${package.Entity}.${entity}
  * @see ${package.Mapper}.${table.mapperName}
  * @see ${package.ServiceImpl}.${table.serviceImplName}
+#end
  */
 #if(${entityLombokModel})
 @Data

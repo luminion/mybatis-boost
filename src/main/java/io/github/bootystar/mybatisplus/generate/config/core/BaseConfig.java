@@ -58,6 +58,11 @@ public abstract class BaseConfig {
      */
     protected boolean swaggerAnnotationWithUUID;
 
+    /**
+     * 额外类链接注释
+     */
+    protected boolean extraClassLinkComment;
+
     //------------------额外类相关配置----------------
 
     /**
