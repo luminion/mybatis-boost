@@ -100,7 +100,7 @@ public class ${entity}SelectDTO {
                 #if(${value}=="LIKE"||${value}=="NOT LIKE")
 
     public ${extraFieldType} get${field.capitalName}${key}() {
-        return ${extraFieldName} == null || ${extraFieldName}.isEmpty() ? ${extraFieldName} : "%" + ${extraFieldName} + "%";
+        return ${extraFieldName} == null || ${extraFieldName}.isEmpty() ? null : "%" + ${extraFieldName} + "%";
     }
                 #end
             #end
