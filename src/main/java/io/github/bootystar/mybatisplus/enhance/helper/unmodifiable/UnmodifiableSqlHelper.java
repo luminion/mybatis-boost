@@ -156,7 +156,7 @@ public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
                 return Optional.empty();
             }
         }
-        if (SqlKeyword.isLikeOperator(operator)) {
+        if (SqlKeyword.isLikeOperator(operator) && value instanceof String) {
             value = "%" + value + "%";
         }
         return Optional.of(new SqlConditionU(isOr, jdbcColumn, operator, value));

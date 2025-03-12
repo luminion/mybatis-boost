@@ -97,7 +97,7 @@ public class ${entity}SelectDTO {
                     #end
                 #end
     private ${extraFieldType} ${extraFieldName};
-                #if(${value}=="LIKE"||${value}=="NOT LIKE")
+                #if((${value}=="LIKE"||${value}=="NOT LIKE")&&${extraFieldType}=="String")
 
     public ${extraFieldType} get${field.capitalName}${key}() {
         return ${extraFieldName} == null || ${extraFieldName}.isEmpty() ? null : "%" + ${extraFieldName} + "%";
@@ -155,7 +155,7 @@ public class ${entity}SelectDTO {
                 #end
             #end
             #if(!${existField} && ${extraFieldStrategy.allowGenerate(${value},${field})})
-                #if(${value}=="LIKE"||${value}=="NOT LIKE")
+                #if((${value}=="LIKE"||${value}=="NOT LIKE")&&${extraFieldType}=="String")
                 #else
 
     public ${extraFieldType} ${getprefix}${field.capitalName}${key}() {
