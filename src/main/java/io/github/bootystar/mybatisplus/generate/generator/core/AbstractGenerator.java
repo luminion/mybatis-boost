@@ -217,6 +217,7 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
                 .formatServiceFileName("%sService")
         ;
         strategyConfigBuilder.controllerBuilder()
+                .enableHyphenStyle()
                 .enableRestStyle()
         ;
         return this;

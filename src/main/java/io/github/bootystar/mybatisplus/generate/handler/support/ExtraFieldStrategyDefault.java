@@ -42,7 +42,7 @@ public class ExtraFieldStrategyDefault implements ExtraFieldStrategy {
 
         // 大小比较
         if (SqlKeyword.CONDITION_OPERATORS_COMPARE.contains(keyword)) {
-            return ALLOW_COMPARE.contains(propertyType) || isShortString;
+            return ALLOW_COMPARE.contains(propertyType);
         }
 
         // 模糊查询
