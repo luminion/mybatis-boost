@@ -3,9 +3,11 @@ package io.github.bootystar.mybatisplus.generate.generator.core;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.*;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.type.ITypeConvertHandler;
+import com.baomidou.mybatisplus.generator.type.TypeRegistry;
 import io.github.bootystar.mybatisplus.generate.config.builder.BaseBuilder;
 import io.github.bootystar.mybatisplus.generate.engine.EnhanceVelocityTemplateEngine;
 import io.github.bootystar.mybatisplus.generate.handler.support.TypeConvertHandler;
@@ -36,13 +38,11 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
     protected TypeConvertHandler typeConvertHandler = new TypeConvertHandler();
 
     public AbstractGenerator(String url, String username, String password, B customConfigBuilder) {
-        this.dataSourceConfigBuilder = new DataSourceConfig.Builder(url, username, password)
-                .typeConvertHandler(typeConvertHandler)
-        ;
+        this.dataSourceConfigBuilder = new DataSourceConfig.Builder(url, username, password);
         this.customConfigBuilder = customConfigBuilder;
         this.globalConfigBuilder
                 .dateType(DateType.TIME_PACK)
-                .author(System.getProperty("user.name"))
+                .author("bootystar")
                 .outputDir(System.getProperty("user.dir") + "/src/main/java")
         ;
         this.packageConfigBuilder
@@ -193,6 +193,16 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
         globalConfigBuilder
                 .disableOpenDir()
         ;
+        dataSourceConfigBuilder
+                .typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
+                    if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
+                        return DbColumnType.INTEGER;
+                    }
+                    if (JdbcType.SMALLINT == metaInfo.getJdbcType()) {
+                        return DbColumnType.INTEGER;
+                    }
+                    return typeRegistry.getColumnType(metaInfo);
+                });
         customConfigBuilder
                 .editExcludeColumns("create_time", "update_time", "create_by", "update_by", "created_by", "updated_by", "create_at", "update_at", "created_at", "updated_at")
                 .sortColumn("order", false)
@@ -246,18 +256,6 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
         strategyConfigBuilder.controllerBuilder()
                 .enableFileOverride()
         ;
-        return this;
-    }
-
-    @Override
-    public EnhanceGenerator<B> enableByte2Integer() {
-        typeConvertHandler.setByte2Integer(true);
-        return this;
-    }
-
-    @Override
-    public EnhanceGenerator<B> enableShort2Integer() {
-        typeConvertHandler.setShort2Integer(true);
         return this;
     }
 }

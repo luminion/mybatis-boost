@@ -44,8 +44,5 @@ public interface EnhanceGenerator<B extends BaseBuilder<B>> {
 
     EnhanceGenerator<B> enableGlobalFileOverwrite();
 
-    EnhanceGenerator<B> enableByte2Integer();
-
-    EnhanceGenerator<B> enableShort2Integer();
 
 }
