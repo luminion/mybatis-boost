@@ -269,8 +269,8 @@ public class ${table.controllerName} {
     @ResponseBody
     #end
     ${requestMethod4Select}("/list")
-    public ${returnMethod.clazz("List<${entityVO}>")} selectList(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} param) {
-        return ${returnMethod.method("baseService.listByDTO(param)")};
+    public ${returnMethod.clazz("List<${entityVO}>")} selectList(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s) {
+        return ${returnMethod.method("baseService.listByDTO(s)")};
     }
 
     #if(${springdoc})
@@ -292,8 +292,8 @@ public class ${table.controllerName} {
     @ResponseBody
     #end
     ${requestMethod4Select}("/page/{current}/{size}")
-    public ${returnMethod.clazz(${pageClazz4return})} selectPage(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} param, $!{pagePathParams}) {
-        return ${returnMethod.method(${pageMethod.method("baseService.pageByDTO(param, current, size)")})};
+    public ${returnMethod.clazz(${pageClazz4return})} selectPage(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s, $!{pagePathParams}) {
+        return ${returnMethod.method(${pageMethod.method("baseService.pageByDTO(s, current, size)")})};
     }
 #end
 #if(${generateImport})
@@ -355,11 +355,11 @@ public class ${table.controllerName} {
      */
     #end
     ${requestMethod4Select}("/excelExport/{current}/{size}")
-    public void excelExport(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} param, ${pagePathParams}, HttpServletResponse response) throws IOException {
+    public void excelExport(#if(${postQuery})$!{optionalBodyStr}#end${entitySelectDTO} s, ${pagePathParams}, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(param, response.getOutputStream(), ${entityVO}.class, current, size);
+        baseService.excelExport(s, response.getOutputStream(), ${entityVO}.class, current, size);
     }
 #end
 

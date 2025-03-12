@@ -1,17 +1,17 @@
 package ${package.Mapper};
 ## ------参数设置----start
 #set($entityVO = "${entity}VO")
-#if(${selectDTO.classFullName})
-    #set($entitySelectDTO = ${selectDTO.clazz("${entity}")})
-    #if(${generateSelect}||${generateExport})
-import ${selectDTO.classFullName};
-    #end
-#else
-    #set($entitySelectDTO = "${entity}SelectDTO")
-    #if(${generateSelect}||${generateExport})
-import ${basePackage}.${package4DTO}.${entity}SelectDTO;
-    #end
-#end
+###if(${selectDTO.classFullName})
+##    #set($entitySelectDTO = ${selectDTO.clazz("${entity}")})
+##    #if(${generateSelect}||${generateExport})
+##import ${selectDTO.classFullName};
+##    #end
+###else
+##    #set($entitySelectDTO = "${entity}SelectDTO")
+##    #if(${generateSelect}||${generateExport})
+##import ${basePackage}.${package4DTO}.${entity}SelectDTO;
+##    #end
+###end
 ## ------参数设置----end
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import ${superMapperClassPackage};
@@ -38,7 +38,7 @@ interface ${table.mapperName} : ${superMapperClass}<${entity}>
 #else
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
 
-    List<${entityVO}> listByDTO(${entitySelectDTO} param, IPage<${entity}VO> page);
+    List<${entityVO}> listByDTO(${entitySelectDTO} s, IPage<${entity}VO> page);
 
 }
 #end

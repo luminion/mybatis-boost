@@ -89,17 +89,17 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     #if(${generateInsert})
 
     @Override
-    public Object insertByDTO(Object param) {
-//        ${entityInsertDTO} dto = (${entityInsertDTO}) param;
-        return super.insertByDTO(param);
+    public Object insertByDTO(Object s) {
+//        ${entityInsertDTO} dto = (${entityInsertDTO}) s;
+        return super.insertByDTO(s);
     }
     #end
     #if(${generateUpdate})
 
     @Override
-    public boolean updateByDTO(Object param) {
-//        ${entityUpdateDTO} dto = (${entityUpdateDTO}) param;
-        return super.updateByDTO(param);
+    public boolean updateByDTO(Object s) {
+//        ${entityUpdateDTO} dto = (${entityUpdateDTO}) s;
+        return super.updateByDTO(s);
     }
     #end
     #if(${generateDelete})
@@ -110,11 +110,11 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     }
     #end
 ##    @Override
-##    public List<${entityVO}> doSelect(Object param, IPage<${entityVO}> page) {
+##    public List<${entityVO}> doSelect(Object s, IPage<${entityVO}> page) {
 ####        #if(${entitySelectDTO})
-####//        ${entitySelectDTO} dto = (${entitySelectDTO}) param;
+####//        ${entitySelectDTO} dto = (${entitySelectDTO}) s;
 ####        #end
-##        return super.doSelect(param, page);
+##        return super.doSelect(s, page);
 ##        #end
 ##    }
     #if(${generateSelect})
@@ -125,13 +125,13 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     }
 
     @Override
-    public List<${entityVO}> listByDTO(Object param) {
-        return super.listByDTO(param);
+    public List<${entityVO}> listByDTO(Object s) {
+        return super.listByDTO(s);
     }
 
     @Override
-    public IPage<${entityVO}> pageByDTO(Object param, Long current, Long size) {
-        return super.pageByDTO(param, current, size);
+    public IPage<${entityVO}> pageByDTO(Object s, Long current, Long size) {
+        return super.pageByDTO(s, current, size);
     }
     #end
     #if(${generateImport})
@@ -145,8 +145,8 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     #if(${generateExport})
 
     @Override
-    public void excelExport(Object param, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
-        super.excelExport(param, os, clazz, current, size, includeFields);
+    public void excelExport(Object s, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
+        super.excelExport(s, os, clazz, current, size, includeFields);
     }
     #end
 

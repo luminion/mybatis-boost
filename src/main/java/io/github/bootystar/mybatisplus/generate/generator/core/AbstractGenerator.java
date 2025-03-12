@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.*;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
+import com.baomidou.mybatisplus.generator.type.ITypeConvertHandler;
 import io.github.bootystar.mybatisplus.generate.config.builder.BaseBuilder;
 import io.github.bootystar.mybatisplus.generate.engine.EnhanceVelocityTemplateEngine;
+import io.github.bootystar.mybatisplus.generate.handler.support.TypeConvertHandler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.JdbcType;
@@ -31,17 +33,11 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
     protected StrategyConfig.Builder strategyConfigBuilder = new StrategyConfig.Builder();
     protected InjectionConfig.Builder injectionConfigBuilder = new InjectionConfig.Builder();
     protected B customConfigBuilder;
+    protected TypeConvertHandler typeConvertHandler = new TypeConvertHandler();
 
     public AbstractGenerator(String url, String username, String password, B customConfigBuilder) {
-        // todo 转化byte及short类型开关
         this.dataSourceConfigBuilder = new DataSourceConfig.Builder(url, username, password)
-                .typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
-                    // 避免byte转换成Integer
-                    if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
-                        return DbColumnType.INTEGER;
-                    }
-                    return typeRegistry.getColumnType(metaInfo);
-                })
+                .typeConvertHandler(typeConvertHandler)
         ;
         this.customConfigBuilder = customConfigBuilder;
         this.globalConfigBuilder
@@ -252,4 +248,15 @@ public abstract class AbstractGenerator<B extends BaseBuilder<B>> implements Enh
         return this;
     }
 
+    @Override
+    public EnhanceGenerator<B> enableByte2Integer() {
+        typeConvertHandler.setByte2Integer(true);
+        return this;
+    }
+
+    @Override
+    public EnhanceGenerator<B> enableShort2Integer() {
+        typeConvertHandler.setShort2Integer(true);
+        return this;
+    }
 }

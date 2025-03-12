@@ -10,17 +10,17 @@ package ${package.Service};
 #set($entityInsertDTO = "${entity}InsertDTO")
 #set($entityUpdateDTO = "${entity}UpdateDTO")
 #set($entityVO = "${entity}VO")
-#if(${selectDTO.classFullName})
-    #set($entitySelectDTO = ${selectDTO.clazz("${entity}")})
-    #if(${generateSelect}||${generateExport})
-import ${selectDTO.classFullName};
-    #end
-#else
-    #set($entitySelectDTO = "${entity}SelectDTO")
-    #if(${generateSelect}||${generateExport})
-import ${basePackage}.${package4DTO}.${entity}SelectDTO;
-    #end
-#end
+###if(${selectDTO.classFullName})
+##    #set($entitySelectDTO = ${selectDTO.clazz("${entity}")})
+##    #if(${generateSelect}||${generateExport})
+##import ${selectDTO.classFullName};
+##    #end
+###else
+##    #set($entitySelectDTO = "${entity}SelectDTO")
+##    #if(${generateSelect}||${generateExport})
+##import ${basePackage}.${package4DTO}.${entity}SelectDTO;
+##    #end
+###end
 ## ------参数设置----end
 #if(${generateSelect}||${generateExport})
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -60,21 +60,21 @@ interface ${table.serviceName} : ${superServiceClass}<${entity}>
 public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
     #if(${generateInsert})
 
-    Object insertByDTO(${entityInsertDTO} param);
+    Object insertByDTO(Object s);
     #end
     #if(${generateUpdate})
 
-    boolean updateByDTO(${entityUpdateDTO} param);
+    boolean updateByDTO(Object s);
     #end
     #if(${generateSelect})
 
     ${entityVO} oneById(Serializable id);
 
-    ${entityVO} oneByDTO(${entitySelectDTO} param);
+    ${entityVO} oneByDTO(Object s);
 
-    List<${entityVO}> listByDTO(${entitySelectDTO} param);
+    List<${entityVO}> listByDTO(Object s);
 
-    IPage<${entityVO}> pageByDTO(${entitySelectDTO} param, Long current, Long size);
+    IPage<${entityVO}> pageByDTO(Object s, Long current, Long size);
     #end
     #if(${generateImport})
 
@@ -84,7 +84,7 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
     #end
     #if(${generateExport})
 
-    void excelExport(${entitySelectDTO} param, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields);
+    void excelExport(Object s, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields);
     #end
 
 

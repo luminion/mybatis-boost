@@ -51,17 +51,17 @@ public interface DynamicService<T, V> extends IService<T> {
         return tableInfo.getPropertyValue(source, keyProperty);
     }
 
-    default Object insertByDTO(Object param) {
-        T entity = toEntity(param);
+    default Object insertByDTO(Object s) {
+        T entity = toEntity(s);
         save(entity);
         return toId(entity);
     }
 
-    default boolean updateByDTO(Object param) {
-        return updateById(toEntity(param));
+    default boolean updateByDTO(Object s) {
+        return updateById(toEntity(s));
     }
 
-    List<V> doSelect(Object param, IPage<V> page);
+    List<V> doSelect(Object s, IPage<V> page);
 
     default V oneById(Serializable id) {
         if (id == null) throw new IllegalArgumentException("id can't be null");
@@ -77,43 +77,43 @@ public interface DynamicService<T, V> extends IService<T> {
         return MybatisPlusReflectHelper.toTarget(oneById(id), clazz);
     }
 
-    default V oneByDTO(Object param) {
-        List<V> vs = listByDTO(param);
+    default V oneByDTO(Object s) {
+        List<V> vs = listByDTO(s);
         if (vs == null || vs.isEmpty()) return null;
         if (vs.size() > 1) throw new TooManyResultsException("error query => required one but found " + vs.size());
         return vs.get(0);
     }
 
-    default <R> R oneByDTO(Object param, Class<R> clazz) {
-        return MybatisPlusReflectHelper.toTarget(oneByDTO(param), clazz);
+    default <R> R oneByDTO(Object s, Class<R> clazz) {
+        return MybatisPlusReflectHelper.toTarget(oneByDTO(s), clazz);
     }
 
     default List<V> listByDTO() {
         return doSelect(null, null);
     }
 
-    default List<V> listByDTO(Object param) {
-        return doSelect(param, null);
+    default List<V> listByDTO(Object s) {
+        return doSelect(s, null);
     }
 
-    default <R> List<R> listByDTO(Object param, Class<R> clazz) {
-        return listByDTO(param).stream()
+    default <R> List<R> listByDTO(Object s, Class<R> clazz) {
+        return listByDTO(s).stream()
                 .map(e -> MybatisPlusReflectHelper.toTarget(e, clazz))
                 .collect(Collectors.toList());
     }
 
-    default IPage<V> pageByDTO(Object param, Long current, Long size) {
+    default IPage<V> pageByDTO(Object s, Long current, Long size) {
         if (current == null || current < 1) current = 1L;
         if (size == null) size = 10L;
         IPage<V> page = new Page<>(current, size);
-        List<V> vs = doSelect(param, page);
+        List<V> vs = doSelect(s, page);
         page.setRecords(vs);
         return page;
     }
 
     @SuppressWarnings("unchecked")
-    default <R> IPage<R> pageByDTO(Object param, Long current, Long size, Class<R> clazz) {
-        IPage<R> vp = (IPage<R>) pageByDTO(param, current, size);
+    default <R> IPage<R> pageByDTO(Object s, Long current, Long size, Class<R> clazz) {
+        IPage<R> vp = (IPage<R>) pageByDTO(s, current, size);
         vp.setRecords(
                 vp.getRecords().stream()
                         .map(e -> MybatisPlusReflectHelper.toTarget(e, clazz))
@@ -137,8 +137,8 @@ public interface DynamicService<T, V> extends IService<T> {
         return entityList.size();
     }
 
-    default void excelExport(Object param, OutputStream os, Class<?> clazz, String... includeFields) {
-        excelExport(param, os, clazz, 1L, -1L, includeFields);
+    default void excelExport(Object s, OutputStream os, Class<?> clazz, String... includeFields) {
+        excelExport(s, os, clazz, 1L, -1L, includeFields);
     }
 
     default void excelExport(Object s, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
