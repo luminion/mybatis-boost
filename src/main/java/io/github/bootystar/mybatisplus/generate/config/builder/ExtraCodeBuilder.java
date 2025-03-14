@@ -1,7 +1,7 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
 import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
-import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
+import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldGenerateStrategy;
 
 import java.util.function.Consumer;
 
@@ -18,7 +18,7 @@ public class ExtraCodeBuilder extends BaseEnhanceBuilder<ExtraCodeBuilder> {
     }
 
     @Override
-    public ExtraCodeBuilder extraFieldStrategy(ExtraFieldStrategy strategy) {
+    public ExtraCodeBuilder extraFieldStrategy(ExtraFieldGenerateStrategy strategy) {
         return super.extraFieldStrategy(strategy);
     }
 

@@ -21,16 +21,16 @@ public abstract class DynamicFieldServiceImpl<M extends DynamicMapper<T, V>, T, 
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<V> doSelect(Object param, IPage<V> page) {
+    public List<V> doSelect(Object s, IPage<V> page) {
         DynamicFieldSqlHelper<T> sqlHelper;
-        if (param instanceof DynamicFieldSqlHelper<?>) {
-            DynamicFieldSqlHelper<?> unmodifiableSqlHelper = (DynamicFieldSqlHelper<?>) param;
+        if (s instanceof DynamicFieldSqlHelper<?>) {
+            DynamicFieldSqlHelper<?> unmodifiableSqlHelper = (DynamicFieldSqlHelper<?>) s;
             if (!super.getEntityClass().equals(unmodifiableSqlHelper.getEntityClass())) {
                 throw new UnsupportedOperationException("not support this type of sqlHelper: " + unmodifiableSqlHelper.getEntityClass().getName());
             }
-            sqlHelper = (DynamicFieldSqlHelper<T>) param;
+            sqlHelper = (DynamicFieldSqlHelper<T>) s;
         } else {
-            sqlHelper = new DynamicFieldSqlHelper<>(SqlHelper.of(param), super.getEntityClass(), suffixBuilder);
+            sqlHelper = new DynamicFieldSqlHelper<>(SqlHelper.of(s), super.getEntityClass(), suffixBuilder);
         }
         return getBaseMapper().listByDTO(sqlHelper, page);
     }

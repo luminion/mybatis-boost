@@ -1,7 +1,7 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
 import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
-import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
+import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldGenerateStrategy;
 import lombok.Getter;
 
 import java.util.function.Consumer;
@@ -38,7 +38,7 @@ public class DynamicFieldBuilder extends BaseEnhanceBuilder<DynamicFieldBuilder>
     }
 
     @Override
-    public DynamicFieldBuilder extraFieldStrategy(ExtraFieldStrategy strategy) {
+    public DynamicFieldBuilder extraFieldStrategy(ExtraFieldGenerateStrategy strategy) {
         return super.extraFieldStrategy(strategy);
     }
 }

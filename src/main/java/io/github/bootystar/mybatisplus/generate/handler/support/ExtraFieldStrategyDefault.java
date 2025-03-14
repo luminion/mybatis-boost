@@ -2,7 +2,7 @@ package io.github.bootystar.mybatisplus.generate.handler.support;
 
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
+import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldGenerateStrategy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author bootystar
  */
-public class ExtraFieldStrategyDefault implements ExtraFieldStrategy {
+public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
     private static final List<String> ALLOW_COMPARE = Arrays.asList(
             "Byte",
             "Short",

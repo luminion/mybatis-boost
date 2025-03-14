@@ -1,9 +1,8 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
 import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
-import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
-import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldStrategy;
+import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldGenerateStrategy;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 
 import java.util.Map;
@@ -63,7 +62,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
      * @param strategy 策略
      * @return this
      */
-    protected B extraFieldStrategy(ExtraFieldStrategy strategy) {
+    protected B extraFieldStrategy(ExtraFieldGenerateStrategy strategy) {
         this.extraFieldStrategy = strategy;
         return this.getBuilder();
     }

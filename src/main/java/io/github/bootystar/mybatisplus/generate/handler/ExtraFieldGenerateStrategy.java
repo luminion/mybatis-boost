@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableField;
  * @author bootystar
  */
 @FunctionalInterface
-public interface ExtraFieldStrategy {
+public interface ExtraFieldGenerateStrategy {
 
     /**
      * 是否允许根据源字段生成sql关键字对应的额外字段
