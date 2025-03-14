@@ -13,11 +13,9 @@ package ${package.ServiceImpl};
 ###end
 ## ------参数设置----end
 #if(${overrideMethods}&&${generateSelect})
-import com.baomidou.mybatisplus.core.metadata.IPage;
 #end
 import ${superServiceImplClassPackage};
 #if(${overrideInitSuffixBuilder})
-import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 #end
 import ${package.Entity}.${entity};
 import ${basePackage}.${package4VO}.${entityVO};
@@ -26,15 +24,11 @@ import ${package.Service}.${table.serviceName};
 import org.springframework.stereotype.Service;
 
 #if(${overrideMethods})
-import java.util.List;
-#if(${generateDelete}||${generateSelect})
-import java.io.Serializable;
-#end
+    #if(${generateDelete}||${generateSelect})
+    #end
 #if(${generateImport})
-import java.io.InputStream;
 #end
 #if(${generateExport})
-import java.io.OutputStream;
 #end
 #end
 

@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.generate.config.builder;
 
-import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
+import io.github.bootystar.mybatisplus.generate.handler.support.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldGenerateStrategy;
 
 import java.util.function.Consumer;

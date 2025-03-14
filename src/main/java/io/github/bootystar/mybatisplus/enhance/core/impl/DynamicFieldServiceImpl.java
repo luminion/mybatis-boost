@@ -2,7 +2,6 @@ package io.github.bootystar.mybatisplus.enhance.core.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicMapper;
 import io.github.bootystar.mybatisplus.enhance.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
@@ -17,8 +16,6 @@ import java.util.List;
  */
 public abstract class DynamicFieldServiceImpl<M extends DynamicMapper<T, V>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
 
-    protected ExtraFieldSuffixBuilder suffixBuilder;
-
     @Override
     @SuppressWarnings("unchecked")
     public List<V> doSelect(Object s, IPage<V> page) {
@@ -30,14 +27,9 @@ public abstract class DynamicFieldServiceImpl<M extends DynamicMapper<T, V>, T, 
             }
             sqlHelper = (DynamicFieldSqlHelper<T>) s;
         } else {
-            sqlHelper = new DynamicFieldSqlHelper<>(SqlHelper.of(s), super.getEntityClass(), suffixBuilder);
+            sqlHelper = new DynamicFieldSqlHelper<>(SqlHelper.of(s), super.getEntityClass());
         }
         return getBaseMapper().listByDTO(sqlHelper, page);
-    }
-
-    @SuppressWarnings("unused")
-    protected ExtraFieldSuffixBuilder initSuffixBuilder() {
-        return null;
     }
 
 }

@@ -1,4 +1,4 @@
-package io.github.bootystar.mybatisplus.enhance.builder;
+package io.github.bootystar.mybatisplus.generate.handler.support;
 
 import io.github.bootystar.mybatisplus.enhance.enums.SqlExtraSuffix;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
