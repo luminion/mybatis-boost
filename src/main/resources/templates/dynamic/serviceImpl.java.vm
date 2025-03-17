@@ -46,9 +46,8 @@ open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperNam
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}, ${entityVO}> implements ${table.serviceName} {
 #if(${overrideInitSuffixBuilder})
 
-    @Override
-    protected ExtraFieldSuffixBuilder initSuffixBuilder() {
-        return new ExtraFieldSuffixBuilder()
+    {
+        super.suffixBuilder = new ExtraFieldSuffixBuilder()
                 #foreach($entry in ${extraFieldSuffixMap.entrySet()})
                     #set($key = $entry.key)
                     #set($value = $entry.value)
