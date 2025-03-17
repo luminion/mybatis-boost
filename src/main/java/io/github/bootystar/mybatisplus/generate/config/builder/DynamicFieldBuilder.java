@@ -38,8 +38,8 @@ public class DynamicFieldBuilder extends BaseEnhanceBuilder<DynamicFieldBuilder>
     }
 
     @Override
-    public DynamicFieldBuilder extraFieldStrategy(ExtraFieldGenerateStrategy strategy) {
-        return super.extraFieldStrategy(strategy);
+    public DynamicFieldBuilder extraFieldGenerateStrategy(ExtraFieldGenerateStrategy strategy) {
+        return super.extraFieldGenerateStrategy(strategy);
     }
 }
 

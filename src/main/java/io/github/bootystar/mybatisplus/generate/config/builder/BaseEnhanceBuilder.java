@@ -62,7 +62,7 @@ public abstract class BaseEnhanceBuilder<B extends BaseEnhanceBuilder<B>> extend
      * @param strategy 策略
      * @return this
      */
-    protected B extraFieldStrategy(ExtraFieldGenerateStrategy strategy) {
+    protected B extraFieldGenerateStrategy(ExtraFieldGenerateStrategy strategy) {
         this.extraFieldStrategy = strategy;
         return this.getBuilder();
     }

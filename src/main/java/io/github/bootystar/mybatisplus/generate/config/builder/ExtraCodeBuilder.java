@@ -18,8 +18,8 @@ public class ExtraCodeBuilder extends BaseEnhanceBuilder<ExtraCodeBuilder> {
     }
 
     @Override
-    public ExtraCodeBuilder extraFieldStrategy(ExtraFieldGenerateStrategy strategy) {
-        return super.extraFieldStrategy(strategy);
+    public ExtraCodeBuilder extraFieldGenerateStrategy(ExtraFieldGenerateStrategy strategy) {
+        return super.extraFieldGenerateStrategy(strategy);
     }
 
 
