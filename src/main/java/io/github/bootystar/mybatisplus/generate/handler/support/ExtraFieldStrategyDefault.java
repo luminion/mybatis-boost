@@ -12,20 +12,62 @@ import java.util.List;
  */
 public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
     private static final List<String> ALLOW_COMPARE = Arrays.asList(
-            "Byte",
-            "Short",
-            "Integer",
-            "Long",
-            "Float",
-            "Double",
-            "BigInteger",
-            "BigDecimal",
-            "Date",
-            "Time",
-            "Timestamp",
-            "LocalDate",
-            "LocalTime",
+            "Byte"
+            ,
+            "Short"
+            ,
+            "Integer"
+            ,
+            "Long"
+            ,
+            "Float"
+            ,
+            "Double"
+            ,
+            "BigInteger"
+            ,
+            "BigDecimal"
+            ,
+            "Date"
+            ,
+            "Time"
+            ,
+            "Timestamp"
+            ,
+            "LocalDate"
+            ,
+            "LocalTime"
+            ,
             "LocalDateTime"
+    );
+    private static final List<String> ALLOW_MULTI = Arrays.asList(
+            "Byte"
+            ,
+            "Short"
+            ,
+            "Integer"
+            ,
+            "Long"
+            ,
+//            "Float"
+//            ,
+//            "Double"
+//            ,
+//            "BigInteger"
+//            ,
+//            "BigDecimal"
+//            ,
+//            "Date"
+//            ,
+//            "Time"
+//            ,
+//            "Timestamp"
+//            ,
+            "LocalDate"
+//            ,
+//            "LocalTime"
+//            ,
+//            "LocalDateTime"
     );
 
     public boolean allowGenerate(String keyword, TableField field) {
@@ -39,10 +81,11 @@ public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
         boolean isNullable = field.getMetaInfo().isNullable();
         boolean isString = "String".equals(propertyType);
         boolean isShortString = isString && length > 0 && length <= 64;
+        boolean isIdColumn = field.getColumnName().endsWith("id");
 
         // 大小比较
         if (SqlKeyword.CONDITION_OPERATORS_COMPARE.contains(keyword)) {
-            return ALLOW_COMPARE.contains(propertyType);
+            return ALLOW_COMPARE.contains(propertyType)  && !isKeyFlag && !isIdColumn;
         }
 
         // 模糊查询
@@ -52,7 +95,7 @@ public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
 
         // in查询
         if (SqlKeyword.CONDITION_OPERATORS_MULTI.contains(keyword)) {
-            return ALLOW_COMPARE.contains(propertyType) || isShortString || isKeyFlag;
+            return ALLOW_MULTI.contains(propertyType) || isShortString || isKeyFlag || isIdColumn;
         }
 
         // 是否为空
