@@ -144,7 +144,7 @@ public class CustomConfig extends BaseConfig {
         // 额外字段后缀
         LinkedHashMap<String, String> build = this.extraFieldSuffixBuilder.build();
         if (build != null && !build.isEmpty()) {
-            if (!build.equals(SqlExtraSuffix.DEFAULT_ALL_MAP)) {
+            if (!build.equals(SqlExtraSuffix.DEFAULT_COMPLETE_MAP)) {
                 this.overrideInitSuffixBuilder = true;
             }
             this.extraFieldSuffixMap = build;

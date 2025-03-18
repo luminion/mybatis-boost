@@ -46,7 +46,7 @@ public enum SqlKeyword {
     public static final List<String> CONDITION_OPERATORS_NONE;
     public static final List<String> CONDITION_OPERATORS_SINGLE;
     public static final List<String> CONDITION_OPERATORS_MULTI;
-    public static final List<String> CONDITION_OPERATORS_ALL;
+    public static final List<String> CONDITION_OPERATORS_COMPLETE;
     public static final List<String> CONDITION_OPERATORS_LIKE;
     public static final List<String> CONDITION_OPERATORS_COMPARE;
 
@@ -63,7 +63,7 @@ public enum SqlKeyword {
         all.addAll(none);
         all.addAll(single);
         all.addAll(multi);
-        CONDITION_OPERATORS_ALL = Collections.unmodifiableList(all);
+        CONDITION_OPERATORS_COMPLETE = Collections.unmodifiableList(all);
         List<String> like = Arrays.asList(LIKE.keyword, NOT_LIKE.keyword);
         CONDITION_OPERATORS_LIKE = Collections.unmodifiableList(like);
         List<String> compare = Arrays.asList(GT.keyword, GE.keyword, LT.keyword, LE.keyword);
@@ -86,7 +86,7 @@ public enum SqlKeyword {
             return EQ.keyword;
         }
         operator = operator.toUpperCase();
-        if (CONDITION_OPERATORS_ALL.contains(operator)) {
+        if (CONDITION_OPERATORS_COMPLETE.contains(operator)) {
             if (NE2.keyword.equals(operator)) {
                 return NE.keyword;
             }
@@ -108,7 +108,7 @@ public enum SqlKeyword {
     }
 
     public static boolean isOperator(String operator) {
-        return CONDITION_OPERATORS_ALL.contains(operator);
+        return CONDITION_OPERATORS_COMPLETE.contains(operator);
     }
 
     public static boolean isLikeOperator(String operator) {

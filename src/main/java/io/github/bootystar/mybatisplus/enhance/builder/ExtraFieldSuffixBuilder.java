@@ -39,7 +39,7 @@ public class ExtraFieldSuffixBuilder {
      * @return {@link ExtraFieldSuffixBuilder }
      */
     public ExtraFieldSuffixBuilder defaultCompleteSuffix() {
-        suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_ALL_MAP);
+        suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_COMPLETE_MAP);
         return this;
     }
 

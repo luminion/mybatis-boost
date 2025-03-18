@@ -298,7 +298,7 @@ GeneratorHelper
 * 动态sql生成器特殊配置项:[DynamicSqlBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/DynamicSqlBuilder.java)
 * 动态字段生成器特殊配置项:[DynamicFieldBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/DynamicFieldBuilder.java)
 
-自定义配置示例:(仅供参考, 若有变动不再更新, 详见源码)
+自定义配置示例:(或因版本不同或修改有所变动, 详见源码)
 ```java
 custom
     // 文件相关
@@ -333,12 +333,15 @@ custom
     .disableOverrideMethods() // 不生成重写的父类方法
     .withMapSelectDTO() // 使用Map作为查询入参DTO
     .withSqlHelperSelectDTO() // 使用SqlHelper作为查询入参DTO
-    .extraFieldStrategy(new ExtraFieldStrategyDefault()) // 自定义额外字段策略(字段何时生成/不生成对应后缀的额外字段)
+    .extraFieldGenerateStrategy((sqlOperator,tableFiled)->{
+            // 根据比较符号和字段信息决定是否生成额外字段
+            return true;
+        }) // 自定义额外字段策略(字段何时生成/不生成对应后缀的额外字段)
     .extraFieldSuffixBuilder(builder -> { 
     // 该项默认无需配置, 配置后, 只会根据已配置的字段生成额外后缀, 未配置的类型不会生成后缀
                     builder
-                        .defaultSuffix() // 添加默认的后缀字符(默认生成LIKE,IN,<=,>=的特殊后缀)
-                        .defaultSuffixFull() // 添加所有默认的后缀字符
+                        .defaultSimpleSuffix() // 添加默认的后缀字符(默认生成LIKE,IN,<=,>=的特殊后缀)
+                        .defaultCompleteSuffix() // 添加支持的所有后缀字符
                         .ne("Ne") // 不等于字段额外后缀
                         .lt("Lt") // 小于字段额外后缀
                         .le("Le") // 小于等于字段额外后缀
