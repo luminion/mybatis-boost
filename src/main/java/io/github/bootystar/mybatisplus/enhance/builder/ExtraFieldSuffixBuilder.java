@@ -24,7 +24,7 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 添加常用的默认后缀
+     * 添加常用的后缀
      *
      * @return {@link ExtraFieldSuffixBuilder }
      */
@@ -34,11 +34,11 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 添加所有的默认后缀
+     * 添加所有支持的后缀
      *
      * @return {@link ExtraFieldSuffixBuilder }
      */
-    public ExtraFieldSuffixBuilder defaultAllSuffix() {
+    public ExtraFieldSuffixBuilder defaultCompleteSuffix() {
         suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_ALL_MAP);
         return this;
     }

@@ -1,8 +1,8 @@
-package io.github.bootystar.mybatisplus.generate.handler.support;
+package io.github.bootystar.mybatisplus.generate.strategy.support;
 
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import io.github.bootystar.mybatisplus.enhance.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldGenerateStrategy;
+import io.github.bootystar.mybatisplus.generate.strategy.ExtraFieldGenerateStrategy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author bootystar
  */
-public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
+public class ExtraFieldStrategyAuto implements ExtraFieldGenerateStrategy {
     private static final List<String> ALLOW_COMPARE = Arrays.asList(
             "Byte"
             ,
@@ -48,7 +48,7 @@ public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
             "Integer"
             ,
             "Long"
-            ,
+//            ,
 //            "Float"
 //            ,
 //            "Double"
@@ -62,7 +62,7 @@ public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
 //            "Time"
 //            ,
 //            "Timestamp"
-//            ,
+            ,
             "LocalDate"
 //            ,
 //            "LocalTime"
@@ -70,37 +70,46 @@ public class ExtraFieldStrategyDefault implements ExtraFieldGenerateStrategy {
 //            "LocalDateTime"
     );
 
-    public boolean allowGenerate(String keyword, TableField field) {
-        if (keyword == null || keyword.isEmpty() || field == null) {
+    public boolean allowGenerate(String sqlOperator, TableField tableField) {
+        if (sqlOperator == null || sqlOperator.isEmpty() || tableField == null) {
             return false;
         }
-        keyword = keyword.toUpperCase();
-        String propertyType = field.getPropertyType();
-        int length = field.getMetaInfo().getLength();
-        boolean isKeyFlag = field.isKeyFlag();
-        boolean isNullable = field.getMetaInfo().isNullable();
+        sqlOperator = sqlOperator.toUpperCase();
+        String propertyType = tableField.getPropertyType();
+//        int length = tableField.getMetaInfo().getLength();
+//        boolean isShortString = isString && length > 0 && length <= 64;
+        boolean isKeyFlag = tableField.isKeyFlag();
+        boolean isNullable = tableField.getMetaInfo().isNullable();
         boolean isString = "String".equals(propertyType);
-        boolean isShortString = isString && length > 0 && length <= 64;
-        boolean isIdColumn = field.getColumnName().endsWith("id");
+        boolean isIdColumn = tableField.getColumnName().endsWith("id");
 
         // 大小比较
-        if (SqlKeyword.CONDITION_OPERATORS_COMPARE.contains(keyword)) {
-            return ALLOW_COMPARE.contains(propertyType)  && !isKeyFlag && !isIdColumn;
+        if (SqlKeyword.CONDITION_OPERATORS_COMPARE.contains(sqlOperator)) {
+            return ALLOW_COMPARE.contains(propertyType)
+                    && !isKeyFlag
+                    && !isIdColumn
+                    ;
         }
 
         // 模糊查询
-        if (SqlKeyword.CONDITION_OPERATORS_LIKE.contains(keyword)) {
+        if (SqlKeyword.CONDITION_OPERATORS_LIKE.contains(sqlOperator)) {
             return isString;
         }
 
         // in查询
-        if (SqlKeyword.CONDITION_OPERATORS_MULTI.contains(keyword)) {
-            return ALLOW_MULTI.contains(propertyType) || isShortString || isKeyFlag || isIdColumn;
+        if (SqlKeyword.CONDITION_OPERATORS_MULTI.contains(sqlOperator)) {
+            return ALLOW_MULTI.contains(propertyType)
+//                    || isShortString
+                    || isKeyFlag
+                    || isIdColumn
+                    ;
         }
 
         // 是否为空
-        if (SqlKeyword.CONDITION_OPERATORS_NONE.contains(keyword)) {
-            return isNullable && !isKeyFlag;
+        if (SqlKeyword.CONDITION_OPERATORS_NONE.contains(sqlOperator)) {
+            return isNullable
+                    && !isKeyFlag
+                    ;
         }
 
         return true;

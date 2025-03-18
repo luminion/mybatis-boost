@@ -2,7 +2,7 @@ package io.github.bootystar.mybatisplus.generate.config.builder;
 
 import io.github.bootystar.mybatisplus.enhance.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhance.helper.SqlHelper;
-import io.github.bootystar.mybatisplus.generate.handler.ExtraFieldGenerateStrategy;
+import io.github.bootystar.mybatisplus.generate.strategy.ExtraFieldGenerateStrategy;
 import io.github.bootystar.mybatisplus.generate.info.ClassInfo;
 
 import java.util.Map;
