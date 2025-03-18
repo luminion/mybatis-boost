@@ -155,7 +155,7 @@ public class ${table.controllerName} {
      *
      * @param s 新增入参对象
      * @return id
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     #if(!${restControllerStyle})
@@ -182,7 +182,7 @@ public class ${table.controllerName} {
      *
      * @param s 修改入参对象
      * @return 是否成功
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     #if(!${restControllerStyle})
@@ -209,7 +209,7 @@ public class ${table.controllerName} {
      *
      * @param id 主键id
      * @return 是否成功
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     #if(!${restControllerStyle})
@@ -237,7 +237,7 @@ public class ${table.controllerName} {
      *
      * @param id 主键id
      * @return 查询结果
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     #if(!${restControllerStyle})
@@ -260,9 +260,9 @@ public class ${table.controllerName} {
     /**
      * 列表
      *
-     * @param param 查询条件
+     * @param s 查询条件
      * @return 查询结果
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     #if(!${restControllerStyle})
@@ -281,11 +281,11 @@ public class ${table.controllerName} {
     /**
      * 分页查询(页码与大小均不传时采用默认值)
      *
-     * @param param 查询条件
+     * @param s 查询条件
      * @param current 页码
      * @param size 每页大小
      * @return 查询结果
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     #if(!${restControllerStyle})
@@ -306,7 +306,7 @@ public class ${table.controllerName} {
     /**
      * excel导入模板
      *
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     @GetMapping("/excelTemplate")
@@ -327,7 +327,7 @@ public class ${table.controllerName} {
      *
      * @param excel excel文件
      * @return 导入条数
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     #if(!${restControllerStyle})
@@ -348,10 +348,10 @@ public class ${table.controllerName} {
         #else
     /**
      * excel文件导出
-     * @param param 查询条件
+     * @param s 查询条件
      * @param current 页码
      * @param size 每页大小(-1为全部)
-     * @author ${author}
+##     * @author ${author}
      */
     #end
     ${requestMethod4Select}("/excelExport/{current}/{size}")
