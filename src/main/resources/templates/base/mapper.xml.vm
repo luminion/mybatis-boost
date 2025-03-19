@@ -104,6 +104,10 @@
                         #{item}
                     </foreach>
                 </if>
+                #elseif(${value}=="<>"||${value}=="!=")
+                <if test="param1.${extraFieldName} != null">
+                    AND a.${field.columnName} &lt;&gt; #{param1.${extraFieldName}}
+                </if>
                 #elseif(${value}=="<")
                 <if test="param1.${extraFieldName} != null">
                     AND a.${field.columnName} &lt; #{param1.${extraFieldName}}

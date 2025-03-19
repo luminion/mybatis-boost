@@ -57,7 +57,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
                 #foreach($entry in ${extraFieldSuffixMap.entrySet()})
                     #set($key = $entry.key)
                     #set($value = $entry.value)
-            #if(${value}=="!=")
+            #if(${value}=="!="||${value}=="<>")
                 .ne("${key}")
             #elseif(${value}==">")
                 .gt("${key}")

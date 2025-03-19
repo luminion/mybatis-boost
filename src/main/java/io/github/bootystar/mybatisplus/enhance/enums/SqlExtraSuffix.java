@@ -14,7 +14,7 @@ public enum SqlExtraSuffix {
 
     //    EQ("Eq", SqlKeyword.EQ),
 //    NE("Ne", SqlKeyword.NE),
-    NE("Ne", SqlKeyword.NE2),// 使用!=便于调用者理解
+    NE("Ne", SqlKeyword.NE),
     LT("Lt", SqlKeyword.LT),
     LE("Le", SqlKeyword.LE),
     GT("Gt", SqlKeyword.GT),
