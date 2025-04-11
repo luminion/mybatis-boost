@@ -220,8 +220,9 @@ enhancer of mybatis-plus
 
 ### 代码生成(Lambda链式)
 对`Lambda表达式`不熟悉的见[代码生成(编码式)](#代码生成编码式)
+
 ```java
-import io.github.bootystar.mybatisplus.generate.GeneratorHelper;
+
 ```
 ```java
 String url = "jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8";
@@ -292,11 +293,11 @@ GeneratorHelper
 ```
 
 ### 自定义配置内容
-* 通用配置项:[BaseBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/BaseBuilder.java)
-* 特殊配置项:[BaseEnhanceBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/BaseEnhanceBuilder.java)
-* 额外代码生成器特殊配置项:[ExtraCodeBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/ExtraCodeBuilder.java)
-* 动态sql生成器特殊配置项:[DynamicSqlBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/DynamicSqlBuilder.java)
-* 动态字段生成器特殊配置项:[DynamicFieldBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generate/config/builder/DynamicFieldBuilder.java)
+* 通用配置项:[BaseBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/BaseBuilder.java)
+* 特殊配置项:[BaseEnhanceBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/BaseEnhanceBuilder.java)
+* 额外代码生成器特殊配置项:[ExtraCodeBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/ExtraCodeBuilder.java)
+* 动态sql生成器特殊配置项:[DynamicSqlBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/DynamicSqlBuilder.java)
+* 动态字段生成器特殊配置项:[DynamicFieldBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/DynamicFieldBuilder.java)
 
 自定义配置示例:(或因版本不同或修改有所变动, 详见源码)
 ```java
@@ -357,8 +358,9 @@ custom
 ```
 
 ### 代码生成(编码式)
+
 ```java
-import io.github.bootystar.mybatisplus.generate.generator.impl.*;
+
 ```
 ```java
 String url = "jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8";
@@ -645,9 +647,9 @@ age DESC, id ASC
 * `lambdaHelper()`获取链式动态条件构造器(见`SqlHelper`), 使用方式类似`lambdaQuery()`
 
 源码及实现:
-* [DynamicService.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/DynamicService.java)
-* [DynamicSqlServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/impl/DynamicSqlServiceImpl.java)
-* [DynamicFieldServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhance/core/impl/DynamicFieldServiceImpl.java)
+* [DynamicService.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/DynamicService.java)
+* [DynamicSqlServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/impl/DynamicSqlServiceImpl.java)
+* [DynamicFieldServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/impl/DynamicFieldServiceImpl.java)
 
 
 ## DynamicMapper<T, V, S>
