@@ -1,6 +1,5 @@
 package io.github.bootystar.mybatisplus.enhancer.core;
 
-import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -28,64 +27,43 @@ import java.util.stream.Collectors;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public interface DynamicService<T, V> extends IService<T> {
+public interface DynamicService<V> {
 
     @SuppressWarnings("unchecked")
-    default Class<V> getVOClass() {
-        return (Class<V>) MybatisPlusReflectHelper.resolveTypeArguments(getClass(), DynamicService.class)[1];
+    default Class<V> voClass() {
+        return (Class<V>) MybatisPlusReflectHelper.resolveTypeArguments(getClass(), DynamicService.class)[0];
     }
-
-    default T toEntity(Object source) {
-        return MybatisPlusReflectHelper.toTarget(source, getEntityClass());
-    }
-
+    
     default V toVO(Object source) {
-        return MybatisPlusReflectHelper.toTarget(source, getVOClass());
-    }
-
-    default Object toId(T source) {
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
-        if (tableInfo == null) return null;
-        String keyProperty = tableInfo.getKeyProperty();
-        if (keyProperty == null) return null;
-        return tableInfo.getPropertyValue(source, keyProperty);
-    }
-
-    default Object insertByDTO(Object s) {
-        T entity = toEntity(s);
-        save(entity);
-        return toId(entity);
-    }
-
-    default boolean updateByDTO(Object s) {
-        return updateById(toEntity(s));
+        return MybatisPlusReflectHelper.toTarget(source, voClass());
     }
 
     List<V> doSelect(Object s, IPage<V> page);
 
-    default V oneById(Serializable id) {
+    default V voById(Serializable id) {
         if (id == null) throw new IllegalArgumentException("id can't be null");
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
+        Class<?> clazz =  MybatisPlusReflectHelper.resolveTypeArguments(getClass(), IService.class)[0];
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
         if (tableInfo == null) throw new IllegalArgumentException("there is no id field in entity");
         String keyProperty = tableInfo.getKeyProperty();
         if (keyProperty == null) throw new IllegalArgumentException("there is no id field in entity");
         SqlConditionG condition = new SqlConditionG(keyProperty, SqlKeyword.EQ.keyword, id);
-        return oneByDTO(condition);
+        return voByDTO(condition);
     }
 
-    default <R> R oneById(Serializable id, Class<R> clazz) {
-        return MybatisPlusReflectHelper.toTarget(oneById(id), clazz);
+    default <R> R voById(Serializable id, Class<R> clazz) {
+        return MybatisPlusReflectHelper.toTarget(voById(id), clazz);
     }
 
-    default V oneByDTO(Object s) {
+    default V voByDTO(Object s) {
         List<V> vs = listByDTO(s);
         if (vs == null || vs.isEmpty()) return null;
         if (vs.size() > 1) throw new TooManyResultsException("error query => required one but found " + vs.size());
         return vs.get(0);
     }
 
-    default <R> R oneByDTO(Object s, Class<R> clazz) {
-        return MybatisPlusReflectHelper.toTarget(oneByDTO(s), clazz);
+    default <R> R voByDTO(Object s, Class<R> clazz) {
+        return MybatisPlusReflectHelper.toTarget(voByDTO(s), clazz);
     }
 
     default List<V> listByDTO() {
@@ -129,13 +107,14 @@ public interface DynamicService<T, V> extends IService<T> {
                 .doWrite(Collections.emptyList());
     }
 
-    default int excelImport(InputStream is, Class<?> clazz) {
-        List<?> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
-        if (dataList == null || dataList.isEmpty()) return 0;
-        List<T> entityList = dataList.stream().map(this::toEntity).collect(Collectors.toList());
-        saveBatch(entityList);
-        return entityList.size();
-    }
+    int excelImport(InputStream is, Class<?> clazz);
+//    default int excelImport(InputStream is, Class<?> clazz) {
+//        List<?> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
+//        if (dataList == null || dataList.isEmpty()) return 0;
+//        List<T> entityList = dataList.stream().map(this::toEntity).collect(Collectors.toList());
+//        saveBatch(entityList);
+//        return entityList.size();
+//    }
 
     default void excelExport(Object s, OutputStream os, Class<?> clazz, String... includeFields) {
         excelExport(s, os, clazz, 1L, -1L, includeFields);
@@ -149,9 +128,6 @@ public interface DynamicService<T, V> extends IService<T> {
                 .sheet()
                 .doWrite(voList);
     }
-
-    default SqlHelperWrapper<T, V> lambdaHelper() {
-        return new SqlHelperWrapper<>(this);
-    }
+    
 
 }

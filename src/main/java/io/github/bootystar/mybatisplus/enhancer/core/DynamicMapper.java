@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author bootystar
  */
-public interface DynamicMapper<T, V> extends BaseMapper<T> {
+public interface DynamicMapper<V> {
 
     List<V> listByDTO(Object s, IPage<V> page);
 

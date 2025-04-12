@@ -1,5 +1,6 @@
 package io.github.bootystar.mybatisplus.enhancer.core.impl;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.bootystar.mybatisplus.enhancer.builder.ExtraFieldSuffixBuilder;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author bootystar
  */
-public abstract class DynamicFieldServiceImpl<M extends DynamicMapper<T, V>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
+public abstract class DynamicFieldServiceImpl<M extends BaseMapper<T> & DynamicMapper<V>, T, V> extends ServiceImpl<M, T> implements DynamicService<V> {
 
     protected ExtraFieldSuffixBuilder suffixBuilder;
 

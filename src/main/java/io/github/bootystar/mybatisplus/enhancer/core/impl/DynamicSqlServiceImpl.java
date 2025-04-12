@@ -1,5 +1,6 @@
 package io.github.bootystar.mybatisplus.enhancer.core.impl;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author bootystar
  */
-public abstract class DynamicSqlServiceImpl<M extends DynamicMapper<T, V>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
+public abstract class DynamicSqlServiceImpl<M extends BaseMapper<T> & DynamicMapper<V>, T, V> extends ServiceImpl<M, T> implements DynamicService<V> {
 
     @Override
     @SuppressWarnings("unchecked")
