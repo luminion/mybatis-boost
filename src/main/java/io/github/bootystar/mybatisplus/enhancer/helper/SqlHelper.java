@@ -1,7 +1,7 @@
 package io.github.bootystar.mybatisplus.enhancer.helper;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.github.bootystar.mybatisplus.enhancer.core.DynamicService;
+import io.github.bootystar.mybatisplus.enhancer.core.DynamicQueryService;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlSort;
@@ -103,7 +103,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * @param baseService 基础服务
      * @return {@link SqlHelperWrapper }
      */
-    public <V, S extends IService<T> & DynamicService<V>> SqlHelperWrapper<T, V, S> wrap(S baseService) {
+    public <V, S extends IService<T> & DynamicQueryService<V>> SqlHelperWrapper<T, V, S> wrap(S baseService) {
         return new SqlHelperWrapper<>(baseService).with(this);
     }
 

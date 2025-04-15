@@ -15,11 +15,11 @@ import java.util.List;
  *
  * @author bootystar
  */
-public abstract class DynamicSqlServiceImpl<M extends BaseMapper<T> & DynamicMapper<V>, T, V> extends ServiceImpl<M, T> implements DynamicService<V> {
+public abstract class DynamicSqlServiceImpl<M extends BaseMapper<T> & DynamicMapper<V>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<V> doSelect(Object s, IPage<V> page) {
+    public List<V> voSelect(Object s, IPage<V> page) {
         DynamicSqlSqlHelper<T> sqlHelper;
         if (s instanceof DynamicSqlSqlHelper<?>) {
             DynamicSqlSqlHelper<?> unmodifiableSqlHelper = (DynamicSqlSqlHelper<?>) s;
@@ -30,7 +30,7 @@ public abstract class DynamicSqlServiceImpl<M extends BaseMapper<T> & DynamicMap
         } else {
             sqlHelper = new DynamicSqlSqlHelper<>(SqlHelper.of(s), super.getEntityClass());
         }
-        return getBaseMapper().listByDTO(sqlHelper, page);
+        return getBaseMapper().voSelect(sqlHelper, page);
     }
 
 }

@@ -16,13 +16,13 @@ import java.util.List;
  *
  * @author bootystar
  */
-public abstract class DynamicFieldServiceImpl<M extends BaseMapper<T> & DynamicMapper<V>, T, V> extends ServiceImpl<M, T> implements DynamicService<V> {
+public abstract class DynamicFieldServiceImpl<M extends BaseMapper<T> & DynamicMapper<V>, T, V> extends ServiceImpl<M, T> implements DynamicService<T, V> {
 
     protected ExtraFieldSuffixBuilder suffixBuilder;
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<V> doSelect(Object s, IPage<V> page) {
+    public List<V> voSelect(Object s, IPage<V> page) {
         DynamicFieldSqlHelper<T> sqlHelper;
         if (s instanceof DynamicFieldSqlHelper<?>) {
             DynamicFieldSqlHelper<?> unmodifiableSqlHelper = (DynamicFieldSqlHelper<?>) s;
@@ -33,7 +33,7 @@ public abstract class DynamicFieldServiceImpl<M extends BaseMapper<T> & DynamicM
         } else {
             sqlHelper = new DynamicFieldSqlHelper<>(SqlHelper.of(s), super.getEntityClass(), suffixBuilder);
         }
-        return getBaseMapper().listByDTO(sqlHelper, page);
+        return getBaseMapper().voSelect(sqlHelper, page);
     }
 
 }

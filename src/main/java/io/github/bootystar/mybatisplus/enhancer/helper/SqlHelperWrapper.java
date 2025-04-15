@@ -2,7 +2,7 @@ package io.github.bootystar.mybatisplus.enhancer.helper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.github.bootystar.mybatisplus.enhancer.core.DynamicService;
+import io.github.bootystar.mybatisplus.enhancer.core.DynamicQueryService;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public class SqlHelperWrapper<T, V, S extends IService<T> & DynamicService<V>> extends AbstractSqlHelper<T, SqlHelperWrapper<T, V ,S>> {
+public class SqlHelperWrapper<T, V, S extends IService<T> & DynamicQueryService<V>> extends AbstractSqlHelper<T, SqlHelperWrapper<T, V ,S>> {
 
     private final S baseService;
 
@@ -30,11 +30,11 @@ public class SqlHelperWrapper<T, V, S extends IService<T> & DynamicService<V>> e
     }
 
     public List<V> list() {
-        return baseService.listByDTO(this);
+        return baseService.voList(this);
     }
 
     public IPage<V> page(Long current, Long size) {
-        return baseService.pageByDTO(this, current, size);
+        return baseService.voPage(this, current, size);
     }
 
 
