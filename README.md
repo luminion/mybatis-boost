@@ -113,8 +113,8 @@ enhancer of mybatis-plus
 ```xml
 <!-- (可选)Excel导入导出 -->
 <dependency>
-    <groupId>com.alibaba</groupId>
-    <artifactId>easyexcel</artifactId>
+    <groupId>cn.idev.excel</groupId>
+    <artifactId>FastExcel</artifactId>
 </dependency>
 ```
 
@@ -176,7 +176,7 @@ enhancer of mybatis-plus
     <!-- (可选)Excel导入导出 -->
     <dependency>
         <groupId>com.alibaba</groupId>
-        <artifactId>easyexcel</artifactId>
+        <artifactId>FastExcel</artifactId>
     </dependency>
 </dependencies>
 ```

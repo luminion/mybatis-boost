@@ -1,8 +1,7 @@
 package io.github.bootystar.mybatisplus.enhancer.helper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
-import io.github.bootystar.mybatisplus.enhancer.core.DynamicQueryService;
+import io.github.bootystar.mybatisplus.enhancer.core.DynamicService;
 
 import java.util.List;
 
@@ -12,16 +11,16 @@ import java.util.List;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public class SqlHelperWrapper<T, V, S extends IService<T> & DynamicQueryService<V>> extends AbstractSqlHelper<T, SqlHelperWrapper<T, V ,S>> {
+public class SqlHelperWrapper<T, V> extends AbstractSqlHelper<T, SqlHelperWrapper<T, V>> {
 
-    private final S baseService;
+    private final DynamicService<T, V> baseService;
 
-    public SqlHelperWrapper(S baseService) {
+    public SqlHelperWrapper(DynamicService<T, V> baseService) {
         this.baseService = baseService;
     }
 
     @Override
-    protected SqlHelperWrapper<T, V ,S> returnValue() {
+    protected SqlHelperWrapper<T, V> returnValue() {
         return this;
     }
 

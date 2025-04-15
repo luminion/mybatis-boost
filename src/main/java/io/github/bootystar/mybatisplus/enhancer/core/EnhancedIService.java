@@ -1,7 +1,7 @@
 package io.github.bootystar.mybatisplus.enhancer.core;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import cn.idev.excel.FastExcel;
+import cn.idev.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -49,7 +49,7 @@ public interface EnhancedIService<T> extends IService<T> {
     }
     
     default int excelImport(InputStream is, Class<?> clazz) {
-        List<?> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
+        List<?> dataList = FastExcel.read(is).head(clazz).sheet().doReadSync();
         if (dataList == null || dataList.isEmpty()) return 0;
         List<T> entityList = dataList.stream().map(this::toEntity).collect(Collectors.toList());
         saveBatch(entityList);

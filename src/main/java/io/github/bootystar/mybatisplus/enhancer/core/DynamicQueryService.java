@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhancer.core;
 
-import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import cn.idev.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public interface DynamicQueryService<V> {
 
+    List<V> voSelect(Object s, IPage<V> page);
+    
     @SuppressWarnings("unchecked")
     default Class<V> voClass() {
         return (Class<V>) MybatisPlusReflectHelper.resolveTypeArguments(getClass(), DynamicQueryService.class)[0];
@@ -34,8 +36,6 @@ public interface DynamicQueryService<V> {
     default V toVO(Object source) {
         return MybatisPlusReflectHelper.toTarget(source, voClass());
     }
-
-    List<V> voSelect(Object s, IPage<V> page);
 
     default V voById(Serializable id) {
         if (id == null) throw new IllegalArgumentException("id can't be null");

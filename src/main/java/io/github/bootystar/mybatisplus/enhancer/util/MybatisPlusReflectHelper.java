@@ -7,12 +7,9 @@ import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.reflect.GenericTypeUtils;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import io.github.bootystar.mybatisplus.enhancer.core.DynamicEntity;
-import io.github.bootystar.mybatisplus.generator.info.MethodInfo;
 import lombok.SneakyThrows;
 
-import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -28,40 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class MybatisPlusReflectHelper extends ReflectHelper {
 
     private static final Map<Class<?>, Map<String, String>> FIELD_TO_JDBC_COLUMN_CACHE_MAP = new ConcurrentHashMap<>();
-
-    /**
-     * lambda方法信息
-     *
-     * @param methodReference lambda方法引用
-     * @param parameterClass  参数类型
-     * @return {@link MethodInfo }
-     */
-    public static MethodInfo lambdaMethodInfo(SFunction<?, ?> methodReference, Class<?> parameterClass) {
-        String methodName = "", className = "";
-        try {
-            Method lambdaMethod = methodReference.getClass().getDeclaredMethod("writeReplace");
-            lambdaMethod.setAccessible(Boolean.TRUE);
-            SerializedLambda serializedLambda = (SerializedLambda) lambdaMethod.invoke(methodReference);
-            className = serializedLambda.getImplClass().replace("/", ".");
-            methodName = serializedLambda.getImplMethodName();
-            Class<?> methodClass = Class.forName(className);
-            try {
-                Method returnMethod = methodClass.getMethod(methodName, parameterClass);
-                Class<?> returnType = returnMethod.getReturnType();
-                int modifiers = returnMethod.getModifiers();
-                if (!returnType.equals(methodClass) || !Modifier.isPublic(modifiers)) {
-                    throw new NoSuchMethodException("no public method found which return instance of class itself");
-                }
-                return new MethodInfo(returnMethod);
-            } catch (Exception e) {
-                Constructor<?> constructor = methodClass.getConstructor(parameterClass);
-                return new MethodInfo(constructor);
-            }
-        } catch (Exception e) {
-            String msg = String.format("can't find constructor or method with parameter[%s] source:%s.%s() ", parameterClass.getName(), className, methodName);
-            throw new IllegalStateException(msg);
-        }
-    }
 
     /**
      * 解析超类泛型参数

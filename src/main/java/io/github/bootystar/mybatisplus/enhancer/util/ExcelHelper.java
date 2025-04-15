@@ -1,13 +1,13 @@
 package io.github.bootystar.mybatisplus.enhancer.util;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.converters.Converter;
-import com.alibaba.excel.converters.DefaultConverterLoader;
-import com.alibaba.excel.enums.CellDataTypeEnum;
-import com.alibaba.excel.metadata.GlobalConfiguration;
-import com.alibaba.excel.metadata.data.ReadCellData;
-import com.alibaba.excel.metadata.data.WriteCellData;
-import com.alibaba.excel.metadata.property.ExcelContentProperty;
+import cn.idev.excel.FastExcel;
+import cn.idev.excel.converters.Converter;
+import cn.idev.excel.converters.DefaultConverterLoader;
+import cn.idev.excel.enums.CellDataTypeEnum;
+import cn.idev.excel.metadata.GlobalConfiguration;
+import cn.idev.excel.metadata.data.ReadCellData;
+import cn.idev.excel.metadata.data.WriteCellData;
+import cn.idev.excel.metadata.property.ExcelContentProperty;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
  * @author bootystar
  */
 @Slf4j
-public abstract class ExcelHelper extends EasyExcel {
+public abstract class ExcelHelper extends FastExcel {
     private static final String WRITE_METHOD = "putWriteConverter";
     private static final String ALL_METHOD = "putAllConverter";
 
@@ -64,7 +64,7 @@ public abstract class ExcelHelper extends EasyExcel {
         Method method = method4Converter2write();
         Method method2 = method4Converter2all();
         if (method == null || method2 == null) {
-            log.warn("EasyExcel add excel converter failed , export or import may produce error on special field!");
+            log.warn("FastExcel add excel converter failed , export or import may produce error on special field!");
             return;
         }
         try {
