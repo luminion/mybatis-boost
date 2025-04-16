@@ -1,6 +1,8 @@
 package io.github.bootystar.mybatisplus.enhancer.util;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -97,15 +99,14 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
 //                    result.putIfAbsent(fieldName, value);
 //                    continue;
 //                }
-//                continue;
 //            }
 //            TableId tableId = field.getAnnotation(TableId.class);
 //            if (tableId != null) {
 //                String value = tableId.value();
 //                if (!value.isEmpty()) {
 //                    result.putIfAbsent(fieldName, value);
+//                    continue;
 //                }
-//                continue;
 //            }
             TableField tableField = field.getAnnotation(TableField.class);
             if (tableField != null) {
@@ -113,9 +114,10 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
                 String value = tableField.value();
                 if (value != null) {
                     result.putIfAbsent(fieldName, value);
+                    continue;
                 }
             }
-            // 无注解字段不处理
+//            // 无注解字段
 //            result.putIfAbsent(fieldName, fieldName);
         }
         return result;
