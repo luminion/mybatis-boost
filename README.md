@@ -648,8 +648,8 @@ age DESC, id ASC
 
 源码及实现:
 * [DynamicService.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/DynamicService.java)
-* [DynamicSqlServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/impl/DynamicSqlServiceImpl.java)
-* [DynamicFieldServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/impl/DynamicFieldServiceImpl.java)
+* [DynamicSqlServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/support/DynamicSqlServiceImpl.java)
+* [DynamicFieldServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/support/DynamicFieldService.java)
 
 
 ## DynamicMapper<T, V, S>

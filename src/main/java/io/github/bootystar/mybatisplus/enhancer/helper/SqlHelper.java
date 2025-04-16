@@ -1,7 +1,8 @@
 package io.github.bootystar.mybatisplus.enhancer.helper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.github.bootystar.mybatisplus.enhancer.core.DynamicQueryService;
+import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlSort;
@@ -29,6 +30,15 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * @return {@link SqlHelper }
      */
     public static <T> SqlHelper<T> of() {
+        return new SqlHelper<>();
+    }
+    
+    /**
+     * 返回指定类泛型的sql助手
+     * @param clazz 实体类
+     * @return {@link SqlHelper }
+     */
+    public static <T> SqlHelper<T> of(Class<T> clazz) {
         return new SqlHelper<>();
     }
 
@@ -103,8 +113,12 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * @param baseService 基础服务
      * @return {@link SqlHelperWrapper }
      */
-    public <V, S extends IService<T> & DynamicQueryService<V>> SqlHelperWrapper<T, V, S> wrap(S baseService) {
+    public <V, S extends IService<T> & EnhancedQuery<V>> SqlHelperWrapper<T, V> wrap(S baseService) {
         return new SqlHelperWrapper<>(baseService).with(this);
+    }
+
+    public <V, S extends BaseMapper<T> & EnhancedQuery<V>> SqlHelperWrapper<T, V> wrap(S baseMapper) {
+        return new SqlHelperWrapper<>(baseMapper).with(this);
     }
 
 }

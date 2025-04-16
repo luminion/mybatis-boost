@@ -1,7 +1,9 @@
 package io.github.bootystar.mybatisplus.enhancer.helper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.bootystar.mybatisplus.enhancer.core.DynamicService;
+import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
 
 import java.util.List;
 
@@ -13,10 +15,14 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class SqlHelperWrapper<T, V> extends AbstractSqlHelper<T, SqlHelperWrapper<T, V>> {
 
-    private final DynamicService<T, V> baseService;
+    private final EnhancedQuery<V> enhancedQuery;
 
-    public SqlHelperWrapper(DynamicService<T, V> baseService) {
-        this.baseService = baseService;
+    public <S extends IService<T> & EnhancedQuery<V>> SqlHelperWrapper(S baseService) {
+        this.enhancedQuery = baseService;
+    }
+
+    public <S extends BaseMapper<T> & EnhancedQuery<V>> SqlHelperWrapper(S baseMapper) {
+        this.enhancedQuery = baseMapper;
     }
 
     @Override
@@ -25,15 +31,15 @@ public class SqlHelperWrapper<T, V> extends AbstractSqlHelper<T, SqlHelperWrappe
     }
 
     public V one() {
-        return baseService.voByDTO(this);
+        return enhancedQuery.voByDTO(this);
     }
 
     public List<V> list() {
-        return baseService.voList(this);
+        return enhancedQuery.voList(this);
     }
 
     public IPage<V> page(Long current, Long size) {
-        return baseService.voPage(this, current, size);
+        return enhancedQuery.voPage(this, current, size);
     }
 
 

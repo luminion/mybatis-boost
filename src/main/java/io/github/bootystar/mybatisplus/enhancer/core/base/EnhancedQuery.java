@@ -1,6 +1,5 @@
-package io.github.bootystar.mybatisplus.enhancer.core;
+package io.github.bootystar.mybatisplus.enhancer.core.base;
 
-import cn.idev.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -8,13 +7,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.query.general.SqlConditionG;
-import io.github.bootystar.mybatisplus.enhancer.util.ExcelHelper;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectHelper;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,15 +20,15 @@ import java.util.stream.Collectors;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public interface DynamicQueryService<V> {
+public interface EnhancedQuery<V> {
 
     List<V> voSelect(Object s, IPage<V> page);
-    
+
     @SuppressWarnings("unchecked")
     default Class<V> voClass() {
-        return (Class<V>) MybatisPlusReflectHelper.resolveTypeArguments(getClass(), DynamicQueryService.class)[0];
+        return (Class<V>) MybatisPlusReflectHelper.resolveTypeArguments(getClass(), EnhancedQuery.class)[0];
     }
-    
+
     default V toVO(Object source) {
         return MybatisPlusReflectHelper.toTarget(source, voClass());
     }
@@ -97,18 +93,7 @@ public interface DynamicQueryService<V> {
         return vp;
     }
     
-    default void excelExport(Object s, OutputStream os, Class<?> clazz, String... includeFields) {
-        excelExport(s, os, clazz, 1L, -1L, includeFields);
-    }
 
-    default void excelExport(Object s, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
-        List<V> voList = voPage(s, current, size).getRecords();
-        ExcelHelper.write(os, clazz)
-                .includeColumnFieldNames(Arrays.asList(includeFields))
-                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
-                .sheet()
-                .doWrite(voList);
-    }
     
 
 }
