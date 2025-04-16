@@ -1,8 +1,7 @@
 package io.github.bootystar.mybatisplus.enhancer.util;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -10,7 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.reflect.GenericTypeUtils;
 import io.github.bootystar.mybatisplus.enhancer.core.DynamicEntity;
 import lombok.SneakyThrows;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -55,23 +54,28 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      * 从mybatis plus获取实体类属性与数据库字段转换映射
      *
      * @param clazz 实体类
-     * @return {@link Map }<{@link String }, {@link String }>
+     * @return {@link Map }
      */
     public static Map<String, String> filed2JdbcColumnByMybatisPlusTableInfo(Class<?> clazz) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
         List<TableFieldInfo> fieldList = tableInfo.getFieldList();
         Map<String, String> result = new HashMap<>();
+        String keyProperty = tableInfo.getKeyProperty();
+        String keyColumn = tableInfo.getKeyColumn();
+        if (keyProperty!= null && keyColumn!= null) {
+            result.put(keyProperty, keyColumn);
+        }
         for (TableFieldInfo fieldInfo : fieldList) {
             Field field = fieldInfo.getField();
             String fieldName = field.getName();
             String jdbcColumn = fieldInfo.getColumn();
             result.put(fieldName, jdbcColumn);
         }
-        TableFieldInfo logicDeleteFieldInfo = tableInfo.getLogicDeleteFieldInfo();
-        if (logicDeleteFieldInfo != null) {
-            String name = logicDeleteFieldInfo.getField().getName();
-            result.remove(name);
-        }
+//        TableFieldInfo logicDeleteFieldInfo = tableInfo.getLogicDeleteFieldInfo();
+//        if (logicDeleteFieldInfo != null) {
+//            String name = logicDeleteFieldInfo.getField().getName();
+//            result.remove(name);
+//        }
         return result;
     }
 
@@ -79,25 +83,30 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      * 实体类与数据库字段转换映射
      *
      * @param clazz 克拉兹
-     * @return {@link Map }<{@link String },{@link String }>
+     * @return {@link Map }
      */
     public static Map<String, String> field2JdbcColumnByMybatisPlusAnnotation(Class<?> clazz) {
         HashMap<String, String> result = new HashMap<>();
         Map<String, Field> fieldMap = fieldMap(clazz);
         for (Field field : fieldMap.values()) {
             String fieldName = field.getName();
-            TableLogic tableLogic = field.getAnnotation(TableLogic.class);
-            if (tableLogic != null) {
-                continue;
-            }
-            TableId tableId = field.getAnnotation(TableId.class);
-            if (tableId != null) {
-                String value = tableId.value();
-                if (!value.isEmpty()) {
-                    result.putIfAbsent(fieldName, value);
-                }
-                continue;
-            }
+//            TableLogic tableLogic = field.getAnnotation(TableLogic.class);
+//            if (tableLogic != null) {
+//                String value = tableLogic.value();
+//                if (!value.isEmpty()) {
+//                    result.putIfAbsent(fieldName, value);
+//                    continue;
+//                }
+//                continue;
+//            }
+//            TableId tableId = field.getAnnotation(TableId.class);
+//            if (tableId != null) {
+//                String value = tableId.value();
+//                if (!value.isEmpty()) {
+//                    result.putIfAbsent(fieldName, value);
+//                }
+//                continue;
+//            }
             TableField tableField = field.getAnnotation(TableField.class);
             if (tableField != null) {
 //                boolean exist = tableField.exist();
@@ -107,7 +116,7 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
                 }
             }
             // 无注解字段不处理
-//            result.putIfAbsent(fieldName, jdbcColumn);
+//            result.putIfAbsent(fieldName, fieldName);
         }
         return result;
     }
@@ -130,7 +139,7 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      * 3.实现了EnhanceEntity接口的映射信息
      *
      * @param entityClass 实体类
-     * @return {@link Map }<{@link String }, {@link String }>
+     * @return {@link Map }
      */
     public static Map<String, String> field2JdbcColumnMap(Class<?> entityClass) {
         Map<String, String> map = FIELD_TO_JDBC_COLUMN_CACHE_MAP.get(entityClass);
@@ -148,7 +157,7 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
      * @param entityClass  实体类
      * @param columnFormat 数据库字段映射格式{@link String#format(String, Object...)}
      * @param ignoreFormat 当字段名包含该值时,不进行字段映射
-     * @return {@link Map }<{@link String }, {@link String }>
+     * @return {@link Map }
      */
     public static Map<String, String> field2JdbcColumnMap(Class<?> entityClass, String columnFormat, String ignoreFormat) {
         String format = columnFormat == null || columnFormat.isEmpty() ? "%s" : columnFormat;
@@ -181,10 +190,14 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
         return result;
     }
 
-    public static String getXmlContent(Class<?> entityClass,Class<?> voClass) {
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
-        String tableName = tableInfo.getTableName();
-       
+    public static String getXmlContent(Class<?> entityClass, Class<?> voClass) {
+        String tableName = null;
+        TableName annotation = entityClass.getAnnotation(TableName.class);
+        if (annotation!=null && !annotation.value().isEmpty()){
+            tableName = annotation.value();
+        }else{
+            tableName =entityClass.getName();
+        }
         return  "    <sql id=\"selectFragment\">\n" +
                 "        <if test=\"param1 != null\">\n" +
                 "            <foreach collection=\"param1\" item=\"gen\">\n" +
@@ -240,10 +253,10 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
                 "            <include refid=\"selectFragment\"/>\n" +
                 "            AND a.deleted = 0\n" +
                 "        </trim>\n" +
-                "        <trim prefix=\"ORDER BY\" suffixOverrides=\",\">\n" +
-                "            <include refid=\"sortFragment\"/>\n" +
-                "            a.sort , a.create_time DESC , a.id DESC\n" +
-                "        </trim>\n" +
+//                "        <trim prefix=\"ORDER BY\" suffixOverrides=\",\">\n" +
+//                "            <include refid=\"sortFragment\"/>\n" +
+//                "            a.sort , a.create_time DESC , a.id DESC\n" +
+//                "        </trim>\n" +
                 "    </select>"
                 ;
     }
