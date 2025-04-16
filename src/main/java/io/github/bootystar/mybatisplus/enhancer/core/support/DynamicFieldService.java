@@ -23,12 +23,12 @@ public interface DynamicFieldService<V> extends DynamicService<V> {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    default List<V> voSelect(Object s, IPage<V> page) {
+    default List<V> doSelectVO(Object s, IPage<V> page) {
         DynamicFieldSqlHelper<?> sqlHelper;
         IService iService = CastHelper.cast(this, IService.class);
         DynamicMapper dynamicMapper = CastHelper.cast(iService.getBaseMapper(), DynamicMapper.class);
-        if (!Objects.equals(dynamicMapper.voClass(), voClass())) {
-            throw new IllegalStateException("baseMapper has different vo class: " + dynamicMapper.voClass().getName());
+        if (!Objects.equals(dynamicMapper.getVOClass(), getVOClass())) {
+            throw new IllegalStateException("baseMapper has different vo class: " + dynamicMapper.getVOClass().getName());
         }
         if (s instanceof DynamicFieldSqlHelper<?>) {
             DynamicFieldSqlHelper<?> unmodifiableSqlHelper = (DynamicFieldSqlHelper<?>) s;
@@ -39,7 +39,7 @@ public interface DynamicFieldService<V> extends DynamicService<V> {
         } else {
             sqlHelper = new DynamicFieldSqlHelper<>(SqlHelper.of(s), iService.getEntityClass(), getSuffixBuilder());
         }
-        return dynamicMapper.voSelect(sqlHelper, page);
+        return dynamicMapper.doSelectVO(sqlHelper, page);
     }
 
 }

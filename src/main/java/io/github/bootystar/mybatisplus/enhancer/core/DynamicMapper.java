@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface DynamicMapper<V> extends EnhancedQuery<V>{
 
-    List<V> voSelect(Object s, IPage<V> page);
+    List<V> doSelectVO(Object s, IPage<V> page);
 
 }

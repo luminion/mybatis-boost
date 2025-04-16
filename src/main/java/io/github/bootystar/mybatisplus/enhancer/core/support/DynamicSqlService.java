@@ -18,12 +18,12 @@ public interface DynamicSqlService<V> extends DynamicService<V> {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    default List<V> voSelect(Object s, IPage<V> page) {
+    default List<V> doSelectVO(Object s, IPage<V> page) {
         DynamicSqlSqlHelper sqlHelper;
         IService iService = CastHelper.cast(this, IService.class);
         DynamicMapper dynamicMapper = CastHelper.cast(iService.getBaseMapper(), DynamicMapper.class);
-        if (!Objects.equals(dynamicMapper.voClass(), voClass())) {
-            throw new IllegalStateException("baseMapper has different vo class: " + dynamicMapper.voClass().getName());
+        if (!Objects.equals(dynamicMapper.getVOClass(), getVOClass())) {
+            throw new IllegalStateException("baseMapper has different vo class: " + dynamicMapper.getVOClass().getName());
         }
         if (s instanceof DynamicSqlSqlHelper<?>) {
             DynamicSqlSqlHelper<?> unmodifiableSqlHelper = (DynamicSqlSqlHelper<?>) s;
@@ -34,7 +34,7 @@ public interface DynamicSqlService<V> extends DynamicService<V> {
         } else {
             sqlHelper = new DynamicSqlSqlHelper(SqlHelper.of(s), iService.getEntityClass());
         }
-        return dynamicMapper.voSelect(sqlHelper, page);
+        return dynamicMapper.doSelectVO(sqlHelper, page);
     }
 
 }

@@ -64,7 +64,7 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
         Map<String, String> result = new HashMap<>();
         String keyProperty = tableInfo.getKeyProperty();
         String keyColumn = tableInfo.getKeyColumn();
-        if (keyProperty!= null && keyColumn!= null) {
+        if (keyProperty != null && keyColumn != null) {
             result.put(keyProperty, keyColumn);
         }
         for (TableFieldInfo fieldInfo : fieldList) {
@@ -193,14 +193,14 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
     }
 
     public static String getXmlContent(Class<?> entityClass, Class<?> voClass) {
-        String tableName = null;
+        String tableName;
         TableName annotation = entityClass.getAnnotation(TableName.class);
-        if (annotation!=null && !annotation.value().isEmpty()){
+        if (annotation != null && !annotation.value().isEmpty()) {
             tableName = annotation.value();
-        }else{
-            tableName =entityClass.getName();
+        } else {
+            tableName = entityClass.getName();
         }
-        return  "    <sql id=\"selectFragment\">\n" +
+        return "    <sql id=\"selectFragment\">\n" +
                 "        <if test=\"param1 != null\">\n" +
                 "            <foreach collection=\"param1\" item=\"gen\">\n" +
                 "                <if test=\"gen.conditions != null and gen.conditions.size() > 0\">\n" +
@@ -246,19 +246,19 @@ public abstract class MybatisPlusReflectHelper extends ReflectHelper {
                 "        </if>\n" +
                 "    </sql>\n" +
                 "\n" +
-                "    <select id=\"voList\" resultType=\""+ voClass.getName()+"\">\n" +
+                "    <select id=\"doSelectVO\" resultType=\"" + voClass.getName() + "\">\n" +
                 "        SELECT\n" +
                 "        a.*\n" +
                 "        FROM\n" +
                 "        " + tableName + " a\n" +
                 "        <trim prefix=\"WHERE\" prefixOverrides=\"AND|OR\">\n" +
                 "            <include refid=\"selectFragment\"/>\n" +
-                "            AND a.deleted = 0\n" +
+//                "            AND a.deleted = 0\n" + // 逻辑删除
                 "        </trim>\n" +
-//                "        <trim prefix=\"ORDER BY\" suffixOverrides=\",\">\n" +
-//                "            <include refid=\"sortFragment\"/>\n" +
-//                "            a.sort , a.create_time DESC , a.id DESC\n" +
-//                "        </trim>\n" +
+                "        <trim prefix=\"ORDER BY\" suffixOverrides=\",\">\n" +
+                "            <include refid=\"sortFragment\"/>\n" +
+//                "            a.sort , a.create_time DESC , a.id DESC\n" + // 默认排序
+                "        </trim>\n" +
                 "    </select>"
                 ;
     }
