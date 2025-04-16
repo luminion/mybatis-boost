@@ -45,7 +45,7 @@ public abstract class ReflectHelper {
      * 指定类属性map
      *
      * @param clazz 类
-     * @return {@link Map }<{@link String }, {@link Field }>
+     * @return {@link Map }
      */
     public static Map<String, Field> fieldMap(Class<?> clazz) {
         if (isJavaCoreClass(clazz)) {

@@ -178,7 +178,7 @@ public class ExtraFieldSuffixBuilder {
     /**
      * 构建
      *
-     * @return {@link HashMap }<{@link String }, {@link String }>
+     * @return {@link HashMap }
      */
     public LinkedHashMap<String, String> build() {
         return suffix2OperatorMap;

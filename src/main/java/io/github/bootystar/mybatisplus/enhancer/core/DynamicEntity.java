@@ -14,7 +14,7 @@ public interface DynamicEntity {
      * key为实体类属性名
      * value为数据库字段名
      *
-     * @return {@link Map }<{@link String }, {@link String }>
+     * @return {@link Map }
      */
     Map<String, String> extraFieldColumnMap();
 

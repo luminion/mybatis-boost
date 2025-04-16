@@ -1,7 +1,5 @@
 package io.github.bootystar.mybatisplus.enhancer.core.base;
 
-import cn.idev.excel.FastExcel;
-import cn.idev.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.util.CastHelper;
 import io.github.bootystar.mybatisplus.enhancer.util.ExcelHelper;
@@ -22,14 +20,14 @@ public interface EnhancedExcel {
 
     default void excelTemplate(OutputStream os, Class<?> clazz) {
         ExcelHelper.write(os, clazz)
-                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+//                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .sheet()
                 .doWrite(Collections.emptyList());
     }
 
     @SuppressWarnings({"unchecked","rawtypes"})
     default int excelImport(InputStream is, Class<?> clazz) {
-        List<?> dataList = FastExcel.read(is).head(clazz).sheet().doReadSync();
+        List<?> dataList = ExcelHelper.read(is).head(clazz).sheet().doReadSync();
         if (dataList == null || dataList.isEmpty()) return 0;
         IService iService = CastHelper.cast(this, IService.class);
         List<?> entityList = dataList.stream()
@@ -49,7 +47,7 @@ public interface EnhancedExcel {
         List<?> voList = enhancedQuery.voPage(s, current, size).getRecords();
         ExcelHelper.write(os, clazz)
                 .includeColumnFieldNames(Arrays.asList(includeFields))
-                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+//                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .sheet()
                 .doWrite(voList);
     }

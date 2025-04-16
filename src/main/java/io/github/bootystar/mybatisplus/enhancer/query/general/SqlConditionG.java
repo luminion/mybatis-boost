@@ -26,7 +26,7 @@ public class SqlConditionG implements SqlCondition {
     protected String field;
 
     /**
-     * 运算符(=,>,<,!=,<>,>=,<=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
+     * 运算符(=,>,&lt;,!=,&lt;>,>=,&lt;=,LIKE,NOT LIKE,IS NULL,IS NOT NULL,IN,NOT IN)
      */
     protected String operator;
 
