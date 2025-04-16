@@ -90,9 +90,9 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.2.7</version>
                         <!--跳过GPG签名-->
-<!--                        <configuration>-->
-<!--                            <skip>true</skip>-->
-<!--                        </configuration>-->
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
