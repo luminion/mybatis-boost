@@ -11,20 +11,23 @@ import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectHelper;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public interface EnhancedIService {
+public interface EnhancedIService<T> extends IService<T> {
 
-    @SuppressWarnings("unchecked")
-    default <R> R toId(Object source) {
+    default T toEntity(Object source) {
+        return MybatisPlusReflectHelper.toTarget(source, getEntityClass());
+    }
+    
+    default Object toId(Object source) {
         IService<?> iService = CastHelper.cast(this,IService.class);
         TableInfo tableInfo = TableInfoHelper.getTableInfo(iService.getEntityClass());
         if (tableInfo == null) return null;
         String keyProperty = tableInfo.getKeyProperty();
         if (keyProperty == null) return null;
-        return (R) tableInfo.getPropertyValue(source, keyProperty);
+        return tableInfo.getPropertyValue(source, keyProperty);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    default <R> R insertByDTO(Object s) {
+    default Object insertByDTO(Object s) {
         IService iService = CastHelper.cast(this,IService.class);
         Object entity = MybatisPlusReflectHelper.toTarget(s, iService.getEntityClass());
         iService.save(entity);

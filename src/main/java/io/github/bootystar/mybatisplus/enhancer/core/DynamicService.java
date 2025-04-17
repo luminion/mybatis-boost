@@ -7,6 +7,6 @@ import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
 /**
  * @author bootystar
  */
-public interface DynamicService<V> extends EnhancedQuery<V>, EnhancedExcel, EnhancedIService {
+public interface DynamicService<T, V> extends EnhancedIService<T>, EnhancedQuery<V>, EnhancedExcel {
 
 }
