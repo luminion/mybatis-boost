@@ -1,184 +1,29 @@
 # mybatis-plus-enhancer
 enhancer of mybatis-plus
-* 代码生成器兼容`mybatis-plus代码生成器`的所有配置项目, 并提供更多额外的可选配置项
-* 代码生成器提供`新增DTO`,`修改DTO`,`导入DTO`,`导出DTO`,`出参VO`的额外生成
-* 代码生成器支持选择性生成`增删查改导入导出`相关方法及配套类 
-* 代码生成器提供`代码注入`的方式生成生成额外方法及逻辑, 生成的代码可在不添加额外依赖的情况下运行
-* 提供多种`IService`的增强实现, 提供更多可用方法, 并完全兼容`IService`, 可无缝迁移衔接
-* 支持通过`属性`+`特殊后缀`的方式自动映射不同类型的查询
-* 支持过前端传参生成`防注入的动态sql`, 并支持条件嵌套
+* 针对mybatis-plus的增强
+* 动态Sql工具
+* IService增强
+* BaseMapper增强
 
-[依赖](#maven依赖)   
-[增强型代码生成器](#代码生成器)   
-[动态Sql工具](#动态sql工具SqlHelper)  
-[IService增强](#dynamicservicet-v)   
-[BaseMapper增强](#dynamicmappert-v-s)   
 
 
 ## Maven依赖
-
-### SpringBoot3
 ```xml
-<!-- 依赖版本管理 -->
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>io.github.bootystar</groupId>
-            <artifactId>mybatis-plus-enhancer</artifactId>
-            <version>1.0.0</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-
-<dependencies>
-    <!--mybatis-plus-enhancer-->
-    <dependency>
-        <groupId>io.github.bootystar</groupId>
-        <artifactId>mybatis-plus-enhancer</artifactId>
-    </dependency>
-    <!-- spring boot3 引入 -->
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-    </dependency>
-</dependencies>
-```
-
-### SpringBoot2
-```xml
-<!-- 依赖版本管理 -->
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>io.github.bootystar</groupId>
-            <artifactId>mybatis-plus-enhancer</artifactId>
-            <version>1.0.0</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-
-<dependencies>
-    <!--mybatis-plus-enhancer-->
-    <dependency>
-        <groupId>io.github.bootystar</groupId>
-        <artifactId>mybatis-plus-enhancer</artifactId>
-    </dependency>
-    <!-- spring boot2 引入 -->
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-boot-starter</artifactId>
-    </dependency>
-</dependencies>
-```
-
-### 可选项
-
-#### 分页插件依赖
-```xml
-<!-- (可选)分页插件 jdk11+引入 -->
 <dependency>
-    <groupId>com.baomidou</groupId>
-    <artifactId>mybatis-plus-jsqlparser</artifactId>
-</dependency>
-<!-- (可选)分页插件 jdk8+引入 -->
-<dependency>
-    <groupId>com.baomidou</groupId>
-    <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
+    <groupId>io.github.bootystar</groupId>
+    <artifactId>mybatis-plus-enhancer</artifactId>
+    <version>1.2.0</version>
 </dependency>
 ```
 
-#### 代码生成器依赖
-```xml
-<!-- (可选)代码生成器 -->
-<dependency>
-    <groupId>com.baomidou</groupId>
-    <artifactId>mybatis-plus-generator</artifactId>
-    <!-- (可选)生成器代码在test目录下时,可使用test作用域 -->
-    <!--<scope>test</scope>-->
-</dependency>
-<!-- (可选)代码生成器-模板引擎 -->
-<dependency>
-    <groupId>org.apache.velocity</groupId>
-    <artifactId>velocity-engine-core</artifactId>
-    <!-- (可选)生成器代码在test目录下时,可使用test作用域 -->
-    <!--<scope>test</scope>-->
-</dependency>
-```
-
-#### Excel依赖
+### 如果需要使用Excel功能,请自行引入fastExcel依赖
 ```xml
 <!-- (可选)Excel导入导出 -->
 <dependency>
     <groupId>cn.idev.excel</groupId>
     <artifactId>FastExcel</artifactId>
+    <version>1.1.0</version>
 </dependency>
-```
-
-### `pom.xml`示例
-```xml
-<!-- 依赖版本管理 -->
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>io.github.bootystar</groupId>
-            <artifactId>mybatis-plus-enhancer</artifactId>
-            <version>1.0.0</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-
-<dependencies>
-    <!--mybatis-plus-enhancer-->
-    <dependency>
-        <groupId>io.github.bootystar</groupId>
-        <artifactId>mybatis-plus-enhancer</artifactId>
-    </dependency>
-    <!-- spring boot3 引入 -->
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-    </dependency>
-    <!-- spring boot2 引入 -->
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-boot-starter</artifactId>
-    </dependency>
-    <!-- (可选)分页插件 jdk11+引入 -->
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-jsqlparser</artifactId>
-    </dependency>
-    <!-- (可选)分页插件 jdk8+引入 -->
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
-    </dependency>
-    <!-- (可选)代码生成器 -->
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-generator</artifactId>
-        <!-- (可选)生成器代码在test目录下时,可使用test作用域 -->
-        <!--<scope>test</scope>-->
-    </dependency>
-    <!-- (可选)代码生成器-模板引擎 -->
-    <dependency>
-        <groupId>org.apache.velocity</groupId>
-        <artifactId>velocity-engine-core</artifactId>
-        <!-- (可选)生成器代码在test目录下时,可使用test作用域 -->
-        <!--<scope>test</scope>-->
-    </dependency>
-    <!-- (可选)Excel导入导出 -->
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>FastExcel</artifactId>
-    </dependency>
-</dependencies>
 ```
 
 ### SNAPSHOT仓库地址
@@ -216,287 +61,51 @@ enhancer of mybatis-plus
 </repositories>
 ```
 
-## 代码生成器
-
-### 代码生成(Lambda链式)
-对`Lambda表达式`不熟悉的见[代码生成(编码式)](#代码生成编码式)
+## 使用方式
+* 使`Mapper`实现`DynamicMapper`接口, 指定泛型为数据展示的实体类
+* 用`MapperHelper`的`getXmlContent`方法,获取动态sql的xml内容
+* 在`Mapper`对应的xml文件中引入动态sql的xml内容
+* 此时`Mapper`的所有增强方法均可使用
+  * `voById`
+  * `voByDTO`
+  * `voList`
+  * `voPage`
+* (非必须)`Service`实现`DynamicSqlService`, 即会自动添加上述方法
 
 ```java
-
+// 继承DynamicMapper, 指定泛型为数据展示的类(也可直接使用实体类)
+public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUserVO> {
+}
 ```
 ```java
-String url = "jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8";
-String username = "postgres";
-String password = "root";
-GeneratorHelper
-//        .extraCodeGenerator(url, username, password) // 额外代码生成器
-//        .dynamicSqlGenerator(url, username, password) // 动态SQL生成器
-        .dynamicFieldGenerator(url, username, password) // 动态字段生成器
-        .initialize() // 初始化常用配置
-        .pkg(pkg -> pkg.parent("io.github.bootystar" ))// 父包名
-//        .mapperXmlResource("static/mapper") // mapper.xml文件在Resources下的路径
-        .execute("sys_user" )// 要生成的表(不输入为全部)
-;
+    void test1(){
+        // 获取mapper对应的xml内容并复制到对应的xml文件中
+        String xmlContent = MapperHelper.getXmlContent(SysUserMapper.class);
+        System.out.println(xmlContent);
+    }
 ```
 
-### 可选配置项
+使用示例:
 ```java
-String url = "jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8";
-String username = "postgres";
-String password = "root";
-GeneratorHelper
-        // .extraCodeGenerator(url, username, password) // 额外代码生成器
-        // .dynamicSqlGenerator(url, username, password) // 动态SQL生成器
-        .dynamicFieldGenerator(url, username, password) // 动态字段生成器
-        .enableGlobalFileOverwrite() // 全局文件覆盖生成(覆盖所有的文件)
-        .mapperXmlResource("static/mapper") // mapper.xml文件在Resources下的路径
-        .initialize() // 初始化常用配置
-        .custom(custom -> {
-        // 自定义配置
-            custom
-                .enableJakartaApi() // 启用Jakarta API, springboot3及以上需要开启
-                .enableFileOverride() // 文件覆盖生成(DTO、VO)
-                .disableInsert() // 不生成新增
-                .disableUpdate() // 不生成更新
-                .disableDelete() // 不生成删除
-                .disableSelect() // 不生成查询
-                .disableImport() // 不生成导入
-                .disableExport() // 不生成导出
-                // 略... 更多可配置项见下文说明
-        ;})
-        .dataSource(dataSource -> {
-        // 数据源配置(参考mybatis-plus官方文档)
-        })
-        .global(global -> {
-        // 全局配置(参考mybatis-plus官方文档)
-        })
-        .pkg(pkg -> {
-        // 包配置(参考mybatis-plus官方文档)
-        })
-        .strategy(strategy -> {
-        // 策略配置(参考mybatis-plus官方文档)
-        })
-        .entity(entity -> {
-        // 实体类配置(参考mybatis-plus官方文档)
-        })
-        .mapper(mapper -> {
-        // mapper配置(参考mybatis-plus官方文档)
-        })
-        .service(service -> {
-        // service配置(参考mybatis-plus官方文档)
-        })
-        .controller(controller -> {
-        // controller配置(参考mybatis-plus官方文档)
-        })
-        .execute("sys_user") // 要生成的表(不输入为全部)
-        ;
-```
-
-### 自定义配置内容
-* 通用配置项:[BaseBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/BaseBuilder.java)
-* 特殊配置项:[BaseEnhanceBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/BaseEnhanceBuilder.java)
-* 额外代码生成器特殊配置项:[ExtraCodeBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/ExtraCodeBuilder.java)
-* 动态sql生成器特殊配置项:[DynamicSqlBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/DynamicSqlBuilder.java)
-* 动态字段生成器特殊配置项:[DynamicFieldBuilder.java](src/main/java/io/github/bootystar/mybatisplus/generator/config/builder/DynamicFieldBuilder.java)
-
-自定义配置示例:(或因版本不同或修改有所变动, 详见源码)
-```java
-custom
-    // 文件相关
-    .enableFileOverride() // 文件覆盖生成(DTO、VO)
-    .disableInsert() // 不生成新增
-    .disableUpdate() // 不生成更新
-    .disableDelete() // 不生成删除
-    .disableSelect() // 不生成查询
-    .disableImport() // 不生成导入
-    .disableExport() // 不生成导出
-    .package4DTO("dto") // DTO的包名
-    .path4DTO("C:/Project/test21/") // DTO的路径(全路径或相对路径)
-    .package4VO("vo") // VO的包名
-    .path4VO("C:/Project/test21/") // VO的路径(全路径或相对路径)
-    .editExcludeColumns("create_time", "update_time") // 新增/修改时忽略的字段
-    // controller额外生成项
-    .baseUrl("/api") // 请求url前缀
-    .enableCrossOrigins() // 启用跨域
-    .enableJakartaApi() // 启用Jakarta API, springboot3以上需要开启
-    .enableAutoWired() // 使用@Autowired替换@Resource
-    .returnMethod(R1::new) // 返回值对象封装的方法
-    .pageMethod(P1::of) // 分页对象封装的方法(需要接收IPage作为参数)
-    .disableRestful() // 禁用restful
-    .disableRequestBody() // 禁用请求体
-    .disableValidated() // 禁用参数校验
-    .disablePostQuery() // 复杂查询不使用post请求(使用get请求, 并关闭@RequestBody)
-    // mapper额外生成项
-    .sortColumnClear() // 清空排序
-    .sortColumn("create_time",true) // 添加排序(字段,是否倒序)
-    .sortColumn("id",true) // 添加排序(字段,是否倒序)
-    // 特殊配置项, 因不同生成器而异
-    .disableOverrideMethods() // 不生成重写的父类方法
-    .withMapSelectDTO() // 使用Map作为查询入参DTO
-    .withSqlHelperSelectDTO() // 使用SqlHelper作为查询入参DTO
-    .extraFieldGenerateStrategy((sqlOperator,tableFiled)->{
-            // 根据比较符号和字段信息决定是否生成额外字段
-            return true;
-        }) // 自定义额外字段策略(字段何时生成/不生成对应后缀的额外字段)
-    .extraFieldSuffixBuilder(builder -> { 
-    // 该项默认无需配置, 配置后, 只会根据已配置的字段生成额外后缀, 未配置的类型不会生成后缀
-                    builder
-                        .defaultSimpleSuffix() // 添加默认的后缀字符(默认生成LIKE,IN,<=,>=的特殊后缀)
-                        .defaultCompleteSuffix() // 添加支持的所有后缀字符
-                        .ne("Ne") // 不等于字段额外后缀
-                        .lt("Lt") // 小于字段额外后缀
-                        .le("Le") // 小于等于字段额外后缀
-                        .ge("Ge") // 大于等于字段额外后缀
-                        .gt("Gt") // 大于字段额外后缀
-                        .like("Like") // 模糊匹配字段额外后缀
-                        .notLike("NotLike") // 反模糊匹配字段额外后缀
-                        .in("In") // 包含字段额外后缀
-                        .notIn("NotIn") // 不包含字段额外后缀
-                        .isNull("IsNull") // 空字段额外后缀
-                        .isNotNull("IsNotNull") // 非空字段额外后缀
-        ;})// 自定义字段额外后缀
-```
-
-### 代码生成(编码式)
-
-```java
-
-```
-```java
-String url = "jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8";
-String username = "postgres";
-String password = "root";
-//ExtraCodeGenerator generator = new ExtraCodeGenerator(url, username, password); // 额外代码生成器
-//DynamicSqlGenerator generator = new DynamicSqlGenerator(url, username, password); // 动态SQL生成器
-DynamicFieldGenerator generator = new DynamicFieldGenerator(url, username, password); // 动态字段生成器
-
-generator.enableGlobalFileOverwrite() // 全局文件覆盖生成(覆盖所有的文件)
-        .mapperXmlResource("static/mapper") // mapper.xml文件在Resources下的路径
-        .initialize() // 初始化常用配置
-;
-generator.getCustomConfigBuilder() // 自定义配置
-        .enableJakartaApi() // ...略
-;
-generator.getDataSourceConfigBuilder() // 数据源配置(参考mybatis-plus官方文档)
-    //.driverClassName("org.postgresql.Driver")
-;
-generator.getGlobalConfigBuilder() // 全局配置(参考mybatis-plus官方文档)
-    //.author("bootystar")
-;
-generator.getPackageConfigBuilder() // 包配置(参考mybatis-plus官方文档)
-    //.parent("io.github.bootystar")
-;
-generator.getStrategyConfigBuilder() // 策略配置(参考mybatis-plus官方文档)
-    //.addTablePrefix("sys_")
-;
-generator.getStrategyConfigBuilder().entityBuilder() // 实体类配置(参考mybatis-plus官方文档)
-    //.enableLombok()
-;
-generator.getStrategyConfigBuilder().mapperBuilder() // mapper配置(参考mybatis-plus官方文档)
-    //.enableBaseResultMap()
-;
-generator.getStrategyConfigBuilder().serviceBuilder() // service配置(参考mybatis-plus官方文档)
-    //.formatServiceFileName("%sService")
-;
-generator.getStrategyConfigBuilder().controllerBuilder() // controller配置(参考mybatis-plus官方文档)
-    //.enableRestStyle()
-;
-generator.execute("sys_user"); // 要生成的表(不输入为全部)
-```
-
-### 生成器实现
-
-#### 额外代码生成器`ExtraCodeGenerator`
-优点:
-* 该生成器增强方式为`代码注入`, 可生成后直接复制代码到其他`mybatis-plus`项目使用,可移植性强
-* 运行时除`mybatis-plus`外无其他依赖, 依赖耦合低
-* 支持通过`属性`+`特殊后缀`的方式自动映射不同类型的查询
-
-缺点:
-* `Service`和`ServiceImpl`内硬编码了`DTO`,`VO`
-* `mapper.xml`内代码量较多
-* 若生成后的实体数据库模型发生变化, 需要修改对应的`mapper.xml`和`SelectDTO`
-
-#### 动态sql生成器`DynamicSqlGenerator`
-优点:
-* 默认使用`SqlHelper`入参, 支持`lambda`链式调用, `灵活`性极高
-* 可动态映射`属性`和`值`为查询条件, 并支持嵌套子条件
-* 可动态映射`排序属性`和`升降`序
-* 可添加`非本表字段`的动态映射
-* 支持直接使用`实体类`和`Map`入参,可根据入参动态映射
-* 可自定义额外参数, 在`mapper.xml`中可直接使用
-* `Service`继承实现, 无需实现, 无额外代码
-* `ServiceImpl`继承实现, 无需实现, 无额外代码
-* `mapper.xml`中内容`简洁`且`兼容性`强, 可无缝衔接自行编写的sql
-
-缺点:
-* 需要`mybatis-plus-enhancer`依赖, 部分低版本`mybatis-plus`需要升级后使用
-* 前端传参较复杂
-
-#### 动态字段生成器`DynamicFieldGenerator`
-优点:
-* 入参为`SqlHelper`时, 兼容`DynamicSqlGenerator`的动态映射功能
-* 支持通过`属性`+`特殊后缀`的方式自动映射不同类型的查询
-* 可自定义额外参数, 在`mapper.xml`中可直接使用
-* `Service`继承实现, 无需实现, 无额外代码
-* `ServiceImpl`继承实现, 无需实现, 无额外代码
-* `mapper.xml`中内容`简洁`且`兼容性`强, 可无缝衔接自行编写的sql
-
-缺点:
-* 需要`mybatis-plus-enhancer`依赖, 部分低版本`mybatis-plus`需要升级后使用
-
-## 动态sql工具`SqlHelper`
-
-### 后端方法
-该工具用于生成sql片段, 支持Object入参  
-该工具条件底层为树状结构, 入参可以进行子条件的多层嵌套  
-嵌套子条件时,父条件必须为有效条件(即能映射对应字段的条件)  
-该类含以下方法用于生成sql片段
-* `<T>of()`静态方法, 通过指定对象的属性/值映射创建SqlHelper, 可指定泛型用于方法匹配入参
-* `requiredNext()` 设置下一个条件为必定生效的条件
-* `or()`设置下一个条件与最后一个条件的关系为or
-* `eq()`等于
-* `ne()`不等于
-* `gt()`大于
-* `ge()`大于等于
-* `lt()`小于
-* `le()`小于等于
-* `like()`模糊匹配
-* `notLike()`反模糊匹配
-* `isNull()`为空
-* `isNotNull()`非空
-* `in()`包含
-* `notIn()`不包含
-* `orderByAsc()`排序升序
-* `orderByDesc()`排序降序
-* `condition()`添加ISqlCondition(条件的原始封装类, 推荐使用`ConditionG`)
-* `sort()`添加ISqlSort(排序的原始封装类, 推荐使用`SortG`)
-* `with()`添加并融合另一个SqlHelper所有条件(包含子条件)(`ISqlTree`为`SqlHelper`的父类)
-* `withChild()`将另一个SqlHelper所有条件(包含子条件)添加为本对象的子条件
-* `wrap()`包装SqlHelper, 添加指定DynamicService服务的查询方法
-
-使用示例
-```java
-
     @Resource
     private ISysUserService baseService;
     
     public void example() {
-        
         // 根据指定实体类\map\SqlHelper创建sqlHelper
         HashMap<String, Object> map = new HashMap<>();
         map.put("name","张三"); // 姓名= 张三
         map.put("ageIn", Arrays.asList(1,2,3,4,5)); // 年龄= 1,2,3,4,5
+        List<SysUserVO> vos2 = baseService.voList(map); // 通过map作为参数传入DynamicService进行查询
+      
         SqlHelper<SysUser> sqlHelper = SqlHelper.<SysUser>of(map);
-        List<SysUserVO> vos1 = baseService.listByDTO(sqlHelper); // 通过sqlHelper作为参数传入DynamicService进行查询
-    
+        List<SysUserVO> vos1 = baseService.voList(sqlHelper); // 通过sqlHelper作为参数传入DynamicService进行查询
+      
         // 其他条件1
         SqlHelper<Object> otherSqlHelper1= new SqlHelper<>();
         // 其他条件2
         SqlHelper<Object> otherSqlHelper2= new SqlHelper<>();
         // 设置条件......
-        
-        
+
         // 链式表达
         List<SysUserVO> list = SqlHelper.<SysUser>of()
                 .eq(SysUser::getAge, 18)  // 年龄= 18
@@ -517,27 +126,10 @@ generator.execute("sys_user"); // 要生成的表(不输入为全部)
 
 ```
 
-### 前端参数说明
-#### 条件参数`conditions`
-* `or`表示与其他条件的关系是否为`或者`(非必填,默认false)
-* `field`表示`属性`名
-* `operator`表示运算符(默认为`=`, 为`=`时无需传递, 不区分大小写)
-* `value`表示属性对应的`值`
+## SqlHelper条件辅助器
+该类可直接作为前端入参DTO, 允许前端通过传参进行sql拼接
 
-tips:  
-* `operator`不区分大小写, 支持 `=`、`!=`、`>`、`>=`、`<`、`<=`、`in`、`not in` 、`like`、`not like`、`is null`、`is not null`   
-* `value`对应的`operator`若为`in`或`not in`时,`value`需要为`["value1","value2","value3"]`的多参数形式   
-* `value`对应的`operator`若为`is null`或`is not null`时,`value`可传递不为`null`的任意值   
-
-#### 条件参数`child`
-* 该参数实际为嵌套的子条件, 支持多重嵌套
-* 内部嵌套的实际参数为`conditions`和`子child`
-
-#### 排序参数`sorts`
-* `field`表示`属性`名
-* `desc`表示是否倒序(默认为`false`, 正序时无需传递)
-
-#### 前端参数基础格式示例:
+#### 入参格式示例:
 ```json
 {
   "conditions": [
@@ -576,6 +168,27 @@ tips:
   ]
 }
 ```
+
+#### 条件参数`conditions`
+* `or`表示与其他条件的关系是否为`或者`(非必填,默认false)
+* `field`表示`属性`名
+* `operator`表示运算符(默认为`=`, 为`=`时无需传递, 不区分大小写)
+* `value`表示属性对应的`值`
+
+tips:
+* `operator`不区分大小写, 支持 `=`、`!=`、`>`、`>=`、`<`、`<=`、`in`、`not in` 、`like`、`not like`、`is null`、`is not null`
+* `value`对应的`operator`若为`in`或`not in`时,`value`需要为`["value1","value2","value3"]`的多参数形式
+* `value`对应的`operator`若为`is null`或`is not null`时,`value`可传递不为`null`的任意值
+
+#### 条件参数`child`
+* 该参数实际为嵌套的子条件, 支持多重嵌套
+* 内部嵌套的实际参数为`conditions`和`子child`
+
+#### 排序参数`sorts`
+* `field`表示`属性`名
+* `desc`表示是否倒序(默认为`false`, 正序时无需传递)
+
+
 
 #### 动态`sql`和对应`传参`示例
 ```sql
@@ -627,35 +240,46 @@ age DESC, id ASC
 }
 ```
 
-## `DynamicService<T, V>`
-该接口针对`IService`定义了一系列增强方法, 其中`T`为数据库实体类, `V`为VO数据展示类  
-该接口大多方法都提供了`默认实现`, 实际需要实现的仅有`doSelect()`方法
+## `DynamicService<V>`
+该接口针对`IService`定义了一系列增强方法,`V`为VO数据展示类  
+该接口大多方法都提供了`默认实现`, 实际需要实现的仅有`voSelect()`方法
 * `getVOClass()`获取VO数据展示类
-* `toEntity()`将指定对象转化为`T`
 * `toVO()`将指定对象转化为`V`
-* `toId()`获取`T`对象的`主键id`
-* `insertByDTO()`新增方法, 默认返回值`R`为新增数据的`主键id`
+* `toId()`获取实体类对象的`主键id`
+* `insertByDTO()`新增方法, 默认返回值为新增数据的`主键id`
 * `updateByDTO()`更新方法
-* `doSelect()`查询逻辑封装方法
-* `oneById()`根据`主键id`查询单个VO
-* `oneByDTO()`查询单个VO
-* `listByDTO()`查询VO列表
-* `pageByDTO()`查询VO分页
+* `voById()`根据`主键id`查询单个VO
+* `voByDTO()`查询单个VO
+* `voList()`查询VO列表
+* `voPage()`查询VO分页
 * `excelTemplate()`excel导入模板
 * `excelImport()`excel文件导入
 * `excelExport()`excel文件导出
-* `lambdaHelper()`获取链式动态条件构造器(见`SqlHelper`), 使用方式类似`lambdaQuery()`
+### 提供2个默认实现
+* `DynamicSqlService`
+  * [DynamicSqlService.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/support/DynamicSqlService.java)
+  * 允许动态拼接sql的实现, 并针对传参进行防注入
+  * 自动映射实体类属性字段
+  * 非实体类属性会存放到`param1.map`中, 可通过param1.map.xxx判断参数是否存在,并添加对应逻辑
+* `DynamicFieldService`
+  * [DynamicFieldService.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/support/DynamicFieldService.java)
+  * 允许动态拼接sql的实现, 并对非本表字段/特殊值进行防注入
+  * 允许后缀查询, 通过在原有字段名添加不同后缀,自动映射不同查询
+  * 支持通过重写`getSuffixBuilder()`方法自定义后缀词
+  * 自动映射实体类属性字段和对应后缀字段
+  * 未自动映射的属性会存放到`param1.map`中, 可通过param1.map.xxx判断参数是否存在,并添加对应逻辑
+  * 后缀示例:
+    * name 精准查询
+    * nameLike 模糊查询
+    * ageLt 年龄小于
+    * ageGt 年龄大于
+    * ageIn 年龄在...内
+* 也可根据自己的需求, 自定义实现`DynamicService`接口, 并实现`voSelect()`方法
 
-源码及实现:
-* [DynamicService.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/DynamicService.java)
-* [DynamicSqlServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/support/DynamicSqlServiceImpl.java)
-* [DynamicFieldServiceImpl.java](src/main/java/io/github/bootystar/mybatisplus/enhancer/core/support/DynamicFieldService.java)
-
-
-## DynamicMapper<T, V, S>
-该接口定义了动态mapper的入参查询,其中`T`为数据库实体类, `V`为VO数据展示类, `S`为查询入参类
-* 子mapper继承该类, 即可运行, 无需实现方法(需要提供对应xml文件)
-* 该mapper的参数及对应`xml`文件会由生成器自动生成
+## `DynamicMapper<V>`
+该接口定义了动态mapper的入参查询,`V`为VO数据展示类
+* 子mapper继承该类, 即可运行, 无需实现方法
+* 需要提供对应xml文件, 可通过工具类获取xml文件内容
 * 可在`mapper.xml`文件中添加对应的额外表及字段检索等自定义逻辑
 
 ### xml中额外SQL编写
@@ -670,25 +294,9 @@ age DESC, id ASC
 * `sortFragment`下方可添加额外排序条件(添加条件时不需要添加`ORDER BY`关键字)
 * 参数映射顺序`实体类属性字段信息`->`@TableFiled注解`->`DynamicEntity映射`
 
-#### 默认生成的xml
+#### 工具类生成的xml基础内容示例
 ```xml
-<select id="listByDTO" resultType="io.github.bootystar.vo.SysUserVO">
-    SELECT
-    a.*
-    FROM
-    sys_user a
-    <trim prefix="WHERE" prefixOverrides="AND|OR" suffixOverrides="AND|OR">
-        <include refid="selectFragment"/>
-    </trim>
-    <trim prefix="ORDER BY" suffixOverrides=",">
-        <include refid="sortFragment"/>
-    </trim>
-</select>
-```
-
-#### 自定义后的xml
-```xml
-<select id="listByDTO" resultType="io.github.bootystar.vo.SysUserVO">
+<select id="voSelectByXml" resultType="io.github.bootystar.vo.SysUserVO">
     SELECT
     a.*
     FROM
