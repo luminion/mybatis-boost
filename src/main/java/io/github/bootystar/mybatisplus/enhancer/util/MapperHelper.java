@@ -15,19 +15,22 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class MapperHelper {
 
     public static String getXmlContent(Class<?> entityClass, Class<?> voClass) {
-       return getXmlContent(entityClass,voClass,null);
+        return getXmlContent(entityClass, voClass, null);
     }
 
-    public static <T> String getXmlContent(Class<T> entityClass, Class<?> voClass, Map<SFunction<T, ?>,Boolean> sortMap) {
+    public static <T> String getXmlContent(Class<T> entityClass, Class<?> voClass, Map<SFunction<T, ?>, Boolean> sortMap) {
         AtomicReference<String> orderBySqlRef = new AtomicReference<>("");
-        if (sortMap!=null && !sortMap.isEmpty()) {
-            sortMap.entrySet().stream().map(e->{
+        if (sortMap != null && !sortMap.isEmpty()) {
+            sortMap.entrySet().stream().map(e -> {
                 SFunction<T, ?> key = e.getKey();
                 String columnName = PropertyNamer.methodToProperty(LambdaUtils.extract(key).getImplMethodName());
-                return String.format("a.%s%s", columnName, e.getValue() ? " DESC" : "" );
+                return String.format("a.%s%s", columnName, e.getValue() ? " DESC" : "");
             }).reduce((e1, e2) -> e1 + " , " + e2).ifPresent(orderBySqlRef::set);
         }
         String orderBySql = orderBySqlRef.get();
+        if (!orderBySql.isEmpty()) {
+            orderBySql = "            " + orderBySql + "\n";
+        }
         String tableName;
         TableName annotation = entityClass.getAnnotation(TableName.class);
         if (annotation != null && !annotation.value().isEmpty()) {
@@ -92,13 +95,11 @@ public abstract class MapperHelper {
                 "        </trim>\n" +
                 "        <trim prefix=\"ORDER BY\" suffixOverrides=\",\">\n" +
                 "            <include refid=\"sortFragment\"/>\n" +
-                orderBySql+
-//                "            a.sort , a.create_time DESC , a.id DESC\n" + // 默认排序
+                orderBySql +  // 默认排序
                 "        </trim>\n" +
                 "    </select>"
                 ;
     }
 
- 
 
 }
