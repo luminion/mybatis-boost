@@ -1,11 +1,14 @@
 package io.github.bootystar.mybatisplus.enhancer.util;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -13,6 +16,26 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author bootystar
  */
 public abstract class MapperHelper {
+
+    public static <T> String getXmlContent(Class<? extends EnhancedQuery<?>> enhancedQueryClass) {
+        return getXmlContent(enhancedQueryClass, new HashMap<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> String getXmlContent(Class<? extends EnhancedQuery<?>> enhancedQueryClass, Map<SFunction<T, ?>, Boolean> sortMap) {
+        Class<?> voClass = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, EnhancedQuery.class)[0];
+        Class<?>[] mapperClasses = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, BaseMapper.class);
+        Class<?>[] serviceClasses = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, IService.class);
+        Class<T> entityClass = null;
+        if (mapperClasses != null && mapperClasses.length > 0) {
+            entityClass = (Class<T>) mapperClasses[0];
+        } else if (serviceClasses != null && serviceClasses.length > 0) {
+            entityClass = (Class<T>) serviceClasses[0];
+        } else {
+            throw new IllegalArgumentException("no base entity info in " + enhancedQueryClass.getName());
+        }
+        return getXmlContent(entityClass, voClass, sortMap);
+    }
 
     public static String getXmlContent(Class<?> entityClass, Class<?> voClass) {
         return getXmlContent(entityClass, voClass, null);
