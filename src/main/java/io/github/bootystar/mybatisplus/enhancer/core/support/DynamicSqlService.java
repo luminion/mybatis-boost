@@ -3,7 +3,7 @@ package io.github.bootystar.mybatisplus.enhancer.core.support;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper;
-import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
+import io.github.bootystar.mybatisplus.enhancer.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhancer.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable.DynamicSqlSqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.util.CastHelper;
@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * @author bootystar
  */
-public interface DynamicSqlService<V> extends EnhancedQuery<V> {
+public interface DynamicSqlService<V> extends DynamicService<V> {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})

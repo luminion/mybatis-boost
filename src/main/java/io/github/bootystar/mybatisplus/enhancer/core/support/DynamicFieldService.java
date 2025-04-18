@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper;
-import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
+import io.github.bootystar.mybatisplus.enhancer.core.DynamicService;
 import io.github.bootystar.mybatisplus.enhancer.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable.DynamicFieldSqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.util.CastHelper;
@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * @author bootystar
  */
-public interface DynamicFieldService<V> extends EnhancedQuery<V> {
+public interface DynamicFieldService<V> extends DynamicService<V> {
 
     default ExtraFieldSuffixBuilder getSuffixBuilder() {
         return null;
