@@ -107,7 +107,7 @@ public abstract class MapperHelper {
                 "        </if>\n" +
                 "    </sql>\n" +
                 "\n" +
-                "    <select id=\"doSelectVO\" resultType=\"" + voClass.getName() + "\">\n" +
+                "    <select id=\"voSelectByXml\" resultType=\"" + voClass.getName() + "\">\n" +
                 "        SELECT\n" +
                 "        a.*\n" +
                 "        FROM\n" +

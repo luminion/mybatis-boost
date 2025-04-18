@@ -23,7 +23,7 @@ public interface DynamicFieldService<V> extends DynamicService<V> {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    default List<V> doSelectVO(Object s, IPage<V> page) {
+    default List<V> voSelect(Object s, IPage<V> page) {
         DynamicFieldSqlHelper<?> sqlHelper;
         IService iService = CastHelper.cast(this, IService.class);
         DynamicMapper dynamicMapper = CastHelper.cast(iService.getBaseMapper(), DynamicMapper.class);
@@ -39,7 +39,7 @@ public interface DynamicFieldService<V> extends DynamicService<V> {
         } else {
             sqlHelper = new DynamicFieldSqlHelper<>(SqlHelper.of(s), iService.getEntityClass(), getSuffixBuilder());
         }
-        return dynamicMapper.doSelectVO(sqlHelper, page);
+        return dynamicMapper.voSelect(sqlHelper, page);
     }
 
 }

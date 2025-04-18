@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public interface EnhancedQuery<V> {
 
-    List<V> doSelectVO(Object s, IPage<V> page);
+    List<V> voSelect(Object s, IPage<V> page);
 
     @SuppressWarnings("unchecked")
     default Class<V> getVOClass() {
@@ -60,11 +60,11 @@ public interface EnhancedQuery<V> {
     }
 
     default List<V> voList() {
-        return doSelectVO(null, null);
+        return voSelect(null, null);
     }
 
     default List<V> voList(Object s) {
-        return doSelectVO(s, null);
+        return voSelect(s, null);
     }
 
     default <R> List<R> voList(Object s, Class<R> clazz) {
@@ -77,7 +77,7 @@ public interface EnhancedQuery<V> {
         if (current == null || current < 1) current = 1L;
         if (size == null) size = 10L;
         IPage<V> page = new Page<>(current, size);
-        List<V> vs = doSelectVO(null, page);
+        List<V> vs = voSelect(null, page);
         page.setRecords(vs);
         return page;
     }
@@ -86,7 +86,7 @@ public interface EnhancedQuery<V> {
         if (current == null || current < 1) current = 1L;
         if (size == null) size = 10L;
         IPage<V> page = new Page<>(current, size);
-        List<V> vs = doSelectVO(s, page);
+        List<V> vs = voSelect(s, page);
         page.setRecords(vs);
         return page;
     }
