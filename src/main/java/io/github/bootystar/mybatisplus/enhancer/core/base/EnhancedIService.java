@@ -11,11 +11,12 @@ import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectHelper;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public interface EnhancedIService<T> extends IService<T> {
+public interface EnhancedIService {
+//public interface EnhancedIService<T> extends IService<T> {
 
-    default T toEntity(Object source) {
-        return MybatisPlusReflectHelper.toTarget(source, getEntityClass());
-    }
+//    default T toEntity(Object source) {
+//        return MybatisPlusReflectHelper.toTarget(source, getEntityClass());
+//    }
     
     default Object toId(Object source) {
         IService<?> iService = CastHelper.cast(this,IService.class);
