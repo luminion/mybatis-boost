@@ -4,8 +4,9 @@ enhancer of mybatis-plus
 * 动态Sql工具
 * IService增强
 * BaseMapper增强
+* Excel导入导出
 
-
+原生成器相关代码已独立到单独仓库 https://github.com/bootystar/mybatis-plus-generator
 
 ## Maven依赖
 ```xml
@@ -16,7 +17,7 @@ enhancer of mybatis-plus
 </dependency>
 ```
 
-### 如果需要使用Excel功能,请自行引入fastExcel依赖
+### 如果需要使用Excel功能,请自行引入FastExcel依赖
 ```xml
 <!-- (可选)Excel导入导出 -->
 <dependency>
