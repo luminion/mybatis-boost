@@ -3,7 +3,9 @@ package io.github.bootystar.mybatisplus.enhancer.helper;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
+import io.github.bootystar.mybatisplus.enhancer.expception.ParamMappingException;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.query.SqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlSort;
 import io.github.bootystar.mybatisplus.enhancer.query.SqlTree;
 import io.github.bootystar.mybatisplus.enhancer.query.general.SqlConditionG;
@@ -14,6 +16,7 @@ import org.apache.ibatis.reflection.property.PropertyNamer;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 
 /**
  * sql助手抽象类
@@ -43,7 +46,7 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
      * <p>
      * 仅操作条件, 不会影响排序
      * <p>
-     * 运行方法后,若未添加新条件, 可能会抛出{@link io.github.bootystar.mybatisplus.enhancer.expception.ParamMappingException}异常
+     * 运行方法后,若未添加新条件, 可能会抛出{@link ParamMappingException}异常
      *
      * @return this
      */
@@ -274,6 +277,12 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
             return returnValue();
         }
         this.getConditions().addAll(SqlHelper.of(sqlTree).getConditions());
+        if (sqlTree instanceof SqlEntity){
+            Collection<? extends SqlSort> treeSorts = ((SqlEntity) sqlTree).getSorts();
+            if (treeSorts != null && !treeSorts.isEmpty()) {
+                this.getSorts().addAll(treeSorts.stream().map(SqlSortG::of).collect(Collectors.toList()));
+            }
+        }
         if (sqlTree.getChild() != null) {
             return withChild(sqlTree.getChild());
         }
