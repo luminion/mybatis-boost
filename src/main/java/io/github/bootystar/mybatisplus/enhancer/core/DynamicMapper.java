@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface DynamicMapper<V> extends EnhancedQuery<V> {
 
-    List<V> voSelectByXml(SqlTree sqlTree, IPage<V> page);
+    List<V> voSelectByXml(Object s, IPage<V> page);
 
     @Override
     default List<V> voSelect(Object param, IPage<V> page) {
@@ -22,7 +22,7 @@ public interface DynamicMapper<V> extends EnhancedQuery<V> {
             return voSelectByXml(null, page);
         }
         if (param instanceof SqlTree) {
-            return voSelectByXml((SqlTree) param, page);
+            return voSelectByXml(param, page);
         }
         return voSelectByXml(SqlHelper.of(param), page);
     }
