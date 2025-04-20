@@ -57,7 +57,6 @@ enhancer of mybatis-plus
 ```
 
 ## 快速开始
-* 引入依赖
 * 使`Mapper`实现`DynamicMapper`接口, 指定泛型为数据展示的实体类
 * 用`MapperHelper`的`getSelectContent`方法,获取动态sql的xml内容
 * 将动态sql的内容复制在`Mapper`对应的xml文件中
@@ -84,13 +83,20 @@ public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUse
     private ISysUserService baseService;
     
     public void example() {
-        //
-        
         // 根据指定实体类\map\SqlHelper创建sqlHelper
         HashMap<String, Object> map = new HashMap<>();
         map.put("name","张三"); // 姓名= 张三
         map.put("ageIn", Arrays.asList(1,2,3,4,5)); // 年龄= 1,2,3,4,5
         List<SysUserVO> vos2 = baseService.voList(map); // 通过map作为参数传入DynamicService进行查询
+
+        baseService.voById("1");// 根据id查询VO
+        baseService.voByDTO(map); // 根据条件查询单个VO
+        baseService.voList(map); // 根据条件查询列表
+        baseService.voPage(map, 1L, 10L); // 根据条件查询分页
+        OutputStream outputStream = new FileOutputStream("a.xlsx");
+        baseService.excelExport(map, outputStream,SysUserVO.class); // 导出excel
+        InputStream inputStream = new FileInputStream("a.xlsx");
+        baseService.excelImport(inputStream,SysUserVO.class); // 导入excel
       
         SqlHelper<SysUser> sqlHelper = SqlHelper.<SysUser>of(map);
         List<SysUserVO> vos1 = baseService.voList(sqlHelper); // 通过sqlHelper作为参数传入DynamicService进行查询
