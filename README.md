@@ -58,7 +58,7 @@ enhancer of mybatis-plus
 
 ## 快速开始
 * 使`Mapper`实现`DynamicMapper`接口, 指定泛型为数据展示的实体类
-* 用`MapperHelper`的`getSelectContent`方法,获取动态sql的xml内容
+* 用`MapperHelper`的`getMapperContent`方法,获取动态sql的xml内容
 * 将动态sql的内容复制在`Mapper`对应的xml文件中
 * (非必须)`Service`实现`DynamicSqlService`, 即会自动添加Mapper对应方法
 
@@ -72,7 +72,7 @@ public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUse
 ```java
     void test1(){
         // 获取mapper对应的xml内容并复制到对应的xml文件中
-        String xmlContent = MapperHelper.getSelectContent(SysUserMapper.class);
+        String xmlContent = MapperHelper.getMapperContent(SysUserMapper.class);
         System.out.println(xmlContent);
     }
 ```

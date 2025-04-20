@@ -33,7 +33,7 @@ public abstract class MapperHelper {
     }
 
     @SuppressWarnings("unchecked" )
-    public static <T> String getSelectContent(Class<? extends EnhancedQuery<?>> enhancedQueryClass) {
+    public static <T> String getMapperContent(Class<? extends EnhancedQuery<?>> enhancedQueryClass) {
         Class<?> voClass = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, EnhancedQuery.class)[0];
         Class<?>[] mapperClasses = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, BaseMapper.class);
         Class<?>[] serviceClasses = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, IService.class);
@@ -45,10 +45,10 @@ public abstract class MapperHelper {
         } else {
             throw new IllegalArgumentException("no base entity info in " + enhancedQueryClass.getName());
         }
-        return getSelectContent(entityClass, voClass);
+        return getMapperContent(entityClass, voClass);
     }
 
-    public static <T> String getSelectContent(Class<T> entityClass, Class<?> voClass) {
+    public static <T> String getMapperContent(Class<T> entityClass, Class<?> voClass) {
         return "    <select id=\"voSelectByXml\" resultType=\"" + voClass.getName() + "\">\n" +
                 getSqlContent(entityClass) +
                 "    </select>"
