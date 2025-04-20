@@ -27,8 +27,8 @@ enhancer of mybatis-plus
 </dependency>
 ```
 
-### SNAPSHOT仓库地址
-#### 若需引入`SNAPSHOT`快照版本, 需配置快照仓库地址
+### 中央仓库地址
+拉取SNAPSHOT或镜像仓库尚未同步的RELEASE版本时可配置在`pom.xml`文件中
 ```xml
 <repositories>
     <repository>
@@ -39,9 +39,14 @@ enhancer of mybatis-plus
             <enabled>true</enabled>
         </snapshots>
     </repository>
+    <repository>
+      <id>release</id>
+      <name>release</name>
+      <url>https://s01.oss.sonatype.org/content/repositories/releases/</url>
+    </repository>
 </repositories>
 ```
-#### 若使用阿里云仓库, 需在maven的`settings.xml`文件中配置`!snapshots`
+#### 若使用阿里云镜像拉取SNAPSHOT版本, 需在maven的`settings.xml`文件中配置`!snapshots`
 ```xml
 <mirror>
   <id>aliyunmaven</id>
@@ -50,38 +55,25 @@ enhancer of mybatis-plus
   <url>https://maven.aliyun.com/repository/public</url>
 </mirror>
 ```
-### RELEASE仓库地址
-中央仓库同步各镜像仓库有延迟, 若无法拉取, 可通过配置或直接访问该地址下载
-```xml
-<repositories>
-    <repository>
-        <id>release</id>
-        <name>release</name>
-        <url>https://s01.oss.sonatype.org/content/repositories/releases/</url>
-    </repository>
-</repositories>
-```
 
-## 使用方式
+## 快速开始
+* 引入依赖
 * 使`Mapper`实现`DynamicMapper`接口, 指定泛型为数据展示的实体类
-* 用`MapperHelper`的`getXmlContent`方法,获取动态sql的xml内容
-* 在`Mapper`对应的xml文件中引入动态sql的xml内容
-* 此时`Mapper`的所有增强方法均可使用
-  * `voById`
-  * `voByDTO`
-  * `voList`
-  * `voPage`
-* (非必须)`Service`实现`DynamicSqlService`, 即会自动添加上述方法
+* 用`MapperHelper`的`getSelectContent`方法,获取动态sql的xml内容
+* 将动态sql的内容复制在`Mapper`对应的xml文件中
+* (非必须)`Service`实现`DynamicSqlService`, 即会自动添加Mapper对应方法
 
+继承示例:
 ```java
 // 继承DynamicMapper, 指定泛型为数据展示的类(也可直接使用实体类)
 public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUserVO> {
 }
 ```
+获取xml内容示例:
 ```java
     void test1(){
         // 获取mapper对应的xml内容并复制到对应的xml文件中
-        String xmlContent = MapperHelper.getXmlContent(SysUserMapper.class);
+        String xmlContent = MapperHelper.getSelectContent(SysUserMapper.class);
         System.out.println(xmlContent);
     }
 ```
@@ -92,6 +84,8 @@ public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUse
     private ISysUserService baseService;
     
     public void example() {
+        //
+        
         // 根据指定实体类\map\SqlHelper创建sqlHelper
         HashMap<String, Object> map = new HashMap<>();
         map.put("name","张三"); // 姓名= 张三
@@ -286,13 +280,14 @@ age DESC, id ASC
 ### xml中额外SQL编写
 * 在`xml`文件中, 可根据自身需要进行连表或者字段检索
 * 基础表别名固定为`a`, 请勿修改
-* `selectFragment`为自动映射封装的查询条件
-* `selectFragment`下方添加额外条件(添加条件时不需要添加`WHERE`关键字)
-* `selectFragment`下处添加额外条件时, 建议始终添加`AND`或`OR`连接符, 系统会自动去除多余的连接符
+* `dynamicSelect`为自动映射封装的查询条件
+* `dynamicSelect`下方添加额外条件(添加条件时不需要添加`WHERE`关键字)
+* `dynamicSelect`下处添加额外条件时, 建议始终添加`AND`或`OR`连接符, 系统会自动去除多余的连接符
 * 无法自动映射的查询条件会统一存放到`param1.map`中, 可通过param1.map.xxx判断参数是否存在,并添加对应逻辑
 * 无法自动映射的查询条件值为`null`时, 系统会将字符串`"null"`作为值添加到map中,避免`<if test"param1.map.xxx!=null">`判断失效
-* `sortFragment`为自动映射封装的排序条件
-* `sortFragment`下方可添加额外排序条件(添加条件时不需要添加`ORDER BY`关键字)
+* `dynamicSort`为自动映射封装的排序条件
+* `dynamicSort`上方及下方可添加额外排序条件(添加条件时不需要添加`ORDER BY`关键字)
+* `dynamicSort`下方添加排序时, 建议始终添加`,`连接符, 系统会自动去除多余的连接符
 * 参数映射顺序`实体类属性字段信息`->`@TableFiled注解`->`DynamicEntity映射`
 
 #### 工具类生成的xml基础内容示例
@@ -304,20 +299,19 @@ age DESC, id ASC
     sys_user a
     <!--额外添加连表-->
     left join sys_role b on a.role_id = b.id
-    <trim prefix="WHERE" prefixOverrides="AND|OR" suffixOverrides="AND|OR">
-        <include refid="selectFragment"/>
-        <!--在selectFragment下添加额外的查询条件-->
-        <!--注意:记得使用AND|OR连接符,当映射条件不存在时会自动删除AND|OR符号-->
-        AND a.deleted = 0 AND b.level = #{param1.map.roleLevel}
+    <where>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper.dynamicSelect"/>
+        <!--添加查询条件-->
+        AND a.deleted = 0
         <!--对未自动映射的条件进行判断, 并操作-->
-        <if test="param1.map.xxx!=null">
-            AND a.name = #{param1.map.xxx}
+        <if test="param1.map.keyword!=null">
+            AND a.name = #{param1.map.keyword}
         </if>
-    </trim>
-    <trim prefix="ORDER BY" suffixOverrides=",">
-        <include refid="sortFragment"/>
-        <!--在sortFragment下额外添加排序-->
-        a.create_time DESC , a.id DESC ,
+    <where/>
+    <trim prefix="ORDER BY" prefixOverrides=",">
+        <include refid="io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper.dynamicSort"/>
+        <!--添加额外排序-->
+        , a.create_time DESC , a.id DESC
     </trim>
 </select>
 ```
