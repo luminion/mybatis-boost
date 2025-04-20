@@ -83,21 +83,21 @@ public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUse
     private ISysUserService baseService;
     
     public void example() {
-        // 根据指定实体类\map\SqlHelper创建sqlHelper
+        // 条件(可以是实体类, 也可以是map)
         HashMap<String, Object> map = new HashMap<>();
         map.put("name","张三"); // 姓名= 张三
-        map.put("ageIn", Arrays.asList(1,2,3,4,5)); // 年龄= 1,2,3,4,5
-        List<SysUserVO> vos2 = baseService.voList(map); // 通过map作为参数传入DynamicService进行查询
+        map.put("age", 2); // 年龄= 2
 
+        // 主要增强方法
         baseService.voById("1");// 根据id查询VO
         baseService.voByDTO(map); // 根据条件查询单个VO
         baseService.voList(map); // 根据条件查询列表
         baseService.voPage(map, 1L, 10L); // 根据条件查询分页
         OutputStream outputStream = new FileOutputStream("a.xlsx");
-        baseService.excelExport(map, outputStream,SysUserVO.class); // 导出excel
-        InputStream inputStream = new FileInputStream("a.xlsx");
-        baseService.excelImport(inputStream,SysUserVO.class); // 导入excel
-      
+        baseService.excelExport(map, new FileOutputStream("a.xlsx"),SysUserVO.class); // 导出excel
+        baseService.excelImport(new FileInputStream("a.xlsx"),SysUserVO.class); // 导入excel
+  
+        // 根据指定实体类\map\SqlHelper创建sqlHelper
         SqlHelper<SysUser> sqlHelper = SqlHelper.<SysUser>of(map);
         List<SysUserVO> vos1 = baseService.voList(sqlHelper); // 通过sqlHelper作为参数传入DynamicService进行查询
       
