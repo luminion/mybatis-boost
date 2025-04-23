@@ -48,15 +48,21 @@ public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
             String field = conditionO.getField();
             String jdbcColumn = field2JdbcColumnMap.get(field);
             if (jdbcColumn == null) {
+                boolean isSuffix = false;
                 for (String suffix : suffixes) {
                     if (field.endsWith(suffix)) {
                         String sourceFiled = field.substring(0, field.length() - suffix.length());
                         String operator = suffix2OperatorMap.get(suffix);
+                        log.debug("condition field [{}] Matched suffix operator [{}]", field, operator);
                         wrap2JdbcColumnCondition(conditionO.isOr(), sourceFiled, operator, conditionO.getValue()).ifPresent(result::add);
+                        isSuffix = true;
                         break;
                     }
                 }
-                log.info("condition field [{}] not exist in fieldMap , it will be removed and put into paramMap", field);
+                if (isSuffix) {
+                    continue;
+                }
+                log.debug("condition field [{}] not exist neither in fieldMap or suffixMap , it will be removed and put into paramMap", field);
                 this.map.putIfAbsent(field, conditionO.getValue());
                 continue;
             }
