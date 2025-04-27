@@ -62,9 +62,11 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
         SqlHelper<T> helper = new SqlHelper<>();
         if (s instanceof SqlCondition) {
             helper.condition((SqlCondition) s);
+            return helper;
         }
         if (s instanceof SqlSort) {
             helper.sort((SqlSort) s);
+            return helper;
         }
         Map<?, ?> map = ReflectHelper.objectToMap(s);
         for (Map.Entry<?, ?> next : map.entrySet()) {
