@@ -32,7 +32,7 @@ public abstract class MapperHelper {
         }
     }
 
-    @SuppressWarnings("unchecked" )
+    @SuppressWarnings("unchecked")
     public static <T> String getMapperContent(Class<? extends EnhancedQuery<?>> enhancedQueryClass) {
         Class<?> voClass = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, EnhancedQuery.class)[0];
         Class<?>[] mapperClasses = MybatisPlusReflectHelper.resolveTypeArguments(enhancedQueryClass, BaseMapper.class);
