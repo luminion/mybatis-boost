@@ -21,7 +21,7 @@ public abstract class MapperHelper {
 
     public static boolean initSqlFragment(SqlSessionFactory sqlSessionFactory) {
         Configuration configuration = sqlSessionFactory.getConfiguration();
-        String resource = "mapper/DynamicMapper.xml";
+        String resource = "bootystar/mapper/DynamicMapper.xml";
         try (InputStream inputStream = Resources.getResourceAsStream(resource)) {
             XMLMapperBuilder mapperBuilder = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
             mapperBuilder.parse();
