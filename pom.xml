@@ -63,7 +63,8 @@
             <groupId>cn.idev.excel</groupId>
             <artifactId>fastexcel</artifactId>
             <version>${excel.version}</version>
-            <optional>true</optional>
+            <scope>compile</scope>
+<!--            <optional>true</optional>-->
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
