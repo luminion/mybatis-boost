@@ -1,7 +1,5 @@
 package io.github.bootystar.mybatisplus.enhancer.core.base;
 
-import cn.idev.excel.EasyExcel;
-import cn.idev.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.util.CastHelper;
 import io.github.bootystar.mybatisplus.enhancer.util.ExcelAdapter;
