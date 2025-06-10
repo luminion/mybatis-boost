@@ -26,12 +26,6 @@ public class EnhancerAutoConfiguration implements ApplicationContextAware {
         }else{
             log.error("DynamicMapper sqlFragments Configured Failed, dynamic sql may not work");
         }
-        
-//        try {
-//            Class<?> aClass = Class.forName("io.github.bootystar.helper.third.excel.ExcelHelper");         
-//        }catch (Exception e){
-//            log.debug("excel converter config failed, excel may not work");
-//        }
     }
 
 }

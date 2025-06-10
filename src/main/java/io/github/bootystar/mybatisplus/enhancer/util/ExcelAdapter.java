@@ -34,7 +34,7 @@ public abstract class ExcelAdapter {
 
 
     @SneakyThrows
-    public static void write(OutputStream os,  Class<?> clazz, List<?> dataList,String... includeFields) {
+    public static void write(OutputStream os, Class<?> clazz, List<?> dataList, String... includeFields) {
 //        EasyExcel.write(os, clazz)
 //                .includeColumnFieldNames(Arrays.asList(includeFields))
 //                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
@@ -46,17 +46,17 @@ public abstract class ExcelAdapter {
         }
         Class<?> aClass = Class.forName(excelBasePackage + ".write.handler.WriteHandler");
         Object o = Class.forName(excelBasePackage + ".write.style.column.LongestMatchColumnWidthStyleStrategy").newInstance();
-        invoke = invoke.getClass().getMethod("registerWriteHandler",aClass).invoke(invoke, o);
+        invoke = invoke.getClass().getMethod("registerWriteHandler", aClass).invoke(invoke, o);
         invoke = invoke.getClass().getMethod("sheet").invoke(invoke);
-        invoke.getClass().getMethod("doWrite",  Collection.class).invoke(invoke, dataList);
+        invoke.getClass().getMethod("doWrite", Collection.class).invoke(invoke, dataList);
     }
 
     @SuppressWarnings("unchecked")
     @SneakyThrows
     public static <T> List<T> read(InputStream is, Class<T> clazz) {
 //        List<?> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
-        Object invoke = excelClass().getMethod("read",  InputStream.class).invoke(null, is);
-        invoke = invoke.getClass().getMethod("head",  Class.class).invoke(invoke, clazz);
+        Object invoke = excelClass().getMethod("read", InputStream.class).invoke(null, is);
+        invoke = invoke.getClass().getMethod("head", Class.class).invoke(invoke, clazz);
         invoke = invoke.getClass().getMethod("sheet").invoke(invoke);
         return (List<T>) invoke.getClass().getMethod("doReadSync").invoke(invoke);
     }
