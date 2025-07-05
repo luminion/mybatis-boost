@@ -13,22 +13,17 @@
     <artifactId>mybatis-plus-enhancer</artifactId>
     <version>1.2.4</version>
 
-    <properties>
-        <springboot.version>2.7.18</springboot.version>
-        <mybatisplus.version>3.5.11</mybatisplus.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>${springboot.version}</version>
+            <version>2.7.18</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring</artifactId>
-            <version>${mybatisplus.version}</version>
+            <version>3.5.11</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
