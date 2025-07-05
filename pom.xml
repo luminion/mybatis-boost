@@ -8,8 +8,9 @@
         <groupId>io.github.bootystar</groupId>
         <artifactId>framework</artifactId>
         <version>1.2.0</version>
-    </parent>    
+    </parent>
 
+    <name>${project.groupId}:${project.artifactId}</name>
     <artifactId>mybatis-plus-enhancer</artifactId>
     <version>1.2.4</version>
 
