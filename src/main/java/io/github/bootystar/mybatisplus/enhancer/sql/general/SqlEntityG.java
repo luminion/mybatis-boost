@@ -1,10 +1,11 @@
-package io.github.bootystar.mybatisplus.enhancer.query.general;
+package io.github.bootystar.mybatisplus.enhancer.sql.general;
 
-import io.github.bootystar.mybatisplus.enhancer.query.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 /**
  * 条件树
@@ -19,5 +20,10 @@ public class SqlEntityG extends SqlTreeG implements SqlEntity {
      * 排序条件列表
      */
     protected LinkedHashSet<SqlSortG> sorts;
+
+    /**
+     * 未自动映射的条件列表
+     */
+    protected Map<String,Object> map;
 
 }

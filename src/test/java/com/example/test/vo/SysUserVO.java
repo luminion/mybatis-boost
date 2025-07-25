@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
  * 用户-VO
  *
  * @author bootystar
- * @since 2025-07-24
+ * @since 2025-07-25
  * @see com.example.test.entity.SysUser
  * @see com.example.test.mapper.SysUserMapper
+ * @see com.example.test.service.impl.SysUserServiceImpl
  */
 @Data
 @ExcelIgnoreUnannotated
@@ -53,7 +54,7 @@ public class SysUserVO {
      * 姓名Like后缀
      */
     @ExcelProperty(value = "姓名Like后缀")
-    private String nameLike;
+    private String description;
 
     /**
      * 年龄

@@ -10,9 +10,10 @@ import java.util.List;
  * 用户-查询DTO
  *
  * @author bootystar
- * @since 2025-07-24
+ * @since 2025-07-25
  * @see com.example.test.entity.SysUser
  * @see com.example.test.mapper.SysUserMapper
+ * @see com.example.test.service.impl.SysUserServiceImpl
  */
 @Data
 public class SysUserSelectDTO {
@@ -83,17 +84,26 @@ public class SysUserSelectDTO {
     private String name;
 
     /**
-     * 姓名Like后缀
+     * 姓名(LIKE)
      */
     private String nameLike;
+
+    public String getNameLike() {
+        return nameLike == null || nameLike.isEmpty() ? null : "%" + nameLike + "%";
+    }
+
+    /**
+     * 姓名Like后缀
+     */
+    private String description;
 
     /**
      * 姓名Like后缀(LIKE)
      */
-    private String nameLikeLike;
+    private String descriptionLike;
 
-    public String getNameLikeLike() {
-        return nameLikeLike == null || nameLikeLike.isEmpty() ? null : "%" + nameLikeLike + "%";
+    public String getDescriptionLike() {
+        return descriptionLike == null || descriptionLike.isEmpty() ? null : "%" + descriptionLike + "%";
     }
 
     /**

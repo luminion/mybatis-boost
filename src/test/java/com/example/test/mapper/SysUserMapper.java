@@ -17,7 +17,4 @@ import java.util.List;
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUserVO> {
 
-    @Override
-    List<SysUserVO> voSelectByXml(Object s, IPage<SysUserVO> page);
-
 }

@@ -1,6 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.query.unmodifiable;
+package io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhancer.query.SqlSort;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlSort;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

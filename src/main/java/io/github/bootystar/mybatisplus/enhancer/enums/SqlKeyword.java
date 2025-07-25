@@ -34,8 +34,8 @@ public enum SqlKeyword {
     IN("IN"),
     NOT_IN("NOT IN"),
     
-    WITH_BIT("&>"),
-    WITHOUT_BIT("&="),
+    BITWISE_WITH("&>"),
+    BITWISE_WITHOUT("&="),
 
 //    NOT("NOT"),
 //    EXISTS("EXISTS"),

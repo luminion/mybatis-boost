@@ -1,6 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.query.general;
+package io.github.bootystar.mybatisplus.enhancer.sql.general;
 
-import io.github.bootystar.mybatisplus.enhancer.query.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
 import lombok.Getter;
 import lombok.Setter;
 

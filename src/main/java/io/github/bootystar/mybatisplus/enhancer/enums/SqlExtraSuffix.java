@@ -27,9 +27,9 @@ public enum SqlExtraSuffix {
 
     IS_NULL("IsNull", SqlKeyword.IS_NULL),
     IS_NOT_NULL("IsNotNull", SqlKeyword.IS_NOT_NULL),
-    
-    WITH_BIT("WithBit", SqlKeyword.WITH_BIT),
-    WITHOUT_BIT("WithoutBit", SqlKeyword.WITHOUT_BIT),
+
+    BITWISE_WITH("WithBit", SqlKeyword.BITWISE_WITH),
+    BITWISE_WITHOUT("WithoutBit", SqlKeyword.BITWISE_WITHOUT),
     
     ;
 

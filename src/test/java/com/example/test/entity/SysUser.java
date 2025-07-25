@@ -53,7 +53,7 @@ public class SysUser {
     /**
      * 姓名Like后缀
      */
-    private String nameLike;
+    private String description;
 
     /**
      * 年龄

@@ -2,14 +2,14 @@ package io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable;
 
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.expception.ParamMappingException;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlEntity;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlSort;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlTree;
-import io.github.bootystar.mybatisplus.enhancer.query.unmodifiable.SqlConditionU;
-import io.github.bootystar.mybatisplus.enhancer.query.unmodifiable.SqlEntityU;
-import io.github.bootystar.mybatisplus.enhancer.query.unmodifiable.SqlSortU;
-import io.github.bootystar.mybatisplus.enhancer.query.unmodifiable.SqlTreeU;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlSort;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlConditionU;
+import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlEntityU;
+import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlSortU;
+import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlTreeU;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectHelper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +20,7 @@ import java.util.*;
  * @author bootystar
  */
 @Slf4j
+@Deprecated
 public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
 
     /**

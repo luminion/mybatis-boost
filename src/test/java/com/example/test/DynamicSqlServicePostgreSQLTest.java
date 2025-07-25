@@ -89,12 +89,13 @@ public class DynamicSqlServicePostgreSQLTest {
     @Order(1)
     public void testDynamicServiceBasicQuery() {
         // 测试 postgresql 数据源 voById
-        SysUserVO userVO = sysUserDynamicSqlService.voById(userId1.toString());
+        SysUserVO userVO = sysUserDynamicSqlService.voById(userId1);
         assertNotNull(userVO);
         assertEquals("张三", userVO.getName());
 
         // 测试 postgresql 数据源 voByDTO (使用Map)
         Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("id", userId1);
         queryMap.put("name", "张三");
         SysUserVO userVO2 = sysUserDynamicSqlService.voByDTO(queryMap);
         assertNotNull(userVO2);

@@ -89,12 +89,13 @@ public class DynamicFieldServiceMySQLTest {
     @Order(1)
     public void testDynamicServiceBasicQuery() {
         // 测试 mysql 数据源 voById
-        SysUserVO userVO = sysUserDynamicFieldService.voById(userId1.toString());
+        SysUserVO userVO = sysUserDynamicFieldService.voById(userId1);
         assertNotNull(userVO);
         assertEquals("赵六", userVO.getName());
 
         // 测试 mysql 数据源 voByDTO (使用Map)
         Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("id", userId1);
         queryMap.put("name", "赵六");
         SysUserVO userVO2 = sysUserDynamicFieldService.voByDTO(queryMap);
         assertNotNull(userVO2);
@@ -166,10 +167,13 @@ public class DynamicFieldServiceMySQLTest {
     public void testDTOQuery() {
         // 测试 mysql 数据源使用 SysUserSelectDTO 查询
         SysUserSelectDTO dto = new SysUserSelectDTO();
+        dto.setId(userId1);
         dto.setName("赵六");
+        // 确保 DTO 查询也添加 id 条件
         SysUserVO userVO = sysUserDynamicFieldService.voByDTO(dto);
         assertNotNull(userVO);
         assertEquals("赵六", userVO.getName());
+        assertEquals(userId1, userVO.getId());
 
         // 测试 mysql 数据源 ageIn 查询
         SysUserSelectDTO dto2 = new SysUserSelectDTO();

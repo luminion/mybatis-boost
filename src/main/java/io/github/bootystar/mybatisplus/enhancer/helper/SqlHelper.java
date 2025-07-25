@@ -3,12 +3,12 @@ package io.github.bootystar.mybatisplus.enhancer.helper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlEntity;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlSort;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlTree;
-import io.github.bootystar.mybatisplus.enhancer.query.general.SqlConditionG;
-import io.github.bootystar.mybatisplus.enhancer.query.general.SqlSortG;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlSort;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlConditionG;
+import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlSortG;
 import io.github.bootystar.mybatisplus.enhancer.util.ReflectHelper;
 
 import java.util.Collection;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
+public class SqlHelper<T> extends LambdaSqlHelper<T, SqlHelper<T>> {
 
 
     /**
@@ -113,14 +113,14 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * 包装sql助手, 添加指定服务的查询方法
      *
      * @param baseService 基础服务
-     * @return {@link SqlHelperWrapper }
+     * @return {@link LambdaSqlHelperWrapper }
      */
-    public <V, S extends IService<T> & EnhancedQuery<V>> SqlHelperWrapper<T, V> wrap(S baseService) {
-        return new SqlHelperWrapper<>(baseService).with(this);
+    public <V, S extends IService<T> & EnhancedQuery<V>> LambdaSqlHelperWrapper<T, V> wrap(S baseService) {
+        return new LambdaSqlHelperWrapper<>(baseService).with(this);
     }
 
-    public <V, S extends BaseMapper<T> & EnhancedQuery<V>> SqlHelperWrapper<T, V> wrap(S baseMapper) {
-        return new SqlHelperWrapper<>(baseMapper).with(this);
+    public <V, S extends BaseMapper<T> & EnhancedQuery<V>> LambdaSqlHelperWrapper<T, V> wrap(S baseMapper) {
+        return new LambdaSqlHelperWrapper<>(baseMapper).with(this);
     }
 
 }

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.enhancer.query.general.SqlConditionG;
+import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlConditionG;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectHelper;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 

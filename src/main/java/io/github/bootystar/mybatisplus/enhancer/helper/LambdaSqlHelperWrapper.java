@@ -13,20 +13,20 @@ import java.util.List;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public class SqlHelperWrapper<T, V> extends AbstractSqlHelper<T, SqlHelperWrapper<T, V>> {
+public class LambdaSqlHelperWrapper<T, V> extends LambdaSqlHelper<T, LambdaSqlHelperWrapper<T, V>> {
 
     private final EnhancedQuery<V> enhancedQuery;
 
-    public <S extends IService<T> & EnhancedQuery<V>> SqlHelperWrapper(S baseService) {
+    public <S extends IService<T> & EnhancedQuery<V>> LambdaSqlHelperWrapper(S baseService) {
         this.enhancedQuery = baseService;
     }
 
-    public <S extends BaseMapper<T> & EnhancedQuery<V>> SqlHelperWrapper(S baseMapper) {
+    public <S extends BaseMapper<T> & EnhancedQuery<V>> LambdaSqlHelperWrapper(S baseMapper) {
         this.enhancedQuery = baseMapper;
     }
 
     @Override
-    protected SqlHelperWrapper<T, V> returnValue() {
+    protected LambdaSqlHelperWrapper<T, V> returnValue() {
         return this;
     }
 

@@ -2,9 +2,9 @@ package io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable;
 
 import io.github.bootystar.mybatisplus.enhancer.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlExtraSuffix;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlTree;
-import io.github.bootystar.mybatisplus.enhancer.query.unmodifiable.SqlConditionU;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlConditionU;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -13,6 +13,7 @@ import java.util.*;
  * @author bootystar
  */
 @Slf4j
+@Deprecated
 public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
 
     private Map<String, String> suffix2OperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;

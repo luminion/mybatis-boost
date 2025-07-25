@@ -1,11 +1,12 @@
-package io.github.bootystar.mybatisplus.enhancer.query.unmodifiable;
+package io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhancer.query.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
 import lombok.Getter;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 /**
  * @author bootystar
@@ -14,6 +15,8 @@ import java.util.LinkedHashSet;
 public class SqlEntityU extends SqlTreeU implements SqlEntity {
 
     protected Collection<SqlSortU> sorts;
+    
+    protected Map<String,Object> map;
 
     public SqlEntityU(Collection<SqlConditionU> conditions, SqlTreeU child, Collection<SqlSortU> sorts) {
         super(conditions, child);

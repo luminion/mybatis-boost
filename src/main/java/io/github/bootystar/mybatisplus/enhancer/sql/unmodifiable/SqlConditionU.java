@@ -1,7 +1,7 @@
-package io.github.bootystar.mybatisplus.enhancer.query.unmodifiable;
+package io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable;
 
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.enhancer.query.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

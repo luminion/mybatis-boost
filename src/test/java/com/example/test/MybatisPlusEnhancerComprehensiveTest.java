@@ -1,7 +1,6 @@
 package com.example.test;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.test.dto.SysUserSelectDTO;
 import com.example.test.entity.SysUser;
 import com.example.test.impl.SysUserDynamicFieldService;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -141,12 +139,13 @@ public class MybatisPlusEnhancerComprehensiveTest {
     @Order(1)
     public void testDynamicServiceBasicQuery() {
         // 测试 postgresql 数据源 voById
-        SysUserVO userVO = sysUserDynamicSqlService.voById(userId1.toString());
+        SysUserVO userVO = sysUserDynamicSqlService.voById(userId1);
         assertNotNull(userVO);
         assertEquals("张三", userVO.getName());
 
         // 测试 postgresql 数据源 voByDTO (使用Map)
         Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("id", userId1);
         queryMap.put("name", "张三");
         SysUserVO userVO2 = sysUserDynamicSqlService.voByDTO(queryMap);
         assertNotNull(userVO2);
@@ -166,12 +165,13 @@ public class MybatisPlusEnhancerComprehensiveTest {
         assertTrue(userPage.getRecords().size() >= 2);
         
         // 测试 mysql 数据源 voById
-        SysUserVO userVO3 = sysUserDynamicFieldService.voById(userId4.toString());
+        SysUserVO userVO3 = sysUserDynamicFieldService.voById(userId4);
         assertNotNull(userVO3);
         assertEquals("赵六", userVO3.getName());
 
         // 测试 mysql 数据源 voByDTO (使用Map)
         Map<String, Object> queryMap2 = new HashMap<>();
+        queryMap2.put("id", userId4);
         queryMap2.put("name", "赵六");
         SysUserVO userVO4 = sysUserDynamicFieldService.voByDTO(queryMap2);
         assertNotNull(userVO4);
@@ -278,6 +278,7 @@ public class MybatisPlusEnhancerComprehensiveTest {
     public void testDTOQuery() {
         // 测试 postgresql 数据源使用 SysUserSelectDTO 查询
         SysUserSelectDTO dto = new SysUserSelectDTO();
+        dto.setId(userId1);
         dto.setName("张三");
         SysUserVO userVO = sysUserDynamicSqlService.voByDTO(dto);
         assertNotNull(userVO);

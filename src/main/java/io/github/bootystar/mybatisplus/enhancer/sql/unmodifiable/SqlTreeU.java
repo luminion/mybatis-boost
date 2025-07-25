@@ -1,6 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.query.unmodifiable;
+package io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhancer.query.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
 import lombok.Getter;
 
 import java.util.Collection;
