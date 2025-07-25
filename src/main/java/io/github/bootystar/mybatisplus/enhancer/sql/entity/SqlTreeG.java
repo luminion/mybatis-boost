@@ -1,6 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.sql.general;
+package io.github.bootystar.mybatisplus.enhancer.sql.entity;
 
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlConditionTree;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
  */
 @Setter
 @Getter
-public class SqlTreeG implements SqlTree {
+public class SqlTreeG implements SqlConditionTree {
 
     /**
      * 查询条件列表

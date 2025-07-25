@@ -1,6 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.sql.general;
+package io.github.bootystar.mybatisplus.enhancer.sql.entity;
 
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlSort;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlSort;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

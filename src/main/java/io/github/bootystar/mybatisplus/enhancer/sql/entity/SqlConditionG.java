@@ -1,6 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.sql.general;
+package io.github.bootystar.mybatisplus.enhancer.sql.entity;
 
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlCondition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

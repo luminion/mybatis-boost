@@ -1,14 +1,14 @@
-package io.github.bootystar.mybatisplus.enhancer.helper;
+package io.github.bootystar.mybatisplus.enhancer.sql.helper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlSort;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
-import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlConditionG;
-import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlSortG;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlSort;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlConditionTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.entity.SqlConditionG;
+import io.github.bootystar.mybatisplus.enhancer.sql.entity.SqlSortG;
 import io.github.bootystar.mybatisplus.enhancer.util.ReflectHelper;
 
 import java.util.Collection;
@@ -56,8 +56,8 @@ public class SqlHelper<T> extends LambdaSqlHelper<T, SqlHelper<T>> {
         if (s instanceof SqlHelper<?>) {
             return (SqlHelper<T>) s;
         }
-        if (s instanceof SqlTree) {
-            return ofSqlTree((SqlTree) s, true);
+        if (s instanceof SqlConditionTree) {
+            return ofSqlTree((SqlConditionTree) s, true);
         }
         SqlHelper<T> helper = new SqlHelper<>();
         if (s instanceof SqlCondition) {
@@ -85,7 +85,7 @@ public class SqlHelper<T> extends LambdaSqlHelper<T, SqlHelper<T>> {
      * @param copySorts 是否复制排序
      * @return {@link SqlHelper}
      */
-    protected static <T> SqlHelper<T> ofSqlTree(SqlTree tree, boolean copySorts) {
+    protected static <T> SqlHelper<T> ofSqlTree(SqlConditionTree tree, boolean copySorts) {
         if (tree == null) {
             return new SqlHelper<>();
         }
@@ -102,7 +102,7 @@ public class SqlHelper<T> extends LambdaSqlHelper<T, SqlHelper<T>> {
                 }
             }
         }
-        SqlTree child = tree.getChild();
+        SqlConditionTree child = tree.getChild();
         if (child != null) {
             helper.setChild(ofSqlTree(child, false));
         }

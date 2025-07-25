@@ -1,4 +1,4 @@
-package io.github.bootystar.mybatisplus.enhancer.sql;
+package io.github.bootystar.mybatisplus.enhancer.sql.base;
 
 import java.util.Collection;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author bootystar
  */
-public interface SqlEntity extends SqlTree {
+public interface SqlEntity extends SqlConditionTree {
 
     /**
      * 排序条件列表

@@ -1,11 +1,11 @@
-package io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable;
+package io.github.bootystar.mybatisplus.enhancer.sql.helper.unmodifiable;
 
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.expception.ParamMappingException;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlSort;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlSort;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlConditionTree;
 import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlConditionU;
 import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlEntityU;
 import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlSortU;
@@ -54,7 +54,7 @@ public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
         this.field2JdbcColumnMap = field2JdbcColumnMap;
     }
 
-    protected void initProperties(SqlTree sqlTree) {
+    protected void initProperties(SqlConditionTree sqlTree) {
         // 不在迭代时直接赋值, 保留扩展空间
         SqlTreeU tree = recursionTree(sqlTree);
         if (tree == null) {
@@ -65,12 +65,12 @@ public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
         this.sorts = validatedSorts(sqlTree);
     }
 
-    protected SqlTreeU recursionTree(SqlTree sqlTree) {
+    protected SqlTreeU recursionTree(SqlConditionTree sqlTree) {
         if (sqlTree == null) {
             return null;
         }
         Collection<SqlConditionU> conditions = wrapConditions(sqlTree.getConditions());
-        SqlTree child = sqlTree.getChild();
+        SqlConditionTree child = sqlTree.getChild();
         if (conditions == null || conditions.isEmpty()) {
             if (child != null) {
                 String s = Optional.ofNullable(sqlTree.getConditions()).orElse(Collections.emptyList()).stream()
@@ -84,7 +84,7 @@ public abstract class UnmodifiableSqlHelper<T> extends SqlEntityU {
         return new SqlTreeU(conditions, newChild);
     }
 
-    protected Collection<SqlSortU> validatedSorts(SqlTree sqlTree) {
+    protected Collection<SqlSortU> validatedSorts(SqlConditionTree sqlTree) {
         if (!(sqlTree instanceof SqlEntity)) {
             return null;
         }

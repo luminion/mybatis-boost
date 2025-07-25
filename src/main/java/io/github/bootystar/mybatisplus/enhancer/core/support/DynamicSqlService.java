@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper;
 import io.github.bootystar.mybatisplus.enhancer.core.DynamicService;
-import io.github.bootystar.mybatisplus.enhancer.helper.SqlHelper;
-import io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable.DynamicSqlSqlHelper;
+import io.github.bootystar.mybatisplus.enhancer.sql.helper.SqlHelper;
+import io.github.bootystar.mybatisplus.enhancer.sql.helper.unmodifiable.DynamicSqlSqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.util.CastHelper;
 
 import java.util.List;

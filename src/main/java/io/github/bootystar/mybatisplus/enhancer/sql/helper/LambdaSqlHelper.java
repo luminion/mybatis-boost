@@ -1,17 +1,17 @@
-package io.github.bootystar.mybatisplus.enhancer.helper;
+package io.github.bootystar.mybatisplus.enhancer.sql.helper;
 
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.expception.ParamMappingException;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlSort;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
-import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlConditionG;
-import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlEntityG;
-import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlSortG;
-import io.github.bootystar.mybatisplus.enhancer.sql.general.SqlTreeG;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlSort;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlConditionTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.entity.SqlConditionG;
+import io.github.bootystar.mybatisplus.enhancer.sql.entity.SqlEntityG;
+import io.github.bootystar.mybatisplus.enhancer.sql.entity.SqlSortG;
+import io.github.bootystar.mybatisplus.enhancer.sql.entity.SqlTreeG;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
 import java.util.Collection;
@@ -81,7 +81,7 @@ public abstract class LambdaSqlHelper<T, Child extends LambdaSqlHelper<T, Child>
      * @param sqlTree sql树
      * @return this
      */
-    public Child with(SqlTree sqlTree) {
+    public Child with(SqlConditionTree sqlTree) {
         if (sqlTree == null || sqlTree.getConditions() == null || sqlTree.getConditions().isEmpty()) {
             return returnValue();
         }
@@ -106,7 +106,7 @@ public abstract class LambdaSqlHelper<T, Child extends LambdaSqlHelper<T, Child>
      * @param sqlTree sql树
      * @return this
      */
-    public Child withChild(SqlTree sqlTree) {
+    public Child withChild(SqlConditionTree sqlTree) {
         SqlTreeG tree = this;
         while (tree.getChild() != null) {
             tree = tree.getChild();

@@ -2,8 +2,8 @@ package io.github.bootystar.mybatisplus.enhancer.core;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.bootystar.mybatisplus.enhancer.core.base.EnhancedQuery;
-import io.github.bootystar.mybatisplus.enhancer.helper.SqlHelper;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.helper.SqlHelper;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlEntity;
 
 import java.util.List;
 

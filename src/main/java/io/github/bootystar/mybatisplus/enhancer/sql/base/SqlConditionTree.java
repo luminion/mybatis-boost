@@ -1,4 +1,4 @@
-package io.github.bootystar.mybatisplus.enhancer.sql;
+package io.github.bootystar.mybatisplus.enhancer.sql.base;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,23 +8,23 @@ import java.util.NoSuchElementException;
  * SQL树
  * @author bootystar
  */
-public interface SqlTree extends Iterable<SqlTree> {
+public interface SqlConditionTree extends Iterable<SqlConditionTree> {
 
     Collection<? extends SqlCondition> getConditions();
 
-    SqlTree getChild();
+    SqlConditionTree getChild();
 
     @Override
     @SuppressWarnings("all")
-    default Iterator<SqlTree> iterator() {
+    default Iterator<SqlConditionTree> iterator() {
         return new Itr(this);
     }
 
-    class Itr implements Iterator<SqlTree> {
+    class Itr implements Iterator<SqlConditionTree> {
 
-        private SqlTree current;
+        private SqlConditionTree current;
 
-        public Itr(SqlTree root) {
+        public Itr(SqlConditionTree root) {
             current = root;
         }
 
@@ -34,11 +34,11 @@ public interface SqlTree extends Iterable<SqlTree> {
         }
 
         @Override
-        public SqlTree next() {
+        public SqlConditionTree next() {
             if (current == null) {
                 throw new NoSuchElementException();
             }
-            SqlTree result = current;
+            SqlConditionTree result = current;
             current = current.getChild();
             return result;
         }

@@ -1,7 +1,7 @@
-package io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable;
+package io.github.bootystar.mybatisplus.enhancer.sql.helper.unmodifiable;
 
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlConditionTree;
 import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlConditionU;
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ import java.util.Collection;
 @Deprecated
 public class DynamicSqlSqlHelper<T> extends UnmodifiableSqlHelper<T> {
 
-    public DynamicSqlSqlHelper(SqlTree sourceTree, Class<T> entityClass) {
+    public DynamicSqlSqlHelper(SqlConditionTree sourceTree, Class<T> entityClass) {
         super(entityClass);
         initProperties(sourceTree);
     }

@@ -1,4 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.sql;
+package io.github.bootystar.mybatisplus.enhancer.sql.validator;
+
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlSort;
 
 import java.util.List;
 

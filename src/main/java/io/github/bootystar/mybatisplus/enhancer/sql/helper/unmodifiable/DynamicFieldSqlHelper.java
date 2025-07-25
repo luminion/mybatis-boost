@@ -1,9 +1,9 @@
-package io.github.bootystar.mybatisplus.enhancer.helper.unmodifiable;
+package io.github.bootystar.mybatisplus.enhancer.sql.helper.unmodifiable;
 
 import io.github.bootystar.mybatisplus.enhancer.builder.ExtraFieldSuffixBuilder;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlExtraSuffix;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlTree;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlConditionTree;
 import io.github.bootystar.mybatisplus.enhancer.sql.unmodifiable.SqlConditionU;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +18,7 @@ public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
 
     private Map<String, String> suffix2OperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
 
-    public DynamicFieldSqlHelper(SqlTree tree, Class<T> entityClass) {
+    public DynamicFieldSqlHelper(SqlConditionTree tree, Class<T> entityClass) {
         super(entityClass);
         if (tree == null) {
             throw new IllegalArgumentException("tree can't be null");
@@ -26,7 +26,7 @@ public class DynamicFieldSqlHelper<T> extends UnmodifiableSqlHelper<T> {
         initProperties(tree);
     }
 
-    public DynamicFieldSqlHelper(SqlTree tree, Class<T> entityClass, ExtraFieldSuffixBuilder suffixBuilder) {
+    public DynamicFieldSqlHelper(SqlConditionTree tree, Class<T> entityClass, ExtraFieldSuffixBuilder suffixBuilder) {
         super(entityClass);
         if (tree == null) {
             throw new IllegalArgumentException("tree can't be null");

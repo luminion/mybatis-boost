@@ -1,4 +1,4 @@
-package io.github.bootystar.mybatisplus.enhancer.sql;
+package io.github.bootystar.mybatisplus.enhancer.sql.base;
 
 /**
  * SQL排序

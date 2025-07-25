@@ -1,6 +1,6 @@
-package io.github.bootystar.mybatisplus.enhancer.sql.general;
+package io.github.bootystar.mybatisplus.enhancer.sql.entity;
 
-import io.github.bootystar.mybatisplus.enhancer.sql.SqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.sql.base.SqlEntity;
 import lombok.Getter;
 import lombok.Setter;
 

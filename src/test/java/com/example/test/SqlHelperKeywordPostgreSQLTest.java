@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.test.entity.SysUser;
 import com.example.test.impl.SysUserDynamicSqlService;
 import com.example.test.vo.SysUserVO;
-import io.github.bootystar.mybatisplus.enhancer.helper.SqlHelper;
+import io.github.bootystar.mybatisplus.enhancer.sql.helper.SqlHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
