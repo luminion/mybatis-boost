@@ -150,6 +150,30 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
     }
 
     /**
+     * 位运算,具有指定值对应的位码
+     *
+     * @param getter 对象getter方法
+     * @param value  值
+     * @return this
+     */
+    public <R> Child withBit(SFunction<T, R> getter, R value) {
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.WITH_BIT.keyword, value));
+        return returnValue();
+    }
+
+    /**
+     * 位运算,不具有指定值对应的位码
+     *
+     * @param getter 对象getter方法
+     * @param value  值
+     * @return this
+     */
+    public <R> Child withoutBit(SFunction<T, R> getter, R value) {
+        this.condition(new SqlConditionG(this.getFieldName(getter), SqlKeyword.WITHOUT_BIT.keyword, value));
+        return returnValue();
+    }
+    
+    /**
      * 模糊查询
      *
      * @param getter 对象getter方法
@@ -305,6 +329,5 @@ public abstract class AbstractSqlHelper<T, Child extends AbstractSqlHelper<T, Ch
         tree.setChild(SqlHelper.of(sqlTree));
         return returnValue();
     }
-
 
 }

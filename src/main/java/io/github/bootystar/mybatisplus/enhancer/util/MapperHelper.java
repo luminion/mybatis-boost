@@ -80,56 +80,5 @@ public abstract class MapperHelper {
                 ;
     }
 
-    public static String getDynamicSelectFragment() {
-        return "    <sql id=\"dynamicSelect\">\n" +
-                "        <if test=\"param1 != null\">\n" +
-                "            <foreach collection=\"param1\" item=\"gen\">\n" +
-                "                <if test=\"gen.conditions != null and gen.conditions.size() > 0\">\n" +
-                "                    <trim prefix=\"AND (\" suffix=\")\" prefixOverrides=\"AND|OR\">\n" +
-                "                        <foreach collection=\"gen.conditions\" item=\"item\">\n" +
-                "                            <choose>\n" +
-                "                                <when test=\"item.isOr()\">\n" +
-                "                                    OR\n" +
-                "                                </when>\n" +
-                "                                <otherwise>\n" +
-                "                                    AND\n" +
-                "                                </otherwise>\n" +
-                "                            </choose>\n" +
-                "                            <choose>\n" +
-                "                                <when test=\"item.operator == 'IN' or item.operator == 'NOT IN'\">\n" +
-                "                                    ${item.field} ${item.operator}\n" +
-                "                                    <foreach collection=\"item.value\" item=\"val\" separator=\",\" open=\"(\" close=\")\">\n" +
-                "                                        #{val}\n" +
-                "                                    </foreach>\n" +
-                "                                </when>\n" +
-                "                                <when test=\"item.operator == 'IS NULL' or item.operator == 'IS NOT NULL'\">\n" +
-                "                                    ${item.field} ${item.operator}\n" +
-                "                                </when>\n" +
-                "                                <otherwise>\n" +
-                "                                    ${item.field} ${item.operator} #{item.value}\n" +
-                "                                </otherwise>\n" +
-                "                            </choose>\n" +
-                "                        </foreach>\n" +
-                "                    </trim>\n" +
-                "                </if>\n" +
-                "            </foreach>\n" +
-                "        </if>\n" +
-                "    </sql>"
-                ;
-    }
-
-    public static String getDynamicSortFragment() {
-        return "    <sql id=\"dynamicSort\">\n" +
-                "        <if test=\"param1 != null and param1.sorts != null and param1.sorts.size() > 0\">\n" +
-                "            <foreach collection=\"param1.sorts\" item=\"item\" separator=\",\" open=\",\">\n" +
-                "                ${item.field}\n" +
-                "                <if test=\"item.isDesc()\">\n" +
-                "                    DESC\n" +
-                "                </if>\n" +
-                "            </foreach>\n" +
-                "        </if>\n" +
-                "    </sql>"
-                ;
-    }
 
 }

@@ -26,7 +26,12 @@ public enum SqlExtraSuffix {
     NOT_IN("NotIn", SqlKeyword.NOT_IN),
 
     IS_NULL("IsNull", SqlKeyword.IS_NULL),
-    IS_NOT_NULL("IsNotNull", SqlKeyword.IS_NOT_NULL);
+    IS_NOT_NULL("IsNotNull", SqlKeyword.IS_NOT_NULL),
+    
+    WITH_BIT("WithBit", SqlKeyword.WITH_BIT),
+    WITHOUT_BIT("WithoutBit", SqlKeyword.WITHOUT_BIT),
+    
+    ;
 
     public final String suffix;
     public final SqlKeyword sqlKeyword;

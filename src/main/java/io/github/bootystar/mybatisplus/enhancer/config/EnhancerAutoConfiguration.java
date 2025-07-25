@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.util.Map;
+
 /**
  * @author bootystar
  */
@@ -19,12 +21,20 @@ public class EnhancerAutoConfiguration implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SqlSessionFactory sqlSessionFactory = applicationContext.getBean(SqlSessionFactory.class);
-        boolean b = MapperHelper.initSqlFragment(sqlSessionFactory);
-        if (b){
-            log.debug("DynamicMapper sqlFragments Configured");
-        }else{
-            log.error("DynamicMapper sqlFragments Configured Failed, dynamic sql may not work");
+        // 获取所有 SqlSessionFactory 实例
+        Map<String, SqlSessionFactory> sqlSessionFactoryMap = applicationContext.getBeansOfType(SqlSessionFactory.class);
+        
+        // 为每个 SqlSessionFactory 实例配置 DynamicMapper
+        for (Map.Entry<String, SqlSessionFactory> entry : sqlSessionFactoryMap.entrySet()) {
+            String beanName = entry.getKey();
+            SqlSessionFactory sqlSessionFactory = entry.getValue();
+            
+            boolean success = MapperHelper.initSqlFragment(sqlSessionFactory);
+            if (success) {
+                log.debug("DynamicMapper sqlFragments configured for SqlSessionFactory bean: {}", beanName);
+            } else {
+                log.error("DynamicMapper sqlFragments configuration failed for SqlSessionFactory bean: {}, dynamic sql may not work", beanName);
+            }
         }
     }
 

@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    dynamic:
+      primary: mysql
+      datasource:
+        mysql:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+          username: root
+          password: root
+        postgresql:
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+          username: postgres
+          password: root
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    root: info
+    com.example.test.mapper: debug
+    io.github.bootystar.mybatisplus: debug
+    org.apache.ibatis: debug
+    java.sql: debug

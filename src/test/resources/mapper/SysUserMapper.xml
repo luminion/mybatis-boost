@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.test.mapper.SysUserMapper">
+
+    <select id="voSelectByXml" resultType="com.example.test.vo.SysUserVO">
+        SELECT
+        a.*
+        FROM
+        sys_user a
+        <where>
+            <include refid="io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper.dynamicSelect"/>
+            AND a.deleted = 0
+        </where>
+        <trim prefix="ORDER BY" prefixOverrides=",">
+            <include refid="io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper.dynamicSort"/>
+            , a.create_time DESC, a.id DESC
+        </trim>
+    </select>
+
+</mapper>
