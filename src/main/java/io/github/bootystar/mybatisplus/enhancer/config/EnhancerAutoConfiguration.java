@@ -1,6 +1,6 @@
 package io.github.bootystar.mybatisplus.enhancer.config;
 
-import io.github.bootystar.mybatisplus.enhancer.util.MapperHelper;
+import io.github.bootystar.mybatisplus.enhancer.util.MapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeansException;
@@ -29,7 +29,7 @@ public class EnhancerAutoConfiguration implements ApplicationContextAware {
             String beanName = entry.getKey();
             SqlSessionFactory sqlSessionFactory = entry.getValue();
             
-            boolean success = MapperHelper.initSqlFragment(sqlSessionFactory);
+            boolean success = MapperUtil.initSqlFragment(sqlSessionFactory);
             if (success) {
                 log.debug("DynamicMapper sqlFragments configured for SqlSessionFactory bean: {}", beanName);
             } else {

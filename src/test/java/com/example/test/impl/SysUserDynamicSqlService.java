@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.test.entity.SysUser;
 import com.example.test.mapper.SysUserMapper;
 import com.example.test.vo.SysUserVO;
-import io.github.bootystar.mybatisplus.enhancer.core.support.DynamicSqlService;
+import io.github.bootystar.mybatisplus.enhancer.DynamicService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @DS("postgresql")
-public class SysUserDynamicSqlService extends ServiceImpl<SysUserMapper, SysUser> implements DynamicSqlService<SysUserVO> {
+public class SysUserDynamicSqlService extends ServiceImpl<SysUserMapper, SysUser> implements DynamicService<SysUserVO> {
     
 
 

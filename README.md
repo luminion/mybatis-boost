@@ -297,28 +297,30 @@ age DESC, id ASC
 * 参数映射顺序`实体类属性字段信息`->`@TableFiled注解`->`DynamicEntity映射`
 
 #### 工具类生成的xml基础内容示例
+
 ```xml
+
 <select id="voSelectByXml" resultType="io.github.bootystar.vo.SysUserVO">
-    SELECT
-    a.*
-    FROM
-    sys_user a
-    <!--额外添加连表-->
-    left join sys_role b on a.role_id = b.id
-    <where>
-        <include refid="io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper.dynamicSelect"/>
-        <!--添加查询条件-->
-        AND a.deleted = 0
-        <!--对未自动映射的条件进行判断, 并操作-->
-        <if test="param1.map.keyword!=null">
-            AND a.name = #{param1.map.keyword}
-        </if>
-    <where/>
-    <trim prefix="ORDER BY" prefixOverrides=",">
-        <include refid="io.github.bootystar.mybatisplus.enhancer.core.DynamicMapper.dynamicSort"/>
-        <!--添加额外排序-->
-        , a.create_time DESC , a.id DESC
-    </trim>
+  SELECT
+  a.*
+  FROM
+  sys_user a
+  <!--额外添加连表-->
+  left join sys_role b on a.role_id = b.id
+  <where>
+  <include refid="io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSelect"/>
+  <!--添加查询条件-->
+  AND a.deleted = 0
+  <!--对未自动映射的条件进行判断, 并操作-->
+  <if test="param1.map.keyword!=null">
+    AND a.name = #{param1.map.keyword}
+  </if>
+  <where/>
+  <trim prefix="ORDER BY" prefixOverrides=",">
+    <include refid="io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSort"/>
+    <!--添加额外排序-->
+    , a.create_time DESC , a.id DESC
+  </trim>
 </select>
 ```
 
