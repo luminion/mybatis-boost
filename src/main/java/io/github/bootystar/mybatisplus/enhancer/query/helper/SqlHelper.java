@@ -12,16 +12,22 @@ import java.util.function.Consumer;
 @SuppressWarnings("unused")
 public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
 
+    public static <T> SqlHelper<T> of(Class<T> clazz) {
+        SqlHelper<T> sqlHelper = new SqlHelper<>();
+        sqlHelper.entityClass = clazz;
+        return sqlHelper;
+    }
+
     @Override
     public SqlHelper<T> or(Consumer<SqlHelper<T>> consumer) {
         SqlHelper<T> child = new SqlHelper<>();
         consumer.accept(child);
         SqlTree current = this;
-        while (current.getChild()!=null){
+        while (current.getChild() != null) {
             current = current.getChild();
         }
-        child.child=child;
+        child.child = child;
         return this;
     }
-    
+
 }

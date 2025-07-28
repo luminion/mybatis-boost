@@ -1,5 +1,6 @@
 package io.github.bootystar.mybatisplus.enhancer.util;
 
+import io.github.bootystar.mybatisplus.enhancer.query.helper.ISqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 
 /**
@@ -8,7 +9,7 @@ import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 public class SqlValidateUtil {
     
     
-    public static <T> void validate(SqlHelper<T> sqlHelper){
+    public static <T> void validate(ISqlHelper<T> sqlHelper){
         
     }
     

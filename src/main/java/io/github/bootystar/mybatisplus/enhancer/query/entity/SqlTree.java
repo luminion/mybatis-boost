@@ -1,12 +1,11 @@
 package io.github.bootystar.mybatisplus.enhancer.query.entity;
 
+import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 /**
@@ -34,7 +33,22 @@ public class SqlTree implements ISqlTree {
 
     {
         this.conditions = new LinkedHashSet<>();
+        symbol = SqlKeyword.AND.keyword;
     }
 
+    public void setChild(SqlTree sqlTree) {
+        if (child != null) {
+            throw new IllegalArgumentException("child already exists");
+        }
+        this.child = sqlTree;
+    }
+
+    public SqlTree getLowestChild() {
+        SqlTree current = this;
+        while (current.getChild() != null) {
+            current = current.getChild();
+        }
+        return current;
+    }
 
 }

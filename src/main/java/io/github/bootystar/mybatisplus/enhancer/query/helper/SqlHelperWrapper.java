@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.EnhancedQuery;
+import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class SqlHelperWrapper<T, V> extends SqlHelper<T> {
 
     public <S extends IService<T> & EnhancedQuery<V>> SqlHelperWrapper(S baseService) {
         this.enhancedQuery = baseService;
+        this.entityClass = baseService.getEntityClass();
     }
 
     public <S extends BaseMapper<T> & EnhancedQuery<V>> SqlHelperWrapper(S baseMapper) {
