@@ -2,8 +2,7 @@ package io.github.bootystar.mybatisplus.enhancer.query.entity;
 
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,8 +14,10 @@ import java.util.LinkedHashSet;
  *
  * @author bootystar
  */
-@Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class SqlTree implements ISqlTree {
     /**
      * 条件列表

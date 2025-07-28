@@ -2,8 +2,7 @@ package io.github.bootystar.mybatisplus.enhancer.query.entity;
 
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlSort;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,8 +14,10 @@ import java.util.Map;
  *
  * @author bootystar
  */
-@Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
 
     /**

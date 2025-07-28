@@ -2,18 +2,18 @@ package io.github.bootystar.mybatisplus.enhancer.query.entity;
 
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 条件参数
  *
  * @author bootystar
  */
-@Data
+
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class SqlCondition implements ISqlCondition {
 
     protected String field;

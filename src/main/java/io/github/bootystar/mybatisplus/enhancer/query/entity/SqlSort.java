@@ -1,22 +1,22 @@
 package io.github.bootystar.mybatisplus.enhancer.query.entity;
 
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlSort;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 排序参数
  *
  * @author bootystar
  */
-@Data
+
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class SqlSort implements ISqlSort {
 
     protected String field;
-    
+
     protected boolean desc;
 
     public static SqlSort of(ISqlSort sort) {

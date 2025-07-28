@@ -2,14 +2,11 @@ package io.github.bootystar.mybatisplus.enhancer.query.helper;
 
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
-import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
-import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlSort;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -19,12 +16,13 @@ import java.util.function.Function;
 @SuppressWarnings({"unchecked", "unused"})
 public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends ISqlHelper<T> {
 
-    default S or(Function<S,S> function) {
-        // todo or
-
-        return (S) this;
-    }
-    
+    /**
+     * 或条件
+     *
+     * @param consumer 拼装或条件
+     * @return {@link S }
+     */
+    S or(Consumer<S> consumer);
     
     /**
      * 等于

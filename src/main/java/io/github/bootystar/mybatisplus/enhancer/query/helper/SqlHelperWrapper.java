@@ -13,7 +13,7 @@ import java.util.List;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public class SqlHelperWrapper<T, V> extends SqlHelperBase<T, SqlHelperWrapper<T, V>> {
+public class SqlHelperWrapper<T, V> extends SqlHelper<T> {
 
     private final EnhancedQuery<V> enhancedQuery;
 
@@ -23,11 +23,6 @@ public class SqlHelperWrapper<T, V> extends SqlHelperBase<T, SqlHelperWrapper<T,
 
     public <S extends BaseMapper<T> & EnhancedQuery<V>> SqlHelperWrapper(S baseMapper) {
         this.enhancedQuery = baseMapper;
-    }
-
-    @Override
-    protected SqlHelperWrapper<T, V> returnSelf() {
-        return this;
     }
 
     public V one() {
