@@ -1,7 +1,5 @@
 package io.github.bootystar.mybatisplus.enhancer.query.helper;
 
-import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlTree;
-
 import java.util.function.Consumer;
 
 /**
@@ -22,11 +20,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     public SqlHelper<T> or(Consumer<SqlHelper<T>> consumer) {
         SqlHelper<T> child = new SqlHelper<>();
         consumer.accept(child);
-        SqlTree current = this;
-        while (current.getChild() != null) {
-            current = current.getChild();
-        }
-        child.child = child;
+        this.addChild(child);
         return this;
     }
 

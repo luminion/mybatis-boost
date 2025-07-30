@@ -3,7 +3,8 @@ package io.github.bootystar.mybatisplus.enhancer.query.entity;
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -14,8 +15,6 @@ import java.util.LinkedHashSet;
  * @author bootystar
  */
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
 public class SqlTree implements ISqlTree {
     /**
@@ -36,19 +35,54 @@ public class SqlTree implements ISqlTree {
         symbol = SqlKeyword.AND.keyword;
     }
 
-    public void setChild(SqlTree sqlTree) {
-        if (child != null) {
-            throw new IllegalArgumentException("child already exists");
-        }
-        this.child = sqlTree;
+    public SqlTree() {
     }
 
-    public SqlTree getLowestChild() {
+
+    public SqlTree(Collection<ISqlCondition> conditions) {
+        this.conditions = conditions;
+    }
+
+    public SqlTree(Collection<ISqlCondition> conditions, String symbol) {
+        if (!SqlKeyword.AND.keyword.equals(symbol) && !SqlKeyword.OR.keyword.equals(symbol)) {
+            throw new IllegalArgumentException("illegal symbol: " + symbol);
+        }
+        this.conditions = conditions;
+        this.symbol = symbol;
+    }
+
+    private SqlTree addSingleChild(ISqlTree child) {
+        if (child == null || child.getConditions().isEmpty()) {
+            return this;
+        }
+        // create a new child to avoid circling reference
+        SqlTree newChild = new SqlTree(child.getConditions(), SqlKeyword.OR.keyword);
         SqlTree current = this;
         while (current.getChild() != null) {
             current = current.getChild();
         }
-        return current;
+        current.child = newChild;
+        return this;
+    }
+
+    protected SqlTree addChild(ISqlTree sqlTree) {
+        if (sqlTree == null) {
+            return this;
+        }
+        for (ISqlTree node : sqlTree) {
+            if (node.getConditions().isEmpty()) {
+                continue;
+            }
+            String symbol1 = node.getSymbol();
+            if (SqlKeyword.OR.keyword.equals(symbol1)) {
+                // put or conditions as child
+                this.addSingleChild(node);
+            } else {
+                // put and conditions to current level
+                this.getConditions().addAll(node.getConditions());
+            }
+        }
+        return this;
     }
 
 }

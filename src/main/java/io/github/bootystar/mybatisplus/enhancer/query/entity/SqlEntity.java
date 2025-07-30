@@ -2,6 +2,7 @@ package io.github.bootystar.mybatisplus.enhancer.query.entity;
 
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlSort;
+import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
 import lombok.*;
 
 import java.util.Collection;
@@ -38,4 +39,16 @@ public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
         this.map = new HashMap<>();
     }
 
+    @Override
+    protected SqlTree addChild(ISqlTree sqlTree) {
+        if (sqlTree==null){
+            return this;
+        }
+        if (sqlTree instanceof SqlEntity<?>){
+            SqlEntity<?> sqlEntity = (SqlEntity<?>) sqlTree;
+            this.sorts.addAll(sqlEntity.getSorts());
+            this.map.putAll(sqlEntity.getMap());
+        }
+        return super.addChild(sqlTree);
+    }
 }
