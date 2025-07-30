@@ -8,14 +8,7 @@
                 <if test="gen.conditions != null and gen.conditions.size() > 0">
                     <trim prefix="AND (" suffix=")" prefixOverrides="AND|OR">
                         <foreach collection="gen.conditions" item="item">
-                            <choose>
-                                <when test="item.isOr()">
-                                    OR
-                                </when>
-                                <otherwise>
-                                    AND
-                                </otherwise>
-                            </choose>
+                            ${gen.symbol}
                             <choose>
                                 <when test="item.operator == 'IN' or item.operator == 'NOT IN'">
                                     ${item.field} ${item.operator}

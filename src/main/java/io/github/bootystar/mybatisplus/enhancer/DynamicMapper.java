@@ -21,7 +21,7 @@ public interface DynamicMapper<V> extends EnhancedQuery<V> {
     @Override
     default List<V> voQuery(Object param, IPage<V> page) {
         Class<?> entityClass = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), BaseMapper.class)[0];
-        return voQueryByXml(SqlHelper.of(entityClass).process(SqlValidateUtil::validate), page);
+        return voQueryByXml(SqlHelper.of(entityClass).with(param).process(SqlValidateUtil::validate), page);
     }
-    
+
 }

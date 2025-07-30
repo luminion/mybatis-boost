@@ -7,14 +7,30 @@ import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
 import io.github.bootystar.mybatisplus.enhancer.util.ReflectUtil;
+import lombok.Getter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author bootystar
  */
+@Getter
 @SuppressWarnings({"unused", "unchecked"})
-public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity<T> implements ISqlHelperLambda<T, S> {
+public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity implements ISqlHelperLambda<T, S> {
+
+    /**
+     * 对用实体类, 用于Sql校验/处理
+     */
+    protected transient Class<T> entityClass;
+    /**
+     * 映射map, 无法自动映射的字段会存放到该map中
+     */
+    protected transient Map<String, Object> map;
+
+    {
+        this.map = new HashMap<>();
+    }
 
     /**
      * 根据指定对象字段映射条件
