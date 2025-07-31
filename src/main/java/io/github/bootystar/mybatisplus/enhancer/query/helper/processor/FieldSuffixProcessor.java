@@ -13,28 +13,57 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 /**
+ * 字段后缀处理器
+ * <p>
+ * 提供基于字段后缀的SQL条件处理功能，支持通过字段后缀自动识别SQL操作符
+ *
  * @author bootystar
  */
 @Slf4j
 public class FieldSuffixProcessor {
+    /**
+     * 后缀到操作符的映射关系
+     */
     private Map<String, String> suffix2OperatorMap;
 
     {
         suffix2OperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
     }
     
+    /**
+     * 单例实例
+     */
     private final static FieldSuffixProcessor instance = new FieldSuffixProcessor();
 
+    /**
+     * 获取单例实例
+     *
+     * @return {@link FieldSuffixProcessor} 单例实例
+     */
     public static FieldSuffixProcessor of() {
         return instance;
     }
     
+    /**
+     * 创建新的字段后缀处理器实例
+     *
+     * @param suffix2OperatorMap 后缀到操作符的映射关系
+     * @return {@link FieldSuffixProcessor} 字段后缀处理器实例
+     */
     public static FieldSuffixProcessor of(Map<String, String> suffix2OperatorMap) {
         FieldSuffixProcessor fieldSuffixProcessor = new FieldSuffixProcessor();
         fieldSuffixProcessor.suffix2OperatorMap = suffix2OperatorMap;
         return fieldSuffixProcessor;
     }
 
+    /**
+     * 处理SQL助手
+     *
+     * @param rootHelper 根SQL助手
+     * @param <T>        实体类型
+     * @return {@link ISqlHelper} 处理后的SQL助手
+     * @throws IllegalArgumentException 当无法获取实体类时抛出
+     */
     public <T> ISqlHelper<T> process(ISqlHelper<T> rootHelper) {
         Class<T> entityClass = rootHelper.getEntityClass();
         if (entityClass == null) {

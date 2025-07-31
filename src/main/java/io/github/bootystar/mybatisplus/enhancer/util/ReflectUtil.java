@@ -10,18 +10,25 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 反射工具类
+ * <p>
+ * 提供通用的反射工具方法，包括实例创建、字段映射、属性复制等
+ *
  * @author bootystar
  */
 public abstract class ReflectUtil {
 
+    /**
+     * 类字段映射缓存
+     */
     private static final Map<Class<?>, Map<String, Field>> FIELD_MAP_CACHE = new ConcurrentHashMap<>();
 
 
     /**
-     * 是否为java自带的核心类
+     * 判断是否为Java核心类
      *
-     * @param clazz 克拉兹
-     * @return boolean
+     * @param clazz 类
+     * @return boolean 是否为Java核心类
      */
     public static boolean isJavaCoreClass(Class<?> clazz) {
         if (clazz == null) {
@@ -33,8 +40,10 @@ public abstract class ReflectUtil {
     /**
      * 新建实例
      *
-     * @param clazz 克拉兹
-     * @return target
+     * @param clazz 类
+     * @param <T>   实例类型
+     * @return {@link T} 新实例
+     * @throws Exception 当实例化出现异常时抛出
      */
     @SneakyThrows
     public static <T> T newInstance(Class<T> clazz) {
@@ -42,10 +51,10 @@ public abstract class ReflectUtil {
     }
 
     /**
-     * 指定类属性map
+     * 获取指定类的字段映射
      *
      * @param clazz 类
-     * @return {@link Map }
+     * @return {@link Map} 字段名到字段的映射
      */
     public static Map<String, Field> fieldMap(Class<?> clazz) {
         if (isJavaCoreClass(clazz)) {
@@ -71,6 +80,12 @@ public abstract class ReflectUtil {
         return map;
     }
 
+    /**
+     * 判断是否为特殊修饰符
+     *
+     * @param modifiers 修饰符
+     * @return boolean 是否为特殊修饰符
+     */
     public static boolean isSpecialModifier(int modifiers) {
         return Modifier.isStatic(modifiers)
                 || Modifier.isFinal(modifiers)
@@ -84,9 +99,11 @@ public abstract class ReflectUtil {
     /**
      * 复制属性
      *
-     * @param source 来源
-     * @param target 目标
-     * @return target
+     * @param source 来源对象
+     * @param target 目标对象
+     * @param <T>    目标对象类型
+     * @return {@link T} 目标对象
+     * @throws Exception 当复制出现异常时抛出
      */
     @SneakyThrows
     public static <T> T copyFieldProperties(Object source, T target) {
@@ -108,8 +125,9 @@ public abstract class ReflectUtil {
     /**
      * 对象转map
      *
-     * @param source 来源
-     * @return {@link Map }
+     * @param source 来源对象
+     * @return {@link Map} 映射关系
+     * @throws Exception 当转换出现异常时抛出
      */
     @SneakyThrows
     public static Map<?, ?> objectToMap(Object source) {
@@ -128,9 +146,10 @@ public abstract class ReflectUtil {
     /**
      * 对象转对象
      *
-     * @param source 来源
+     * @param source 来源对象
      * @param clazz  目标类
-     * @return target
+     * @param <U>    目标类型
+     * @return {@link U} 目标对象
      */
     public static <U> U toTarget(Object source, Class<U> clazz) {
         return copyFieldProperties(source, newInstance(clazz));

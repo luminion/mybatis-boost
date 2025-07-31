@@ -1,22 +1,25 @@
 package io.github.bootystar.mybatisplus.enhancer.query.core;
 
 /**
- * 排序
+ * SQL排序接口
+ * <p>
+ * 定义SQL查询中的排序规则，包括排序字段和排序方向
+ *
  * @author bootystar
  */
 public interface ISqlSort {
 
     /**
-     * 属性名
+     * 获取属性名
      *
-     * @return {@link String }
+     * @return {@link String } 属性名
      */
     String getField();
 
     /**
-     * 是否倒序
+     * 是否倒序排列
      *
-     * @return boolean
+     * @return boolean true表示倒序，false表示正序
      */
     boolean isDesc();
 

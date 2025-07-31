@@ -12,7 +12,9 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 /**
- * 可排序的条件树
+ * 可排序的条件树实体类
+ * <p>
+ * 扩展SqlTree类，增加了排序功能，用于表示包含排序信息的SQL条件树
  *
  * @author bootystar
  */
@@ -31,6 +33,12 @@ public class SqlEntity extends SqlTree implements ISqlEntity {
         this.sorts = new LinkedHashSet<>();
     }
 
+    /**
+     * 添加子节点
+     *
+     * @param sqlTree SQL树
+     * @return {@link SqlTree} 当前实例
+     */
     @Override
     protected SqlTree addChild(ISqlTree sqlTree) {
         if (sqlTree==null){

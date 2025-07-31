@@ -12,6 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * SQL助手抽象基类
+ * <p>
+ * 提供SQL构建的基本功能，包括条件添加、排序设置等，使用泛型支持链式调用
+ *
+ * @param <T> 实体类型
+ * @param <S> 返回类型（用于支持链式调用）
  * @author bootystar
  */
 @Getter
@@ -19,11 +25,11 @@ import java.util.Map;
 public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity implements ISqlHelperLambda<T, S> {
 
     /**
-     * 对用实体类, 用于Sql校验/处理
+     * 对应实体类，用于SQL校验/处理
      */
     protected transient Class<T> entityClass;
     /**
-     * 映射map, 无法自动映射的字段会存放到该map中
+     * 映射map，无法自动映射的字段会存放到该map中
      */
     protected transient Map<String, Object> unmapped;
 
@@ -33,13 +39,14 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
 
     /**
      * 根据指定对象字段映射条件
-     * 当对象为{@link ISqlTree}时, 将对象作为子条件添加
-     * 当对象为{@link ISqlCondition}时, 将对象作为条件添加
-     * 当对象为{@link ISqlSort}时, 将对象作为排序添加
-     * 当对象为其他类型时, 将对象字段通过{@link MybatisPlusReflectUtil#objectToMap(Object)}映射为k,v, 作为条件添加
+     * <p>
+     * 当对象为{@link ISqlTree}时，将对象作为子条件添加<br>
+     * 当对象为{@link ISqlCondition}时，将对象作为条件添加<br>
+     * 当对象为{@link ISqlSort}时，将对象作为排序添加<br>
+     * 当对象为其他类型时，将对象字段通过{@link MybatisPlusReflectUtil#objectToMap(Object)}映射为k,v，作为条件添加
      *
-     * @param s s
-     * @return {@link SqlHelper}
+     * @param s 任意对象
+     * @return {@link SqlHelper} SQL助手实例
      */
     @SuppressWarnings("unchecked")
     public S with(Object s) {

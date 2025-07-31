@@ -8,10 +8,22 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * 动态服务接口
+ * <p>
+ * 提供动态SQL查询功能，整合IService和EnhancedQuery接口
+ *
+ * @param <V> VO类型
  * @author bootystar
  */
 public interface DynamicService<V> extends EnhancedIService, EnhancedQuery<V>, EnhancedExcel {
 
+    /**
+     * VO查询
+     *
+     * @param s    查询参数
+     * @param page 分页对象
+     * @return {@link List} VO对象列表
+     */
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     default List<V> voQuery(Object s, IPage<V> page) {

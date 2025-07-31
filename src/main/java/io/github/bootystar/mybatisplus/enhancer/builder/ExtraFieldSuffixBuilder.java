@@ -7,12 +7,22 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
+ * 字段后缀构建器
+ * <p>
+ * 用于构建字段后缀与SQL操作符之间的映射关系，支持动态SQL查询中的字段后缀匹配功能
+ *
  * @author bootystar
  */
 public class ExtraFieldSuffixBuilder {
     private static final String SUFFIX_PATTERN = "^[a-zA-Z0-9_$]+$";
     private final LinkedHashMap<String, String> suffix2OperatorMap = new LinkedHashMap<>();
 
+    /**
+     * 检查后缀是否合法
+     *
+     * @param suffix 待检查的后缀
+     * @throws IllegalArgumentException 当后缀为null或包含特殊字符时抛出
+     */
     private void check(String suffix) {
         if (suffix == null) {
             throw new IllegalArgumentException("suffix can't be null");
@@ -26,7 +36,7 @@ public class ExtraFieldSuffixBuilder {
     /**
      * 添加常用的后缀
      *
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder defaultSimpleSuffix() {
         suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_SIMPLE_MAP);
@@ -36,7 +46,7 @@ public class ExtraFieldSuffixBuilder {
     /**
      * 添加所有支持的后缀
      *
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder defaultCompleteSuffix() {
         suffix2OperatorMap.putAll(SqlExtraSuffix.DEFAULT_COMPLETE_MAP);
@@ -44,10 +54,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 不等于
+     * 添加不等于操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder ne(String suffix) {
         check(suffix);
@@ -56,10 +66,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 大于
+     * 添加大于操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder gt(String suffix) {
         check(suffix);
@@ -68,10 +78,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 大于等于
+     * 添加大于等于操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder ge(String suffix) {
         check(suffix);
@@ -80,10 +90,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 小于
+     * 添加小于操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder lt(String suffix) {
         check(suffix);
@@ -92,10 +102,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 小于等于
+     * 添加小于等于操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder le(String suffix) {
         check(suffix);
@@ -104,10 +114,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 模糊匹配
+     * 添加模糊匹配操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder like(String suffix) {
         check(suffix);
@@ -116,10 +126,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 不模糊匹配
+     * 添加不模糊匹配操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder notLike(String suffix) {
         check(suffix);
@@ -128,10 +138,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * in
+     * 添加in操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder in(String suffix) {
         check(suffix);
@@ -140,10 +150,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * not in
+     * 添加not in操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder notIn(String suffix) {
         check(suffix);
@@ -152,10 +162,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * is null
+     * 添加is null操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder isNull(String suffix) {
         check(suffix);
@@ -164,10 +174,10 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * is not null
+     * 添加is not null操作符的后缀
      *
      * @param suffix 后缀
-     * @return {@link ExtraFieldSuffixBuilder }
+     * @return {@link ExtraFieldSuffixBuilder } 构建器实例
      */
     public ExtraFieldSuffixBuilder isNotNull(String suffix) {
         check(suffix);
@@ -176,9 +186,9 @@ public class ExtraFieldSuffixBuilder {
     }
 
     /**
-     * 构建
+     * 构建后缀到操作符的映射关系
      *
-     * @return {@link HashMap }
+     * @return {@link HashMap } 后缀到操作符的映射关系
      */
     public LinkedHashMap<String, String> build() {
         return suffix2OperatorMap;

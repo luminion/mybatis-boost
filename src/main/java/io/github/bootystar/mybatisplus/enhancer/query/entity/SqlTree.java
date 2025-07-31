@@ -10,7 +10,9 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 /**
- * 条件树
+ * SQL条件树实体类
+ * <p>
+ * 实现ISqlTree接口，用于表示SQL查询条件的树形结构，支持嵌套条件和复杂查询
  *
  * @author bootystar
  */
@@ -35,14 +37,29 @@ public class SqlTree implements ISqlTree {
         symbol = SqlKeyword.AND.keyword;
     }
 
+    /**
+     * 默认构造函数
+     */
     public SqlTree() {
     }
 
 
+    /**
+     * 使用条件集合构造SqlTree
+     *
+     * @param conditions 条件集合
+     */
     public SqlTree(Collection<ISqlCondition> conditions) {
         this.conditions = conditions;
     }
 
+    /**
+     * 使用条件集合和连接符构造SqlTree
+     *
+     * @param conditions 条件集合
+     * @param symbol     连接符，只能是AND或OR
+     * @throws IllegalArgumentException 当symbol不是AND或OR时抛出
+     */
     public SqlTree(Collection<ISqlCondition> conditions, String symbol) {
         if (!SqlKeyword.AND.keyword.equals(symbol) && !SqlKeyword.OR.keyword.equals(symbol)) {
             throw new IllegalArgumentException("illegal symbol: " + symbol);
@@ -51,6 +68,12 @@ public class SqlTree implements ISqlTree {
         this.symbol = symbol;
     }
 
+    /**
+     * 添加单个子节点
+     *
+     * @param child 子节点
+     * @return {@link SqlTree} 当前实例
+     */
     private SqlTree addSingleChild(ISqlTree child) {
         if (child == null || child.getConditions().isEmpty()) {
             return this;
@@ -65,6 +88,12 @@ public class SqlTree implements ISqlTree {
         return this;
     }
 
+    /**
+     * 添加子节点
+     *
+     * @param sqlTree SQL树
+     * @return {@link SqlTree} 当前实例
+     */
     protected SqlTree addChild(ISqlTree sqlTree) {
         if (sqlTree == null) {
             return this;

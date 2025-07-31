@@ -17,12 +17,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 针对mybatis-plus增强的反射工具类
+ * MyBatis-Plus反射工具类
+ * <p>
+ * 提供针对MyBatis-Plus的反射工具方法，包括泛型解析、字段映射等
  *
  * @author bootystar
  */
 public abstract class MybatisPlusReflectUtil extends ReflectUtil {
 
+    /**
+     * 实体类字段到数据库列的映射缓存
+     */
     private static final Map<Class<?>, Map<String, String>> FIELD_TO_JDBC_COLUMN_CACHE_MAP = new ConcurrentHashMap<>();
 
     /**
@@ -30,17 +35,17 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
      *
      * @param clazz      指定类
      * @param superClass 超类
-     * @return {@link Class }
+     * @return {@link Class} 泛型参数数组
      */
     public static Class<?>[] resolveTypeArguments(Class<?> clazz, Class<?> superClass) {
         return GenericTypeUtils.resolveTypeArguments(clazz, superClass);
     }
 
     /**
-     * id字段属性名
+     * 获取ID字段属性名
      *
-     * @param clazz 克拉兹
-     * @return {@link String }
+     * @param clazz 实体类
+     * @return {@link String} ID字段属性名
      */
     public static String idFieldPropertyName(Class<?> clazz) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
@@ -51,20 +56,20 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
     }
 
     /**
-     * getter字段名
+     * 获取getter方法对应的字段名
      *
      * @param getter getter方法
-     * @return {@link String }
+     * @return {@link String} 字段名
      */
     public static String getterFieldName(SFunction<?, ?> getter) {
         return PropertyNamer.methodToProperty(LambdaUtils.extract(getter).getImplMethodName());
     }
 
     /**
-     * 从mybatis plus获取实体类属性与数据库字段转换映射
+     * 从MyBatis Plus获取实体类属性与数据库字段转换映射
      *
      * @param clazz 实体类
-     * @return {@link Map }
+     * @return {@link Map} 字段到列的映射关系
      */
     public static Map<String, String> filed2JdbcColumnByMybatisPlusTableInfo(Class<?> clazz) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
@@ -90,10 +95,10 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
     }
 
     /**
-     * 实体类与数据库字段转换映射
+     * 实体类与数据库字段转换映射（基于注解）
      *
-     * @param clazz 克拉兹
-     * @return {@link Map }
+     * @param clazz 实体类
+     * @return {@link Map} 字段到列的映射关系
      */
     public static Map<String, String> field2JdbcColumnByMybatisPlusAnnotation(Class<?> clazz) {
         HashMap<String, String> result = new HashMap<>();
@@ -139,7 +144,7 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
      * 3.实现了EnhanceEntity接口的映射信息
      *
      * @param entityClass 实体类
-     * @return {@link Map }
+     * @return {@link Map} 字段到列的映射关系
      */
     public static Map<String, String> field2JdbcColumnMap(Class<?> entityClass) {
         Map<String, String> map = FIELD_TO_JDBC_COLUMN_CACHE_MAP.get(entityClass);
@@ -157,7 +162,7 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
      * @param entityClass  实体类
      * @param columnFormat 数据库字段映射格式{@link String#format(String, Object...)}
      * @param ignoreFormat 当字段名包含该值时,不进行字段映射
-     * @return {@link Map }
+     * @return {@link Map} 字段到列的映射关系
      */
     public static Map<String, String> field2JdbcColumnMap(Class<?> entityClass, String columnFormat, String ignoreFormat) {
         String format = columnFormat == null || columnFormat.isEmpty() ? "%s" : columnFormat;

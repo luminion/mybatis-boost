@@ -18,11 +18,23 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 /**
+ * 默认SQL处理器
+ * <p>
+ * 提供SQL条件验证和处理功能，包括字段映射验证、操作符验证等
+ *
  * @author bootystar
  */
 @Slf4j
 public abstract class DefaultProcessor {
 
+    /**
+     * 验证SQL条件
+     *
+     * @param sqlCondition         SQL条件
+     * @param field2JdbcColumnMap  字段到数据库列的映射
+     * @param unmapped             未映射参数集合
+     * @return {@link ISqlCondition} 验证后的SQL条件，如果验证失败返回null
+     */
     public static ISqlCondition validate(ISqlCondition sqlCondition, Map<String, String> field2JdbcColumnMap, Map<String, Object> unmapped) {
         String field = sqlCondition.getField();
         String operator = sqlCondition.getOperator();
@@ -62,6 +74,13 @@ public abstract class DefaultProcessor {
         return new SqlCondition(jdbcColumn, operator, value);
     }
 
+    /**
+     * 包装SQL条件
+     *
+     * @param sqlHelper     SQL助手
+     * @param sqlConditions SQL条件集合
+     * @param symbol        连接符号
+     */
     public static void warp(AbstractSqlHelper<?, ?> sqlHelper, Collection<ISqlCondition> sqlConditions, String symbol) {
         if (sqlHelper==null || sqlConditions==null || sqlConditions.isEmpty()) {
             return;
@@ -75,6 +94,14 @@ public abstract class DefaultProcessor {
         sqlHelper.with(iSqlTrees);
     }
 
+    /**
+     * 处理SQL助手
+     *
+     * @param rootHelper 根SQL助手
+     * @param <T>        实体类型
+     * @return {@link ISqlHelper} 处理后的SQL助手
+     * @throws IllegalArgumentException 当无法获取实体类时抛出
+     */
     public static <T> ISqlHelper<T> process(ISqlHelper<T> rootHelper) {
         Class<T> entityClass = rootHelper.getEntityClass();
         if (entityClass == null) {
