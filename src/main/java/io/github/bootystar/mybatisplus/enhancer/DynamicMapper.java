@@ -2,12 +2,10 @@ package io.github.bootystar.mybatisplus.enhancer;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlEntity;
-import io.github.bootystar.mybatisplus.enhancer.query.helper.processor.DefaultProcessor;
+import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.processor.FieldSuffixProcessor;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
-import io.github.bootystar.mybatisplus.enhancer.util.SqlProcessUtil;
 
 import java.util.List;
 
