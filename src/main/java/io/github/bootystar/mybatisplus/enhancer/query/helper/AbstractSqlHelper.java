@@ -6,7 +6,6 @@ import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
-import io.github.bootystar.mybatisplus.enhancer.util.ReflectUtil;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -26,10 +25,10 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
     /**
      * 映射map, 无法自动映射的字段会存放到该map中
      */
-    protected transient Map<String, Object> map;
+    protected transient Map<String, Object> unmapped;
 
     {
-        this.map = new HashMap<>();
+        this.unmapped = new HashMap<>();
     }
 
     /**

@@ -6,9 +6,9 @@
         <if test="param1 != null">
             <foreach collection="param1" item="gen">
                 <if test="gen.conditions != null and gen.conditions.size() > 0">
-                    <trim prefix="AND (" suffix=")" prefixOverrides="AND|OR">
-                        <foreach collection="gen.conditions" item="item">
-                            ${gen.symbol}
+                    ${gen.symbol}
+                    <trim prefix="(" suffix=")" prefixOverrides="AND|OR">
+                        <foreach collection="gen.conditions" item="item" separator="AND">
                             <choose>
                                 <when test="item.operator == 'IN' or item.operator == 'NOT IN'">
                                     ${item.field} ${item.operator}

@@ -13,7 +13,7 @@ public interface ISqlHelper<T> extends ISqlEntity {
 
     Class<T> getEntityClass();
 
-    Map<String, Object> getMap();
+    Map<String, Object> getUnmapped();
     
     default ISqlHelper<T> process(Function<ISqlHelper<T>,ISqlHelper<T>> processor){
         return processor.apply(this);

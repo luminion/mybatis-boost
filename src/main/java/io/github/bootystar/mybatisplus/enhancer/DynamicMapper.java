@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlEntity;
+import io.github.bootystar.mybatisplus.enhancer.query.helper.processor.DefaultProcessor;
 import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
-import io.github.bootystar.mybatisplus.enhancer.util.SqlValidateUtil;
+import io.github.bootystar.mybatisplus.enhancer.util.SqlProcessUtil;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface DynamicMapper<V> extends EnhancedQuery<V> {
     @Override
     default List<V> voQuery(Object param, IPage<V> page) {
         Class<?> entityClass = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), BaseMapper.class)[0];
-        return voQueryByXml(SqlHelper.of(entityClass).with(param).process(SqlValidateUtil::validate), page);
+        return voQueryByXml(SqlHelper.of(entityClass).with(param).process(DefaultProcessor::process), page);
     }
 
 }
