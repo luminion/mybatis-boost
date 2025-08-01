@@ -250,7 +250,7 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
   "state": 1
 }
 ```
-#### 一般条件拼接
+#### 指定字段检索条件
 - 通过`conditions`字段指定查询条件,
 - 其中每个条件对象`field`表示字段,`value`表示值,`operator`表示操作符号
 - `operator`不填写时,默认为等于, 可选值：
@@ -269,7 +269,7 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
   - `$>` - 位运算, 包含指定bit位
   - `$=` - 位运算, 不包含指定bit位
 
-查询`name`为`mike`, `version`为`1`, `state`为`1`或`2`或`3`的数据
+查询`name`为`mike`, `version`大于等于`1`, `state`为`1`或`2`或`3`的数据
 ```json
 {
   "conditions": [
@@ -279,6 +279,7 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
     },
     {
       "field": "version",
+      "operator": ">=",
       "value": 1
     },
     {
@@ -289,7 +290,7 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
   ]
 }
 ```
-#### 指定排序的查询
+#### 指定排序字段
 - 通过`sorts`字段指定排序字段, 
 - 其中每个条件对象`field`表示排序的字段,`isDesc`表示是否倒序
 
