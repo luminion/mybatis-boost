@@ -1,5 +1,8 @@
 package io.github.bootystar.mybatisplus.enhancer.query.helper;
 
+import io.github.bootystar.mybatisplus.enhancer.core.EnhancedQuery;
+import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
+
 import java.util.function.Consumer;
 
 /**
@@ -35,9 +38,21 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     @Override
     public SqlHelper<T> or(Consumer<SqlHelper<T>> consumer) {
         SqlHelper<T> child = new SqlHelper<>();
+        child.symbol= SqlKeyword.OR.keyword;
         consumer.accept(child);
         this.addChild(child);
         return this;
+    }
+
+    /**
+     * 创建SQL助手包装器，用于将SQL助手实例包装为EnhancedQuery实例
+     *
+     * @param enhancedQuery EnhancedQuery实例
+     * @param <V>           封装的VO类型
+     * @return {@link SqlHelperWrapper} SQL助手包装器实例
+     */
+    public <V> SqlHelperWrapper<T, V> wrap(EnhancedQuery<V> enhancedQuery) {
+        return new SqlHelperWrapper<>(this, enhancedQuery);
     }
 
 }

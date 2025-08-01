@@ -3,10 +3,7 @@ package io.github.bootystar.mybatisplus.enhancer.query.entity;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlSort;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -19,8 +16,7 @@ import java.util.LinkedHashSet;
  * @author bootystar
  */
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 @EqualsAndHashCode(callSuper = true)
 public class SqlEntity extends SqlTree implements ISqlEntity {
 

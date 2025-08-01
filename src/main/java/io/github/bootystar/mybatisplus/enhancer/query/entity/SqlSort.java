@@ -12,9 +12,10 @@ import lombok.*;
  */
 
 @Getter
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class SqlSort implements ISqlSort {
 
     /**

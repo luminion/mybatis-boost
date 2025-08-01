@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.github.bootystar.mybatisplus.enhancer.DynamicMapper">
+<mapper namespace="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper">
 
     <sql id="dynamicSelect">
         <if test="param1 != null">
             <foreach collection="param1" item="gen">
                 <if test="gen.conditions != null and gen.conditions.size() > 0">
-                    ${gen.symbol}
-                    <trim prefix="(" suffix=")" prefixOverrides="AND|OR">
-                        <foreach collection="gen.conditions" item="item" separator="AND">
+                    <trim prefix="AND (" suffix=")" prefixOverrides="AND|OR">
+                        <foreach collection="gen.conditions" item="item">
+                            ${gen.symbol}
                             <choose>
                                 <when test="item.operator == 'IN' or item.operator == 'NOT IN'">
                                     ${item.field} ${item.operator}

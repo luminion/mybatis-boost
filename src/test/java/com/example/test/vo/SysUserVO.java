@@ -23,7 +23,7 @@ public class SysUserVO {
     /**
      * id
      */
-    @ExcelProperty(value = "id")
+//    @ExcelProperty(value = "id")
     private Long id;
 
     /**

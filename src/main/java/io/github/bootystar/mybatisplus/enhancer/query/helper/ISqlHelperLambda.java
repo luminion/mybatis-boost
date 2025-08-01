@@ -212,7 +212,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S bitwiseWith(SFunction<T, R> getter, R value) {
-        getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.BITWISE_WITH.keyword, value));
+        getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.BIT_WITH.keyword, value));
         return (S) this;
     }
 
@@ -225,7 +225,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S bitwiseWithout(SFunction<T, R> getter, R value) {
-        getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.BITWISE_WITHOUT.keyword, value));
+        getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.BIT_WITHOUT.keyword, value));
         return (S) this;
     }
 

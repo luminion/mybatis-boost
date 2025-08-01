@@ -1,9 +1,9 @@
 # mybatis-plus-enhancer
 enhancer of mybatis-plus
-* 针对mybatis-plus的增强
+* 针对mybatis-plus的扩展
 * 动态Sql工具
-* IService增强
-* BaseMapper增强
+* IService扩展
+* BaseMapper扩展
 * Excel导入导出
 
 原生成器相关代码已独立到单独仓库 https://github.com/bootystar/mybatis-plus-generator
@@ -88,7 +88,7 @@ public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUse
         map.put("name","张三"); // 姓名= 张三
         map.put("age", 2); // 年龄= 2
 
-        // 主要增强方法
+        // 主要扩展方法
         baseService.voById("1");// 根据id查询VO
         baseService.voByDTO(map); // 根据条件查询单个VO
         baseService.voList(map); // 根据条件查询列表
@@ -242,7 +242,7 @@ age DESC, id ASC
 ```
 
 ## `DynamicService<V>`
-该接口针对`IService`定义了一系列增强方法,`V`为VO数据展示类  
+该接口针对`IService`定义了一系列扩展方法,`V`为VO数据展示类  
 该接口大多方法都提供了`默认实现`, 实际需要实现的仅有`voSelect()`方法
 * `getVOClass()`获取VO数据展示类
 * `toVO()`将指定对象转化为`V`
@@ -308,7 +308,7 @@ age DESC, id ASC
   <!--额外添加连表-->
   left join sys_role b on a.role_id = b.id
   <where>
-  <include refid="io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSelect"/>
+  <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
   <!--添加查询条件-->
   AND a.deleted = 0
   <!--对未自动映射的条件进行判断, 并操作-->
@@ -317,7 +317,7 @@ age DESC, id ASC
   </if>
   <where/>
   <trim prefix="ORDER BY" prefixOverrides=",">
-    <include refid="io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSort"/>
+    <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort"/>
     <!--添加额外排序-->
     , a.create_time DESC , a.id DESC
   </trim>

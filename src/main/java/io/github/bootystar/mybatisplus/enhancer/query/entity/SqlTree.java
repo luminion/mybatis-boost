@@ -5,6 +5,8 @@ import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -17,7 +19,9 @@ import java.util.LinkedHashSet;
  * @author bootystar
  */
 @Getter
+@ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 public class SqlTree implements ISqlTree {
     /**
      * 条件列表
@@ -37,12 +41,6 @@ public class SqlTree implements ISqlTree {
         symbol = SqlKeyword.AND.keyword;
     }
 
-    /**
-     * 默认构造函数
-     */
-    public SqlTree() {
-    }
-
 
     /**
      * 使用条件集合构造SqlTree
@@ -50,7 +48,7 @@ public class SqlTree implements ISqlTree {
      * @param conditions 条件集合
      */
     public SqlTree(Collection<ISqlCondition> conditions) {
-        this.conditions = conditions;
+        this.conditions.addAll(conditions);
     }
 
     /**
@@ -61,11 +59,8 @@ public class SqlTree implements ISqlTree {
      * @throws IllegalArgumentException 当symbol不是AND或OR时抛出
      */
     public SqlTree(Collection<ISqlCondition> conditions, String symbol) {
-        if (!SqlKeyword.AND.keyword.equals(symbol) && !SqlKeyword.OR.keyword.equals(symbol)) {
-            throw new IllegalArgumentException("illegal symbol: " + symbol);
-        }
-        this.conditions = conditions;
-        this.symbol = symbol;
+        this.conditions.addAll(conditions);
+        this.symbol = SqlKeyword.replaceConnector(symbol);
     }
 
     /**

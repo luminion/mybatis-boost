@@ -1,4 +1,4 @@
-package io.github.bootystar.mybatisplus.enhancer;
+package io.github.bootystar.mybatisplus.enhancer.core;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.util.CastUtil;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 增强Excel接口
+ * 扩展Excel接口
  * <p>
  * 提供Excel导入导出功能，支持模板导出、数据导入和数据导出
  *

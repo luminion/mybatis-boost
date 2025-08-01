@@ -1,4 +1,4 @@
-package io.github.bootystar.mybatisplus.enhancer;
+package io.github.bootystar.mybatisplus.enhancer.core;
 
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -8,15 +8,15 @@ import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
 
 
 /**
- * 增强IService接口
+ * 扩展IService接口
  * <p>
  * 提供额外的服务层功能，包括DTO转换、实体操作等
  *
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public interface EnhancedIService {
-//public interface EnhancedIService<T> extends IService<T> {
+public interface EnhancedService {
+//public interface EnhancedService<T> extends IService<T> {
 
 //    default T toEntity(Object source) {
 //        return MybatisPlusReflectHelper.toTarget(source, getEntityClass());

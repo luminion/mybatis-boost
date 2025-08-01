@@ -2,6 +2,8 @@ package io.github.bootystar.mybatisplus.enhancer;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.bootystar.mybatisplus.enhancer.core.EnhancedExcel;
+import io.github.bootystar.mybatisplus.enhancer.core.EnhancedQuery;
 import io.github.bootystar.mybatisplus.enhancer.util.CastUtil;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.Objects;
  * @param <V> VO类型
  * @author bootystar
  */
-public interface DynamicService<V> extends EnhancedIService, EnhancedQuery<V>, EnhancedExcel {
+public interface EnhancedService<V> extends io.github.bootystar.mybatisplus.enhancer.core.EnhancedService, EnhancedQuery<V>, EnhancedExcel {
 
     /**
      * VO查询
@@ -28,11 +30,11 @@ public interface DynamicService<V> extends EnhancedIService, EnhancedQuery<V>, E
     @SuppressWarnings({"unchecked", "rawtypes"})
     default List<V> voQuery(Object s, IPage<V> page) {
         IService iService = CastUtil.cast(this, IService.class);
-        DynamicMapper dynamicMapper = CastUtil.cast(iService.getBaseMapper(), DynamicMapper.class);
-        if (!Objects.equals(dynamicMapper.voClass(), voClass())) {
-            throw new IllegalStateException("baseMapper has different vo class: " + dynamicMapper.voClass().getName());
+        EnhancedMapper flexibleViewMapper = CastUtil.cast(iService.getBaseMapper(), EnhancedMapper.class);
+        if (!Objects.equals(flexibleViewMapper.getVOClass(), getVOClass())) {
+            throw new IllegalStateException("baseMapper has different vo class: " + flexibleViewMapper.getVOClass().getName());
         }
-        return dynamicMapper.voQuery(s, page);
+        return flexibleViewMapper.voQuery(s, page);
     }
     
 }

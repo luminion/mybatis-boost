@@ -2,10 +2,7 @@ package io.github.bootystar.mybatisplus.enhancer.query.entity;
 
 import io.github.bootystar.mybatisplus.enhancer.enums.SqlKeyword;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * SQL条件实体类
@@ -14,11 +11,10 @@ import lombok.NoArgsConstructor;
  *
  * @author bootystar
  */
-
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 public class SqlCondition implements ISqlCondition {
 
     /**
@@ -46,6 +42,12 @@ public class SqlCondition implements ISqlCondition {
      */
     public SqlCondition(String field, Object value) {
         this.field = field;
+        this.value = value;
+    }
+    
+    public SqlCondition(String field, String operator, Object value) {
+        this.field = field;
+        this.operator = SqlKeyword.replaceOperator(operator);
         this.value = value;
     }
 

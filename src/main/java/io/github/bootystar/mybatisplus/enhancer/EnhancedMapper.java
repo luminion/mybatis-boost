@@ -2,6 +2,7 @@ package io.github.bootystar.mybatisplus.enhancer;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.bootystar.mybatisplus.enhancer.core.EnhancedQuery;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.processor.FieldSuffixProcessor;
@@ -17,7 +18,7 @@ import java.util.List;
  * @param <V> VO类型
  * @author bootystar
  */
-public interface DynamicMapper<V> extends EnhancedQuery<V> {
+public interface EnhancedMapper<V> extends EnhancedQuery<V> {
 
     /**
      * 通过XML进行VO查询

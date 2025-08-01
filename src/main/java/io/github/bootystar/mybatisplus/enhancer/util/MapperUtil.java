@@ -3,7 +3,7 @@ package io.github.bootystar.mybatisplus.enhancer.util;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.github.bootystar.mybatisplus.enhancer.EnhancedQuery;
+import io.github.bootystar.mybatisplus.enhancer.core.EnhancedQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.io.Resources;
@@ -31,13 +31,13 @@ public abstract class MapperUtil {
      */
     public static boolean initSqlFragment(SqlSessionFactory sqlSessionFactory) {
         Configuration configuration = sqlSessionFactory.getConfiguration();
-        String resource = "bootystar/mapper/DynamicMapper.xml";
+        String resource = "bootystar/mapper/EnhancedMapper.xml";
         try (InputStream inputStream = Resources.getResourceAsStream(resource)) {
             XMLMapperBuilder mapperBuilder = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
             mapperBuilder.parse();
             return true;
         } catch (IOException e) {
-            log.error("error creating DynamicMapper sqlFragments", e);
+            log.error("error creating EnhancedMapper sqlFragments", e);
             return false;
         }
     }
@@ -45,7 +45,7 @@ public abstract class MapperUtil {
     /**
      * 获取Mapper内容
      *
-     * @param enhancedQueryClass 增强查询类
+     * @param enhancedQueryClass 扩展查询类
      * @return {@link String} Mapper内容
      * @throws IllegalArgumentException 当无法解析实体信息时抛出
      */
@@ -110,10 +110,10 @@ public abstract class MapperUtil {
                 "        FROM\n" +
                 "        " + tableName + " a\n" +
                 "        <where>\n" +
-                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSelect\"/>\n" +
+                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect\"/>\n" +
                 "        </where>\n" +
                 "        <trim prefix=\"ORDER BY\" prefixOverrides=\",\">\n" +
-                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSort\"/>\n" +
+                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort\"/>\n" +
                 "        </trim>\n"
                 ;
     }

@@ -1,4 +1,4 @@
-package io.github.bootystar.mybatisplus.enhancer;
+package io.github.bootystar.mybatisplus.enhancer.core;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 增强查询接口
+ * 扩展查询接口
  * <p>
  * 提供VO查询功能，支持单个查询、列表查询和分页查询
  *
@@ -40,7 +40,7 @@ public interface EnhancedQuery<V> {
      * @return {@link Class} VO类
      */
     @SuppressWarnings("unchecked")
-    default Class<V> voClass() {
+    default Class<V> getVOClass() {
         return (Class<V>) MybatisPlusReflectUtil.resolveTypeArguments(getClass(), EnhancedQuery.class)[0];
     }
 
@@ -51,7 +51,7 @@ public interface EnhancedQuery<V> {
      * @return {@link V} VO对象
      */
     default V toVO(Object source) {
-        return MybatisPlusReflectUtil.toTarget(source, voClass());
+        return MybatisPlusReflectUtil.toTarget(source, getVOClass());
     }
 
     /**

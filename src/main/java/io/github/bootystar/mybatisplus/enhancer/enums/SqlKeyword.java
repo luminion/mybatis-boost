@@ -80,15 +80,15 @@ public enum SqlKeyword {
      * NOT IN操作符
      */
     NOT_IN("NOT IN"),
-    
+
     /**
      * 位运算包含操作符
      */
-    BITWISE_WITH("&>"),
+    BIT_WITH("&>"),
     /**
      * 位运算不包含操作符
      */
-    BITWISE_WITHOUT("&="),
+    BIT_WITHOUT("&="),
 
 //    NOT("NOT"),
 //    EXISTS("EXISTS"),
@@ -135,7 +135,7 @@ public enum SqlKeyword {
         CONDITION_CONNECTORS = Collections.unmodifiableList(connector);
         List<String> none = Arrays.asList(IS_NULL.keyword, IS_NOT_NULL.keyword);
         CONDITION_OPERATORS_NONE = Collections.unmodifiableList(none);
-        List<String> single = Arrays.asList(EQ.keyword, NE.keyword, NE2.keyword, GT.keyword, GE.keyword, LT.keyword, LE.keyword, LIKE.keyword, NOT_LIKE.keyword);
+        List<String> single = Arrays.asList(EQ.keyword, NE.keyword, NE2.keyword, GT.keyword, GE.keyword, LT.keyword, LE.keyword, LIKE.keyword, NOT_LIKE.keyword, BIT_WITH.keyword, BIT_WITHOUT.keyword);
         CONDITION_OPERATORS_SINGLE = Collections.unmodifiableList(single);
         List<String> multi = Arrays.asList(IN.keyword, NOT_IN.keyword);
         CONDITION_OPERATORS_MULTI = Collections.unmodifiableList(multi);

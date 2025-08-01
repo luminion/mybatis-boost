@@ -8,14 +8,14 @@
         FROM
         sys_user a
         <where>
-            <include refid="io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSelect"/>
+            <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
             AND a.deleted = 0
-            <if test="param1.map.nameLike!=null">
-                AND a.name LIKE #{param1.map.nameLike}
+            <if test="param1.unmapped.nameLike!=null">
+                AND a.name LIKE #{param1.un.nameLike}
             </if>
         </where>
         <trim prefix="ORDER BY" prefixOverrides=",">
-            <include refid="io.github.bootystar.mybatisplus.enhancer.DynamicMapper.dynamicSort"/>
+            <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort"/>
             , a.create_time DESC, a.id DESC
         </trim>
     </select>

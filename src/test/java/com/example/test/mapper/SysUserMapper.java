@@ -3,7 +3,7 @@ package com.example.test.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.test.entity.SysUser;
 import com.example.test.vo.SysUserVO;
-import io.github.bootystar.mybatisplus.enhancer.DynamicMapper;
+import io.github.bootystar.mybatisplus.enhancer.EnhancedMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,6 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author bootystar
  */
 @Mapper
-public interface SysUserMapper extends BaseMapper<SysUser>, DynamicMapper<SysUserVO> {
+public interface SysUserMapper extends BaseMapper<SysUser>, EnhancedMapper<SysUserVO> {
 
 }

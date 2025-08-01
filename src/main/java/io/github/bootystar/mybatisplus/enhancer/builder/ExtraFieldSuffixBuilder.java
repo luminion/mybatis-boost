@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
  * 用于构建字段后缀与SQL操作符之间的映射关系，支持动态SQL查询中的字段后缀匹配功能
  *
  * @author bootystar
+ * @deprecated 废弃, 降低耦合由用户自行控制SuffixMap 
  */
 public class ExtraFieldSuffixBuilder {
     private static final String SUFFIX_PATTERN = "^[a-zA-Z0-9_$]+$";
