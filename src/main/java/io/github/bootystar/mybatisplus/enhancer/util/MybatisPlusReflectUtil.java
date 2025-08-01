@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.reflect.GenericTypeUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import io.github.bootystar.mybatisplus.enhancer.core.EnhancedEntity;
+import lombok.SneakyThrows;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 
 import java.lang.reflect.Field;
@@ -156,6 +158,15 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
         return result;
     }
 
+    @SneakyThrows
+    public static Map<String, String> field2JdbcColumnMapByEnhancedEntity(Class<?> entityClass) {
+        if (EnhancedEntity.class.isAssignableFrom(entityClass)) {
+            EnhancedEntity enhanceEntity = (EnhancedEntity) entityClass.getConstructor().newInstance();
+            return enhanceEntity.extraFieldColumnMap();
+        }
+        return new HashMap<>();
+    }
+
     /**
      * 获取实体类属性与数据库字段的映射关系
      *
@@ -169,6 +180,7 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
         Map<String, String> tableInfoMap = filed2JdbcColumnByMybatisPlusTableInfo(entityClass);
         Map<String, String> annotationMap = field2JdbcColumnByMybatisPlusAnnotation(entityClass);
+        Map<String, String> enhancedEntityMap = field2JdbcColumnMapByEnhancedEntity(entityClass);
         // 表信息优先
         tableInfoMap.forEach((key, value) -> {
             if (ignoreFormat != null && value.contains(ignoreFormat)) {
@@ -178,6 +190,13 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
             }
         });
         annotationMap.forEach((key, value) -> {
+            if (ignoreFormat != null && value.contains(ignoreFormat)) {
+                result.putIfAbsent(key, value);
+            } else {
+                result.putIfAbsent(key, String.format(format, value));
+            }
+        });
+        enhancedEntityMap.forEach((key, value) -> {
             if (ignoreFormat != null && value.contains(ignoreFormat)) {
                 result.putIfAbsent(key, value);
             } else {
