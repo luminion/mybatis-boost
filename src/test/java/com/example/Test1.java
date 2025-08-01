@@ -2,11 +2,10 @@ package com.example;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.test.entity.SysUser;
-import com.example.test.impl.SysUserDynamicSqlService;
+import com.example.test.impl.PostgresService;
 import com.example.test.vo.SysUserVO;
+import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author bootystar
@@ -30,58 +28,71 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Test1 {
 
     @Autowired
-    private SysUserDynamicSqlService sysUserDynamicSqlService;
+    private PostgresService postgresService;
 
     private static Long userId1;
     private static Long userId2;
     private static Long userId3;
+    private static Long userId4;
 
-    @BeforeEach
+//    @Test
     void setUp() {
         // 准备测试数据到postgresql数据源
         SysUser user1 = new SysUser();
         user1.setName("张三");
         user1.setAge(25);
         user1.setBirthDate(LocalDate.of(1998, 1, 1));
-        user1.setState(1);
+        user1.setState(1); // 二进制 001
         user1.setCreateTime(LocalDateTime.now());
         user1.setUpdateTime(LocalDateTime.now());
         user1.setDeleted(0);
         user1.setVersion(1);
-        sysUserDynamicSqlService.save(user1);
+        postgresService.save(user1);
         userId1 = user1.getId();
 
         SysUser user2 = new SysUser();
         user2.setName("李四");
         user2.setAge(30);
         user2.setBirthDate(LocalDate.of(1993, 5, 10));
-        user2.setState(1);
+        user2.setState(2); // 二进制 010
         user2.setCreateTime(LocalDateTime.now());
         user2.setUpdateTime(LocalDateTime.now());
         user2.setDeleted(0);
         user2.setVersion(1);
-        sysUserDynamicSqlService.save(user2);
+        postgresService.save(user2);
         userId2 = user2.getId();
 
         SysUser user3 = new SysUser();
         user3.setName("王五");
         user3.setAge(35);
         user3.setBirthDate(LocalDate.of(1988, 12, 20));
-        user3.setState(0);
+        user3.setState(3); // 二进制 011
         user3.setCreateTime(LocalDateTime.now());
         user3.setUpdateTime(LocalDateTime.now());
         user3.setDeleted(0);
         user3.setVersion(1);
-        sysUserDynamicSqlService.save(user3);
+        postgresService.save(user3);
         userId3 = user3.getId();
+        
+        SysUser user4 = new SysUser();
+        user4.setAge(40);
+        user4.setBirthDate(LocalDate.of(1998, 1, 1));
+        user4.setState(4);
+        user4.setCreateTime(LocalDateTime.now());
+        user4.setUpdateTime(LocalDateTime.now());
+        user4.setDeleted(0);
+        user4.setVersion(1);
+        postgresService.save(user4);
+        userId4 = user4.getId();
     }
 
-    @AfterEach
+//    @Test
     void tearDown() {
         // 清理postgresql数据源测试数据
-        if (userId1 != null) sysUserDynamicSqlService.removeById(userId1);
-        if (userId2 != null) sysUserDynamicSqlService.removeById(userId2);
-        if (userId3 != null) sysUserDynamicSqlService.removeById(userId3);
+        if (userId1 != null) postgresService.removeById(userId1);
+        if (userId2 != null) postgresService.removeById(userId2);
+        if (userId3 != null) postgresService.removeById(userId3);
+        if (userId4 != null) postgresService.removeById(userId4);
     }
 
     /**
@@ -90,12 +101,12 @@ public class Test1 {
     @Test
     @Order(1)
     public void testEq() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .eq(SysUser::getName, "张三")
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         assertEquals("张三", list.get(0).getName());
     }
 
@@ -105,12 +116,12 @@ public class Test1 {
     @Test
     @Order(2)
     public void testNe() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .ne(SysUser::getName, "张三")
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         list.forEach(user -> assertNotEquals("张三", user.getName()));
     }
 
@@ -120,12 +131,12 @@ public class Test1 {
     @Test
     @Order(3)
     public void testGt() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .gt(SysUser::getAge, 25)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1); // 李四(30)和王五(35)
+        assertFalse(list.isEmpty()); // 李四(30)和王五(35)
         list.forEach(user -> assertTrue(user.getAge() > 25));
     }
 
@@ -135,12 +146,12 @@ public class Test1 {
     @Test
     @Order(4)
     public void testGe() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .ge(SysUser::getAge, 25)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1); // 张三(25)、李四(30)和王五(35)
+        assertFalse(list.isEmpty()); // 张三(25)、李四(30)和王五(35)
         list.forEach(user -> assertTrue(user.getAge() >= 25));
     }
 
@@ -150,12 +161,12 @@ public class Test1 {
     @Test
     @Order(5)
     public void testLt() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .lt(SysUser::getAge, 30)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1); // 张三(25)
+        assertFalse(list.isEmpty()); // 张三(25)
         list.forEach(user -> assertTrue(user.getAge() < 30));
     }
 
@@ -165,12 +176,12 @@ public class Test1 {
     @Test
     @Order(6)
     public void testLe() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .le(SysUser::getAge, 30)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1); // 张三(25)和李四(30)
+        assertFalse(list.isEmpty()); // 张三(25)和李四(30)
         list.forEach(user -> assertTrue(user.getAge() <= 30));
     }
 
@@ -180,12 +191,12 @@ public class Test1 {
     @Test
     @Order(7)
     public void testLike() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .like(SysUser::getName, "张")
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         assertTrue(list.get(0).getName().contains("张"));
     }
 
@@ -195,12 +206,12 @@ public class Test1 {
     @Test
     @Order(8)
     public void testNotLike() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .notLike(SysUser::getName, "张")
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         list.forEach(user -> assertFalse(user.getName().contains("张")));
     }
 
@@ -210,12 +221,12 @@ public class Test1 {
     @Test
     @Order(9)
     public void testIn() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .in(SysUser::getAge, Arrays.asList(25, 30))
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         Set<Integer> ages = new HashSet<>(Arrays.asList(25, 30));
         list.forEach(user -> assertTrue(ages.contains(user.getAge())));
     }
@@ -226,9 +237,9 @@ public class Test1 {
     @Test
     @Order(10)
     public void testNotIn() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .notIn(SysUser::getAge, Arrays.asList(25, 30))
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
         assertTrue(list.size() >= 0); // 王五(35)
@@ -242,28 +253,14 @@ public class Test1 {
     @Test
     @Order(11)
     public void testIsNull() {
-        // 先添加一个name为null的测试数据到postgresql数据源
-        SysUser user = new SysUser();
-        user.setName(null);
-        user.setAge(40);
-        user.setBirthDate(LocalDate.of(1983, 1, 1));
-        user.setState(1);
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
-        user.setDeleted(0);
-        user.setVersion(1);
-        sysUserDynamicSqlService.save(user);
-
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .isNull(SysUser::getName)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
-        list.forEach(u -> assertNull(u.getName()));
+        assertFalse(list.isEmpty());
+        assertTrue(list.stream().allMatch(e -> e.getName() == null));
 
-        // 清理临时数据
-        sysUserDynamicSqlService.removeById(user.getId());
     }
 
     /**
@@ -272,12 +269,12 @@ public class Test1 {
     @Test
     @Order(12)
     public void testIsNotNull() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .isNotNull(SysUser::getName)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1); // 原始的3个用户
+        assertFalse(list.isEmpty()); // 原始的3个用户
         list.forEach(u -> assertNotNull(u.getName()));
     }
 
@@ -287,14 +284,14 @@ public class Test1 {
     @Test
     @Order(13)
     public void testOr() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
-                .eq(SysUser::getName, "张三")
-                .or()
-                .eq(SysUser::getName, "李四")
-                .wrap(sysUserDynamicSqlService)
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
+                .ge(SysUser::getState, 1)
+                .or(s->s.eq(SysUser::getName, "李四").eq(SysUser::getName, "张三"))
+                .or(s->s.ge(SysUser::getAge, 20).le(SysUser::getAge, 30))
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         Set<String> names = new HashSet<>(Arrays.asList("张三", "李四"));
         list.forEach(user -> assertTrue(names.contains(user.getName())));
     }
@@ -305,12 +302,12 @@ public class Test1 {
     @Test
     @Order(14)
     public void testOrderByAsc() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .orderByAsc(SysUser::getAge)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         for (int i = 0; i < list.size() - 1; i++) {
             assertTrue(list.get(i).getAge() <= list.get(i + 1).getAge());
         }
@@ -322,12 +319,12 @@ public class Test1 {
     @Test
     @Order(15)
     public void testOrderByDesc() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
+        List<SysUserVO> list = SqlHelper.of(SysUser.class)
                 .orderByDesc(SysUser::getAge)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .list();
         assertNotNull(list);
-        assertTrue(list.size() >= 1);
+        assertFalse(list.isEmpty());
         for (int i = 0; i < list.size() - 1; i++) {
             assertTrue(list.get(i).getAge() >= list.get(i + 1).getAge());
         }
@@ -339,9 +336,9 @@ public class Test1 {
     @Test
     @Order(16)
     public void testPage() {
-        IPage<SysUserVO> page = SqlHelper.<SysUser>of()
+        IPage<SysUserVO> page = SqlHelper.of(SysUser.class)
                 .ge(SysUser::getAge, 25)
-                .wrap(sysUserDynamicSqlService)
+                .wrap(postgresService)
                 .page(1L, 2L);
         assertNotNull(page);
         assertEquals(1, page.getCurrent());
@@ -351,19 +348,59 @@ public class Test1 {
     }
 
     /**
-     * 测试 requiredNext 功能
+     * 测试 bitwiseWith 条件
      */
     @Test
     @Order(17)
-    public void testRequiredNext() {
-        List<SysUserVO> list = SqlHelper.<SysUser>of()
-                .eq(SysUser::getAge, 25)
-                .requiredNext()
-                .eq(SysUser::getName, "张三")
-                .wrap(sysUserDynamicSqlService)
+    public void testBitwiseWith() {
+        // 测试具有指定位的用户 (state & 1 > 0)
+        // 张三(state=1)和王五(state=3)应该匹配这个条件
+        List<SysUserVO> list1 = SqlHelper.of(SysUser.class)
+                .bitWith(SysUser::getState, 1)
+                .wrap(postgresService)
                 .list();
-        assertNotNull(list);
-        // 验证嵌套条件查询是否正确执行
-        assertTrue(list.size() >= 0); // 可能为空，取决于具体数据和查询逻辑
+        assertNotNull(list1);
+        assertTrue(list1.size() >= 2); // 张三和王五
+        assertTrue(list1.stream().allMatch(e -> (e.getState() & 1) > 0));
+
+        // 测试具有指定位的用户 (state & 2 > 0)
+        // 李四(state=2)和王五(state=3)应该匹配这个条件
+        List<SysUserVO> list2 = SqlHelper.of(SysUser.class)
+                .bitWith(SysUser::getState, 2)
+                .wrap(postgresService)
+                .list();
+        assertNotNull(list2);
+        assertTrue(list2.size() >= 2); // 李四和王五
+        assertTrue(list2.stream().allMatch(e -> (e.getState() & 2) > 0));
     }
+
+    /**
+     * 测试 bitwiseWithout 条件
+     */
+    @Test
+    @Order(18)
+    public void testBitwiseWithout() {
+        // 测试不具有指定位的用户 (state & 2 = 0)
+        // 只有张三(state=1)应该匹配这个条件
+        List<SysUserVO> list1 = SqlHelper.of(SysUser.class)
+                .bitWithout(SysUser::getState, 2)
+                .wrap(postgresService)
+                .list();
+        assertNotNull(list1);
+        assertFalse(list1.isEmpty());
+        assertTrue(list1.stream().allMatch(e -> (e.getState() & 2) == 0));
+
+        // 测试不具有指定位的用户 (state & 1 = 0)
+        // 只有李四(state=2)应该匹配这个条件
+        List<SysUserVO> list2 = SqlHelper.of(SysUser.class)
+                .bitWithout(SysUser::getState, 1)
+                .wrap(postgresService)
+                .list();
+        assertNotNull(list2);
+        assertFalse(list2.isEmpty());
+        assertTrue(list2.stream().allMatch(e -> (e.getState() & 1) == 0));
+    }
+
+
+ 
 }

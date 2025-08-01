@@ -28,7 +28,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return {@link S } 当前实例
      */
     S or(Consumer<S> consumer);
-    
+
     /**
      * 等于条件
      *
@@ -38,6 +38,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S eq(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.EQ.keyword, value));
         return (S) this;
     }
@@ -51,6 +54,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S ne(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.NE.keyword, value));
         return (S) this;
     }
@@ -64,6 +70,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S gt(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.GT.keyword, value));
         return (S) this;
     }
@@ -77,6 +86,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S ge(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.GE.keyword, value));
         return (S) this;
     }
@@ -90,6 +102,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S lt(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.LT.keyword, value));
         return (S) this;
     }
@@ -103,6 +118,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S le(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.LE.keyword, value));
         return (S) this;
     }
@@ -116,6 +134,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S like(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.LIKE.keyword, value));
         return (S) this;
     }
@@ -129,6 +150,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S notLike(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.NOT_LIKE.keyword, value));
         return (S) this;
     }
@@ -142,6 +166,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S in(SFunction<T, R> getter, Collection<? extends R> value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.IN.keyword, value));
         return (S) this;
     }
@@ -155,6 +182,9 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default <R> S notIn(SFunction<T, R> getter, Collection<? extends R> value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.NOT_IN.keyword, value));
         return (S) this;
     }
@@ -211,7 +241,10 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S bitwiseWith(SFunction<T, R> getter, R value) {
+    default <R> S bitWith(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.BIT_WITH.keyword, value));
         return (S) this;
     }
@@ -224,7 +257,10 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S bitwiseWithout(SFunction<T, R> getter, R value) {
+    default <R> S bitWithout(SFunction<T, R> getter, R value) {
+        if (value == null) {
+            return (S) this;
+        }
         getConditions().add(new SqlCondition(MybatisPlusReflectUtil.getterFieldName(getter), SqlKeyword.BIT_WITHOUT.keyword, value));
         return (S) this;
     }

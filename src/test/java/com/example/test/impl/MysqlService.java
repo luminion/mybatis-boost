@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
  * @author bootystar
  */
 @Service
-@DS("postgresql")
-public class PostgresEnhancedService extends ServiceImpl<SysUserMapper, SysUser> implements EnhancedService<SysUserVO> {
-    
+@DS("mysql")
+public class MysqlService extends ServiceImpl<SysUserMapper, SysUser> implements EnhancedService<SysUserVO> {
 
+  
 
 }
