@@ -183,7 +183,7 @@ public class SysUserController {
 
 }
 ```
-java代码使用方式请参考:[示例](src/test/java/com/example)
+java代码使用方式请参考:[测试用例](src/test/java/com/example)
 
 ## 核心功能
 
@@ -202,12 +202,7 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
   "state": 1
 }
 ```
-
-后缀示例: 
-- `name`包含`mike`
-- `version`为`1`
-- `age`在`18-60`之间
-- `state`为`1`或`2`或`3` 
+查询`name`包含`mike`, `version`为`1`, `age`在`18-60`之间, `state`为`1`或`2`或`3`数据: 
 
 ```json
 {
@@ -231,7 +226,7 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
 - `NotIn` - NOT IN查询
 - `IsNull` - IS NULL
 - `IsNotNull` - IS NOT NULL
-- `bitWith` - 位运算, 包含指定bit位
+- `BitWith` - 位运算, 包含指定bit位
 - `BitWithout` - 位运算, 不包含指定bit位
 
 ### 动态SQL
@@ -292,7 +287,7 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
 ```
 #### 指定排序字段
 - 通过`sorts`字段指定排序字段, 
-- 其中每个条件对象`field`表示排序的字段,`isDesc`表示是否倒序
+- 其中每个条件对象`field`表示排序的字段,`isDesc`表示是否倒序(未指定时默认升序)
 
 查询`name`为`mike`, `version`为`1`的数据, 并将结果按照`id`降序, `age`升序排列
 ```json
@@ -317,4 +312,166 @@ java代码使用方式请参考:[示例](src/test/java/com/example)
     }
   ]
 }
+```
+#### 复杂条件拼接
+SqlHelper完整结构
+- `conditions` - 查询条件
+- `sorts` - 排序字段, 仅根节点有效
+- `symbol` - 条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
+- `child` - 子节点, 一般用于组合嵌套`OR`条件
+  - `conditions` - 子节点查询条件
+  - `symbol` - 子节点条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
+  - `child` - 子子节点(可重复嵌套)
+
+使用建议:
+- 根节点的`conditions`字段用于组合`AND`条件 
+- 当需要组合`OR`条件时, 将`OR`条件组合在`child`中
+- `symbol`默认为`AND`,不组合`OR`条件时无需传递
+- `child`不使用时, 无需传递
+- 
+```json
+{
+  "conditions": [],
+  "sorts": [],
+  "child": {
+    "conditions": [],
+    "symbol": "OR",
+    "child": {
+      "conditions": [],
+      "symbol": "AND",
+      "child": {
+        "conditions": [],
+      }
+    }
+  }
+}
+```
+查询 `verssion`大于`1`,`state`为`1`, `name`为`mike`或`john`, `age`小于`18`或大于`60`的数据
+```sql
+select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or name = 'john') and (age < 18 or age > 60)
+```
+输入参数:
+```json
+{
+  "conditions": [
+    {
+      "field": "version",
+      "operator": ">",
+      "value": 1
+    },
+    {
+      "field": "state",
+      "value": 1
+    }
+  ],
+  "child": {
+    "symbol": "OR",
+    "conditions": [
+      {
+        "field": "name",
+        "value": "mike"
+      },
+      {
+        "field": "name",
+        "value": "john"
+      }
+    ],
+    "child": {
+      "symbol": "OR",
+      "conditions": [
+        {
+          "field": "age",
+          "operator": "<",
+          "value": 18
+        },
+        {
+          "field": "age",
+          "operator": ">",
+          "value": 60
+        }
+      ]
+    }
+  }
+}
+```
+
+## 字段映射
+默认字段映射规则为:
+- 通过Mybatis-plus的配置和注解来获取字段和数据库列的映射关系
+- 满足后缀查询时, 会自动去掉后缀并转化为对应类型查询
+- 若后缀查询和字段冲突, 则使用字段映射关系, 例如`nameLike`字段已存在时, 不会映射为`name`的模糊查询
+- 若找不到对应的字段映射关系, 则会自动将字段放入`unmapped`中, 供后续处理
+- 默认字段映射关系如下:
+  - 获取实体类对应的表信息
+  - 获取实体类字段信息
+  - 获取`@TableField`注解的属性
+  - 获取`EnhancedEntity`接口映射的属性
+
+## 多表联查
+支持以下方式查询非本表字段
+- 自动映射, 兼容`动态SQL`和`动态后缀`查询
+  - 通过`@TableField(exist = false, value="xxx")`注解, 将字段封装为指定数据表的指定列
+  - 实现`EnhancedEntity`接口, 在`extraFieldColumnMap()`方法中定义字段名和数据库表/列的映射关系
+- 在`mapper.xml`文件中自行手动指定
+
+自动映射时, 需要在xml文件中添加需要连接的表和表名
+
+### 通过`@TableFiled`指定
+
+```java
+public class SysUserVO {
+
+  @TableField("user_name") // 字段为user_name
+  private String userName;
+
+  @TableField(exist = false, value = "role.name") // 映射为role表的name字段
+  private String roleName;
+
+  @TableField(exist = false, value = "dept.name") // 映射为dept表的name字段
+  private String deptName;
+}
+``` 
+
+### 实现EnhancedEntity接口
+
+```java
+public class SysUserVO implements EnhancedEntity {
+  // 属性列表....
+    
+  @Override
+  public Map<String, String> extraFieldColumnMap() {
+    var map = new HashMap<Object, Object>();
+    map.put("userName", "user_name"); // 将userName映射为实体类对应表的user_name字段
+    map.put("roleId", "role.id"); // 将roleId映射为role表的id字段
+    map.put("deptId", "dept.id"); // 将deptId映射为dept表的id字段
+    return map;
+  }
+}
+``` 
+
+### 在`mapper.xml`文件中自行手动指定
+所有不能自动映射的字段和值, 会作为`K`,`V`放入`param1.unmapped`中, 供后续处理, 可以在`mapper.xml`文件中自行手动指定, 如下:
+```xml
+
+<select id="voQueryByXml" resultType="com.example.test.vo.SysUserVO">
+    SELECT a.* FROM
+    sys_user a
+    left join sys_role b on a.role_id = b.id
+    left join sys_dept c on a.dept_id = c.id
+    <where>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
+        <!--判断并字段是否存在值, 存在则添加条件-->
+        <if test="param1.unmapped.roleName!=null">
+            AND b.name = #{param1.unmapped.roleName}
+        </if>
+        <if test="param1.unmapped.deptName!=null">
+            AND c.name = #{param1.unmapped.deptName}
+        </if>
+    </where>
+    <trim prefix="ORDER BY" prefixOverrides=",">
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort"/>
+        <!--添加自定义排序条件-->
+        , a.create_time DESC, a.id DESC
+    </trim>
+</select>
 ```
