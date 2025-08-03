@@ -6,7 +6,7 @@
 
 English | [中文](README_ZH.md)
 
-An enhancement toolkit for MyBatis-Plus that provides dynamic SQL building, IService and BaseMapper enhancements, and Excel import/export support.
+An enhancement toolkit for MyBatis-Plus that provides dynamic SQL building, suffix mapping query, IService and BaseMapper enhancements, and Excel import/export support.
 
 ## Features
 
@@ -170,15 +170,15 @@ public class SysUserController {
     public int importExcel(@RequestParam("file") MultipartFile file) {
         // Return number of imported records
         return sysUserService.importExcel(file, SysUserVO.class);
+        ;
     }
 
     // Excel export
-    @PostMapping("/excel/export")
-    public void exportExcel(HttpServletResponse response) throws IOException {
-        String fileName = "user_list.xlsx";
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
-        sysUserService.exportExcel(response.getOutputStream(), SysUserVO.class);
+    @PostMapping("/excel/export/{current}/{size}")
+    public void exportExcel(@RequestBody Map<String, Object> params,
+                            @PathVariable("current") Long current,
+                            @PathVariable("size") Long size) {
+        sysUserService.exportExcel(fileName, SysUserVO.class);
     }
 }
 ```
@@ -188,19 +188,33 @@ For Java code usage examples, please refer to: [Examples](src/test/java/com/exam
 ## Core Features
 
 ### Suffix Query
-With suffix queries, you can easily implement various query requirements.
+- The frontend can easily implement various query requirements by adding `field suffixes` to the input parameters
+- When the frontend input parameters do not have suffixes, it is equivalent to an `equal` query
+- The backend can receive parameters using `entity class` or `Map`
+
+#### Frontend Input Example
+Original fields:
+```json
+{
+  "name": "mike",
+  "version": 1,
+  "age": 18,
+  "state": 1
+}
+```
+Query data where `name` contains `mike`, `version` is `1`, `age` is between `18-60`, and `state` is `1` or `2` or `3`: 
 
 ```json
 {
-  "nameLike": "John",
+  "nameLike": "mike",
+  "version": 1,
   "ageGe": 18,
   "ageLt": 60,
   "stateIn": [1, 2, 3]
 }
 ```
 
-Supported suffix types:
-- `Eq` - Equal (default)
+Supported suffix keywords:
 - `Ne` - Not equal
 - `Lt` - Less than
 - `Le` - Less than or equal
@@ -212,67 +226,252 @@ Supported suffix types:
 - `NotIn` - NOT IN query
 - `IsNull` - IS NULL
 - `IsNotNull` - IS NOT NULL
+- `BitWith` - Bit operation, contains specified bit
+- `BitWithout` - Bit operation, does not contain specified bit
 
-### Lambda Chaining Calls
-Support Lambda expression chaining calls to build query conditions:
+### Dynamic SQL
 
-```java
-List<SysUserVO> list = SqlHelper.of(SysUser.class)
-    .eq(SysUser::getState, 1)
-    .ge(SysUser::getAge, 18)
-    .like(SysUser::getName, "J")
-    .orderByDesc(SysUser::getCreateTime)
-    .wrap(userService)
-    .voList();
-```
+- The frontend can freely specify the `fields` and `values` to query, and freely specify query types, concatenation, sorting, and combination of multiple conditions
+- The backend uses the `SqlHelper` object to receive parameters
 
-### DTO Query
-Support querying through DTO objects, fields in DTO will be automatically mapped to database fields:
+#### Input Example
 
-```java
-public class SysUserSelectDTO {
-    private String nameLike;
-    private Integer ageGe;
-    private Integer ageLt;
-    private List<Integer> stateIn;
-    // getter/setter...
+Original fields:
+```json
+{
+  "name": "mike",
+  "version": 1,
+  "age": 18,
+  "state": 1
 }
+```
+#### Specify Field Search Conditions
+- Specify query conditions through the `conditions` field
+- Each condition object has `field` for the field, `value` for the value, and `operator` for the operator
+- When `operator` is not filled in, the default is equal. Optional values:
+  - `=` - Equal (default)
+  - `<>` - Not equal
+  - `>` - Greater than
+  - `>=` - Greater than or equal
+  - `<` - Less than
+  - `<=` - Less than or equal
+  - `LIKE` - Fuzzy matching
+  - `NOT LIKE` - Not fuzzy matching
+  - `IN` - IN query
+  - `NOT IN` - NOT IN query
+  - `IS NULL` - Specified field is NULL
+  - `IS NOT NULL` - Specified field is not NULL
+  - `$>` - Bit operation, contains specified bit
+  - `$=` - Bit operation, does not contain specified bit
 
-SysUserSelectDTO dto = new SysUserSelectDTO();
-dto.setNameLike("John");
-dto.setAgeGe(18);
-List<SysUserVO> list = userService.voList(dto);
+Query data where `name` is `mike`, `version` is greater than or equal to `1`, and `state` is `1` or `2` or `3`:
+```json
+{
+  "conditions": [
+    {
+      "field": "name",
+      "value": "mike"
+    },
+    {
+      "field": "version",
+      "operator": ">=",
+      "value": 1
+    },
+    {
+      "field": "state",
+      "operator": "IN",
+      "value": [1, 2, 3]
+    }
+  ]
+}
+```
+#### Specify Sort Fields
+- Specify sort fields through the `sorts` field
+- Each condition object has `field` for the sort field and `isDesc` for whether to sort in descending order (ascending by default when not specified)
+
+Query data where `name` is `mike` and `version` is `1`, and sort the results by `id` descending and `age` ascending:
+```json
+{
+  "conditions": [
+    {
+      "field": "name",
+      "value": "mike"
+    },
+    {
+      "field": "version",
+      "value": 1
+    }
+  ],
+  "sorts": [
+    {
+      "field": "id",
+      "isDesc": true
+    },
+    {
+      "field": "age"
+    }
+  ]
+}
+```
+#### Complex Condition Concatenation
+SqlHelper complete structure:
+- `conditions` - Query conditions
+- `sorts` - Sort fields, only valid for root node
+- `symbol` - Connection symbol between conditions, `AND` or `OR`, defaults to `AND` when not specified
+- `child` - Child node, generally used to combine nested `OR` conditions
+  - `conditions` - Child node query conditions
+  - `symbol` - Connection symbol between child node conditions, `AND` or `OR`, defaults to `AND` when not specified
+  - `child` - Grandchild node (can be nested repeatedly)
+
+Usage suggestions:
+- The `conditions` field of the root node is used to combine `AND` conditions
+- When you need to combine `OR` conditions, combine the `OR` conditions in `child`
+- `symbol` defaults to `AND`, no need to pass when not combining `OR` conditions
+- `child` does not need to be passed when not used
+
+```json
+{
+  "conditions": [],
+  "sorts": [],
+  "child": {
+    "conditions": [],
+    "symbol": "OR",
+    "child": {
+      "conditions": [],
+      "symbol": "AND",
+      "child": {
+        "conditions": [],
+      }
+    }
+  }
+}
+```
+Query data where `version` is greater than `1`, `state` is `1`, `name` is `mike` or `john`, and `age` is less than `18` or greater than `60`:
+```sql
+select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or name = 'john') and (age < 18 or age > 60)
+```
+Input parameters:
+```json
+{
+  "conditions": [
+    {
+      "field": "version",
+      "operator": ">",
+      "value": 1
+    },
+    {
+      "field": "state",
+      "value": 1
+    }
+  ],
+  "child": {
+    "symbol": "OR",
+    "conditions": [
+      {
+        "field": "name",
+        "value": "mike"
+      },
+      {
+        "field": "name",
+        "value": "john"
+      }
+    ],
+    "child": {
+      "symbol": "OR",
+      "conditions": [
+        {
+          "field": "age",
+          "operator": "<",
+          "value": 18
+        },
+        {
+          "field": "age",
+          "operator": ">",
+          "value": 60
+        }
+      ]
+    }
+  }
+}
 ```
 
-### Excel Import/Export
-Support Excel import/export functionality based on FastExcel:
+## Field Mapping
+Default field mapping rules:
+- Get field and database column mapping relationship through Mybatis-plus configuration and annotations
+- When suffix query is satisfied, the suffix will be automatically removed and converted to corresponding type query
+- If suffix query and field conflict, the field mapping relationship will be used. For example, when the `nameLike` field already exists, it will not be mapped to a fuzzy query of `name`
+- If the corresponding field mapping relationship cannot be found, the field will be automatically put into `unmapped` for subsequent processing
+- Default field mapping relationship:
+  - Get table information corresponding to entity class
+  - Get entity class field information
+  - Get properties of `@TableField` annotation
+  - Get properties mapped by `EnhancedEntity` interface
+
+## Multi-table Join Query
+Support the following ways to query non-table fields:
+- Automatic mapping, compatible with `dynamic SQL` and `dynamic suffix` queries
+  - Use `@TableField(exist = false, value="xxx")` annotation to encapsulate fields as specified table columns
+  - Implement `EnhancedEntity` interface and define field name and database table/column mapping relationship in `extraFieldColumnMap()` method
+- Manually specify in `mapper.xml` file
+
+When using automatic mapping, you need to add the tables and table names to be joined in the xml file
+
+### Specify via `@TableField`
 
 ```java
-// Export Excel
-userService.exportExcel(outputStream, SysUserVO.class);
+public class SysUserVO {
 
-// Import Excel
-int count = userService.importExcel(file, SysUserVO.class);
+  @TableField("user_name") // Field is user_name
+  private String userName;
+
+  @TableField(exist = false, value = "role.name") // Map to role table's name field
+  private String roleName;
+
+  @TableField(exist = false, value = "dept.name") // Map to dept table's name field
+  private String deptName;
+}
+``` 
+
+### Implement EnhancedEntity Interface
+
+```java
+public class SysUserVO implements EnhancedEntity {
+  // Property list....
+    
+  @Override
+  public Map<String, String> extraFieldColumnMap() {
+    var map = new HashMap<Object, Object>();
+    map.put("userName", "user_name"); // Map userName to user_name field of the table corresponding to the entity class
+    map.put("roleId", "role.id"); // Map roleId to id field of role table
+    map.put("deptId", "dept.id"); // Map deptId to id field of dept table
+    return map;
+  }
+}
+``` 
+
+### Manually specify in `mapper.xml` file
+All fields and values that cannot be automatically mapped will be put into `param1.unmapped` as `K`,`V` for subsequent processing. You can manually specify them in the `mapper.xml` file as follows:
+```xml
+
+<select id="voQueryByXml" resultType="com.example.test.vo.SysUserVO">
+    SELECT a.* FROM
+    sys_user a
+    left join sys_role b on a.role_id = b.id
+    left join sys_dept c on a.dept_id = c.id
+    <where>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
+        <!--Check if the field exists and add condition if it does-->
+        <if test="param1.unmapped.roleName!=null">
+            AND b.name = #{param1.unmapped.roleName}
+        </if>
+        <if test="param1.unmapped.deptName!=null">
+            AND c.name = #{param1.unmapped.deptName}
+        </if>
+    </where>
+    <trim prefix="ORDER BY" prefixOverrides=",">
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort"/>
+        <!--Add custom sort conditions-->
+        , a.create_time DESC, a.id DESC
+    </trim>
+</select>
 ```
-
-## Configuration
-
-### application.yml
-
-```yaml
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-logging:
-  level:
-    org.apache.ibatis: debug
-    java.sql: debug
-```
-
-## More Examples
-
-Please refer to [Test Cases](src/test/java/com/example) for more usage examples.
-
-## License
-
-[Apache License 2.0](LICENSE)
