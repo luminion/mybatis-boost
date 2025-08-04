@@ -340,7 +340,7 @@ Usage suggestions:
       "conditions": [],
       "connector": "AND",
       "child": {
-        "conditions": [],
+        "conditions": []
       }
     }
   }

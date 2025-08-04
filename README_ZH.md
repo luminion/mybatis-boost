@@ -340,7 +340,7 @@ SqlHelper完整结构
       "conditions": [],
       "connector": "AND",
       "child": {
-        "conditions": [],
+        "conditions": []
       }
     }
   }
