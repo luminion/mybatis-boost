@@ -25,7 +25,7 @@ public interface ISqlTree extends Iterable<ISqlTree> {
      *
      * @return 连接符号，如AND或OR
      */
-    String getSymbol();
+    String getConnector();
 
     /**
      * 获取子条件

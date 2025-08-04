@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @Slf4j
 @SpringBootTest
-public class Test1 {
+public class SqlHelperTest1 {
 
     @Autowired
     private PostgresService postgresService;

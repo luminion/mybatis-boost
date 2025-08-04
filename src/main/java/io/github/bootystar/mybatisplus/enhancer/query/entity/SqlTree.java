@@ -30,7 +30,7 @@ public class SqlTree implements ISqlTree {
     /**
      * 条件列表中条件的连接符
      */
-    protected String symbol;
+    protected String connector;
     /**
      * 子条件
      */
@@ -38,7 +38,7 @@ public class SqlTree implements ISqlTree {
 
     {
         this.conditions = new LinkedHashSet<>();
-        symbol = SqlKeyword.AND.keyword;
+        connector = SqlKeyword.AND.keyword;
     }
 
 
@@ -55,12 +55,12 @@ public class SqlTree implements ISqlTree {
      * 使用条件集合和连接符构造SqlTree
      *
      * @param conditions 条件集合
-     * @param symbol     连接符，只能是AND或OR
+     * @param connector     连接符，只能是AND或OR
      * @throws IllegalArgumentException 当symbol不是AND或OR时抛出
      */
-    public SqlTree(Collection<ISqlCondition> conditions, String symbol) {
+    public SqlTree(Collection<ISqlCondition> conditions, String connector) {
         this.conditions.addAll(conditions);
-        this.symbol = SqlKeyword.replaceConnector(symbol);
+        this.connector = SqlKeyword.replaceConnector(connector);
     }
 
     /**
@@ -97,7 +97,7 @@ public class SqlTree implements ISqlTree {
             if (node.getConditions().isEmpty()) {
                 continue;
             }
-            String symbol1 = node.getSymbol();
+            String symbol1 = node.getConnector();
             if (SqlKeyword.OR.keyword.equals(symbol1)) {
                 // put or conditions as child
                 this.addSingleChild(node);

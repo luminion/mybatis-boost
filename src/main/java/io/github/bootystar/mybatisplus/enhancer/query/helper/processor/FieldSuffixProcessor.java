@@ -109,7 +109,7 @@ public class FieldSuffixProcessor {
                 }
                 validatedConditions.add(validate);
             }
-            DefaultProcessor.warp(resultHelper, validatedConditions, currentHelper.getSymbol());
+            DefaultProcessor.warp(resultHelper, validatedConditions, currentHelper.getConnector());
         }
         for (ISqlSort sort : rootHelper.getSorts()) {
             String field = sort.getField();

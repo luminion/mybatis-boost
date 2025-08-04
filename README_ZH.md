@@ -317,16 +317,16 @@ java代码使用方式请参考:[测试用例](src/test/java/com/example)
 SqlHelper完整结构
 - `conditions` - 查询条件
 - `sorts` - 排序字段, 仅根节点有效
-- `symbol` - 条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
+- `connector` - 条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
 - `child` - 子节点, 一般用于组合嵌套`OR`条件
   - `conditions` - 子节点查询条件
-  - `symbol` - 子节点条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
+  - `connector` - 子节点条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
   - `child` - 子子节点(可重复嵌套)
 
 使用建议:
 - 根节点的`conditions`字段用于组合`AND`条件 
 - 当需要组合`OR`条件时, 将`OR`条件组合在`child`中
-- `symbol`默认为`AND`,不组合`OR`条件时无需传递
+- `connector`默认为`AND`,不组合`OR`条件时无需传递
 - `child`不使用时, 无需传递
 - 
 ```json
@@ -335,10 +335,10 @@ SqlHelper完整结构
   "sorts": [],
   "child": {
     "conditions": [],
-    "symbol": "OR",
+    "connector": "OR",
     "child": {
       "conditions": [],
-      "symbol": "AND",
+      "connector": "AND",
       "child": {
         "conditions": [],
       }
@@ -365,7 +365,7 @@ select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or n
     }
   ],
   "child": {
-    "symbol": "OR",
+    "connector": "OR",
     "conditions": [
       {
         "field": "name",
@@ -377,7 +377,7 @@ select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or n
       }
     ],
     "child": {
-      "symbol": "OR",
+      "connector": "OR",
       "conditions": [
         {
           "field": "age",

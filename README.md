@@ -317,16 +317,16 @@ Query data where `name` is `mike` and `version` is `1`, and sort the results by 
 SqlHelper complete structure:
 - `conditions` - Query conditions
 - `sorts` - Sort fields, only valid for root node
-- `symbol` - Connection symbol between conditions, `AND` or `OR`, defaults to `AND` when not specified
+- `connector` - Connection connector between conditions, `AND` or `OR`, defaults to `AND` when not specified
 - `child` - Child node, generally used to combine nested `OR` conditions
   - `conditions` - Child node query conditions
-  - `symbol` - Connection symbol between child node conditions, `AND` or `OR`, defaults to `AND` when not specified
+  - `connector` - Connection connector between child node conditions, `AND` or `OR`, defaults to `AND` when not specified
   - `child` - Grandchild node (can be nested repeatedly)
 
 Usage suggestions:
 - The `conditions` field of the root node is used to combine `AND` conditions
 - When you need to combine `OR` conditions, combine the `OR` conditions in `child`
-- `symbol` defaults to `AND`, no need to pass when not combining `OR` conditions
+- `connector` defaults to `AND`, no need to pass when not combining `OR` conditions
 - `child` does not need to be passed when not used
 
 ```json
@@ -335,10 +335,10 @@ Usage suggestions:
   "sorts": [],
   "child": {
     "conditions": [],
-    "symbol": "OR",
+    "connector": "OR",
     "child": {
       "conditions": [],
-      "symbol": "AND",
+      "connector": "AND",
       "child": {
         "conditions": [],
       }
@@ -365,7 +365,7 @@ Input parameters:
     }
   ],
   "child": {
-    "symbol": "OR",
+    "connector": "OR",
     "conditions": [
       {
         "field": "name",
@@ -377,7 +377,7 @@ Input parameters:
       }
     ],
     "child": {
-      "symbol": "OR",
+      "connector": "OR",
       "conditions": [
         {
           "field": "age",

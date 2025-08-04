@@ -32,14 +32,14 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     /**
      * 添加OR条件
      *
-     * @param consumer 拼装或条件的函数
+     * @param sqlHelper 拼装或条件的函数
      * @return {@link SqlHelper} 当前实例
      */
     @Override
-    public SqlHelper<T> or(Consumer<SqlHelper<T>> consumer) {
+    public SqlHelper<T> or(Consumer<SqlHelper<T>> sqlHelper) {
         SqlHelper<T> child = new SqlHelper<>();
-        child.symbol= SqlKeyword.OR.keyword;
-        consumer.accept(child);
+        child.connector = SqlKeyword.OR.keyword;
+        sqlHelper.accept(child);
         this.addChild(child);
         return this;
     }
