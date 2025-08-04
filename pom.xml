@@ -16,7 +16,7 @@
     
     <properties>
         <springboot.version>2.7.18</springboot.version>
-        <mybatis.plus.version>3.5.11</mybatis.plus.version>
+        <mybatis.plus.version>3.5.12</mybatis.plus.version>
     </properties>
     
     <dependencyManagement>
@@ -103,12 +103,6 @@
             <version>42.7.7</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-            <scope>test</scope>
-        </dependency>
- 
     </dependencies>
 
 </project>
