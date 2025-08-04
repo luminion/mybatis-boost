@@ -12,7 +12,7 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <artifactId>mybatis-plus-enhancer</artifactId>
-    <version>1.2.4</version>
+    <version>2.0.0</version>
     
     <properties>
         <springboot.version>2.7.18</springboot.version>
