@@ -24,16 +24,28 @@ public class FieldSuffixProcessor {
     /**
      * 后缀到操作符的映射关系
      */
-    private Map<String, String> suffix2OperatorMap;
+    private final Map<String, String> suffix2OperatorMap;
 
-    {
-        suffix2OperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
+    /**
+     * 私有构造函数
+     */
+    private FieldSuffixProcessor() {
+        this.suffix2OperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
     }
-    
+
+    /**
+     * 带参数的私有构造函数
+     */
+    private FieldSuffixProcessor(Map<String, String> suffix2OperatorMap) {
+        this.suffix2OperatorMap = suffix2OperatorMap != null ?
+            Collections.unmodifiableMap(new HashMap<>(suffix2OperatorMap)) :
+            SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
+    }
+
     /**
      * 单例实例
      */
-    private final static FieldSuffixProcessor instance = new FieldSuffixProcessor();
+    private static final FieldSuffixProcessor instance = new FieldSuffixProcessor();
 
     /**
      * 获取单例实例
@@ -51,9 +63,7 @@ public class FieldSuffixProcessor {
      * @return {@link FieldSuffixProcessor} 字段后缀处理器实例
      */
     public static FieldSuffixProcessor of(Map<String, String> suffix2OperatorMap) {
-        FieldSuffixProcessor fieldSuffixProcessor = new FieldSuffixProcessor();
-        fieldSuffixProcessor.suffix2OperatorMap = suffix2OperatorMap;
-        return fieldSuffixProcessor;
+        return new FieldSuffixProcessor(suffix2OperatorMap);
     }
 
     /**

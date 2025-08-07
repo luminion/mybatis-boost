@@ -47,6 +47,9 @@ public abstract class ReflectUtil {
      */
     @SneakyThrows
     public static <T> T newInstance(Class<T> clazz) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("clazz must not be null");
+        }
         return clazz.getConstructor().newInstance();
     }
 
@@ -57,6 +60,9 @@ public abstract class ReflectUtil {
      * @return {@link Map} 字段名到字段的映射
      */
     public static Map<String, Field> fieldMap(Class<?> clazz) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("clazz must not be null");
+        }
         if (isJavaCoreClass(clazz)) {
             throw new IllegalArgumentException("clazz must not be java class");
         }
@@ -65,6 +71,7 @@ public abstract class ReflectUtil {
             return stringFieldMap;
         }
         Map<String, Field> map = new HashMap<>();
+        Class<?> originalClass = clazz; // 保存原始类用于缓存键
         while (clazz != null && Object.class != clazz && !clazz.isInterface()) {
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {
@@ -76,7 +83,7 @@ public abstract class ReflectUtil {
             }
             clazz = clazz.getSuperclass();
         }
-        FIELD_MAP_CACHE.put(clazz, map);
+        FIELD_MAP_CACHE.put(originalClass, map); // 使用原始类作为缓存键
         return map;
     }
 
@@ -152,6 +159,12 @@ public abstract class ReflectUtil {
      * @return {@link U} 目标对象
      */
     public static <U> U toTarget(Object source, Class<U> clazz) {
+        if (source == null) {
+            return null;
+        }
+        if (clazz == null) {
+            throw new IllegalArgumentException("clazz must not be null");
+        }
         return copyFieldProperties(source, newInstance(clazz));
     }
 

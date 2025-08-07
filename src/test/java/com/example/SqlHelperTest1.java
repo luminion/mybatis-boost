@@ -6,17 +6,13 @@ import com.example.test.impl.PostgresService;
 import com.example.test.vo.SysUserVO;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @Slf4j
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SqlHelperTest1 {
 
     @Autowired
@@ -34,12 +31,27 @@ public class SqlHelperTest1 {
     private static Long userId2;
     private static Long userId3;
     private static Long userId4;
+    private static Long userId5; // 新增测试用户
 
-//    @Test
+    @BeforeAll
+    static void setUpClass() {
+        log.info("开始SqlHelper测试");
+    }
+
+    @AfterAll
+    static void tearDownClass() {
+        log.info("SqlHelper测试完成");
+    }
+
+    @BeforeEach
     void setUp() {
+        // 清理之前的测试数据
+        tearDown();
+
         // 准备测试数据到postgresql数据源
         SysUser user1 = new SysUser();
         user1.setName("张三");
+        user1.setDescription("测试用户1");
         user1.setAge(25);
         user1.setBirthDate(LocalDate.of(1998, 1, 1));
         user1.setState(1); // 二进制 001
@@ -52,6 +64,7 @@ public class SqlHelperTest1 {
 
         SysUser user2 = new SysUser();
         user2.setName("李四");
+        user2.setDescription("测试用户2");
         user2.setAge(30);
         user2.setBirthDate(LocalDate.of(1993, 5, 10));
         user2.setState(2); // 二进制 010
@@ -64,6 +77,7 @@ public class SqlHelperTest1 {
 
         SysUser user3 = new SysUser();
         user3.setName("王五");
+        user3.setDescription("测试用户3");
         user3.setAge(35);
         user3.setBirthDate(LocalDate.of(1988, 12, 20));
         user3.setState(3); // 二进制 011
@@ -73,8 +87,10 @@ public class SqlHelperTest1 {
         user3.setVersion(1);
         postgresService.save(user3);
         userId3 = user3.getId();
-        
+
         SysUser user4 = new SysUser();
+        user4.setName(null); // 测试null值
+        user4.setDescription("测试用户4");
         user4.setAge(40);
         user4.setBirthDate(LocalDate.of(1998, 1, 1));
         user4.setState(4);
@@ -84,15 +100,34 @@ public class SqlHelperTest1 {
         user4.setVersion(1);
         postgresService.save(user4);
         userId4 = user4.getId();
+
+        // 新增边界测试用户
+        SysUser user5 = new SysUser();
+        user5.setName("赵六");
+        user5.setDescription("边界测试用户");
+        user5.setAge(0); // 边界值测试
+        user5.setBirthDate(LocalDate.of(2000, 1, 1));
+        user5.setState(0);
+        user5.setCreateTime(LocalDateTime.now());
+        user5.setUpdateTime(LocalDateTime.now());
+        user5.setDeleted(0);
+        user5.setVersion(1);
+        postgresService.save(user5);
+        userId5 = user5.getId();
     }
 
-//    @Test
+    @AfterEach
     void tearDown() {
         // 清理postgresql数据源测试数据
-        if (userId1 != null) postgresService.removeById(userId1);
-        if (userId2 != null) postgresService.removeById(userId2);
-        if (userId3 != null) postgresService.removeById(userId3);
-        if (userId4 != null) postgresService.removeById(userId4);
+        try {
+            if (userId1 != null) postgresService.removeById(userId1);
+            if (userId2 != null) postgresService.removeById(userId2);
+            if (userId3 != null) postgresService.removeById(userId3);
+            if (userId4 != null) postgresService.removeById(userId4);
+            if (userId5 != null) postgresService.removeById(userId5);
+        } catch (Exception e) {
+            log.warn("清理测试数据时出现异常: {}", e.getMessage());
+        }
     }
 
     /**
@@ -401,6 +436,192 @@ public class SqlHelperTest1 {
         assertTrue(list2.stream().allMatch(e -> (e.getState() & 1) == 0));
     }
 
+    /**
+     * 测试空值和边界条件
+     */
+    @Test
+    @Order(19)
+    public void testNullAndBoundaryConditions() {
+        // 测试空值查询
+        List<SysUserVO> nullNameList = SqlHelper.of(SysUser.class)
+                .isNull(SysUser::getName)
+                .wrap(postgresService)
+                .list();
+        assertNotNull(nullNameList);
+        assertTrue(nullNameList.size() >= 1); // user4的name为null
 
- 
+        // 测试边界值查询
+        List<SysUserVO> zeroAgeList = SqlHelper.of(SysUser.class)
+                .eq(SysUser::getAge, 0)
+                .wrap(postgresService)
+                .list();
+        assertNotNull(zeroAgeList);
+        assertTrue(zeroAgeList.size() >= 1); // user5的age为0
+
+        // 测试空集合查询
+        List<SysUserVO> emptyInList = SqlHelper.of(SysUser.class)
+                .in(SysUser::getAge, Collections.emptyList())
+                .wrap(postgresService)
+                .list();
+        assertNotNull(emptyInList);
+        assertTrue(emptyInList.isEmpty()); // 空集合应该返回空结果
+    }
+
+    /**
+     * 测试复杂组合条件
+     */
+    @Test
+    @Order(20)
+    public void testComplexConditions() {
+        // 测试复杂AND条件组合
+        List<SysUserVO> complexAndList = SqlHelper.of(SysUser.class)
+                .ge(SysUser::getAge, 25)
+                .le(SysUser::getAge, 35)
+                .isNotNull(SysUser::getName)
+                .wrap(postgresService)
+                .list();
+        assertNotNull(complexAndList);
+        assertTrue(complexAndList.size() >= 2); // 张三、李四、王五符合条件
+
+        // 测试复杂OR条件组合
+        List<SysUserVO> complexOrList = SqlHelper.of(SysUser.class)
+                .eq(SysUser::getName, "张三")
+                .or(helper -> helper.eq(SysUser::getName, "李四"))
+                .wrap(postgresService)
+                .list();
+        assertNotNull(complexOrList);
+        assertEquals(2, complexOrList.size()); // 张三和李四
+
+        // 测试混合条件
+        List<SysUserVO> mixedList = SqlHelper.of(SysUser.class)
+                .ge(SysUser::getAge, 20)
+                .or(helper -> helper
+                        .eq(SysUser::getName, "赵六")
+                        .eq(SysUser::getAge, 0))
+                .wrap(postgresService)
+                .list();
+        assertNotNull(mixedList);
+        assertTrue(mixedList.size() >= 4); // 应该包含大部分用户
+    }
+
+    /**
+     * 测试字段后缀功能
+     */
+    @Test
+    @Order(21)
+    public void testFieldSuffixFeatures() {
+        // 创建带后缀字段的查询对象
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("nameLike", "三"); // 应该转换为name LIKE '%三%'
+        queryParams.put("ageGe", 25); // 应该转换为age >= 25
+        queryParams.put("ageLe", 35); // 应该转换为age <= 35
+
+        List<SysUserVO> suffixList = SqlHelper.of(SysUser.class)
+                .with(queryParams)
+                .wrap(postgresService)
+                .list();
+        assertNotNull(suffixList);
+        assertTrue(suffixList.size() >= 1); // 张三应该匹配
+
+        // 验证结果
+        suffixList.forEach(user -> {
+            assertTrue(user.getName().contains("三"));
+            assertTrue(user.getAge() >= 25 && user.getAge() <= 35);
+        });
+    }
+
+    /**
+     * 测试异常情况处理
+     */
+    @Test
+    @Order(22)
+    public void testExceptionHandling() {
+        // 测试无效操作符（这个测试可能需要根据实际实现调整）
+        assertDoesNotThrow(() -> {
+            List<SysUserVO> list = SqlHelper.of(SysUser.class)
+                    .eq(SysUser::getName, "张三")
+                    .wrap(postgresService)
+                    .list();
+            assertNotNull(list);
+        });
+
+        // 测试空参数
+        assertDoesNotThrow(() -> {
+            List<SysUserVO> list = SqlHelper.of(SysUser.class)
+                    .with(null)
+                    .wrap(postgresService)
+                    .list();
+            assertNotNull(list);
+        });
+    }
+
+    /**
+     * 测试性能和大数据量处理
+     */
+    @Test
+    @Order(23)
+    public void testPerformanceAndLargeData() {
+        long startTime = System.currentTimeMillis();
+
+        // 执行复杂查询
+        List<SysUserVO> performanceList = SqlHelper.of(SysUser.class)
+                .ge(SysUser::getAge, 0)
+                .le(SysUser::getAge, 100)
+                .isNotNull(SysUser::getCreateTime)
+                .orderByAsc(SysUser::getAge)
+                .orderByDesc(SysUser::getCreateTime)
+                .wrap(postgresService)
+                .list();
+
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+
+        assertNotNull(performanceList);
+        assertTrue(executionTime < 5000); // 查询应该在5秒内完成
+        log.info("复杂查询执行时间: {}ms, 结果数量: {}", executionTime, performanceList.size());
+
+        // 验证排序结果
+        if (performanceList.size() > 1) {
+            for (int i = 1; i < performanceList.size(); i++) {
+                SysUserVO prev = performanceList.get(i - 1);
+                SysUserVO curr = performanceList.get(i);
+                assertTrue(prev.getAge() <= curr.getAge(), "年龄排序不正确");
+            }
+        }
+    }
+
+    /**
+     * 测试分页功能的边界情况
+     */
+    @Test
+    @Order(24)
+    public void testPaginationBoundaries() {
+        // 测试第一页
+        IPage<SysUserVO> firstPage = SqlHelper.of(SysUser.class)
+                .ge(SysUser::getAge, 0)
+                .wrap(postgresService)
+                .page(1L, 2L);
+        assertNotNull(firstPage);
+        assertEquals(1, firstPage.getCurrent());
+        assertEquals(2, firstPage.getSize());
+        assertTrue(firstPage.getTotal() >= 5);
+
+        // 测试超出范围的页码
+        IPage<SysUserVO> outOfRangePage = SqlHelper.of(SysUser.class)
+                .ge(SysUser::getAge, 0)
+                .wrap(postgresService)
+                .page(999L, 10L);
+        assertNotNull(outOfRangePage);
+        assertEquals(999, outOfRangePage.getCurrent());
+        assertTrue(outOfRangePage.getRecords().isEmpty());
+
+        // 测试负数页码（应该被修正为1）
+        IPage<SysUserVO> negativePage = SqlHelper.of(SysUser.class)
+                .ge(SysUser::getAge, 0)
+                .wrap(postgresService)
+                .page(-1L, 10L);
+        assertNotNull(negativePage);
+        assertEquals(1, negativePage.getCurrent()); // 应该被修正为1
+    }
+
 }

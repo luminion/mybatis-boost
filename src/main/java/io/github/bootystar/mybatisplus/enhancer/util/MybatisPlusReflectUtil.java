@@ -73,8 +73,14 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
      * @param clazz 实体类
      * @return {@link Map} 字段到列的映射关系
      */
-    public static Map<String, String> filed2JdbcColumnByMybatisPlusTableInfo(Class<?> clazz) {
+    public static Map<String, String> field2JdbcColumnByMybatisPlusTableInfo(Class<?> clazz) {
+        if (clazz == null) {
+            return new HashMap<>();
+        }
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
+        if (tableInfo == null) {
+            return new HashMap<>();
+        }
         List<TableFieldInfo> fieldList = tableInfo.getFieldList();
         Map<String, String> result = new HashMap<>();
         String keyProperty = tableInfo.getKeyProperty();
@@ -103,6 +109,9 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
      * @return {@link Map} 字段到列的映射关系
      */
     public static Map<String, String> field2JdbcColumnByMybatisPlusAnnotation(Class<?> clazz) {
+        if (clazz == null) {
+            return new HashMap<>();
+        }
         HashMap<String, String> result = new HashMap<>();
         Map<String, Field> fieldMap = fieldMap(clazz);
         for (Field field : fieldMap.values()) {
@@ -160,9 +169,13 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
 
     @SneakyThrows
     public static Map<String, String> field2JdbcColumnMapByEnhancedEntity(Class<?> entityClass) {
+        if (entityClass == null) {
+            return new HashMap<>();
+        }
         if (EnhancedEntity.class.isAssignableFrom(entityClass)) {
             EnhancedEntity enhanceEntity = (EnhancedEntity) entityClass.getConstructor().newInstance();
-            return enhanceEntity.extraFieldColumnMap();
+            Map<String, String> extraFieldColumnMap = enhanceEntity.extraFieldColumnMap();
+            return extraFieldColumnMap != null ? extraFieldColumnMap : new HashMap<>();
         }
         return new HashMap<>();
     }
@@ -178,7 +191,7 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
     public static Map<String, String> field2JdbcColumnMap(Class<?> entityClass, String columnFormat, String ignoreFormat) {
         String format = columnFormat == null || columnFormat.isEmpty() ? "%s" : columnFormat;
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
-        Map<String, String> tableInfoMap = filed2JdbcColumnByMybatisPlusTableInfo(entityClass);
+        Map<String, String> tableInfoMap = field2JdbcColumnByMybatisPlusTableInfo(entityClass);
         Map<String, String> annotationMap = field2JdbcColumnByMybatisPlusAnnotation(entityClass);
         Map<String, String> enhancedEntityMap = field2JdbcColumnMapByEnhancedEntity(entityClass);
         // 表信息优先
