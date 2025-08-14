@@ -43,7 +43,6 @@ public abstract class ReflectUtil {
      * @param clazz 类
      * @param <T>   实例类型
      * @return {@link T} 新实例
-     * @throws Exception 当实例化出现异常时抛出
      */
     @SneakyThrows
     public static <T> T newInstance(Class<T> clazz) {
@@ -110,7 +109,6 @@ public abstract class ReflectUtil {
      * @param target 目标对象
      * @param <T>    目标对象类型
      * @return {@link T} 目标对象
-     * @throws Exception 当复制出现异常时抛出
      */
     @SneakyThrows
     public static <T> T copyFieldProperties(Object source, T target) {
@@ -134,7 +132,6 @@ public abstract class ReflectUtil {
      *
      * @param source 来源对象
      * @return {@link Map} 映射关系
-     * @throws Exception 当转换出现异常时抛出
      */
     @SneakyThrows
     public static Map<?, ?> objectToMap(Object source) {

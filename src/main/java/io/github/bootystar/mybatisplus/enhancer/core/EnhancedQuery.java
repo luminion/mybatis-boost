@@ -28,11 +28,11 @@ public interface EnhancedQuery<V> {
     /**
      * VO查询
      *
-     * @param s    查询参数
-     * @param page 分页对象
+     * @param param 查询参数
+     * @param page  分页对象
      * @return {@link List} VO对象列表
      */
-    List<V> voQuery(Object s, IPage<V> page);
+    List<V> voQuery(Object param, IPage<V> page);
 
     /**
      * 获取VO类
@@ -59,12 +59,12 @@ public interface EnhancedQuery<V> {
      *
      * @param id ID值
      * @return {@link V} VO对象
-     * @throws IllegalArgumentException   当ID为空或实体无ID字段时抛出
-     * @throws TooManyResultsException    当查询结果超过一个时抛出
+     * @throws IllegalArgumentException 当ID为空或实体无ID字段时抛出
+     * @throws TooManyResultsException  当查询结果超过一个时抛出
      */
     default V voById(Serializable id) {
         if (id == null) throw new IllegalArgumentException("id can't be null");
-        Class<?> clazz =  MybatisPlusReflectUtil.resolveTypeArguments(getClass(), IService.class)[0];
+        Class<?> clazz = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), IService.class)[0];
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
         if (tableInfo == null) throw new IllegalArgumentException("there is no id field in entity");
         String keyProperty = tableInfo.getKeyProperty();
@@ -88,12 +88,12 @@ public interface EnhancedQuery<V> {
     /**
      * 通过DTO查询单个VO对象
      *
-     * @param s DTO对象
+     * @param param 查询参数
      * @return {@link V} VO对象
      * @throws TooManyResultsException 当查询结果超过一个时抛出
      */
-    default V voByDTO(Object s) {
-        List<V> vs = voList(s);
+    default V voByDTO(Object param) {
+        List<V> vs = voList(param);
         if (vs == null || vs.isEmpty()) return null;
         if (vs.size() > 1) throw new TooManyResultsException("error query => required one but found " + vs.size());
         return vs.get(0);
@@ -102,13 +102,13 @@ public interface EnhancedQuery<V> {
     /**
      * 通过DTO查询单个VO对象并转换为目标类型
      *
-     * @param s     DTO对象
+     * @param param 查询参数
      * @param clazz 目标类
      * @param <R>   目标类型
      * @return {@link R} 目标对象
      */
-    default <R> R voByDTO(Object s, Class<R> clazz) {
-        return MybatisPlusReflectUtil.toTarget(voByDTO(s), clazz);
+    default <R> R voByDTO(Object param, Class<R> clazz) {
+        return MybatisPlusReflectUtil.toTarget(voByDTO(param), clazz);
     }
 
     /**
@@ -123,23 +123,23 @@ public interface EnhancedQuery<V> {
     /**
      * 通过DTO查询VO对象列表
      *
-     * @param s DTO对象
+     * @param param 查询参数
      * @return {@link List} VO对象列表
      */
-    default List<V> voList(Object s) {
-        return voQuery(s, null);
+    default List<V> voList(Object param) {
+        return voQuery(param, null);
     }
 
     /**
      * 通过DTO查询VO对象列表并转换为目标类型
      *
-     * @param s     DTO对象
+     * @param param 查询参数
      * @param clazz 目标类
      * @param <R>   目标类型
      * @return {@link List} 目标对象列表
      */
-    default <R> List<R> voList(Object s, Class<R> clazz) {
-        return voList(s).stream()
+    default <R> List<R> voList(Object param, Class<R> clazz) {
+        return voList(param).stream()
                 .map(e -> MybatisPlusReflectUtil.toTarget(e, clazz))
                 .collect(Collectors.toList());
     }
@@ -147,7 +147,7 @@ public interface EnhancedQuery<V> {
     /**
      * 分页查询VO对象（无条件）
      *
-     * @param current 当前页
+     * @param current 查询参数
      * @param size    每页大小
      * @return {@link IPage} 分页结果
      */
@@ -159,20 +159,20 @@ public interface EnhancedQuery<V> {
         page.setRecords(vs);
         return page;
     }
-    
+
     /**
      * 通过DTO分页查询VO对象
      *
-     * @param s       DTO对象
+     * @param param   查询参数
      * @param current 当前页
      * @param size    每页大小
      * @return {@link IPage} 分页结果
      */
-    default IPage<V> voPage(Object s, Long current, Long size) {
+    default IPage<V> voPage(Object param, Long current, Long size) {
         if (current == null || current < 1) current = 1L;
         if (size == null) size = 10L;
         IPage<V> page = new Page<>(current, size);
-        List<V> vs = voQuery(s, page);
+        List<V> vs = voQuery(param, page);
         page.setRecords(vs);
         return page;
     }
@@ -180,7 +180,7 @@ public interface EnhancedQuery<V> {
     /**
      * 通过DTO分页查询VO对象并转换为目标类型
      *
-     * @param s       DTO对象
+     * @param param   查询参数
      * @param current 当前页
      * @param size    每页大小
      * @param clazz   目标类
@@ -188,8 +188,8 @@ public interface EnhancedQuery<V> {
      * @return {@link IPage} 分页结果
      */
     @SuppressWarnings("unchecked")
-    default <R> IPage<R> voPage(Object s, Long current, Long size, Class<R> clazz) {
-        IPage<R> vp = (IPage<R>) voPage(s, current, size);
+    default <R> IPage<R> voPage(Object param, Long current, Long size, Class<R> clazz) {
+        IPage<R> vp = (IPage<R>) voPage(param, current, size);
         vp.setRecords(
                 vp.getRecords().stream()
                         .map(e -> MybatisPlusReflectUtil.toTarget(e, clazz))
@@ -197,8 +197,5 @@ public interface EnhancedQuery<V> {
         );
         return vp;
     }
-    
-
-    
 
 }

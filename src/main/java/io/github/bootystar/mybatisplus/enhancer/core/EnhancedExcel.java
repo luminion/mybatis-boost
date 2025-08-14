@@ -53,29 +53,29 @@ public interface EnhancedExcel {
     /**
      * 导出Excel数据
      *
-     * @param s            查询参数
-     * @param os           输出流
-     * @param clazz        数据类
+     * @param param         查询参数
+     * @param os            输出流
+     * @param clazz         数据类
      * @param includeFields 包含的字段
      */
-    default void excelExport(Object s, OutputStream os, Class<?> clazz, String... includeFields) {
-        excelExport(s, os, clazz, 1L, -1L, includeFields);
+    default void excelExport(Object param, OutputStream os, Class<?> clazz, String... includeFields) {
+        excelExport(param, os, clazz, 1L, -1L, includeFields);
     }
 
     /**
      * 导出Excel数据（分页）
      *
-     * @param s       查询参数
-     * @param os      输出流
-     * @param clazz   数据类
-     * @param current 当前页
-     * @param size    每页大小
+     * @param param         查询参数
+     * @param os            输出流
+     * @param clazz         数据类
+     * @param current       当前页
+     * @param size          每页大小
      * @param includeFields 包含的字段
      */
     @SuppressWarnings("rawtypes")
-    default void excelExport(Object s, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
+    default void excelExport(Object param, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
         EnhancedQuery enhancedQuery = CastUtil.cast(this, EnhancedQuery.class);
-        List<?> voList = enhancedQuery.voPage(s, current, size).getRecords();
+        List<?> voList = enhancedQuery.voPage(param, current, size).getRecords();
         ExcelUtil.write(os, clazz, voList, includeFields);
     }
 

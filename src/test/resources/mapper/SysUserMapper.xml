@@ -11,7 +11,7 @@
             <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
             AND a.deleted = 0
             <if test="param1.unmapped.nameLike!=null">
-                AND a.name LIKE #{param1.un.nameLike}
+                AND a.name LIKE #{param1.unmapped.nameLike}
             </if>
         </where>
         <trim prefix="ORDER BY" prefixOverrides=",">

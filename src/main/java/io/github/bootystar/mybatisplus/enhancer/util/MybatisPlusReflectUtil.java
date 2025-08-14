@@ -81,6 +81,16 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
         if (tableInfo == null) {
             return new HashMap<>();
         }
+        Map<String, String> result = field2JdbcColumnByTableInfo(tableInfo);
+        TableFieldInfo logicDeleteFieldInfo = tableInfo.getLogicDeleteFieldInfo();
+        if (logicDeleteFieldInfo != null) {
+            String name = logicDeleteFieldInfo.getField().getName();
+            result.remove(name);
+        }
+        return result;
+    }
+
+    private static Map<String, String> field2JdbcColumnByTableInfo(TableInfo tableInfo) {
         List<TableFieldInfo> fieldList = tableInfo.getFieldList();
         Map<String, String> result = new HashMap<>();
         String keyProperty = tableInfo.getKeyProperty();
@@ -94,11 +104,6 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
             String jdbcColumn = fieldInfo.getColumn();
             result.put(fieldName, jdbcColumn);
         }
-//        TableFieldInfo logicDeleteFieldInfo = tableInfo.getLogicDeleteFieldInfo();
-//        if (logicDeleteFieldInfo != null) {
-//            String name = logicDeleteFieldInfo.getField().getName();
-//            result.remove(name);
-//        }
         return result;
     }
 
@@ -119,7 +124,7 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
 //            TableLogic tableLogic = field.getAnnotation(TableLogic.class);
 //            if (tableLogic != null) {
 //                String value = tableLogic.value();
-//                if (!value.isEmpty()) {
+//                if (!value.isEmpty() && !result.containsKey(value)) {
 //                    result.putIfAbsent(fieldName, value);
 //                    continue;
 //                }
@@ -127,22 +132,20 @@ public abstract class MybatisPlusReflectUtil extends ReflectUtil {
 //            TableId tableId = field.getAnnotation(TableId.class);
 //            if (tableId != null) {
 //                String value = tableId.value();
-//                if (!value.isEmpty()) {
+//                if (!value.isEmpty() && !result.containsKey(value)) {
 //                    result.putIfAbsent(fieldName, value);
 //                    continue;
 //                }
 //            }
             TableField tableField = field.getAnnotation(TableField.class);
             if (tableField != null) {
-//                boolean exist = tableField.exist();
+                boolean exist = tableField.exist();
                 String value = tableField.value();
-                if (value != null) {
+                if (!exist && value != null && !result.containsKey(value)) {
                     result.putIfAbsent(fieldName, value);
                     continue;
                 }
             }
-//            // 无注解字段
-//            result.putIfAbsent(fieldName, fieldName);
         }
         return result;
     }

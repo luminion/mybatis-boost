@@ -23,11 +23,11 @@ public interface EnhancedMapper<V> extends EnhancedQuery<V> {
     /**
      * 通过XML进行VO查询
      *
-     * @param s    SQL实体
+     * @param param 参数对象
      * @param page 分页对象
      * @return {@link List} VO对象列表
      */
-    List<V> voQueryByXml(ISqlEntity s, IPage<V> page);
+    List<V> voQueryByXml(Object param, IPage<V> page);
 
     /**
      * VO查询
