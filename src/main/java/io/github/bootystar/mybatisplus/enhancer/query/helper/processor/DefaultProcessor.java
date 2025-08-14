@@ -5,6 +5,7 @@ import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlSort;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlSort;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlTree;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.AbstractSqlHelper;
 import io.github.bootystar.mybatisplus.enhancer.query.helper.ISqlHelper;
@@ -35,7 +36,7 @@ public abstract class DefaultProcessor {
      * @param unmapped             未映射参数集合
      * @return {@link ISqlCondition} 验证后的SQL条件，如果验证失败返回null
      */
-    public static ISqlCondition validate(ISqlCondition sqlCondition, Map<String, String> field2JdbcColumnMap, Map<String, Object> unmapped) {
+    public static ISqlCondition validateCondition(ISqlCondition sqlCondition, Map<String, String> field2JdbcColumnMap, Map<String, Object> unmapped) {
         String field = sqlCondition.getField();
         String operator = sqlCondition.getOperator();
         Object value = sqlCondition.getValue();
@@ -74,6 +75,15 @@ public abstract class DefaultProcessor {
         return new SqlCondition(jdbcColumn, operator, value);
     }
 
+    public static ISqlSort validateSort(ISqlSort sqlSort, Map<String, String> field2JdbcColumnMap) {
+        String jdbcColumn = field2JdbcColumnMap.get(sqlSort.getField());
+        if (jdbcColumn==null){
+            log.warn("sort field [{}] not exist in fieldMap , it will be removed", sqlSort.getField());
+            return null;
+        }
+        return new SqlSort(jdbcColumn, sqlSort.isDesc());
+    }
+
     /**
      * 包装SQL条件
      *
@@ -81,7 +91,7 @@ public abstract class DefaultProcessor {
      * @param sqlConditions SQL条件集合
      * @param symbol        连接符号
      */
-    public static void warp(AbstractSqlHelper<?, ?> sqlHelper, Collection<ISqlCondition> sqlConditions, String symbol) {
+    public static void warpConditions(AbstractSqlHelper<?, ?> sqlHelper, Collection<ISqlCondition> sqlConditions, String symbol) {
         if (sqlHelper==null || sqlConditions==null || sqlConditions.isEmpty()) {
             return;
         }
@@ -92,6 +102,16 @@ public abstract class DefaultProcessor {
         }
         SqlTree iSqlTrees = new SqlTree(sqlConditions, SqlKeyword.OR.keyword);
         sqlHelper.with(iSqlTrees);
+    }
+    
+    
+    public static void wrapSorts(AbstractSqlHelper<?, ?> sqlHelper,Collection<ISqlSort> sqlSorts, Map<String, String> field2JdbcColumnMap) {
+        for (ISqlSort sqlSort : sqlSorts) {
+            ISqlSort iSqlSort = validateSort(sqlSort, field2JdbcColumnMap);
+            if (iSqlSort != null) {
+                sqlHelper.getSorts().add(iSqlSort);
+            }
+        }
     }
 
     /**
@@ -108,29 +128,23 @@ public abstract class DefaultProcessor {
             throw new IllegalArgumentException("can't get entity class from sql helper");
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
-        Collection<ISqlSort> resultSorts = resultHelper.getSorts();
-        Map<String, Object> unmapped = resultHelper.getUnmapped();
         Map<String, String> field2JdbcColumnMap = MybatisPlusReflectUtil.field2JdbcColumnMap(entityClass);
+        Map<String, Object> unmapped = resultHelper.getUnmapped();
         for (ISqlTree currentHelper : rootHelper) {
             Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();
             Iterator<ISqlCondition> conditionIterator = currentHelperConditions.iterator();
             LinkedHashSet<ISqlCondition> validatedConditions = new LinkedHashSet<>(currentHelperConditions.size());
             while (conditionIterator.hasNext()) {
                 ISqlCondition sqlCondition = conditionIterator.next();
-                ISqlCondition validate = DefaultProcessor.validate(sqlCondition, field2JdbcColumnMap, unmapped);
+                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, field2JdbcColumnMap, unmapped);
                 if (validate == null) {
                     continue;
                 }
                 validatedConditions.add(validate);
             }
-            DefaultProcessor.warp(resultHelper, validatedConditions, currentHelper.getConnector());
+            DefaultProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        for (ISqlSort sort : rootHelper.getSorts()) {
-            String field = sort.getField();
-            if (field2JdbcColumnMap.containsKey(field)) {
-                resultSorts.add(sort);
-            }
-        }
+        DefaultProcessor.wrapSorts(resultHelper, resultHelper.getSorts(), field2JdbcColumnMap);
         return resultHelper;
     }
     

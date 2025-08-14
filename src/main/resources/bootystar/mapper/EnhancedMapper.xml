@@ -8,8 +8,7 @@
                 <if test="gen.conditions != null and gen.conditions.size() > 0">
                     <trim prefix="AND (" suffix=")" prefixOverrides="AND|OR">
                         <foreach collection="gen.conditions" item="item">
-                            ${gen.connector}
-                            <choose>
+                            ${gen.connector}<choose>
                                 <when test="item.operator == 'IN' or item.operator == 'NOT IN'">
                                     ${item.field} ${item.operator}
                                     <foreach collection="item.value" item="val" separator="," open="(" close=")">
@@ -39,10 +38,7 @@
     <sql id="dynamicSort">
         <if test="param1 != null and param1.sorts != null and param1.sorts.size() > 0">
             <foreach collection="param1.sorts" item="item" separator="," open=",">
-                ${item.field}
-                <if test="item.isDesc()">
-                    DESC
-                </if>
+                ${item.field}<if test="item.isDesc()"> DESC</if>
             </foreach>
         </if>
     </sql>

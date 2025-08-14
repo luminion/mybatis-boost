@@ -80,7 +80,6 @@ public class FieldSuffixProcessor {
             throw new IllegalArgumentException("can't get entity class from sql helper");
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
-        Collection<ISqlSort> resultSorts = resultHelper.getSorts();
         Map<String, Object> unmapped = resultHelper.getUnmapped();
         Map<String, String> field2JdbcColumnMap = MybatisPlusReflectUtil.field2JdbcColumnMap(entityClass);
         Set<String> suffixes = suffix2OperatorMap.keySet();
@@ -101,7 +100,7 @@ public class FieldSuffixProcessor {
                             String operator = suffix2OperatorMap.get(suffix);
                             log.debug("condition field [{}] Matched suffix operator [{}]", field, operator);
                             SqlCondition suffixCondition = new SqlCondition(sourceFiled, operator, sqlCondition.getValue());
-                            ISqlCondition validateSuffixCondition = DefaultProcessor.validate(suffixCondition, field2JdbcColumnMap, unmapped);
+                            ISqlCondition validateSuffixCondition = DefaultProcessor.validateCondition(suffixCondition, field2JdbcColumnMap, unmapped);
                             if (validateSuffixCondition == null) {
                                 continue;
                             }
@@ -113,20 +112,15 @@ public class FieldSuffixProcessor {
                         continue;
                     }
                 }
-                ISqlCondition validate = DefaultProcessor.validate(sqlCondition, field2JdbcColumnMap, unmapped);
+                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, field2JdbcColumnMap, unmapped);
                 if (validate == null) {
                     continue;
                 }
                 validatedConditions.add(validate);
             }
-            DefaultProcessor.warp(resultHelper, validatedConditions, currentHelper.getConnector());
+            DefaultProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        for (ISqlSort sort : rootHelper.getSorts()) {
-            String field = sort.getField();
-            if (field2JdbcColumnMap.containsKey(field)) {
-                resultSorts.add(sort);
-            }
-        }
+        DefaultProcessor.wrapSorts(resultHelper, resultHelper.getSorts(), field2JdbcColumnMap);
         return resultHelper;
     }
 
