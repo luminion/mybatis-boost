@@ -120,7 +120,7 @@ public class FieldSuffixProcessor {
             }
             DefaultProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        DefaultProcessor.wrapSorts(resultHelper, resultHelper.getSorts(), field2JdbcColumnMap);
+        DefaultProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), field2JdbcColumnMap);
         return resultHelper;
     }
 

@@ -14,8 +14,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,97 +28,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class EnhancedMapperTest {
+public class MysqlEnhancedMapperTest {
 
     @Autowired
     private SysUserMapper sysUserMapper;
-
-    private static Long userId1;
-    private static Long userId2;
-    private static Long userId3;
-    private static Long userId4;
-
-    @BeforeAll
-    static void setUpClass() {
-        log.info("开始EnhancedMapper测试");
-    }
-
-    @AfterAll
-    static void tearDownClass() {
-        log.info("EnhancedMapper测试完成");
-    }
-
-    @BeforeEach
-    void setUp() {
-        // 清理之前的测试数据
-        tearDown();
-        
-        // 准备测试数据
-        SysUser user1 = new SysUser();
-        user1.setName("张三");
-        user1.setDescription("EnhancedMapper测试用户1");
-        user1.setAge(25);
-        user1.setBirthDate(LocalDate.of(1998, 1, 1));
-        user1.setState(1);
-        user1.setCreateTime(LocalDateTime.now());
-        user1.setUpdateTime(LocalDateTime.now());
-        user1.setDeleted(0);
-        user1.setVersion(1);
-        sysUserMapper.insert(user1);
-        userId1 = user1.getId();
-
-        SysUser user2 = new SysUser();
-        user2.setName("李四");
-        user2.setDescription("EnhancedMapper测试用户2");
-        user2.setAge(30);
-        user2.setBirthDate(LocalDate.of(1993, 5, 10));
-        user2.setState(2);
-        user2.setCreateTime(LocalDateTime.now());
-        user2.setUpdateTime(LocalDateTime.now());
-        user2.setDeleted(0);
-        user2.setVersion(1);
-        sysUserMapper.insert(user2);
-        userId2 = user2.getId();
-
-        SysUser user3 = new SysUser();
-        user3.setName("王五");
-        user3.setDescription("EnhancedMapper测试用户3");
-        user3.setAge(35);
-        user3.setBirthDate(LocalDate.of(1988, 12, 20));
-        user3.setState(3);
-        user3.setCreateTime(LocalDateTime.now());
-        user3.setUpdateTime(LocalDateTime.now());
-        user3.setDeleted(0);
-        user3.setVersion(1);
-        sysUserMapper.insert(user3);
-        userId3 = user3.getId();
-        
-        SysUser user4 = new SysUser();
-        user4.setName(null);
-        user4.setDescription("EnhancedMapper测试用户4");
-        user4.setAge(40);
-        user4.setBirthDate(LocalDate.of(1985, 3, 15));
-        user4.setState(4);
-        user4.setCreateTime(LocalDateTime.now());
-        user4.setUpdateTime(LocalDateTime.now());
-        user4.setDeleted(0);
-        user4.setVersion(1);
-        sysUserMapper.insert(user4);
-        userId4 = user4.getId();
-    }
-
-    @AfterEach
-    void tearDown() {
-        // 清理测试数据
-        try {
-            if (userId1 != null) sysUserMapper.deleteById(userId1);
-            if (userId2 != null) sysUserMapper.deleteById(userId2);
-            if (userId3 != null) sysUserMapper.deleteById(userId3);
-            if (userId4 != null) sysUserMapper.deleteById(userId4);
-        } catch (Exception e) {
-            log.warn("清理测试数据时出现异常: {}", e.getMessage());
-        }
-    }
 
     /**
      * 测试基本的VO查询功能

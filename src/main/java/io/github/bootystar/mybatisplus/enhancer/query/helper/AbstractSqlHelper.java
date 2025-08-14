@@ -1,6 +1,7 @@
 package io.github.bootystar.mybatisplus.enhancer.query.helper;
 
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlCondition;
+import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlEntity;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlSort;
 import io.github.bootystar.mybatisplus.enhancer.query.core.ISqlTree;
 import io.github.bootystar.mybatisplus.enhancer.query.entity.SqlCondition;
