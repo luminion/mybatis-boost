@@ -15,7 +15,7 @@ import java.util.Map;
  * 自动配置类
  * <p>
  * 该配置类会在存在SqlSessionFactory的条件下自动配置，主要负责为所有SqlSessionFactory实例
- * 初始化DynamicMapper的SQL片段，确保动态SQL功能能够正常工作
+ * 初始化EnhancedMapper的SQL片段，确保动态SQL功能能够正常工作
  *
  * @author bootystar
  */
@@ -25,7 +25,7 @@ import java.util.Map;
 public class EnhancerAutoConfiguration implements ApplicationContextAware {
 
     /**
-     * 设置应用上下文，并为所有SqlSessionFactory实例配置DynamicMapper
+     * 设置应用上下文，并为所有SqlSessionFactory实例配置EnhancedMapper
      *
      * @param applicationContext 应用上下文
      * @throws BeansException 当获取Bean出现异常时抛出
