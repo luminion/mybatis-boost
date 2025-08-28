@@ -4,32 +4,34 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/bootystar/mybatis-plus-enhancer?style=social)](https://github.com/bootystar/mybatis-plus-enhancer)
 
-English | [中文](README_ZH.md)
+[English](README_EN.md) | 中文
 
-An enhancement toolkit for MyBatis-Plus that provides dynamic SQL building, suffix mapping query, IService and BaseMapper enhancements, and Excel import/export support.
+MyBatis-Plus 增强工具包，提供动态SQL构建、后缀映射查询、IService和BaseMapper增强功能，以及Excel导入导出支持。
 
-## Features
+## 功能特性
 
-- **Suffix SQL Building**: Automatically map different query types with `field`+`suffix`
-- **Dynamic SQL Building**: Support dynamic condition splicing based on input parameters
-- **Join Table Property Query**: Support automatic mapping of non-table field queries
-- **Map Query Conditions**: Automatically convert Map parameters
-- **Data Field Mapping**: Automatically convert properties to database fields
-- **SQL Injection Prevention**: Prevent SQL injection through prepared SQL
-- **Lambda Chaining Calls**: Support chaining calls to append parameter conditions
-- **VO Type Conversion**: Automatically convert query results to specified classes
-- **BaseMapper Enhancement**: Add `voById`, `voList`, `voPage` and other methods
-- **IService Query Enhancement**: Add `voById`, `voList`, `voPage` and other methods
-- **IService Business Enhancement**: Add `insertByDTO`, `updateByDTO` and other methods
-- **IService Excel Integration**: Integrate `FastExcel` and `EasyExcel`, support Excel import/export
+- **后缀SQL构建**：支持`字段`+`后缀`自动映射不同类型查询
+- **动态SQL构建**：支持根据入参动态拼接条件
+- **联表属性查询**：支持非本表字段的查询自动映射
+- **Map查询条件**：自动转化Map参数
+- **数据字段映射**：自动转换属性为数据库字段
+- **SQL反注入**：通过预编译SQL, 防止SQL注入
+- **Lambda链式调用**：支持链式调用追加参数条件
+- **VO类型转化**：自动将查询结果转化为指定类
+- **BaseMapper增强**：添加`voById`、`voList`、`voPage`等方法
+- **IService查询增强**：添加`voById`、`voList`、`voPage` 等方法
+- **IService业务增强**：添加`insertByDTO`、`updateByDTO`等方法
+- **IService集成Excel**：集成`FastExcel`和`EasyExcel`, 支持Excel导入/导出
 
-## Repository
+
+## 仓库地址
 
 - GitHub: https://github.com/bootystar/mybatis-plus-enhancer
 - Maven Central: https://central.sonatype.com/artifact/io.github.bootystar/mybatis-plus-enhancer
 
-## Installation
-
+## maven依赖
+当前最新版本为:  
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.bootystar/mybatis-plus-enhancer)](https://mvnrepository.com/artifact/io.github.bootystar/mybatis-plus-enhancer)
 ```xml
 <dependency>
     <groupId>io.github.bootystar</groupId>
@@ -38,12 +40,10 @@ An enhancement toolkit for MyBatis-Plus that provides dynamic SQL building, suff
 </dependency>
 ```
 
-Current latest version: [![Maven Central](https://img.shields.io/maven-central/v/io.github.bootystar/mybatis-plus-enhancer)](https://mvnrepository.com/artifact/io.github.bootystar/mybatis-plus-enhancer)
+## 快速开始
 
-## Quick Start
-
-### 1. Create MyBatis-Plus Entity and BaseMapper
-If you already have MyBatis-Plus entities and BaseMapper, you can skip this step
+### 1. 创建mybatis-plus实体类和BaseMapper 
+若已有mybatis-plus实体类和BaseMapper, 可跳过此步骤
 
 ```java
 @TableName("sys_user")
@@ -61,14 +61,15 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 }
 ```
 
-### 2. Extend Mapper Interface
-* Create or specify a `VO class` for displaying query results
-* Make the `mapper` interface extend [EnhancedMapper](src/main/java/io/github/bootystar/mybatisplus/enhancer/EnhancedMapper.java), and specify the generic type as VO class
-* Use `utility class` to get `mapper.xml` content, and copy it to the corresponding xml file
-* (Optional) If there is a service layer, you can make the service implement [EnhancedService](src/main/java/io/github/bootystar/mybatisplus/enhancer/EnhancedService.java) interface to have all the methods of the mapper
+### 2. 扩展mapper接口
+* 创建或指定`VO类`, 用于展示查询结果
+* 使`mapper`接口继承[EnhancedMapper](src/main/java/io/github/bootystar/mybatisplus/enhancer/EnhancedMapper.java), 并指定泛型为VO类
+* 通过`工具类`获取`mapper.xml`内容, 并将其复制到对应xml文件中
+* (可选) 若有service层, 可使service实现[EnhancedService](src/main/java/io/github/bootystar/mybatisplus/enhancer/EnhancedService.java)接口, 即可拥有mapper对应所有方法
+
 
 ```java
-// VO class for encapsulating query results, can inherit from entity class or use entity class directly
+// 用于封装查询结果的VO类, 可以继承自实体类, 也可以直接使用实体类
 public class SysUserVO {
     private Long id;
     private String name;
@@ -77,7 +78,7 @@ public class SysUserVO {
 }
 ```
 ```java
-// Mapper interface file, make it extend EnhancedMapper interface
+// mapper接口文件, 使其继承EnhancedMapper接口
 public interface SysUserMapper extends BaseMapper<SysUser>, 
         EnhancedMapper<SysUserVO> {
 }
@@ -86,31 +87,29 @@ public interface SysUserMapper extends BaseMapper<SysUser>,
 ```java
 import io.github.bootystar.mybatisplus.enhancer.util.MapperUtil;
 
-// Get mapper.xml file sql fragment through utility class
+// 通过工具类获取mapper.xml文件的sql片段
 public static void main(String[] args) {
     var mapperContent = MapperUtil.getMapperContent(SysUserMapper.class);
     System.out.println(mapperContent);
 }
 ```
 ```xml
-<!--Copy the sql fragment generated by the utility class to the mapper.xml file-->
+<!--复制工具类生成的该sql片段到mapper.xml文件中-->
 <select id="voQueryByXml" resultType="com.example.test.vo.SysUserVO">
     SELECT a.* FROM sys_user a
     <where>
-        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.queryFragment"/>
     </where>
     <trim prefix="ORDER BY" prefixOverrides=",">
-        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort"/>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
     </trim>
 </select>
 ```
 
-### 3. Usage Examples
+### 3. 使用示例
 
 ```java
 import io.github.bootystar.mybatisplus.enhancer.query.helper.SqlHelper;
-import lombok.SneakyThrows;
-
 import java.util.List;
 import java.util.Map;
 
@@ -121,35 +120,35 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
-    // Query VO by ID
+    // 根据ID查询VO
     @GetMapping("/{id}")
     public SysUserVO getUserById(@PathVariable Long id) {
         return sysUserService.voById(id);
     }
 
-    // Query by DTO object
+    // 通过DTO对象查询
     @PostMapping("/dto")
     public List<SysUserVO> getUsersByDTO(@RequestBody SysUserDTO dto) {
         return sysUserService.voList(dto);
     }
 
-    // Query by map conditions (support suffix mapping for different query types)
+    // 通过map条件查询(支持后缀映射不同类型查询)
     @PostMapping("/map")
     public List<SysUserVO> getUsersByMap(@RequestBody Map<String, Object> params) {
         return sysUserService.voList(params);
     }
 
-    // Dynamic sql query with input parameters
+    // 入参拼装动态sql查询
     @PostMapping("/sql")
     public List<SysUserVO> getUsersBySql(@RequestBody SqlHelper<SysUser> sqlHelper) {
         return sysUserService.voList(sqlHelper);
     }
 
-    // Lambda call, encapsulate required conditions
+    // lambda调用,封装必须条件
     @PostMapping("/lambda")
     public List<SysUserVO> getUsersBySql(@RequestBody Map<String, Object> params) {
         return SqlHelper.of(SysUser.class)
-                .with(params) // Add parameters, support entity class, DTO object, map, SqlHelper, etc.
+                .with(params) // 添加参数, 支持实体类, DTO对象, map, SqlHelper等
                 .eq(SysUser::getState,1) // state=1
                 .ge(SysUser::getAge, 18) // age>=18
                 .like(SysUser::getUserName, "tom") // userName like '%tom%'
@@ -157,7 +156,7 @@ public class SysUserController {
                 .voList();
     }
 
-    // Page query
+    // 分页查询
     @PostMapping("/page/{current}/{size}")
     public IPage<SysUserVO> getUserPage(@RequestBody Map<String, Object> params,
                                         @PathVariable("current") Long current,
@@ -165,35 +164,36 @@ public class SysUserController {
         return sysUserService.voPage(params, current, size);
     }
 
-    // Excel import
+    // Excel导入
     @PostMapping("/excel/import")
     public int importExcel(@RequestParam("file") MultipartFile file) {
-        // Return number of imported records
+        // 返回导入条数
         return sysUserService.importExcel(file, SysUserVO.class);
         ;
     }
 
-    // Excel export
+    // Excel导出
     @PostMapping("/excel/export/{current}/{size}")
     public void exportExcel(@RequestBody Map<String, Object> params,
                             @PathVariable("current") Long current,
                             @PathVariable("size") Long size) {
         sysUserService.exportExcel(fileName, SysUserVO.class);
     }
+
+
 }
 ```
+java代码使用方式请参考:[测试用例](src/test/java/com/example)
 
-For Java code usage examples, please refer to: [Examples](src/test/java/com/example)
+## 核心功能
 
-## Core Features
+### 后缀查询
+- 前端可以在传入参数中添加`字段后缀`轻松实现各种查询需求
+- 前端入参在不添加后缀时, 等同于`等于`查询
+- 后端可用`实体类`或`Map`接收参数
 
-### Suffix Query
-- The frontend can easily implement various query requirements by adding `field suffixes` to the input parameters
-- When the frontend input parameters do not have suffixes, it is equivalent to an `equal` query
-- The backend can receive parameters using `entity class` or `Map`
-
-#### Frontend Input Example
-Original fields:
+#### 前端入参示例
+若实体属性如下
 ```json
 {
   "name": "mike",
@@ -202,7 +202,7 @@ Original fields:
   "state": 1
 }
 ```
-Query data where `name` contains `mike`, `version` is `1`, `age` is between `18-60`, and `state` is `1` or `2` or `3`: 
+查询`name`包含`mike`, `version`为`1`, `age`在`18-60`之间, `state`为`1`或`2`或`3`数据: 
 
 ```json
 {
@@ -214,71 +214,69 @@ Query data where `name` contains `mike`, `version` is `1`, `age` is between `18-
 }
 ```
 
-#### Supported suffix keywords:
-- `Ne` - Not equal
-- `Lt` - Less than
-- `Le` - Less than or equal
-- `Gt` - Greater than
-- `Ge` - Greater than or equal
-- `Like` - Fuzzy matching
-- `NotLike` - Not fuzzy matching
-- `In` - IN query
-- `NotIn` - NOT IN query
+#### 默认的后缀关键字：
+- `Ne` - 不等于
+- `Lt` - 小于
+- `Le` - 小于等于
+- `Gt` - 大于
+- `Ge` - 大于等于
+- `Like` - 模糊匹配
+- `NotLike` - 反模糊匹配
+- `In` - IN查询
+- `NotIn` - NOT IN查询
 - `IsNull` - IS NULL
 - `IsNotNull` - IS NOT NULL
-- `BitWith` - Bit operation, contains specified bit
-- `BitWithout` - Bit operation, does not contain specified bit
+- `BitWith` - 位运算, 包含指定bit位
+- `BitWithout` - 位运算, 不包含指定bit位
 
-#### Custom Suffixes
-- In subclasses of `EnhancedMapper`, you can override the `voQuery` method to implement custom logic
-- The framework provides `FieldSuffixProcessor` for convenient encapsulation of custom suffixes
-- Supported operators (case-insensitive):
-  - `=` - Equal
-  - `<>` - Not equal
-  - `>` - Greater than
-  - `>=` - Greater than or equal
-  - `<` - Less than
-  - `<=` - Less than or equal
-  - `LIKE` - Fuzzy matching
-  - `NOT LIKE` - Not fuzzy matching
-  - `IN` - IN query
-  - `NOT IN` - NOT IN query
-  - `IS NULL` - Specified field is NULL
-  - `IS NOT NULL` - Specified field is not NULL
-  - `$>` - Bit operation, contains specified bit
-  - `$=` - Bit operation, does not contain specified bit
-
+#### 自定义后缀
+- 在`EnhancedMapper`的子类中,可以重写`voQuery`方法实现自定义的逻辑
+- 框架提供`FieldSuffixProcessor`用于便捷的封装自定义后缀
+- 支持的操作符(不区分大小写): 
+  - `=` - 等于,
+  - `<>` - 不等于
+  - `>` - 大于
+  - `>=` - 大于等于
+  - `<` - 小于
+  - `<=` - 小于等于
+  - `LIKE` - 模糊匹配
+  - `NOT LIKE` - 反模糊匹配
+  - `IN` - IN查询
+  - `NOT IN` - NOT IN查询
+  - `IS NULL` - 指定字段为NULL
+  - `IS NOT NULL` - 指定字段不为NULL
+  - `$>` - 位运算, 包含指定bit位
+  - `$=` - 位运算, 不包含指定bit位
 ```java
 public interface SysUserMapper extends BaseMapper<SysUser>, EnhancedMapper<SysUserVO> {
     
   @Override
   default List<V> voQuery(Object param, IPage<V> page) {
     Class<?> entityClass = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), BaseMapper.class)[0];
-    HashMap<String, String> map = new HashMap<String, String>(); // Specify the mapping relationship between suffixes and operators
+    HashMap<String, String> map = new HashMap<String, String>(); // 指定后缀和操作符的映射关系
     map.put("_like", "LIKE");
     map.put("_ge", ">=");
     map.put("_le", "<=");
     map.put("_not_eq", "<>");
     map.put("_like", "LIKE");
-    SqlHelper<SysUser> sqlHelper = SqlHelper.of(SysUser.class) // Create sqlHelper for the corresponding entity class
-            .with(param) // Encapsulate the original parameters
-            .process(FieldSuffixProcessor.of(map)::process) // Field validation/secondary encapsulation
+    SqlHelper<SysUser> sqlHelper = SqlHelper.of(SysUser.class) // 创建对应实体类的sqlHelper
+            .with(param) // 封装原来的参数
+            .process(FieldSuffixProcessor.of(map)::process) // 字段校验/二次封装
             ;
     return voQueryByXml(sqlHelper, page);
   }
 
 }
+
 ```
+### 动态SQL
 
+- 前端可以自由指定需要查询的`字段`和`值`, 并自由指定查询类型, 拼接, 排序, 组合多条件
+- 后端使用`SqlHelper`对象接收参数
 
-### Dynamic SQL
+#### 入参示例
 
-- The frontend can freely specify the `fields` and `values` to query, and freely specify query types, concatenation, sorting, and combination of multiple conditions
-- The backend uses the `SqlHelper` object to receive parameters
-
-#### Input Example
-
-Original fields:
+原始字段:
 ```json
 {
   "name": "mike",
@@ -287,26 +285,26 @@ Original fields:
   "state": 1
 }
 ```
-#### Specify Field Search Conditions
-- Specify query conditions through the `conditions` field
-- Each condition object has `field` for the field, `value` for the value, and `operator` for the operator
-- When `operator` is not filled in, the default is equal. Optional values (case-insensitive):
-  - `=` - Equal (default)
-  - `<>` - Not equal
-  - `>` - Greater than
-  - `>=` - Greater than or equal
-  - `<` - Less than
-  - `<=` - Less than or equal
-  - `LIKE` - Fuzzy matching
-  - `NOT LIKE` - Not fuzzy matching
-  - `IN` - IN query
-  - `NOT IN` - NOT IN query
-  - `IS NULL` - Specified field is NULL
-  - `IS NOT NULL` - Specified field is not NULL
-  - `$>` - Bit operation, contains specified bit
-  - `$=` - Bit operation, does not contain specified bit
+#### 指定字段检索条件
+- 通过`conditions`字段指定查询条件,
+- 其中每个条件对象`field`表示字段,`value`表示值,`operator`表示操作符号
+- `operator`不填写时,默认为等于, 可选值(不区分大小写)：
+  - `=` - 等于(默认),
+  - `<>` - 不等于
+  - `>` - 大于
+  - `>=` - 大于等于
+  - `<` - 小于
+  - `<=` - 小于等于
+  - `LIKE` - 模糊匹配
+  - `NOT LIKE` - 反模糊匹配
+  - `IN` - IN查询
+  - `NOT IN` - NOT IN查询
+  - `IS NULL` - 指定字段为NULL
+  - `IS NOT NULL` - 指定字段不为NULL
+  - `$>` - 位运算, 包含指定bit位
+  - `$=` - 位运算, 不包含指定bit位
 
-Query data where `name` is `mike`, `version` is greater than or equal to `1`, and `state` is `1` or `2` or `3`:
+查询`name`为`mike`, `version`大于等于`1`, `state`为`1`或`2`或`3`的数据
 ```json
 {
   "conditions": [
@@ -327,11 +325,11 @@ Query data where `name` is `mike`, `version` is greater than or equal to `1`, an
   ]
 }
 ```
-#### Specify Sort Fields
-- Specify sort fields through the `sorts` field
-- Each condition object has `field` for the sort field and `isDesc` for whether to sort in descending order (ascending by default when not specified)
+#### 指定排序字段
+- 通过`sorts`字段指定排序字段, 
+- 其中每个条件对象`field`表示排序的字段,`isDesc`表示是否倒序(未指定时默认升序)
 
-Query data where `name` is `mike` and `version` is `1`, and sort the results by `id` descending and `age` ascending:
+查询`name`为`mike`, `version`为`1`的数据, 并将结果按照`id`降序, `age`升序排列
 ```json
 {
   "conditions": [
@@ -355,22 +353,22 @@ Query data where `name` is `mike` and `version` is `1`, and sort the results by 
   ]
 }
 ```
-#### Complex Condition Concatenation
-SqlHelper complete structure:
-- `conditions` - Query conditions
-- `sorts` - Sort fields, only valid for root node
-- `connector` - Connection connector between conditions, `AND` or `OR`, defaults to `AND` when not specified
-- `child` - Child node, generally used to combine nested `OR` conditions
-  - `conditions` - Child node query conditions
-  - `connector` - Connection connector between child node conditions, `AND` or `OR`, defaults to `AND` when not specified
-  - `child` - Grandchild node (can be nested repeatedly)
+#### 复杂条件拼接
+SqlHelper完整结构
+- `conditions` - 查询条件
+- `sorts` - 排序字段, 仅根节点有效
+- `connector` - 条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
+- `child` - 子节点, 一般用于组合嵌套`OR`条件
+  - `conditions` - 子节点查询条件
+  - `connector` - 子节点条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
+  - `child` - 子子节点(可重复嵌套)
 
-Usage suggestions:
-- The `conditions` field of the root node is used to combine `AND` conditions
-- When you need to combine `OR` conditions, combine the `OR` conditions in `child`
-- `connector` defaults to `AND`, no need to pass when not combining `OR` conditions
-- `child` does not need to be passed when not used
-
+使用建议:
+- 根节点的`conditions`字段用于组合`AND`条件 
+- 当需要组合`OR`条件时, 将`OR`条件组合在`child`中
+- `connector`默认为`AND`,不组合`OR`条件时无需传递
+- `child`不使用时, 无需传递
+- 
 ```json
 {
   "conditions": [],
@@ -388,11 +386,11 @@ Usage suggestions:
   }
 }
 ```
-Query data where `version` is greater than `1`, `state` is `1`, `name` is `mike` or `john`, and `age` is less than `18` or greater than `60`:
+查询 `version`大于`1`,`state`为`1`, `name`为`mike`或`john`, `age`小于`18`或大于`60`的数据
+```sql
+select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or name = 'john') and (age < 18 or age > 60)
 ```
-SELECT * FROM sys_user WHERE (version > 1 AND state = 1) AND (name = 'mike' OR name = 'john') AND (age < 18 OR age > 60)
-```
-Input parameters:
+输入参数:
 ```json
 {
   "conditions": [
@@ -437,62 +435,62 @@ Input parameters:
 }
 ```
 
-## Field Mapping
-Default field mapping rules:
-- Get field and database column mapping relationship through Mybatis-plus configuration and annotations
-- When suffix query is satisfied, the suffix will be automatically removed and converted to corresponding type query
-- If suffix query and field conflict, the field mapping relationship will be used. For example, when the `nameLike` field already exists, it will not be mapped to a fuzzy query of `name`
-- If the corresponding field mapping relationship cannot be found, the field will be automatically put into `unmapped` for subsequent processing
-- Default field mapping relationship:
-  - Get table information corresponding to entity class
-  - Get entity class field information
-  - Get properties of `@TableField` annotation
-  - Get properties mapped by `EnhancedEntity` interface
+## 字段映射
+默认字段映射规则为:
+- 通过Mybatis-plus的配置和注解来获取字段和数据库列的映射关系
+- 满足后缀查询时, 会自动去掉后缀并转化为对应类型查询
+- 若后缀查询和字段冲突, 则使用字段映射关系, 例如`nameLike`字段已存在时, 不会映射为`name`的模糊查询
+- 若找不到对应的字段映射关系, 则会自动将字段放入`unmapped`中, 供后续处理
+- 默认字段映射关系如下:
+  - 获取实体类对应的表信息
+  - 获取实体类字段信息
+  - 获取`@TableField`注解的属性
+  - 获取`EnhancedEntity`接口映射的属性
 
-## Multi-table Join Query
-Support the following ways to query non-table fields:
-- Automatic mapping, compatible with `dynamic SQL` and `dynamic suffix` queries
-  - Use `@TableField(exist = false, value="xxx")` annotation to encapsulate fields as specified table columns
-  - Implement `EnhancedEntity` interface and define field name and database table/column mapping relationship in `extraFieldColumnMap()` method
-- Manually specify in `mapper.xml` file
+## 多表联查
+支持以下方式查询非本表字段
+- 自动映射, 兼容`动态SQL`和`动态后缀`查询
+  - 通过`@TableField(exist = false, value="xxx")`注解, 将字段封装为指定数据表的指定列
+  - 实现`EnhancedEntity`接口, 在`extraFieldColumnMap()`方法中定义字段名和数据库表/列的映射关系
+- 在`mapper.xml`文件中自行手动指定
 
-When using automatic mapping, you need to add the tables and table names to be joined in the xml file
+自动映射时, 需要在xml文件中添加需要连接的表和表名
 
-### Specify via `@TableField`
+### 通过`@TableFiled`指定
 
 ```java
 public class SysUserVO {
 
-  @TableField("user_name") // Field is user_name
+  @TableField("user_name") // 字段为user_name
   private String userName;
 
-  @TableField(exist = false, value = "role.name") // Map to role table's name field
+  @TableField(exist = false, value = "role.name") // 映射为role表的name字段
   private String roleName;
 
-  @TableField(exist = false, value = "dept.name") // Map to dept table's name field
+  @TableField(exist = false, value = "dept.name") // 映射为dept表的name字段
   private String deptName;
 }
 ``` 
 
-### Implement EnhancedEntity Interface
+### 实现EnhancedEntity接口
 
 ```java
 public class SysUserVO implements EnhancedEntity {
-  // Property list....
+  // 属性列表....
     
   @Override
   public Map<String, String> extraFieldColumnMap() {
     var map = new HashMap<Object, Object>();
-    map.put("userName", "user_name"); // Map userName to user_name field of the table corresponding to the entity class
-    map.put("roleId", "role.id"); // Map roleId to id field of role table
-    map.put("deptId", "dept.id"); // Map deptId to id field of dept table
+    map.put("userName", "user_name"); // 将userName映射为实体类对应表的user_name字段
+    map.put("roleId", "role.id"); // 将roleId映射为role表的id字段
+    map.put("deptId", "dept.id"); // 将deptId映射为dept表的id字段
     return map;
   }
 }
 ``` 
 
-### Manually specify in `mapper.xml` file
-All fields and values that cannot be automatically mapped will be put into `param1.unmapped` as `K`,`V` for subsequent processing. You can manually specify them in the `mapper.xml` file as follows:
+### 在`mapper.xml`文件中自行手动指定
+所有不能自动映射的字段和值, 会作为`K`,`V`放入`param1.unmapped`中, 供后续处理, 可以在`mapper.xml`文件中自行手动指定, 如下:
 ```xml
 
 <select id="voQueryByXml" resultType="com.example.test.vo.SysUserVO">
@@ -502,7 +500,7 @@ All fields and values that cannot be automatically mapped will be put into `para
     left join sys_dept c on a.dept_id = c.id
     <where>
         <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.queryFragment"/>
-        <!--Check if the field exists and add condition if it does-->
+        <!--判断并字段是否存在值, 存在则添加条件-->
         <if test="param1.unmapped.roleName!=null">
             AND b.name = #{param1.unmapped.roleName}
         </if>
@@ -512,7 +510,8 @@ All fields and values that cannot be automatically mapped will be put into `para
     </where>
     <trim prefix="ORDER BY" prefixOverrides=",">
         <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
-        <!--Add custom sort conditions-->
+        <!--添加自定义排序条件-->
         , a.create_time DESC, a.id DESC
     </trim>
 </select>
+```

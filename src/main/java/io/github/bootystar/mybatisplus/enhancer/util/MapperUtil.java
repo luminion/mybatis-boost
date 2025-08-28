@@ -110,10 +110,10 @@ public abstract class MapperUtil {
                 "        FROM\n" +
                 "        " + tableName + " a\n" +
                 "        <where>\n" +
-                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect\"/>\n" +
+                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.queryFragment\"/>\n" +
                 "        </where>\n" +
                 "        <trim prefix=\"ORDER BY\" prefixOverrides=\",\">\n" +
-                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort\"/>\n" +
+                "            <include refid=\"io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.sortFragment\"/>\n" +
                 "        </trim>\n"
                 ;
     }
