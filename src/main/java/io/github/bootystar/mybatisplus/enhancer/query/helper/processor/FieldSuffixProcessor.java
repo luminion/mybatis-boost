@@ -37,9 +37,10 @@ public class FieldSuffixProcessor {
      * 带参数的私有构造函数
      */
     private FieldSuffixProcessor(Map<String, String> suffix2OperatorMap) {
-        this.suffix2OperatorMap = suffix2OperatorMap != null ?
-            Collections.unmodifiableMap(new HashMap<>(suffix2OperatorMap)) :
-            SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
+        if (suffix2OperatorMap == null) {
+            throw new IllegalArgumentException("suffix2OperatorMap can't be null");
+        }
+        this.suffix2OperatorMap = suffix2OperatorMap;
     }
 
     /**
@@ -55,7 +56,7 @@ public class FieldSuffixProcessor {
     public static FieldSuffixProcessor of() {
         return instance;
     }
-    
+
     /**
      * 创建新的字段后缀处理器实例
      *
@@ -108,7 +109,7 @@ public class FieldSuffixProcessor {
                             break;
                         }
                     }
-                    if (isSuffixMatched){
+                    if (isSuffixMatched) {
                         continue;
                     }
                 }

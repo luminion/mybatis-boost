@@ -15,9 +15,7 @@ import java.util.Map;
  */
 @AllArgsConstructor
 public enum SqlExtraSuffix {
-
-    //    EQ("Eq", SqlKeyword.EQ),
-//    NE("Ne", SqlKeyword.NE),
+    
     /**
      * 不等于操作后缀
      */

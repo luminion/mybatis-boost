@@ -193,7 +193,7 @@ java代码使用方式请参考:[测试用例](src/test/java/com/example)
 - 后端可用`实体类`或`Map`接收参数
 
 #### 前端入参示例
-原始字段
+若实体属性如下
 ```json
 {
   "name": "mike",
@@ -214,7 +214,7 @@ java代码使用方式请参考:[测试用例](src/test/java/com/example)
 }
 ```
 
-支持的后缀关键字：
+#### 默认的后缀关键字：
 - `Ne` - 不等于
 - `Lt` - 小于
 - `Le` - 小于等于
@@ -229,6 +229,46 @@ java代码使用方式请参考:[测试用例](src/test/java/com/example)
 - `BitWith` - 位运算, 包含指定bit位
 - `BitWithout` - 位运算, 不包含指定bit位
 
+#### 自定义后缀
+- 在`EnhancedMapper`的子类中,可以重写`voQuery`方法实现自定义的逻辑
+- 框架提供`FieldSuffixProcessor`用于便捷的封装自定义后缀
+- 支持的操作符(不区分大小写): 
+  - `=` - 等于,
+  - `<>` - 不等于
+  - `>` - 大于
+  - `>=` - 大于等于
+  - `<` - 小于
+  - `<=` - 小于等于
+  - `LIKE` - 模糊匹配
+  - `NOT LIKE` - 反模糊匹配
+  - `IN` - IN查询
+  - `NOT IN` - NOT IN查询
+  - `IS NULL` - 指定字段为NULL
+  - `IS NOT NULL` - 指定字段不为NULL
+  - `$>` - 位运算, 包含指定bit位
+  - `$=` - 位运算, 不包含指定bit位
+```java
+public interface SysUserMapper extends BaseMapper<SysUser>, EnhancedMapper<SysUserVO> {
+    
+  @Override
+  default List<V> voQuery(Object param, IPage<V> page) {
+    Class<?> entityClass = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), BaseMapper.class)[0];
+    HashMap<String, String> map = new HashMap<String, String>(); // 指定后缀和操作符的映射关系
+    map.put("_like", "LIKE");
+    map.put("_ge", ">=");
+    map.put("_le", "<=");
+    map.put("_not_eq", "<>");
+    map.put("_like", "LIKE");
+    SqlHelper<SysUser> sqlHelper = SqlHelper.of(SysUser.class) // 创建对应实体类的sqlHelper
+            .with(param) // 封装原来的参数
+            .process(FieldSuffixProcessor.of(map)::process) // 字段校验/二次封装
+            ;
+    return voQueryByXml(sqlHelper, page);
+  }
+
+}
+
+```
 ### 动态SQL
 
 - 前端可以自由指定需要查询的`字段`和`值`, 并自由指定查询类型, 拼接, 排序, 组合多条件
@@ -248,7 +288,7 @@ java代码使用方式请参考:[测试用例](src/test/java/com/example)
 #### 指定字段检索条件
 - 通过`conditions`字段指定查询条件,
 - 其中每个条件对象`field`表示字段,`value`表示值,`operator`表示操作符号
-- `operator`不填写时,默认为等于, 可选值：
+- `operator`不填写时,默认为等于, 可选值(不区分大小写)：
   - `=` - 等于(默认),
   - `<>` - 不等于
   - `>` - 大于
@@ -346,7 +386,7 @@ SqlHelper完整结构
   }
 }
 ```
-查询 `verssion`大于`1`,`state`为`1`, `name`为`mike`或`john`, `age`小于`18`或大于`60`的数据
+查询 `version`大于`1`,`state`为`1`, `name`为`mike`或`john`, `age`小于`18`或大于`60`的数据
 ```sql
 select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or name = 'john') and (age < 18 or age > 60)
 ```

@@ -214,7 +214,7 @@ Query data where `name` contains `mike`, `version` is `1`, `age` is between `18-
 }
 ```
 
-Supported suffix keywords:
+#### Supported suffix keywords:
 - `Ne` - Not equal
 - `Lt` - Less than
 - `Le` - Less than or equal
@@ -228,6 +228,48 @@ Supported suffix keywords:
 - `IsNotNull` - IS NOT NULL
 - `BitWith` - Bit operation, contains specified bit
 - `BitWithout` - Bit operation, does not contain specified bit
+
+#### Custom Suffixes
+- In subclasses of `EnhancedMapper`, you can override the `voQuery` method to implement custom logic
+- The framework provides `FieldSuffixProcessor` for convenient encapsulation of custom suffixes
+- Supported operators (case-insensitive):
+  - `=` - Equal
+  - `<>` - Not equal
+  - `>` - Greater than
+  - `>=` - Greater than or equal
+  - `<` - Less than
+  - `<=` - Less than or equal
+  - `LIKE` - Fuzzy matching
+  - `NOT LIKE` - Not fuzzy matching
+  - `IN` - IN query
+  - `NOT IN` - NOT IN query
+  - `IS NULL` - Specified field is NULL
+  - `IS NOT NULL` - Specified field is not NULL
+  - `$>` - Bit operation, contains specified bit
+  - `$=` - Bit operation, does not contain specified bit
+
+```java
+public interface SysUserMapper extends BaseMapper<SysUser>, EnhancedMapper<SysUserVO> {
+    
+  @Override
+  default List<V> voQuery(Object param, IPage<V> page) {
+    Class<?> entityClass = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), BaseMapper.class)[0];
+    HashMap<String, String> map = new HashMap<String, String>(); // Specify the mapping relationship between suffixes and operators
+    map.put("_like", "LIKE");
+    map.put("_ge", ">=");
+    map.put("_le", "<=");
+    map.put("_not_eq", "<>");
+    map.put("_like", "LIKE");
+    SqlHelper<SysUser> sqlHelper = SqlHelper.of(SysUser.class) // Create sqlHelper for the corresponding entity class
+            .with(param) // Encapsulate the original parameters
+            .process(FieldSuffixProcessor.of(map)::process) // Field validation/secondary encapsulation
+            ;
+    return voQueryByXml(sqlHelper, page);
+  }
+
+}
+```
+
 
 ### Dynamic SQL
 
@@ -248,7 +290,7 @@ Original fields:
 #### Specify Field Search Conditions
 - Specify query conditions through the `conditions` field
 - Each condition object has `field` for the field, `value` for the value, and `operator` for the operator
-- When `operator` is not filled in, the default is equal. Optional values:
+- When `operator` is not filled in, the default is equal. Optional values (case-insensitive):
   - `=` - Equal (default)
   - `<>` - Not equal
   - `>` - Greater than
@@ -347,8 +389,8 @@ Usage suggestions:
 }
 ```
 Query data where `version` is greater than `1`, `state` is `1`, `name` is `mike` or `john`, and `age` is less than `18` or greater than `60`:
-```sql
-select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or name = 'john') and (age < 18 or age > 60)
+```
+SELECT * FROM sys_user WHERE (version > 1 AND state = 1) AND (name = 'mike' OR name = 'john') AND (age < 18 OR age > 60)
 ```
 Input parameters:
 ```json
@@ -474,4 +516,3 @@ All fields and values that cannot be automatically mapped will be put into `para
         , a.create_time DESC, a.id DESC
     </trim>
 </select>
-```
