@@ -459,7 +459,7 @@ public class SysUserVO implements EnhancedEntity {
     left join sys_role b on a.role_id = b.id
     left join sys_dept c on a.dept_id = c.id
     <where>
-        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.queryFragment"/>
         <!--判断并字段是否存在值, 存在则添加条件-->
         <if test="param1.unmapped.roleName!=null">
             AND b.name = #{param1.unmapped.roleName}
@@ -469,7 +469,7 @@ public class SysUserVO implements EnhancedEntity {
         </if>
     </where>
     <trim prefix="ORDER BY" prefixOverrides=",">
-        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort"/>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
         <!--添加自定义排序条件-->
         , a.create_time DESC, a.id DESC
     </trim>

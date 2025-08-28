@@ -459,7 +459,7 @@ All fields and values that cannot be automatically mapped will be put into `para
     left join sys_role b on a.role_id = b.id
     left join sys_dept c on a.dept_id = c.id
     <where>
-        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSelect"/>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.queryFragment"/>
         <!--Check if the field exists and add condition if it does-->
         <if test="param1.unmapped.roleName!=null">
             AND b.name = #{param1.unmapped.roleName}
@@ -469,7 +469,7 @@ All fields and values that cannot be automatically mapped will be put into `para
         </if>
     </where>
     <trim prefix="ORDER BY" prefixOverrides=",">
-        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.dynamicSort"/>
+        <include refid="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
         <!--Add custom sort conditions-->
         , a.create_time DESC, a.id DESC
     </trim>

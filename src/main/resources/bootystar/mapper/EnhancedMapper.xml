@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.github.bootystar.mybatisplus.enhancer.EnhancedMapper">
 
-    <sql id="dynamicSelect">
+    <sql id="queryFragment">
         <if test="param1 != null">
             <foreach collection="param1" item="gen">
                 <if test="gen.conditions != null and gen.conditions.size() > 0">
@@ -35,7 +35,7 @@
         </if>
     </sql>
 
-    <sql id="dynamicSort">
+    <sql id="sortFragment">
         <if test="param1 != null and param1.sorts != null and param1.sorts.size() > 0">
             <foreach collection="param1.sorts" item="item" separator="," open=",">
                 ${item.field}<if test="item.isDesc()"> DESC</if>
