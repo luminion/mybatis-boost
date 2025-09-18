@@ -15,8 +15,8 @@ import io.github.bootystar.mybatisplus.enhancer.util.MybatisPlusReflectUtil;
  * @author bootystar
  */
 @SuppressWarnings("unused")
-public interface EnhancedService {
-//public interface EnhancedService<T> extends IService<T> {
+public interface EnhancedIService {
+//public interface EnhancedIService<T> extends IService<T> {
 
 //    default T toEntity(Object source) {
 //        return MybatisPlusReflectHelper.toTarget(source, getEntityClass());

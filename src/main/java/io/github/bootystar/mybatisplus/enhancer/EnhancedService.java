@@ -3,6 +3,7 @@ package io.github.bootystar.mybatisplus.enhancer;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.bootystar.mybatisplus.enhancer.core.EnhancedExcel;
+import io.github.bootystar.mybatisplus.enhancer.core.EnhancedIService;
 import io.github.bootystar.mybatisplus.enhancer.core.EnhancedQuery;
 import io.github.bootystar.mybatisplus.enhancer.util.CastUtil;
 
@@ -17,7 +18,7 @@ import java.util.Objects;
  * @param <V> VO类型
  * @author bootystar
  */
-public interface EnhancedService<V> extends io.github.bootystar.mybatisplus.enhancer.core.EnhancedService, EnhancedQuery<V>, EnhancedExcel {
+public interface EnhancedService<V> extends EnhancedIService, EnhancedQuery<V>, EnhancedExcel {
 
     /**
      * VO查询
