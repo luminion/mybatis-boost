@@ -70,7 +70,9 @@ public abstract class DefaultProcessor {
             }
         }
         if (SqlKeyword.isLikeOperator(operator) && value instanceof String) {
-            value = "%" + value + "%";
+            if (!value.toString().contains("%")){
+                value = "%" + value + "%";    
+            }
         }
         return new SqlCondition(jdbcColumn, operator, value);
     }
