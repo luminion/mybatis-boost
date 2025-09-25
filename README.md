@@ -4,8 +4,6 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/bootystar/mybatis-plus-enhancer?style=social)](https://github.com/bootystar/mybatis-plus-enhancer)
 
-[English](README_EN.md) | 中文
-
 MyBatis-Plus 增强工具包，提供动态SQL构建、后缀映射查询、IService和BaseMapper增强功能，以及Excel导入导出支持。
 
 ## 功能特性
