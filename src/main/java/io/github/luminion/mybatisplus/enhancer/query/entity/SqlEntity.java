@@ -44,7 +44,7 @@ public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
      * @return {@link SqlTree} 当前实例
      */
     @Override
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected SqlTree addChild(ISqlTree sqlTree) {
         if (sqlTree==null){
             return this;
