@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
 
@@ -19,30 +20,28 @@ import java.util.Map;
  * @author luminion
  */
 @Slf4j
-@org.springframework.boot.autoconfigure.AutoConfiguration
+@AutoConfiguration
 @ConditionalOnBean(SqlSessionFactory.class)
-public class AutoConfiguration implements ApplicationRunner {
+public class BoostAutoConfiguration implements ApplicationRunner {
 
     private final ApplicationContext applicationContext;
 
-    public AutoConfiguration(ApplicationContext applicationContext) {
+    public BoostAutoConfiguration(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Map<String, SqlSessionFactory> sqlSessionFactoryMap = applicationContext.getBeansOfType(SqlSessionFactory.class);
-
-        log.info("Found {} SqlSessionFactory bean(s), starting to configure EnhancedMapper sqlFragments...", sqlSessionFactoryMap.size());
-
+        log.info("Found {} SqlSessionFactory bean(s), starting to configure sqlFragments...", sqlSessionFactoryMap.size());
         for (Map.Entry<String, SqlSessionFactory> entry : sqlSessionFactoryMap.entrySet()) {
             String beanName = entry.getKey();
             SqlSessionFactory sqlSessionFactory = entry.getValue();
             boolean success = MapperUtil.initSqlFragment(sqlSessionFactory);
             if (success) {
-                log.debug("EnhancedMapper sqlFragments configured for SqlSessionFactory bean: {}", beanName);
+                log.debug("sqlFragments configured for SqlSessionFactory bean: {}", beanName);
             } else {
-                log.error("EnhancedMapper sqlFragments configuration failed for SqlSessionFactory bean: {}, dynamic sql may not work", beanName);
+                log.error("sqlFragments configuration failed for SqlSessionFactory bean: {}, dynamic sql may not work", beanName);
             }
         }
     }
