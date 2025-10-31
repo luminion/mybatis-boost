@@ -1,6 +1,6 @@
 package io.github.luminion.mybatisplus.enhancer.query.helper;
 
-import io.github.luminion.mybatisplus.enhancer.core.EnhancedQuery;
+import io.github.luminion.mybatisplus.enhancer.core.DynamicBase;
 import io.github.luminion.mybatisplus.enhancer.enums.SqlKeyword;
 
 import java.util.function.Consumer;
@@ -44,15 +44,14 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
         return this;
     }
 
-    /**
-     * 创建SQL助手包装器，用于将SQL助手实例包装为EnhancedQuery实例
-     *
-     * @param enhancedQuery EnhancedQuery实例
-     * @param <V>           封装的VO类型
-     * @return {@link SqlHelperWrapper} SQL助手包装器实例
-     */
-    public <V> SqlHelperWrapper<T, V> wrap(EnhancedQuery<V> enhancedQuery) {
-        return new SqlHelperWrapper<>(this, enhancedQuery);
-    }
+//    /**
+//     * 创建SQL助手包装器，用于将SQL助手实例包装为EnhancedQuery实例
+//     *
+//     * @param dynamicBase dynamicBase
+//     * @return {@link SqlHelperWrapper} SQL助手包装器实例
+//     */
+//    public <V> SqlHelperWrapper<T, V> wrap(DynamicBase<V> dynamicBase) {
+//        return new SqlHelperWrapper<>(this, dynamicBase);
+//    }
 
 }
