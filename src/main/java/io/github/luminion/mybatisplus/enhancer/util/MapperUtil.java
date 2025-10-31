@@ -1,5 +1,6 @@
 package io.github.luminion.mybatisplus.enhancer.util;
 
+import io.github.luminion.mybatisplus.enhancer.core.BoostCore;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.io.Resources;
@@ -38,28 +39,17 @@ public abstract class MapperUtil {
         }
     }
 
-//    /**
-//     * 获取Mapper内容
-//     *
-//     * @param enhancedQueryClass 扩展查询类
-//     * @return {@link String} Mapper内容
-//     * @throws IllegalArgumentException 当无法解析实体信息时抛出
-//     */
-//    @SuppressWarnings("unchecked")
-//    public static <T> String getMapperContent(Class<? extends DynamicMapper<?>> enhancedQueryClass) {
-//        Class<?> voClass = MybatisPlusReflectUtil.resolveTypeArguments(enhancedQueryClass, DynamicMapper.class)[0];
-//        Class<?>[] mapperClasses = MybatisPlusReflectUtil.resolveTypeArguments(enhancedQueryClass, BaseMapper.class);
-//        Class<?>[] serviceClasses = MybatisPlusReflectUtil.resolveTypeArguments(enhancedQueryClass, IService.class);
-//        Class<T> entityClass = null;
-//        if (mapperClasses != null && mapperClasses.length > 0) {
-//            entityClass = (Class<T>) mapperClasses[0];
-//        } else if (serviceClasses != null && serviceClasses.length > 0) {
-//            entityClass = (Class<T>) serviceClasses[0];
-//        } else {
-//            throw new IllegalArgumentException("no base entity info in " + enhancedQueryClass.getName());
-//        }
-//        return getMapperContent(entityClass, voClass);
-//    }
+    /**
+     * 获取Mapper内容
+     *
+     * @param boostClass 扩展查询类
+     * @return {@link String} Mapper内容
+     * @throws IllegalArgumentException 当无法解析实体信息时抛出
+     */
+    public static <T, V> String getMapperContent(Class<? extends BoostCore<T, V>> boostClass) {
+        Class<?>[] classes = ReflectUtil.resolveTypeArguments(boostClass, BoostCore.class);
+        return getMapperContent(classes[0], classes[1]);
+    }
 
     /**
      * 获取Mapper内容
@@ -84,14 +74,7 @@ public abstract class MapperUtil {
      * @return {@link String} SQL内容
      */
     public static <T> String getSqlContent(Class<T> entityClass) {
-        String tableName = entityClass.getSimpleName();
-//        TableName annotation = entityClass.getAnnotation(TableName.class);
-//        if (annotation != null && !annotation.value().isEmpty()) {
-//            tableName = annotation.value();
-//        } else {
-//            tableName = entityClass.getName();
-//        }
-        return getSqlContent(tableName);
+        return getSqlContent(BoostUtils.getEntityTableName(entityClass));
     }
 
     /**

@@ -1,7 +1,8 @@
 package io.github.luminion.mybatisplus.enhancer.query.helper;
 
-import io.github.luminion.mybatisplus.enhancer.core.DynamicBase;
+import io.github.luminion.mybatisplus.enhancer.core.BoostCore;
 import io.github.luminion.mybatisplus.enhancer.enums.SqlKeyword;
+import io.github.luminion.mybatisplus.enhancer.util.BoostUtils;
 
 import java.util.function.Consumer;
 
@@ -17,10 +18,18 @@ import java.util.function.Consumer;
 public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
 
     /**
+     * 创建一个新的SQL助手实例
+     *
+     * @return {@link SqlHelper} SQL助手实例
+     */
+    public static <T> SqlHelper<T> of() {
+        return new SqlHelper<>();
+    }
+
+    /**
      * 创建指定实体类型的SQL助手实例
      *
      * @param clazz 实体类
-     * @param <T>   实体类型
      * @return {@link SqlHelper} SQL助手实例
      */
     public static <T> SqlHelper<T> of(Class<T> clazz) {
@@ -28,6 +37,17 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
         sqlHelper.entityClass = clazz;
         return sqlHelper;
     }
+
+    /**
+     * 创建boostCore对应的SQL助手实例
+     *
+     * @param boostCore boostCore
+     * @return {@link SqlHelper} SQL助手实例
+     */
+    public static <T, R> SqlHelper<T> of(BoostCore<T, R> boostCore) {
+        return SqlHelper.of(BoostUtils.getEntityClass(boostCore));
+    }
+
 
     /**
      * 添加OR条件
@@ -43,15 +63,5 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
         this.addChild(child);
         return this;
     }
-
-//    /**
-//     * 创建SQL助手包装器，用于将SQL助手实例包装为EnhancedQuery实例
-//     *
-//     * @param dynamicBase dynamicBase
-//     * @return {@link SqlHelperWrapper} SQL助手包装器实例
-//     */
-//    public <V> SqlHelperWrapper<T, V> wrap(DynamicBase<V> dynamicBase) {
-//        return new SqlHelperWrapper<>(this, dynamicBase);
-//    }
 
 }

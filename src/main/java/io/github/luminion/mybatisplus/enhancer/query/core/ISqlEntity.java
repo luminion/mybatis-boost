@@ -1,6 +1,7 @@
 package io.github.luminion.mybatisplus.enhancer.query.core;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * SQL实体接口
@@ -9,7 +10,7 @@ import java.util.Collection;
  *
  * @author luminion
  */
-public interface ISqlEntity extends ISqlTree {
+public interface ISqlEntity<T> extends ISqlTree {
 
     /**
      * 获取排序字段列表
@@ -17,5 +18,12 @@ public interface ISqlEntity extends ISqlTree {
      * @return 排序字段列表
      */
     Collection<ISqlSort> getSorts();
+
+    /**
+     * 获取未映射的额外字段
+     *
+     * @return {@link Map }<{@link String },{@link Object }>
+     */
+    Map<String,Object> getExtraParams();
 
 }

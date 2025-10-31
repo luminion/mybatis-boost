@@ -2,7 +2,6 @@ package io.github.luminion.mybatisplus.enhancer.query.helper;
 
 import io.github.luminion.mybatisplus.enhancer.query.core.ISqlEntity;
 
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -13,7 +12,7 @@ import java.util.function.Function;
  * @param <T> 实体类型
  * @author luminion
  */
-public interface ISqlHelper<T> extends ISqlEntity {
+public interface ISqlHelper<T> extends ISqlEntity<T> {
 
     /**
      * 获取实体类
@@ -21,13 +20,6 @@ public interface ISqlHelper<T> extends ISqlEntity {
      * @return 实体类
      */
     Class<T> getEntityClass();
-
-    /**
-     * 获取未映射的参数
-     *
-     * @return 未映射参数的Map
-     */
-    Map<String, Object> getUnmapped();
     
     /**
      * 处理SQL助手

@@ -6,7 +6,9 @@ import io.github.luminion.mybatisplus.enhancer.query.core.ISqlTree;
 import lombok.*;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 /**
  * 可排序的条件树实体类
@@ -18,15 +20,21 @@ import java.util.LinkedHashSet;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class SqlEntity extends SqlTree implements ISqlEntity {
+public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
 
     /**
      * 排序字段列表
      */
     protected Collection<ISqlSort> sorts;
+    
+    /**
+     * 映射map，无法自动映射的字段会存放到该map中
+     */
+    protected transient Map<String, Object> extraParams;
 
     {
         this.sorts = new LinkedHashSet<>();
+        this.extraParams = new HashMap<>();
     }
 
     /**

@@ -18,7 +18,7 @@ import java.util.List;
  * @author luminion
  */
 @Slf4j
-public abstract class ExcelUtil {
+public abstract class ExcelUtils {
     /**
      * Excel库基础包名
      */

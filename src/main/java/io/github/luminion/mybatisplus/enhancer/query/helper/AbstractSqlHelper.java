@@ -8,7 +8,6 @@ import io.github.luminion.mybatisplus.enhancer.query.entity.SqlEntity;
 import io.github.luminion.mybatisplus.enhancer.util.ReflectUtil;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,21 +21,13 @@ import java.util.Map;
  */
 @Getter
 @SuppressWarnings({"unused", "unchecked"})
-public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity implements ISqlHelperLambda<T, S> {
+public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity<T> implements ISqlHelperLambda<T, S> {
 
     /**
      * 对应实体类，用于SQL校验/处理
      */
     protected transient Class<T> entityClass;
-    /**
-     * 映射map，无法自动映射的字段会存放到该map中
-     */
-    protected transient Map<String, Object> unmapped;
-
-    {
-        this.unmapped = new HashMap<>();
-    }
-
+    
     /**
      * 根据指定对象字段映射条件
      * <p>

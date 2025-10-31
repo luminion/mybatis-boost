@@ -5,9 +5,7 @@ import io.github.luminion.mybatisplus.enhancer.query.core.ISqlEntity;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * VO查询能力接口
@@ -148,9 +146,8 @@ public interface BoostCore<T, V> {
      *
      * @param criteria 查询条件
      * @return VO对象，不存在返回null
-     * @throws TooManyResultsException 如果查询结果超过1条
      */
-    V voUnique(ISqlEntity<T> criteria) throws TooManyResultsException;
+    V voUnique(ISqlEntity<T> criteria);
 
     /**
      * 根据条件查询唯一VO对象并转换类型
@@ -159,18 +156,16 @@ public interface BoostCore<T, V> {
      * @param criteria 查询条件
      * @param voType   目标VO类型
      * @return VO对象，不存在返回null
-     * @throws TooManyResultsException 如果查询结果超过1条
      */
-    <R> R voUnique(ISqlEntity<T> criteria, Class<R> voType) throws TooManyResultsException;
+    <R> R voUnique(ISqlEntity<T> criteria, Class<R> voType);
 
     /**
      * 根据条件查询唯一VO对象（返回Optional）
      *
      * @param criteria 查询条件
      * @return Optional包装的VO对象
-     * @throws TooManyResultsException 如果查询结果超过1条
      */
-    Optional<V> voUniqueOpt(ISqlEntity<T> criteria) throws TooManyResultsException;
+    Optional<V> voUniqueOpt(ISqlEntity<T> criteria);
 
     /**
      * 根据条件查询唯一VO对象并转换类型（返回Optional）
@@ -178,7 +173,6 @@ public interface BoostCore<T, V> {
      * @param criteria 查询条件
      * @param voType   目标VO类型
      * @return Optional包装的VO对象
-     * @throws TooManyResultsException 如果查询结果超过1条
      */
     <R> Optional<R> voUniqueOpt(ISqlEntity<T> criteria, Class<R> voType);
 
@@ -208,6 +202,8 @@ public interface BoostCore<T, V> {
      */
     <R> List<R> voList(ISqlEntity<T> criteria, Class<R> voType);
 
-    // ==================== 分页查询 ====================
+    // ==================== 分页查询 由子分页实现 ====================
+
+ 
 
 }

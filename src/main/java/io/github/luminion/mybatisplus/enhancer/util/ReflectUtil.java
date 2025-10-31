@@ -1,16 +1,19 @@
 package io.github.luminion.mybatisplus.enhancer.util;
 
+import io.github.luminion.mybatisplus.enhancer.core.BoostCore;
+import io.github.luminion.mybatisplus.enhancer.core.BoostSupport;
 import io.github.luminion.mybatisplus.enhancer.core.SFunction;
+import io.github.luminion.mybatisplus.enhancer.query.core.ISqlEntity;
+import io.github.luminion.mybatisplus.enhancer.query.helper.SqlHelper;
 import lombok.SneakyThrows;
+import org.springframework.core.GenericTypeResolver;
 
+import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -171,17 +174,14 @@ public abstract class ReflectUtil {
 
 
     /**
-     * 获取getter方法对应的字段名
+     * 解析超类泛型参数
      *
-     * @param getter getter方法
-     * @return {@link String} 字段名
+     * @param clazz      指定类
+     * @param superClass 超类
+     * @return {@link Class} 泛型参数数组
      */
-    @SneakyThrows
-    public static String getterFieldName(SFunction<?, ?> getter) {
-        Method lambdaMethod = getter.getClass().getDeclaredMethod("writeReplace");
-        lambdaMethod.setAccessible(Boolean.TRUE);
-        SerializedLambda serializedLambda = (SerializedLambda) lambdaMethod.invoke(getter);
-        return serializedLambda.getImplMethodName();
+    public static Class<?>[] resolveTypeArguments(Class<?> clazz, Class<?> superClass) {
+        return GenericTypeResolver.resolveTypeArguments(clazz, superClass);
     }
 
 }
