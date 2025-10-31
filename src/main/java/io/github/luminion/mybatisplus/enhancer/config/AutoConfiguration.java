@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
 
@@ -20,13 +19,13 @@ import java.util.Map;
  * @author luminion
  */
 @Slf4j
-@AutoConfiguration
+@org.springframework.boot.autoconfigure.AutoConfiguration
 @ConditionalOnBean(SqlSessionFactory.class)
-public class EnhancerAutoConfiguration implements ApplicationRunner {
+public class AutoConfiguration implements ApplicationRunner {
 
     private final ApplicationContext applicationContext;
 
-    public EnhancerAutoConfiguration(ApplicationContext applicationContext) {
+    public AutoConfiguration(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
