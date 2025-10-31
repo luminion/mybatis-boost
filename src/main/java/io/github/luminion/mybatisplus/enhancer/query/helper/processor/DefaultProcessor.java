@@ -10,9 +10,8 @@ import io.github.luminion.mybatisplus.enhancer.query.entity.SqlTree;
 import io.github.luminion.mybatisplus.enhancer.query.helper.AbstractSqlHelper;
 import io.github.luminion.mybatisplus.enhancer.query.helper.ISqlHelper;
 import io.github.luminion.mybatisplus.enhancer.query.helper.SqlHelper;
-import io.github.luminion.mybatisplus.enhancer.util.ReflectUtil;
+import io.github.luminion.mybatisplus.enhancer.util.BoostUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.expression.spel.support.ReflectionHelper;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -131,15 +130,15 @@ public abstract class DefaultProcessor {
             throw new IllegalArgumentException("can't get entity class from sql helper");
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
-        Map<String, String> field2JdbcColumnMap = ReflectUtil.field2JdbcColumnMap(entityClass);
-        Map<String, Object> unmapped = resultHelper.getUnmapped();
+        Map<String, String> field2JdbcColumnMap = BoostUtils.javaFieldToJdbcColumnMap(entityClass);
+        Map<String, Object> extraParams = resultHelper.getExtra();
         for (ISqlTree currentHelper : rootHelper) {
             Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();
             Iterator<ISqlCondition> conditionIterator = currentHelperConditions.iterator();
             LinkedHashSet<ISqlCondition> validatedConditions = new LinkedHashSet<>(currentHelperConditions.size());
             while (conditionIterator.hasNext()) {
                 ISqlCondition sqlCondition = conditionIterator.next();
-                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, field2JdbcColumnMap, unmapped);
+                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, field2JdbcColumnMap, extraParams);
                 if (validate == null) {
                     continue;
                 }

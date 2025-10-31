@@ -30,11 +30,11 @@ public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
     /**
      * 映射map，无法自动映射的字段会存放到该map中
      */
-    protected transient Map<String, Object> extraParams;
+    protected transient Map<String, Object> extra;
 
     {
         this.sorts = new LinkedHashSet<>();
-        this.extraParams = new HashMap<>();
+        this.extra = new HashMap<>();
     }
 
     /**
@@ -44,6 +44,7 @@ public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
      * @return {@link SqlTree} 当前实例
      */
     @Override
+    @SuppressWarnings("rawtypes")
     protected SqlTree addChild(ISqlTree sqlTree) {
         if (sqlTree==null){
             return this;

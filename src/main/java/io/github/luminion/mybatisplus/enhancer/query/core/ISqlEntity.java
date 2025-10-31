@@ -20,10 +20,10 @@ public interface ISqlEntity<T> extends ISqlTree {
     Collection<ISqlSort> getSorts();
 
     /**
-     * 获取未映射的额外字段
+     * 获取未映射的额外字段Map
      *
      * @return {@link Map }<{@link String },{@link Object }>
      */
-    Map<String,Object> getExtraParams();
+    Map<String,Object> getExtra();
 
 }

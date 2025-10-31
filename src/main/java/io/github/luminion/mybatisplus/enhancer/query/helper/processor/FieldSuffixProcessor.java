@@ -80,7 +80,7 @@ public class FieldSuffixProcessor {
             throw new IllegalArgumentException("can't get entity class from sql helper");
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
-        Map<String, Object> extraParams = resultHelper.getExtraParams();
+        Map<String, Object> extraParams = resultHelper.getExtra();
         Map<String, String> javaFieldToJdbcColumnMap = BoostUtils.javaFieldToJdbcColumnMap(entityClass);
         Set<String> suffixes = suffix2OperatorMap.keySet();
         for (ISqlTree currentHelper : rootHelper) {
