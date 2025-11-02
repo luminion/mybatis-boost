@@ -27,7 +27,7 @@ import java.util.Optional;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostApi<T, V, P> extends Booster<T, V> {
+public interface BoostCore<T, V, P> extends Booster<T, V> {
 
     /**
      * 转化为Entity实体对象
@@ -198,18 +198,49 @@ public interface BoostApi<T, V, P> extends Booster<T, V> {
      *
      * @param params 查询条件
      * @param voType 目标VO类型
-     * @return VO对象列表，无结果返回空列表
+     * @return 泛型定义的分页返回对象P
      */
     <R> List<R> voList(ISqlEntity<T> params, Class<R> voType);
 
-    // ==================== 分页查询 由子分页实现 ====================
-    
+    /**
+     * 根据条件查询VO对象列表（分页）
+     *
+     * @param params    查询条件
+     * @param pageNum   页码
+     * @param pageSize  每页数量
+     * @return 泛型定义的分页返回对象P
+     */
     P voPage(ISqlEntity<T> params, int pageNum, int pageSize);
 
+    /**
+     * 根据条件查询VO对象列表并转换类型（分页）
+     *
+     * @param params    查询条件
+     * @param pageNum   页码
+     * @param pageSize  每页数量
+     * @param voType 目标VO类型
+     * @return 泛型定义的分页返回对象P
+     */
     <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType);
 
+    /**
+     * 根据条件查询VO对象列表（分页）
+     *
+     * @param params    查询条件
+     * @param pageNum   页码
+     * @param pageSize  每页数量
+     * @return 泛型定义的分页返回对象P
+     */
     P voPage(ISqlEntity<T> params, long pageNum, long pageSize);
 
+    /**
+     * 根据条件查询VO对象列表（分页）
+     *
+     * @param params    查询条件
+     * @param pageNum   页码
+     * @param pageSize  每页数量
+     * @param voType    目标VO类型
+     * @return 泛型定义的分页返回对象P
+     */
     <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType);
-
 }

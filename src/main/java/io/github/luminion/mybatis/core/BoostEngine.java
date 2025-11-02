@@ -20,10 +20,8 @@ import java.util.stream.Collectors;
  *
  * @author luminion
  */
-public interface BoostApiBase<T, V, P> extends BoostApi<T, V, P> {
+public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
-   
-    
     @Override
     default T toEntity(Object source) {
         return ReflectUtil.toTarget(source, BoostUtils.getEntityClass(this));

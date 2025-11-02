@@ -14,7 +14,7 @@ import java.util.List;
  * @param <P> 分页类
  * @author luminion
  */
-public interface BoostMapper<T, V, P> extends BoostApiBase<T, V, P> {
+public interface BoostMapper<T, V, P> extends BoostEngine<T, V, P> {
 
     @Override
     List<V> selectBySqlEntity(@Param("params") ISqlEntity<T> sqlEntity, @Param("page") P page);
