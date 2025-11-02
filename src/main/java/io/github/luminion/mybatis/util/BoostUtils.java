@@ -4,9 +4,11 @@ package io.github.luminion.mybatis.util;
 import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.core.SFunction;
 import lombok.SneakyThrows;
+import org.springframework.beans.BeanUtils;
 import org.springframework.core.GenericTypeResolver;
 
-import java.lang.invoke.SerializedLambda;
+import java.beans.PropertyDescriptor;
+import java.lang.invoke.*;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -46,19 +48,81 @@ public abstract class BoostUtils {
         if (MybatisPlusUtils.isMybatisPlusEnv()) {
             return MybatisPlusUtils.getIdPropertyName(clazz);
         }
-        String idFieldName = "id";
-        return idFieldName;
+        PropertyDescriptor[] descriptors = BeanUtils.getPropertyDescriptors(clazz);
+        // 获取名为id的属性, 若有, 返回该属性名, 若没有, 获取第一个属性, 并判断是否以id结尾, 若是, 返回该属性名
+        String potentialId = null;
+        for (PropertyDescriptor descriptor : descriptors) {
+            String propertyName = descriptor.getName();
+            if ("class".equals(propertyName)) {
+                continue;
+            }
+            // 优先精确匹配名为 "id" 的属性（忽略大小写）
+            if ("id".equalsIgnoreCase(propertyName)) {
+                return propertyName;
+            }
+            // 如果还没找到过备选ID，则将第一个以 "id" 结尾的属性作为备选
+            if (potentialId == null && propertyName.toLowerCase().endsWith("id")) {
+                potentialId = propertyName;
+            }
+        }
+        if (potentialId != null) {
+            return potentialId;
+        }
+        throw new IllegalStateException("No ID field found in " + clazz);
     }
 
     /**
      * 获取ID字段getter
      *
      * @param clazz 实体类
-     * @return {@link String} ID字段getter
+     * @return {@link SFunction} ID字段getter
      */
+    @SneakyThrows
     public static <T, R> SFunction<T, R> getIdPropertyGetter(Class<T> clazz) {
-        // 完善该方法
-        return null;
+        // This is the non-MyBatis-Plus implementation.
+        // It dynamically creates a serializable lambda for the ID getter.
+
+        // 1. Find the ID property name and its getter method.
+        String idPropertyName = getIdPropertyName(clazz);
+        PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(clazz, idPropertyName);
+        if (descriptor == null) {
+            throw new IllegalStateException("Could not find property descriptor for ID: " + idPropertyName);
+        }
+        Method getter = descriptor.getReadMethod();
+        if (getter == null) {
+            throw new IllegalStateException("Could not find getter for ID property: " + idPropertyName);
+        }
+
+        // 2. Use LambdaMetafactory to create a serializable lambda function.
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+
+        // The MethodHandle for the getter.
+        MethodHandle getterHandle = lookup.unreflect(getter);
+
+        // The type of the SAM (Single Abstract Method) in SFunction.
+        // It's `R apply(T t)`, so its type is `(T) -> R`.
+        // We use the getter's return type for R.
+        MethodType samMethodType = MethodType.methodType(getter.getReturnType(), clazz);
+
+        // The type of the function object we want to create.
+        MethodType factoryType = MethodType.methodType(SFunction.class);
+
+        // The signature of the SAM as it will be implemented.
+        MethodType implType = getterHandle.type();
+
+        CallSite site = LambdaMetafactory.metafactory(
+                lookup,
+                "apply", // The name of the abstract method in SFunction (from Function interface)
+                factoryType,
+                samMethodType,
+                getterHandle,
+                implType
+        );
+
+        // Create an instance of the lambda and cast it.
+        @SuppressWarnings("unchecked")
+        SFunction<T, R> getterLambda = (SFunction<T, R>) site.getTarget().invokeExact();
+        return getterLambda;
     }
 
     /**
