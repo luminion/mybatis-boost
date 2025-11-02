@@ -1,6 +1,5 @@
 package io.github.luminion.mybatis.util;
 
-
 import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.core.SFunction;
 import lombok.SneakyThrows;
@@ -10,57 +9,127 @@ import org.springframework.core.GenericTypeResolver;
 import java.beans.PropertyDescriptor;
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * MyBatis反射工具类
+ * MyBatis Boost 反射工具类
  * <p>
- * 提供针对MyBatis-Plus的反射工具方法，包括泛型解析、字段映射等
+ * 提供可扩展的、针对实体和VO的反射功能。通过注册Provider，可以插入自定义逻辑。
  *
  * @author luminion
  */
 public abstract class BoostUtils {
+
+    // ==================== Extension Point Functional Interfaces ====================
+
+    @FunctionalInterface
+    public interface TableNameProvider {
+        Optional<String> getTableName(Class<?> entityClass);
+    }
+
+    @FunctionalInterface
+    public interface IdPropertyNameProvider {
+        Optional<String> getIdPropertyName(Class<?> entityClass);
+    }
+
+    @FunctionalInterface
+    public interface IdPropertyGetterProvider {
+        <T> Optional<SFunction<T, ?>> get(Class<T> entityClass);
+    }
+
+    @FunctionalInterface
+    public interface GetterPropertyNameProvider {
+        Optional<String> get(SFunction<?, ?> getter);
+    }
+
+    @FunctionalInterface
+    public interface EntityClassProvider {
+        <T, V> Optional<Class<T>> get(Booster<T, V> booster);
+    }
+
+    @FunctionalInterface
+    public interface ViewObjectClassProvider {
+        <T, V> Optional<Class<V>> get(Booster<T, V> booster);
+    }
+
+    @FunctionalInterface
+    public interface FieldToColumnMapProvider {
+        Map<String, String> getMap(Class<?> entityClass);
+    }
+
+    // ==================== Extension Point Lists ====================
+
+    public static final List<TableNameProvider> TABLE_NAME_PROVIDERS = new CopyOnWriteArrayList<>();
+    public static final List<IdPropertyNameProvider> ID_PROPERTY_NAME_PROVIDERS = new CopyOnWriteArrayList<>();
+    public static final List<IdPropertyGetterProvider> ID_PROPERTY_GETTER_PROVIDERS = new CopyOnWriteArrayList<>();
+    public static final List<GetterPropertyNameProvider> GETTER_PROPERTY_NAME_PROVIDERS = new CopyOnWriteArrayList<>();
+    public static final List<EntityClassProvider> ENTITY_CLASS_PROVIDERS = new CopyOnWriteArrayList<>();
+    public static final List<ViewObjectClassProvider> VIEW_OBJECT_CLASS_PROVIDERS = new CopyOnWriteArrayList<>();
+    public static final List<FieldToColumnMapProvider> FIELD_TO_COLUMN_MAP_PROVIDERS = new CopyOnWriteArrayList<>();
 
     /**
      * 实体类字段到数据库列的映射缓存
      */
     private static final Map<Class<?>, Map<String, String>> JAVA_FIELD_TO_JDBC_COLUMN_CACHE_MAP = new ConcurrentHashMap<>();
 
-    /**
-     * 获取指定类对应的表名
-     *
-     * @param clazz 实体类
-     * @return {@link String} 表名称
-     */
-    public static String getEntityTableName(Class<?> clazz) {
-        return clazz.getSimpleName();
+    // ==================== Default Provider Registration ====================
+
+    static {
+        // 注册MyBatis-Plus作为默认的扩展实现 (如果存在于环境中)
+        ID_PROPERTY_NAME_PROVIDERS.add(entityClass -> {
+            if (MybatisPlusUtils.isMybatisPlusEnv()) {
+                return Optional.of(MybatisPlusUtils.getIdPropertyName(entityClass));
+            }
+            return Optional.empty();
+        });
+
+        GETTER_PROPERTY_NAME_PROVIDERS.add(getter -> {
+            if (MybatisPlusUtils.isMybatisPlusEnv()) {
+                return Optional.of(MybatisPlusUtils.getGetterPropertyName(getter));
+            }
+            return Optional.empty();
+        });
+
+        FIELD_TO_COLUMN_MAP_PROVIDERS.add(entityClass -> {
+            if (MybatisPlusUtils.isMybatisPlusEnv()) {
+                return MybatisPlusUtils.javaFieldToJdbcColumnMap(entityClass);
+            }
+            return Collections.emptyMap();
+        });
     }
 
-    /**
-     * 获取ID字段属性名
-     *
-     * @param clazz 实体类
-     * @return {@link String} ID字段属性名
-     */
-    public static String getIdPropertyName(Class<?> clazz) {
-        if (MybatisPlusUtils.isMybatisPlusEnv()) {
-            return MybatisPlusUtils.getIdPropertyName(clazz);
+    // ==================== Public Static Methods ====================
+
+    public static String getEntityTableName(Class<?> clazz) {
+        for (TableNameProvider provider : TABLE_NAME_PROVIDERS) {
+            Optional<String> tableName = provider.getTableName(clazz);
+            if (tableName.isPresent()) {
+                return tableName.get();
+            }
         }
+        return clazz.getSimpleName(); // Default logic
+    }
+
+    public static String getIdPropertyName(Class<?> clazz) {
+        for (IdPropertyNameProvider provider : ID_PROPERTY_NAME_PROVIDERS) {
+            Optional<String> idName = provider.getIdPropertyName(clazz);
+            if (idName.isPresent()) {
+                return idName.get();
+            }
+        }
+        // Default logic
         PropertyDescriptor[] descriptors = BeanUtils.getPropertyDescriptors(clazz);
-        // 获取名为id的属性, 若有, 返回该属性名, 若没有, 获取第一个属性, 并判断是否以id结尾, 若是, 返回该属性名
         String potentialId = null;
         for (PropertyDescriptor descriptor : descriptors) {
             String propertyName = descriptor.getName();
             if ("class".equals(propertyName)) {
                 continue;
             }
-            // 优先精确匹配名为 "id" 的属性（忽略大小写）
             if ("id".equalsIgnoreCase(propertyName)) {
                 return propertyName;
             }
-            // 如果还没找到过备选ID，则将第一个以 "id" 结尾的属性作为备选
             if (potentialId == null && propertyName.toLowerCase().endsWith("id")) {
                 potentialId = propertyName;
             }
@@ -71,18 +140,16 @@ public abstract class BoostUtils {
         throw new IllegalStateException("No ID field found in " + clazz);
     }
 
-    /**
-     * 获取ID字段getter
-     *
-     * @param clazz 实体类
-     * @return {@link SFunction} ID字段getter
-     */
     @SneakyThrows
+    @SuppressWarnings("unchecked")
     public static <T, R> SFunction<T, R> getIdPropertyGetter(Class<T> clazz) {
-        // This is the non-MyBatis-Plus implementation.
-        // It dynamically creates a serializable lambda for the ID getter.
-
-        // 1. Find the ID property name and its getter method.
+        for (IdPropertyGetterProvider provider : ID_PROPERTY_GETTER_PROVIDERS) {
+            Optional<SFunction<T, ?>> getter = provider.get(clazz);
+            if (getter.isPresent()) {
+                return (SFunction<T, R>) getter.get();
+            }
+        }
+        // Default logic
         String idPropertyName = getIdPropertyName(clazz);
         PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(clazz, idPropertyName);
         if (descriptor == null) {
@@ -92,83 +159,54 @@ public abstract class BoostUtils {
         if (getter == null) {
             throw new IllegalStateException("Could not find getter for ID property: " + idPropertyName);
         }
-
-        // 2. Use LambdaMetafactory to create a serializable lambda function.
         MethodHandles.Lookup lookup = MethodHandles.lookup();
-
-        // The MethodHandle for the getter.
         MethodHandle getterHandle = lookup.unreflect(getter);
-
-        // The type of the SAM (Single Abstract Method) in SFunction.
-        // It's `R apply(T t)`, so its type is `(T) -> R`.
-        // We use the getter's return type for R.
         MethodType samMethodType = MethodType.methodType(getter.getReturnType(), clazz);
-
-        // The type of the function object we want to create.
         MethodType factoryType = MethodType.methodType(SFunction.class);
-
-        // The signature of the SAM as it will be implemented.
         MethodType implType = getterHandle.type();
-
-        CallSite site = LambdaMetafactory.metafactory(
-                lookup,
-                "apply", // The name of the abstract method in SFunction (from Function interface)
-                factoryType,
-                samMethodType,
-                getterHandle,
-                implType
-        );
-
-        // Create an instance of the lambda and cast it.
-        @SuppressWarnings("unchecked")
-        SFunction<T, R> getterLambda = (SFunction<T, R>) site.getTarget().invokeExact();
-        return getterLambda;
+        CallSite site = LambdaMetafactory.metafactory(lookup, "apply", factoryType, samMethodType, getterHandle, implType);
+        return (SFunction<T, R>) site.getTarget().invokeExact();
     }
 
-    /**
-     * 获取getter方法对应的java类属性名
-     *
-     * @param getter getter方法
-     * @return {@link String} java类属性名
-     */
     @SneakyThrows
     public static String getGetterPropertyName(SFunction<?, ?> getter) {
-        if (MybatisPlusUtils.isMybatisPlusEnv()) {
-            return MybatisPlusUtils.getGetterPropertyName(getter);
+        for (GetterPropertyNameProvider provider : GETTER_PROPERTY_NAME_PROVIDERS) {
+            Optional<String> propertyName = provider.get(getter);
+            if (propertyName.isPresent()) {
+                return propertyName.get();
+            }
         }
+        // Default logic
         Method lambdaMethod = getter.getClass().getDeclaredMethod("writeReplace");
         lambdaMethod.setAccessible(Boolean.TRUE);
         SerializedLambda serializedLambda = (SerializedLambda) lambdaMethod.invoke(getter);
         return serializedLambda.getImplMethodName();
     }
 
-    
-    
     @SneakyThrows
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public static <T, V> Class<T> getEntityClass(Booster<T, V> booster) {
-        return (Class<T>) GenericTypeResolver
-                .resolveTypeArguments(booster.getClass(), Booster.class)[0];
+        for (EntityClassProvider provider : ENTITY_CLASS_PROVIDERS) {
+            Optional<Class<T>> entityClass = provider.get(booster);
+            if (entityClass.isPresent()) {
+                return entityClass.get();
+            }
+        }
+        return (Class<T>) GenericTypeResolver.resolveTypeArguments(booster.getClass(), Booster.class)[0];
     }
 
     @SneakyThrows
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public static <T, V> Class<V> getViewObjectClass(Booster<T, V> booster) {
-        return (Class<V>) GenericTypeResolver
-                .resolveTypeArguments(booster.getClass(), Booster.class)[1];
+        for (ViewObjectClassProvider provider : VIEW_OBJECT_CLASS_PROVIDERS) {
+            Optional<Class<V>> voClass = provider.get(booster);
+            if (voClass.isPresent()) {
+                return voClass.get();
+            }
+        }
+        return (Class<V>) GenericTypeResolver.resolveTypeArguments(booster.getClass(), Booster.class)[1];
     }
 
-    
-    /**
-     * 获取实体类属性与数据库字段的映射关系
-     * 包含:
-     * 1.mybatis-plus实体类属性与字段映射信息
-     * 2.mybatis-plus注解指定的映射信息
-     * 3.实现了EnhanceEntity接口的映射信息
-     *
-     * @param entityClass 实体类
-     * @return {@link Map} 字段到列的映射关系
-     */
     public static Map<String, String> javaFieldToJdbcColumnMap(Class<?> entityClass) {
         Map<String, String> map = JAVA_FIELD_TO_JDBC_COLUMN_CACHE_MAP.get(entityClass);
         if (map != null) {
@@ -176,11 +214,13 @@ public abstract class BoostUtils {
         }
         String format = "a.%s";
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
-        if (MybatisPlusUtils.isMybatisPlusEnv()) {
-            Map<String, String> fieldToJdbcColumnMap = MybatisPlusUtils.javaFieldToJdbcColumnMap(entityClass);
-            fieldToJdbcColumnMap.forEach((key, value) -> {
-                result.putIfAbsent(key, String.format(format, value));
-            });
+        for (FieldToColumnMapProvider provider : FIELD_TO_COLUMN_MAP_PROVIDERS) {
+            Map<String, String> contributedMap = provider.getMap(entityClass);
+            if (contributedMap != null) {
+                contributedMap.forEach((key, value) -> {
+                    result.putIfAbsent(key, String.format(format, value));
+                });
+            }
         }
         JAVA_FIELD_TO_JDBC_COLUMN_CACHE_MAP.put(entityClass, result);
         return result;
