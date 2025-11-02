@@ -1,6 +1,6 @@
 package io.github.luminion.mybatis.util;
 
-import io.github.luminion.mybatis.core.Boostable;
+import io.github.luminion.mybatis.core.Booster;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.io.Resources;
@@ -46,8 +46,8 @@ public abstract class MapperUtil {
      * @return {@link String} Mapper内容
      * @throws IllegalArgumentException 当无法解析实体信息时抛出
      */
-    public static <T, V> String getMapperContent(Class<? extends Boostable<T, V>> boostClass) {
-        Class<?>[] classes = ReflectUtil.resolveTypeArguments(boostClass, Boostable.class);
+    public static <T, V> String getMapperContent(Class<? extends Booster<T, V>> boostClass) {
+        Class<?>[] classes = ReflectUtil.resolveTypeArguments(boostClass, Booster.class);
         return getMapperContent(classes[0], classes[1]);
     }
 

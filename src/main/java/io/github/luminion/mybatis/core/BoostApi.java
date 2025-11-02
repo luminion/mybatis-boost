@@ -27,7 +27,7 @@ import java.util.Optional;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostCore<T, V, P> extends Boostable<T, V> {
+public interface BoostApi<T, V, P> extends Booster<T, V> {
 
     /**
      * 转化为Entity实体对象

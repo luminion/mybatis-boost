@@ -1,6 +1,6 @@
 package io.github.luminion.mybatis.query.helper;
 
-import io.github.luminion.mybatis.core.Boostable;
+import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.enums.SqlKeyword;
 import io.github.luminion.mybatis.util.BoostUtils;
 
@@ -41,11 +41,11 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     /**
      * 创建boostCore对应的SQL助手实例
      *
-     * @param boostable boostable
+     * @param booster booster
      * @return {@link SqlHelper} SQL助手实例
      */
-    public static <T, R> SqlHelper<T> of(Boostable<T, R> boostable) {
-        return SqlHelper.of(BoostUtils.getEntityClass(boostable));
+    public static <T, R> SqlHelper<T> of(Booster<T, R> booster) {
+        return SqlHelper.of(BoostUtils.getEntityClass(booster));
     }
 
 

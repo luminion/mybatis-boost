@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @author luminion
  */
-public interface BoostSupport<T, V, P> extends BoostCore<T, V, P> {
+public interface BoostApiBase<T, V, P> extends BoostApi<T, V, P> {
 
    
     
@@ -140,10 +140,10 @@ public interface BoostSupport<T, V, P> extends BoostCore<T, V, P> {
         return voList(null);
     }
 
-//    @Override
-//    default List<V> voList(ISqlEntity<T> params) {
-//        return new ArrayList<>();
-//    }
+    @Override
+    default List<V> voList(ISqlEntity<T> params) {
+        return selectBySqlEntity(params, null);
+    }
 
     @Override
     default <R> List<R> voList(ISqlEntity<T> params, Class<R> voType) {
@@ -153,6 +153,25 @@ public interface BoostSupport<T, V, P> extends BoostCore<T, V, P> {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    default P voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
+        throw new UnsupportedOperationException("Not implemented.");
+    }
+
+    @Override
+    default <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
+        throw new UnsupportedOperationException("Not implemented.");
+    }
+
+    @Override
+    default P voPage(ISqlEntity<T> params, long pageNum, long pageSize) {
+        throw new UnsupportedOperationException("Not implemented.");
+    }
+
+    @Override
+    default <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
+        throw new UnsupportedOperationException("Not implemented.");
+    }
 
     /**
      * 最终执行的查询方法
@@ -161,5 +180,5 @@ public interface BoostSupport<T, V, P> extends BoostCore<T, V, P> {
      * @param page     第页
      * @return {@link List }<{@link V }>
      */
-    List<V> voQuery(ISqlEntity<T> params, P page);
+    List<V> selectBySqlEntity(ISqlEntity<T> params, P page);
 }

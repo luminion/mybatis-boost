@@ -1,7 +1,7 @@
 package io.github.luminion.mybatis.util;
 
 
-import io.github.luminion.mybatis.core.Boostable;
+import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.core.SFunction;
 import lombok.SneakyThrows;
 import org.springframework.core.GenericTypeResolver;
@@ -82,16 +82,16 @@ public abstract class BoostUtils {
     
     @SneakyThrows
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    public static <T, V> Class<T> getEntityClass(Boostable<T, V> boostable) {
+    public static <T, V> Class<T> getEntityClass(Booster<T, V> booster) {
         return (Class<T>) GenericTypeResolver
-                .resolveTypeArguments(boostable.getClass(), Boostable.class)[0];
+                .resolveTypeArguments(booster.getClass(), Booster.class)[0];
     }
 
     @SneakyThrows
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    public static <T, V> Class<V> getViewObjectClass(Boostable<T, V> boostable) {
+    public static <T, V> Class<V> getViewObjectClass(Booster<T, V> booster) {
         return (Class<V>) GenericTypeResolver
-                .resolveTypeArguments(boostable.getClass(), Boostable.class)[1];
+                .resolveTypeArguments(booster.getClass(), Booster.class)[1];
     }
 
     
