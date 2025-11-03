@@ -2,12 +2,14 @@ package io.github.luminion.mybatis.util;
 
 import io.github.luminion.mybatis.core.MethodReference;
 import lombok.SneakyThrows;
+import org.springframework.beans.BeanUtils;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.util.ReflectionUtils;
 
+import java.beans.PropertyDescriptor;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,12 +50,11 @@ public abstract class ReflectUtils {
      * @param <T>   实例类型
      * @return {@link T} 新实例
      */
-    @SneakyThrows
     public static <T> T newInstance(Class<T> clazz) {
         if (clazz == null) {
             throw new IllegalArgumentException("clazz must not be null");
         }
-        return clazz.getConstructor().newInstance();
+        return BeanUtils.instantiateClass(clazz);
     }
 
     /**
@@ -69,40 +70,13 @@ public abstract class ReflectUtils {
         if (isJavaCoreClass(clazz)) {
             throw new IllegalArgumentException("clazz must not be java class");
         }
-        Map<String, Field> stringFieldMap = FIELD_MAP_CACHE.get(clazz);
-        if (stringFieldMap != null) {
-            return stringFieldMap;
-        }
-        Map<String, Field> map = new HashMap<>();
-        Class<?> originalClass = clazz; // 保存原始类用于缓存键
-        while (clazz != null && Object.class != clazz && !clazz.isInterface()) {
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                if (isSpecialModifier(field.getModifiers())) {
-                    continue;
-                }
-                map.putIfAbsent(field.getName(), field);
-            }
-            clazz = clazz.getSuperclass();
-        }
-        FIELD_MAP_CACHE.put(originalClass, map); // 使用原始类作为缓存键
-        return map;
-    }
-
-    /**
-     * 判断是否为特殊修饰符
-     *
-     * @param modifiers 修饰符
-     * @return boolean 是否为特殊修饰符
-     */
-    public static boolean isSpecialModifier(int modifiers) {
-        return Modifier.isStatic(modifiers)
-                || Modifier.isFinal(modifiers)
-                || Modifier.isNative(modifiers)
-                || Modifier.isVolatile(modifiers)
-                || Modifier.isTransient(modifiers)
-                ;
+        return FIELD_MAP_CACHE.computeIfAbsent(clazz, k -> {
+            Map<String, Field> map = new HashMap<>();
+            ReflectionUtils.doWithFields(k, 
+                    field -> map.putIfAbsent(field.getName(), field),
+                    ReflectionUtils.COPYABLE_FIELDS);
+            return map;
+        });
     }
 
 
@@ -114,19 +88,9 @@ public abstract class ReflectUtils {
      * @param <T>    目标对象类型
      * @return {@link T} 目标对象
      */
-    @SneakyThrows
     public static <T> T copyFieldProperties(Object source, T target) {
-        if (source == null || target == null || source.equals(target)) return target;
-        Map<String, Field> sourceMap = fieldMap(source.getClass());
-        Map<String, Field> targetMap = fieldMap(target.getClass());
-        for (Field field : sourceMap.values()) {
-            Object o = field.get(source);
-            if (o == null) continue;
-            Field targetFiled = targetMap.get(field.getName());
-            if (targetFiled != null && targetFiled.getType().isAssignableFrom(field.getType())) {
-                targetFiled.set(target, o);
-            }
-        }
+        if (source == null || target == null) return target;
+        BeanUtils.copyProperties(source, target);
         return target;
     }
 
@@ -138,12 +102,14 @@ public abstract class ReflectUtils {
      * @return {@link Map} 映射关系
      */
     @SneakyThrows
-    public static Map<?, ?> objectToMap(Object source) {
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> objectToMap(Object source) {
         if (source == null) return null;
-        if (source instanceof Map) return (Map<?, ?>) source;
+        if (source instanceof Map) return (Map<String, Object>) source;
         HashMap<String, Object> map = new HashMap<>();
         Collection<Field> fields = fieldMap(source.getClass()).values();
         for (Field field : fields) {
+            ReflectionUtils.makeAccessible(field);
             Object o = field.get(source);
             if (o == null) continue;
             map.put(field.getName(), o);
@@ -169,44 +135,6 @@ public abstract class ReflectUtils {
         return copyFieldProperties(source, newInstance(clazz));
     }
 
-
-    
-
-    /**
-     * 获取方法引用序列化后的Lambda信息
-     *
-     * @param methodReference 方法引用
-     * @return {@link SerializedLambda} 序列化的Lambda信息
-     */
-    @SneakyThrows
-    public static <T, R> SerializedLambda getSerializedLambda(MethodReference<T, R> methodReference) {
-        Method writeReplaceMethod = methodReference.getClass().getDeclaredMethod("writeReplace");
-        writeReplaceMethod.setAccessible(true);
-        return (SerializedLambda) writeReplaceMethod.invoke(methodReference);
-    }
-
-    /**
-     * 获取方法引用序列化后的Lambda实现类名
-     *
-     * @param methodReference 方法引用
-     * @return {@link String} Lambda实现类名
-     */
-    public static <T, R> String getSerializedLambdaImplClassName(MethodReference<T, R> methodReference) {
-        SerializedLambda serializedLambda = getSerializedLambda(methodReference);
-        return serializedLambda.getImplClass().replace("/", ".");
-    }
-
-    /**
-     * 获取方法引用序列化后的Lambda实现方法名
-     *
-     * @param methodReference 方法引用
-     * @return {@link String} Lambda实现方法名
-     */
-    public static <T, R> String getSerializedLambdaImplMethodName(MethodReference<T, R> methodReference) {
-        SerializedLambda serializedLambda = getSerializedLambda(methodReference);
-        return serializedLambda.getImplMethodName();
-    }
-
     /**
      * 解析超类泛型参数
      *
@@ -217,5 +145,74 @@ public abstract class ReflectUtils {
     public static Class<?>[] resolveTypeArguments(Class<?> clazz, Class<?> superClass) {
         return GenericTypeResolver.resolveTypeArguments(clazz, superClass);
     }
+
+
+    /**
+     * 获取方法引用序列化后的Lambda信息
+     *
+     * @param getter 方法引用
+     * @return {@link SerializedLambda} 序列化的Lambda信息
+     */
+    @SneakyThrows
+    private static <T, R> SerializedLambda getSerializedLambda(MethodReference<T, R> getter) {
+        Method writeReplaceMethod = getter.getClass().getDeclaredMethod("writeReplace");
+        writeReplaceMethod.setAccessible(true);
+        return (SerializedLambda) writeReplaceMethod.invoke(getter);
+    }
+
+    /**
+     * 获取getter对应类的名称
+     *
+     * @param getter 方法引用
+     * @return {@link String} Lambda实现类名
+     */
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    public static <T, R> Class<T> getGetterClass(MethodReference<T, R> getter) {
+        SerializedLambda serializedLambda = getSerializedLambda(getter);
+        String className = serializedLambda.getImplClass().replace("/", ".");
+        return (Class<T>) Class.forName(className);
+    }
+
+    /**
+     * 获取getter对应的方法
+     *
+     * @param getter 方法引用
+     * @return {@link Method}
+     */
+    @SneakyThrows
+    public static <T, R> Method getGetterMethod(MethodReference<T, R> getter) {
+        SerializedLambda serializedLambda = getSerializedLambda(getter);
+        String implMethodName = serializedLambda.getImplMethodName();
+        Class<?> getterClass = getGetterClass(getter);
+        Method method = ReflectionUtils.findMethod(getterClass, implMethodName);
+        if (method == null) {
+            throw new IllegalStateException("Could not find method " + implMethodName);
+        }
+        return method;
+    }
+
+    /**
+     * 获取getter对应的字段
+     *
+     * @param getter 方法引用
+     * @return {@link Field}
+     */
+    @SneakyThrows
+    public static <T, R> Field getGetterField(MethodReference<T, R> getter) {
+        Class<T> getterClass = getGetterClass(getter);
+        Method getterMethod = getGetterMethod(getter);
+        PropertyDescriptor propertyDescriptor = BeanUtils.findPropertyForMethod(getterMethod, getterClass);
+        if (propertyDescriptor == null) {
+            throw new IllegalStateException("Could not find property for method " + getterMethod.getName());
+        }
+        String propertyName = propertyDescriptor.getName();
+        Field field = ReflectionUtils.findField(getterClass, propertyName);
+        if (field == null) {
+            throw new IllegalStateException("Could not find field " + propertyName);
+        }
+        return field;
+    }
+
 
 }
