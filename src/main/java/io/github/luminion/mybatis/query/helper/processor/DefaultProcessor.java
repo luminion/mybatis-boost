@@ -130,7 +130,7 @@ public abstract class DefaultProcessor {
             throw new IllegalArgumentException("can't get entity class from sql helper");
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
-        Map<String, String> field2JdbcColumnMap = BoostUtils.javaFieldToJdbcColumnMap(entityClass);
+        Map<String, String> field2JdbcColumnMap = BoostUtils.getEntityPropertyToColumnMapForSqlEntity(entityClass);
         Map<String, Object> extraParams = resultHelper.getExtra();
         for (ISqlTree currentHelper : rootHelper) {
             Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();

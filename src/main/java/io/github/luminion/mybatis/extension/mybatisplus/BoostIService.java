@@ -1,4 +1,4 @@
-package io.github.luminion.mybatis.core.extension;
+package io.github.luminion.mybatis.extension.mybatisplus;
 
 import io.github.luminion.mybatis.core.BoostEngine;
 

@@ -81,7 +81,7 @@ public class FieldSuffixProcessor {
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
         Map<String, Object> extraParams = resultHelper.getExtra();
-        Map<String, String> javaFieldToJdbcColumnMap = BoostUtils.javaFieldToJdbcColumnMap(entityClass);
+        Map<String, String> javaFieldToJdbcColumnMap = BoostUtils.getEntityPropertyToColumnMapForSqlEntity(entityClass);
         Set<String> suffixes = suffix2OperatorMap.keySet();
         for (ISqlTree currentHelper : rootHelper) {
             Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();

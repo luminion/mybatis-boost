@@ -1,6 +1,6 @@
 package io.github.luminion.mybatis.query.helper;
 
-import io.github.luminion.mybatis.core.SFunction;
+import io.github.luminion.mybatis.core.MethodRefence;
 import io.github.luminion.mybatis.enums.SqlKeyword;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
 import io.github.luminion.mybatis.query.entity.SqlSort;
@@ -37,11 +37,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S eq(SFunction<T, R> getter, R value) {
+    default <R> S eq(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.EQ.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.EQ.keyword, value));
         return (S) this;
     }
 
@@ -53,11 +53,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S ne(SFunction<T, R> getter, R value) {
+    default <R> S ne(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.NE.keyword, value));
         return (S) this;
     }
 
@@ -69,11 +69,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S gt(SFunction<T, R> getter, R value) {
+    default <R> S gt(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.GT.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.GT.keyword, value));
         return (S) this;
     }
 
@@ -85,11 +85,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S ge(SFunction<T, R> getter, R value) {
+    default <R> S ge(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.GE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.GE.keyword, value));
         return (S) this;
     }
 
@@ -101,11 +101,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S lt(SFunction<T, R> getter, R value) {
+    default <R> S lt(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LT.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.LT.keyword, value));
         return (S) this;
     }
 
@@ -117,11 +117,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S le(SFunction<T, R> getter, R value) {
+    default <R> S le(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.LE.keyword, value));
         return (S) this;
     }
 
@@ -133,11 +133,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S like(SFunction<T, R> getter, R value) {
+    default <R> S like(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LIKE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.LIKE.keyword, value));
         return (S) this;
     }
 
@@ -149,11 +149,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S notLike(SFunction<T, R> getter, R value) {
+    default <R> S notLike(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NOT_LIKE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.NOT_LIKE.keyword, value));
         return (S) this;
     }
 
@@ -165,11 +165,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S in(SFunction<T, R> getter, Collection<? extends R> value) {
+    default <R> S in(MethodRefence<T, R> getter, Collection<? extends R> value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IN.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.IN.keyword, value));
         return (S) this;
     }
 
@@ -181,11 +181,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S notIn(SFunction<T, R> getter, Collection<? extends R> value) {
+    default <R> S notIn(MethodRefence<T, R> getter, Collection<? extends R> value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NOT_IN.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.NOT_IN.keyword, value));
         return (S) this;
     }
 
@@ -195,8 +195,8 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S isNull(SFunction<T, ?> getter) {
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NULL.keyword, null));
+    default S isNull(MethodRefence<T, ?> getter) {
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.IS_NULL.keyword, null));
         return (S) this;
     }
 
@@ -206,8 +206,8 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S isNotNull(SFunction<T, ?> getter) {
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NOT_NULL.keyword, null));
+    default S isNotNull(MethodRefence<T, ?> getter) {
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.IS_NOT_NULL.keyword, null));
         return (S) this;
     }
 
@@ -217,8 +217,8 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S orderByAsc(SFunction<T, ?> getter) {
-        getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), false));
+    default S orderByAsc(MethodRefence<T, ?> getter) {
+        getSorts().add(new SqlSort(BoostUtils.getEntityGetterPropertyName(getter), false));
         return (S) this;
     }
 
@@ -228,8 +228,8 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S orderByDesc(SFunction<T, ?> getter) {
-        getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), true));
+    default S orderByDesc(MethodRefence<T, ?> getter) {
+        getSorts().add(new SqlSort(BoostUtils.getEntityGetterPropertyName(getter), true));
         return (S) this;
     }
 
@@ -241,11 +241,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S bitWith(SFunction<T, R> getter, R value) {
+    default <R> S bitWith(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_WITH.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.BIT_WITH.keyword, value));
         return (S) this;
     }
 
@@ -257,11 +257,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S bitWithout(SFunction<T, R> getter, R value) {
+    default <R> S bitWithout(MethodRefence<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_WITHOUT.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getEntityGetterPropertyName(getter), SqlKeyword.BIT_WITHOUT.keyword, value));
         return (S) this;
     }
 
