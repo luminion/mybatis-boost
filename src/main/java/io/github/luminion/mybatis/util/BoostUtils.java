@@ -3,6 +3,7 @@ package io.github.luminion.mybatis.util;
 import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.core.MethodReference;
 import io.github.luminion.mybatis.provider.BoostProvider;
+import io.github.luminion.mybatis.provider.support.BaseProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.GenericTypeResolver;
 
@@ -22,7 +23,15 @@ public abstract class BoostUtils {
      * 实体类字段到数据库列的映射缓存
      */
     private static final Map<Class<?>, Map<String, String>> ENTITY_PROPERTY_TO_COLUMN_MAP = new ConcurrentHashMap<>();
-    private static final List<BoostProvider> PROVIDERS = new ArrayList<>();
+    private static final TreeSet<BoostProvider> PROVIDERS = new TreeSet<>();
+
+    static {
+        PROVIDERS.add(new BaseProvider());
+    }
+
+    public static List<BoostProvider> checkoutProviders() {
+        return new ArrayList<>(PROVIDERS);
+    }
 
     public static boolean registerProvider(BoostProvider provider) {
         return PROVIDERS.add(provider);
@@ -30,10 +39,6 @@ public abstract class BoostUtils {
 
     public static boolean removeProvider(BoostProvider provider) {
         return PROVIDERS.remove(provider);
-    }
-
-    public static void sortProvider(Comparator<BoostProvider> comparator) {
-        PROVIDERS.sort(comparator);
     }
 
     @SuppressWarnings({"unchecked", "ConstantConditions"})
