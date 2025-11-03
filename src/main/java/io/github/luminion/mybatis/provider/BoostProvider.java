@@ -8,15 +8,7 @@ import org.springframework.core.Ordered;
  * @author luminion
  */
 public interface BoostProvider extends Comparable<BoostProvider>, Ordered,
-        TableNameProvider, PropertyToColumnMapProvider,
-        IdColumProvider, IdPropertyProvider, IdPropertyGetterProvider,
-        GetterColumnProvider, GetterPropertyProvider {
-
-
-    @Override
-    default <T, R> String getGetterPropertyName(MethodReference<T, R> getter){
-        return ReflectUtils.getGetterField(getter).getName();
-    }
+        TableNameProvider, IdPropertyProvider, GetterPropertyProvider, PropertyToColumnMapProvider {
 
     @Override
     default int compareTo(BoostProvider o) {

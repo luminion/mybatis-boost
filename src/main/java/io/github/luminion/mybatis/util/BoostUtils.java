@@ -71,16 +71,6 @@ public abstract class BoostUtils {
         throw new IllegalStateException("No IdProperty found in " + PROVIDERS.size() + " providers, class: " + entityClass.getName());
     }
 
-    public static <T, R> MethodReference<T, R> getIdPropertyGetter(Class<T> entityClass) {
-        for (BoostProvider provider : PROVIDERS) {
-            MethodReference<T, R> idPropertyGetter = provider.getIdPropertyGetter(entityClass);
-            if (idPropertyGetter != null) {
-                return idPropertyGetter;
-            }
-        }
-        throw new IllegalStateException("No IdPropertyGetter found in " + PROVIDERS.size() + " providers, class: " + entityClass.getName());
-    }
-
     public static <T, R> String getGetterPropertyName(MethodReference<T, R> getter) {
         for (BoostProvider provider : PROVIDERS) {
             String propertyName = provider.getGetterPropertyName(getter);

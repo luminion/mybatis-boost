@@ -81,8 +81,9 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     @Override
     default List<V> voListByIds(Collection<? extends Serializable> ids) {
         Class<T> entityClass = BoostUtils.getEntityClass(this);
-        MethodReference<T, Object> idPropertyGetter = BoostUtils.getIdPropertyGetter(entityClass);
-        SqlHelper<T> sqlHelper = SqlHelper.of(this).in(idPropertyGetter, ids);
+        String idPropertyName = BoostUtils.getIdPropertyName(entityClass);
+        SqlCondition sqlCondition = new SqlCondition(idPropertyName, SqlKeyword.IN.keyword, ids);
+        SqlHelper<T> sqlHelper = SqlHelper.of(this).with(sqlCondition);
         return voList(sqlHelper);
     }
 
