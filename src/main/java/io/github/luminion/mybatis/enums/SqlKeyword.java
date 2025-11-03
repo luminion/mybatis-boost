@@ -35,10 +35,6 @@ public enum SqlKeyword {
      */
     NE("<>"),
     /**
-     * 不等于操作符（别名）
-     */
-    NE2("!="),
-    /**
      * 小于操作符
      */
     LT("<"),
@@ -84,11 +80,11 @@ public enum SqlKeyword {
     /**
      * 位运算包含操作符
      */
-    BIT_WITH("&>"),
+    BIT_CONTAINS("&>"),
     /**
      * 位运算不包含操作符
      */
-    BIT_WITHOUT("&="),
+    BIT_NOT_CONTAINS("&="),
 
 //    NOT("NOT"),
 //    EXISTS("EXISTS"),
@@ -129,25 +125,43 @@ public enum SqlKeyword {
      * 比较操作符列表
      */
     public static final List<String> CONDITION_OPERATORS_COMPARE;
+    /**
+     * 位操作符
+     */
+    public static final List<String> CONDITION_OPERATORS_BIT;
 
     static {
         List<String> connector = Arrays.asList(AND.keyword, OR.keyword);
         CONDITION_CONNECTORS = Collections.unmodifiableList(connector);
+        
         List<String> none = Arrays.asList(IS_NULL.keyword, IS_NOT_NULL.keyword);
         CONDITION_OPERATORS_NONE = Collections.unmodifiableList(none);
-        List<String> single = Arrays.asList(EQ.keyword, NE.keyword, NE2.keyword, GT.keyword, GE.keyword, LT.keyword, LE.keyword, LIKE.keyword, NOT_LIKE.keyword, BIT_WITH.keyword, BIT_WITHOUT.keyword);
+        
+        List<String> single = Arrays.asList(EQ.keyword, NE.keyword, 
+                GT.keyword, GE.keyword, 
+                LT.keyword, LE.keyword, 
+                LIKE.keyword, NOT_LIKE.keyword, 
+                BIT_CONTAINS.keyword, BIT_NOT_CONTAINS.keyword
+        );
         CONDITION_OPERATORS_SINGLE = Collections.unmodifiableList(single);
+        
         List<String> multi = Arrays.asList(IN.keyword, NOT_IN.keyword);
         CONDITION_OPERATORS_MULTI = Collections.unmodifiableList(multi);
+        
         List<String> all = new ArrayList<>();
         all.addAll(none);
         all.addAll(single);
         all.addAll(multi);
         CONDITION_OPERATORS_COMPLETE = Collections.unmodifiableList(all);
+        
         List<String> like = Arrays.asList(LIKE.keyword, NOT_LIKE.keyword);
         CONDITION_OPERATORS_LIKE = Collections.unmodifiableList(like);
+        
         List<String> compare = Arrays.asList(GT.keyword, GE.keyword, LT.keyword, LE.keyword);
         CONDITION_OPERATORS_COMPARE = Collections.unmodifiableList(compare);
+        
+        List<String> bit = Arrays.asList(BIT_CONTAINS.keyword, BIT_NOT_CONTAINS.keyword);
+        CONDITION_OPERATORS_BIT = Collections.unmodifiableList(bit);
     }
 
     /**
@@ -179,14 +193,53 @@ public enum SqlKeyword {
         if (operator == null || operator.isEmpty()) {
             return EQ.keyword;
         }
-        operator = operator.toUpperCase();
-        if (CONDITION_OPERATORS_COMPLETE.contains(operator)) {
-            if (NE2.keyword.equals(operator)) {
+        operator = operator.toLowerCase();
+        switch (operator) {
+            case "=":
+            case "==":
+            case "eq":
+                return EQ.keyword;
+            case "<>":
+            case "!=":
+            case "ne":
                 return NE.keyword;
-            }
-            return operator;
+            case "<":
+            case "lt":
+                return GT.keyword;
+            case "<=":
+            case "le":
+                return LE.keyword;
+            case ">":
+            case "gt":
+                return LT.keyword;
+            case ">=":
+            case "ge":
+                return GE.keyword;
+            case "like":
+                return LIKE.keyword;
+            case "not like":
+                return NOT_LIKE.keyword;
+            case "in":
+                return IN.keyword;
+            case "not in":
+                return NOT_IN.keyword;
+            case "null":
+            case "isnull":
+                return IS_NULL.keyword;
+            case "not null":
+            case "is not null":
+                return IS_NOT_NULL.keyword;
+            case "&>0":
+            case "&>":
+            case "bit contains":
+                return BIT_CONTAINS.keyword;
+            case "&=0":
+            case "&=":
+            case "bit not contains":
+                return BIT_NOT_CONTAINS.keyword;
+            default:
+                throw new IllegalArgumentException("illegal operator: " + operator);
         }
-        throw new IllegalArgumentException("illegal operator: " + operator);
     }
 
     /**
@@ -237,6 +290,17 @@ public enum SqlKeyword {
      */
     public static boolean isLikeOperator(String operator) {
         return CONDITION_OPERATORS_LIKE.contains(operator);
+    }
+    
+    
+    /**
+     * 判断是否为位操作符
+     *
+     * @param operator 操作符
+     * @return boolean 是否为BIT操作符
+     */
+    public static boolean isBitOperator(String operator) {
+        return CONDITION_OPERATORS_BIT.contains(operator);
     }
 
 }

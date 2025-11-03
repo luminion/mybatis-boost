@@ -245,7 +245,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_WITH.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_CONTAINS.keyword, value));
         return (S) this;
     }
 
@@ -261,7 +261,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_WITHOUT.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_NOT_CONTAINS.keyword, value));
         return (S) this;
     }
 

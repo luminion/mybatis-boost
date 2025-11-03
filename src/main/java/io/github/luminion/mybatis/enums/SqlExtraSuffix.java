@@ -66,11 +66,11 @@ public enum SqlExtraSuffix {
     /**
      * 位运算包含操作后缀
      */
-    BIT_WITH("BitWith", SqlKeyword.BIT_WITH),
+    BIT_WITH("BitWith", SqlKeyword.BIT_CONTAINS),
     /**
      * 位运算不包含操作后缀
      */
-    BIT_WITHOUT("BitWithout", SqlKeyword.BIT_WITHOUT),
+    BIT_WITHOUT("BitWithout", SqlKeyword.BIT_NOT_CONTAINS),
     
     ;
 
