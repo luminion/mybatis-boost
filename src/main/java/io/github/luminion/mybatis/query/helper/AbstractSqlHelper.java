@@ -5,7 +5,7 @@ import io.github.luminion.mybatis.query.core.ISqlSort;
 import io.github.luminion.mybatis.query.core.ISqlTree;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
 import io.github.luminion.mybatis.query.entity.SqlEntity;
-import io.github.luminion.mybatis.util.ReflectUtil;
+import io.github.luminion.mybatis.util.ReflectUtils;
 import lombok.Getter;
 
 import java.util.Map;
@@ -55,7 +55,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
             this.getSorts().add(((ISqlSort) s));
             return (S) this;
         }
-        Map<?, ?> map = ReflectUtil.objectToMap(s);
+        Map<?, ?> map = ReflectUtils.objectToMap(s);
         for (Map.Entry<?, ?> next : map.entrySet()) {
             Object key = next.getKey();
             Object value = next.getValue();

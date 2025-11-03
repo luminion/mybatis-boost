@@ -3,7 +3,7 @@ package io.github.luminion.mybatis.util;
 import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.core.MethodReference;
 import io.github.luminion.mybatis.provider.BoostProvider;
-import io.github.luminion.mybatis.provider.support.BaseProvider;
+import io.github.luminion.mybatis.provider.support.BasicProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.GenericTypeResolver;
 
@@ -26,7 +26,7 @@ public abstract class BoostUtils {
     private static final TreeSet<BoostProvider> PROVIDERS = new TreeSet<>();
 
     static {
-        PROVIDERS.add(new BaseProvider());
+        PROVIDERS.add(new BasicProvider());
     }
 
     public static List<BoostProvider> checkoutProviders() {

@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author luminion
  */
-public abstract class ReflectUtil {
+public abstract class ReflectUtils {
 
     /**
      * 类字段映射缓存

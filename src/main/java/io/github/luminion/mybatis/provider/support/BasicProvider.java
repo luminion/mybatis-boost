@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * @author luminion
  */
-public class BaseProvider implements BoostProvider {
+public class BasicProvider implements BoostProvider {
     @Override
     public <T, R> String getGetterColumnName(MethodReference<T, R> getter) {
         return "";

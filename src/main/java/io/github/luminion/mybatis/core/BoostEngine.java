@@ -5,7 +5,7 @@ import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
 import io.github.luminion.mybatis.query.helper.SqlHelper;
 import io.github.luminion.mybatis.util.BoostUtils;
-import io.github.luminion.mybatis.util.ReflectUtil;
+import io.github.luminion.mybatis.util.ReflectUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.util.ObjectUtils;
 
@@ -24,12 +24,12 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     @Override
     default T toEntity(Object source) {
-        return ReflectUtil.toTarget(source, BoostUtils.getEntityClass(this));
+        return ReflectUtils.toTarget(source, BoostUtils.getEntityClass(this));
     }
 
     @Override
     default V toVo(Object source) {
-        return ReflectUtil.toTarget(source, BoostUtils.getViewObjectClass(this));
+        return ReflectUtils.toTarget(source, BoostUtils.getViewObjectClass(this));
     }
 
     @Override
@@ -53,7 +53,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         if (ObjectUtils.isEmpty(v)) {
             return null;
         }
-        return ReflectUtil.toTarget(v, voType);
+        return ReflectUtils.toTarget(v, voType);
     }
 
     @Override
@@ -78,7 +78,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     default <R> List<R> voListByIds(Collection<? extends Serializable> ids, Class<R> voType) {
         List<V> vs = voListByIds(ids);
         return vs.stream()
-                .map(v -> ReflectUtil.toTarget(v, voType))
+                .map(v -> ReflectUtils.toTarget(v, voType))
                 .collect(Collectors.toList());
     }
 
@@ -93,7 +93,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     @Override
     default <R> R voFirst(ISqlEntity<T> params, Class<R> voType) {
-        return ReflectUtil.toTarget(voFirst(params), voType);
+        return ReflectUtils.toTarget(voFirst(params), voType);
     }
 
     @Override
@@ -120,7 +120,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     @Override
     default <R> R voUnique(ISqlEntity<T> params, Class<R> voType) throws TooManyResultsException {
-        return ReflectUtil.toTarget(voUnique(params), voType);
+        return ReflectUtils.toTarget(voUnique(params), voType);
     }
 
     @Override
@@ -147,7 +147,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     default <R> List<R> voList(ISqlEntity<T> params, Class<R> voType) {
         List<V> vs = voList(params);
         return vs.stream()
-                .map(v -> ReflectUtil.toTarget(v, voType))
+                .map(v -> ReflectUtils.toTarget(v, voType))
                 .collect(Collectors.toList());
     }
 

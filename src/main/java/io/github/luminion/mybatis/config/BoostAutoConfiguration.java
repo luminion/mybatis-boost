@@ -1,6 +1,6 @@
 package io.github.luminion.mybatis.config;
 
-import io.github.luminion.mybatis.util.MapperUtil;
+import io.github.luminion.mybatis.util.MapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -37,7 +37,7 @@ public class BoostAutoConfiguration implements ApplicationRunner {
         for (Map.Entry<String, SqlSessionFactory> entry : sqlSessionFactoryMap.entrySet()) {
             String beanName = entry.getKey();
             SqlSessionFactory sqlSessionFactory = entry.getValue();
-            boolean success = MapperUtil.initSqlFragment(sqlSessionFactory);
+            boolean success = MapperUtils.initSqlFragment(sqlSessionFactory);
             if (success) {
                 log.debug("sqlFragments configured for SqlSessionFactory bean: {}", beanName);
             } else {

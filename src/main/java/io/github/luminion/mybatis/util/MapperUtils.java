@@ -18,7 +18,7 @@ import java.io.InputStream;
  * @author luminion
  */
 @Slf4j
-public abstract class MapperUtil {
+public abstract class MapperUtils {
 
     /**
      * 初始化SQL片段
@@ -47,7 +47,7 @@ public abstract class MapperUtil {
      * @throws IllegalArgumentException 当无法解析实体信息时抛出
      */
     public static <T, V> String getMapperContent(Class<? extends Booster<T, V>> boostClass) {
-        Class<?>[] classes = ReflectUtil.resolveTypeArguments(boostClass, Booster.class);
+        Class<?>[] classes = ReflectUtils.resolveTypeArguments(boostClass, Booster.class);
         return getMapperContent(classes[0], classes[1]);
     }
 
