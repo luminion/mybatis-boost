@@ -34,7 +34,7 @@ public abstract class MapperUtil {
             mapperBuilder.parse();
             return true;
         } catch (IOException e) {
-            log.error("error creating EnhancedMapper sqlFragments", e);
+            log.error("error creating sqlFragments", e);
             return false;
         }
     }
@@ -60,7 +60,7 @@ public abstract class MapperUtil {
      * @return {@link String} Mapper内容
      */
     public static <T> String getMapperContent(Class<T> entityClass, Class<?> voClass) {
-        return "    <select id=\"voSelectByXml\" resultType=\"" + voClass.getName() + "\">\n" +
+        return "    <select id=\"selectBySqlEntity\" resultType=\"" + voClass.getName() + "\">\n" +
                 getSqlContent(entityClass) +
                 "    </select>"
                 ;
@@ -89,10 +89,10 @@ public abstract class MapperUtil {
                 "        FROM\n" +
                 "        " + tableName + " a\n" +
                 "        <where>\n" +
-                "            <include refid=\"io.github.luminion.mybatisplus.enhancer.EnhancedMapper.queryFragment\"/>\n" +
+                "            <include refid=\"io.github.luminion.mybatis.core.BoostMapper.queryFragment\"/>\n" +
                 "        </where>\n" +
                 "        <trim prefix=\"ORDER BY\" prefixOverrides=\",\">\n" +
-                "            <include refid=\"io.github.luminion.mybatisplus.enhancer.EnhancedMapper.sortFragment\"/>\n" +
+                "            <include refid=\"io.github.luminion.mybatis.core.BoostMapper.sortFragment\"/>\n" +
                 "        </trim>\n"
                 ;
     }
