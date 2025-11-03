@@ -3,7 +3,6 @@ package io.github.luminion.mybatis.util;
 import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.core.MethodReference;
 import io.github.luminion.mybatis.provider.BoostProvider;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.GenericTypeResolver;
 
@@ -37,13 +36,11 @@ public abstract class BoostUtils {
         PROVIDERS.sort(comparator);
     }
 
-    @SneakyThrows
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public static <T, V> Class<T> getEntityClass(Booster<T, V> booster) {
         return (Class<T>) GenericTypeResolver.resolveTypeArguments(booster.getClass(), Booster.class)[0];
     }
 
-    @SneakyThrows
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public static <T, V> Class<V> getViewObjectClass(Booster<T, V> booster) {
         return (Class<V>) GenericTypeResolver.resolveTypeArguments(booster.getClass(), Booster.class)[1];
@@ -63,14 +60,12 @@ public abstract class BoostUtils {
         for (BoostProvider provider : PROVIDERS) {
             String idPropertyName = provider.getIdPropertyName(entityClass);
             if (idPropertyName != null) {
-                
                 return idPropertyName;
             }
         }
         throw new IllegalStateException("No IdProperty found in " + PROVIDERS.size() + " providers, class: " + entityClass.getName());
     }
 
-    @SneakyThrows
     public static <T, R> MethodReference<T, R> getIdPropertyGetter(Class<T> entityClass) {
         for (BoostProvider provider : PROVIDERS) {
             MethodReference<T, R> idPropertyGetter = provider.getIdPropertyGetter(entityClass);
@@ -81,7 +76,6 @@ public abstract class BoostUtils {
         throw new IllegalStateException("No IdPropertyGetter found in " + PROVIDERS.size() + " providers, class: " + entityClass.getName());
     }
 
-    @SneakyThrows
     public static <T, R> String getGetterPropertyName(MethodReference<T, R> getter) {
         for (BoostProvider provider : PROVIDERS) {
             String propertyName = provider.getGetterPropertyName(getter);
@@ -107,7 +101,7 @@ public abstract class BoostUtils {
                 });
             }
         }
-        log.warn("No property to column map found in {} providers, class: {}", PROVIDERS.size(), entityClass.getName());
+        log.warn("No property to column alias map found in {} providers, class: {}", PROVIDERS.size(), entityClass.getName());
         ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, result);
         return result;
     }

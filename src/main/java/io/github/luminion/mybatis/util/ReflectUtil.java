@@ -1,7 +1,6 @@
 package io.github.luminion.mybatis.util;
 
 import io.github.luminion.mybatis.core.MethodReference;
-import io.github.luminion.mybatis.entity.Page;
 import lombok.SneakyThrows;
 import org.springframework.core.GenericTypeResolver;
 
@@ -9,7 +8,9 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -166,32 +167,6 @@ public abstract class ReflectUtil {
             throw new IllegalArgumentException("clazz must not be null");
         }
         return copyFieldProperties(source, newInstance(clazz));
-    }
-
-    /**
-     * 获取方法引用对应的类
-     *
-     * @param methodReference 方法引用
-     * @return {@link Class} 对应的类
-     */
-    @SneakyThrows
-    @SuppressWarnings("unchecked")
-    public static <T, R> Class<T> getClass(MethodReference<T, R> methodReference) {
-        SerializedLambda serializedLambda = getSerializedLambda(methodReference);
-        String className = serializedLambda.getImplClass().replace("/", ".");
-        return (Class<T>) Class.forName(className);
-    }
-
-    /**
-     * 获取方法引用对应的方法名
-     *
-     * @param methodReference 方法引用
-     * @return {@link String} 对应的方法名
-     */
-    @SneakyThrows
-    public static <T, R> String getMethod(MethodReference<T, R> methodReference) {
-        SerializedLambda serializedLambda = getSerializedLambda(methodReference);
-        return serializedLambda.getImplMethodName();
     }
 
     /**
