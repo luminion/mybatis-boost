@@ -1,6 +1,6 @@
 package io.github.luminion.mybatis.query.helper.processor;
 
-import io.github.luminion.mybatis.enums.SqlExtraSuffix;
+import io.github.luminion.mybatis.enums.SqlKeyword;
 import io.github.luminion.mybatis.query.core.ISqlCondition;
 import io.github.luminion.mybatis.query.core.ISqlTree;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
@@ -21,6 +21,57 @@ import java.util.*;
 @Slf4j
 public class FieldSuffixProcessor {
     /**
+     * 操作符后缀映射表
+     */
+    private static final Map<String, String> SUFFIX_TO_OPERATOR_MAP;
+
+    static {
+        Map<String, String> suffixMap = new LinkedHashMap<>();
+
+        suffixMap.put("Ne", SqlKeyword.NE.getKeyword());
+        suffixMap.put("_ne", SqlKeyword.NE.getKeyword());
+
+        suffixMap.put("Lt", SqlKeyword.LT.getKeyword());
+        suffixMap.put("_lt", SqlKeyword.LT.getKeyword());
+
+        suffixMap.put("Le", SqlKeyword.LE.getKeyword());
+        suffixMap.put("_le", SqlKeyword.LE.getKeyword());
+
+        suffixMap.put("Gt", SqlKeyword.GT.getKeyword());
+        suffixMap.put("_gt", SqlKeyword.GT.getKeyword());
+
+        suffixMap.put("Ge", SqlKeyword.GE.getKeyword());
+        suffixMap.put("_ge", SqlKeyword.GE.getKeyword());
+
+        suffixMap.put("Like", SqlKeyword.LIKE.getKeyword());
+        suffixMap.put("_like", SqlKeyword.LIKE.getKeyword());
+
+        suffixMap.put("NotLike", SqlKeyword.NOT_LIKE.getKeyword());
+        suffixMap.put("_not_like", SqlKeyword.NOT_LIKE.getKeyword());
+
+        suffixMap.put("In", SqlKeyword.IN.getKeyword());
+        suffixMap.put("_in", SqlKeyword.IN.getKeyword());
+
+        suffixMap.put("NotIn", SqlKeyword.NOT_IN.getKeyword());
+        suffixMap.put("_not_in", SqlKeyword.NOT_IN.getKeyword());
+
+        suffixMap.put("IsNull", SqlKeyword.IS_NULL.getKeyword());
+        suffixMap.put("_is_null", SqlKeyword.IS_NULL.getKeyword());
+
+        suffixMap.put("IsNotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
+        suffixMap.put("_is_not_null", SqlKeyword.IS_NOT_NULL.getKeyword());
+
+        suffixMap.put("BitContains", SqlKeyword.BIT_CONTAINS.getKeyword());
+        suffixMap.put("_bit_contains", SqlKeyword.BIT_CONTAINS.getKeyword());
+
+        suffixMap.put("BitNotContains", SqlKeyword.BIT_NOT_CONTAINS.getKeyword());
+        suffixMap.put("_bit_not_contains", SqlKeyword.BIT_NOT_CONTAINS.getKeyword());
+
+        SUFFIX_TO_OPERATOR_MAP = Collections.unmodifiableMap(suffixMap);
+    }
+
+
+    /**
      * 后缀到操作符的映射关系
      */
     private final Map<String, String> suffixToOperatorMap;
@@ -29,7 +80,7 @@ public class FieldSuffixProcessor {
      * 私有构造函数
      */
     private FieldSuffixProcessor() {
-        this.suffixToOperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
+        this.suffixToOperatorMap = SUFFIX_TO_OPERATOR_MAP;
     }
 
     /**
@@ -94,7 +145,7 @@ public class FieldSuffixProcessor {
                 if (jdbcColumn == null) {
                     boolean isSuffixMatched = false;
                     for (String suffix : suffixes) {
-                        if (field.endsWith(suffix)) {
+                        if (field.endsWith(suffix) && field.length() > suffix.length()) {
                             isSuffixMatched = true;
                             String sourceFiled = field.substring(0, field.length() - suffix.length());
                             String operator = suffixToOperatorMap.get(suffix);

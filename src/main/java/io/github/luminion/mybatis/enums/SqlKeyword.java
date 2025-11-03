@@ -1,11 +1,11 @@
 package io.github.luminion.mybatis.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
+import static io.github.luminion.mybatis.util.BoostUtils.*;
 
 /**
  * SQL操作符枚举
@@ -14,6 +14,7 @@ import java.util.List;
  *
  * @author luminion
  */
+@Getter
 @AllArgsConstructor
 public enum SqlKeyword {
 
@@ -95,74 +96,9 @@ public enum SqlKeyword {
     /**
      * 操作符关键字
      */
-    public final String keyword;
+    private final String keyword;
 
-    /**
-     * 条件连接符列表
-     */
-    public static final List<String> CONDITION_CONNECTORS;
-    /**
-     * 无参数操作符列表
-     */
-    public static final List<String> CONDITION_OPERATORS_NONE;
-    /**
-     * 单参数操作符列表
-     */
-    public static final List<String> CONDITION_OPERATORS_SINGLE;
-    /**
-     * 多参数操作符列表
-     */
-    public static final List<String> CONDITION_OPERATORS_MULTI;
-    /**
-     * 完整操作符列表
-     */
-    public static final List<String> CONDITION_OPERATORS_COMPLETE;
-    /**
-     * LIKE操作符列表
-     */
-    public static final List<String> CONDITION_OPERATORS_LIKE;
-    /**
-     * 比较操作符列表
-     */
-    public static final List<String> CONDITION_OPERATORS_COMPARE;
-    /**
-     * 位操作符
-     */
-    public static final List<String> CONDITION_OPERATORS_BIT;
 
-    static {
-        List<String> connector = Arrays.asList(AND.keyword, OR.keyword);
-        CONDITION_CONNECTORS = Collections.unmodifiableList(connector);
-        
-        List<String> none = Arrays.asList(IS_NULL.keyword, IS_NOT_NULL.keyword);
-        CONDITION_OPERATORS_NONE = Collections.unmodifiableList(none);
-        
-        List<String> single = Arrays.asList(EQ.keyword, NE.keyword, 
-                GT.keyword, GE.keyword, 
-                LT.keyword, LE.keyword, 
-                LIKE.keyword, NOT_LIKE.keyword, 
-                BIT_CONTAINS.keyword, BIT_NOT_CONTAINS.keyword
-        );
-        CONDITION_OPERATORS_SINGLE = Collections.unmodifiableList(single);
-        
-        List<String> multi = Arrays.asList(IN.keyword, NOT_IN.keyword);
-        CONDITION_OPERATORS_MULTI = Collections.unmodifiableList(multi);
-        
-        List<String> all = new ArrayList<>();
-        all.addAll(none);
-        all.addAll(single);
-        all.addAll(multi);
-        CONDITION_OPERATORS_COMPLETE = Collections.unmodifiableList(all);
-        
-        List<String> like = Arrays.asList(LIKE.keyword, NOT_LIKE.keyword);
-        CONDITION_OPERATORS_LIKE = Collections.unmodifiableList(like);
-        
-        List<String> compare = Arrays.asList(GT.keyword, GE.keyword, LT.keyword, LE.keyword);
-        CONDITION_OPERATORS_COMPARE = Collections.unmodifiableList(compare);
-        
-        List<String> bit = Arrays.asList(BIT_CONTAINS.keyword, BIT_NOT_CONTAINS.keyword);
-        CONDITION_OPERATORS_BIT = Collections.unmodifiableList(bit);
-    }
 
     /**
      * 替换连接符
@@ -173,10 +109,10 @@ public enum SqlKeyword {
      */
     public static String replaceConnector(String connector) {
         if (connector == null || connector.isEmpty()) {
-            return AND.keyword;
+            return SqlKeyword.AND.getKeyword();
         }
         connector = connector.toUpperCase();
-        if (CONDITION_CONNECTORS.contains(connector)) {
+        if (SqlKeyword.AND.getKeyword().equals(connector) || SqlKeyword.OR.getKeyword().equals(connector)) {
             return connector;
         }
         throw new IllegalArgumentException("illegal operator: " + connector);
@@ -191,108 +127,110 @@ public enum SqlKeyword {
      */
     public static String replaceOperator(String operator) {
         if (operator == null || operator.isEmpty()) {
-            return EQ.keyword;
+            return SqlKeyword.EQ.getKeyword();
         }
-        operator = operator.toLowerCase();
+        operator = operator.toUpperCase();
         switch (operator) {
             case "=":
             case "==":
-            case "eq":
-                return EQ.keyword;
+            case "EQ":
+                return SqlKeyword.EQ.getKeyword();
             case "<>":
             case "!=":
-            case "ne":
-                return NE.keyword;
+            case "NE":
+                return SqlKeyword.NE.getKeyword();
             case "<":
-            case "lt":
-                return GT.keyword;
+            case "LT":
+                return SqlKeyword.LT.getKeyword();
             case "<=":
-            case "le":
-                return LE.keyword;
+            case "LE":
+                return SqlKeyword.LE.getKeyword();
             case ">":
-            case "gt":
-                return LT.keyword;
+            case "GT":
+                return SqlKeyword.GT.getKeyword();
             case ">=":
-            case "ge":
-                return GE.keyword;
-            case "like":
-                return LIKE.keyword;
-            case "not like":
-                return NOT_LIKE.keyword;
-            case "in":
-                return IN.keyword;
-            case "not in":
-                return NOT_IN.keyword;
-            case "null":
-            case "isnull":
-                return IS_NULL.keyword;
-            case "not null":
-            case "is not null":
-                return IS_NOT_NULL.keyword;
+            case "GE":
+                return SqlKeyword.GE.getKeyword();
+            case "LIKE":
+                return SqlKeyword.LIKE.getKeyword();
+            case "NOT LIKE":
+                return SqlKeyword.NOT_LIKE.getKeyword();
+            case "IN":
+                return SqlKeyword.IN.getKeyword();
+            case "NOT IN":
+                return SqlKeyword.NOT_IN.getKeyword();
+            case "NULL":
+            case "ISNULL":
+            case "IS NULL":
+                return SqlKeyword.IS_NULL.getKeyword();
+            case "NOT NULL":
+            case "IS NOT NULL":
+                return SqlKeyword.IS_NOT_NULL.getKeyword();
             case "&>0":
             case "&>":
-            case "bit contains":
-                return BIT_CONTAINS.keyword;
+            case "BIT CONTAINS":
+                return SqlKeyword.BIT_CONTAINS.getKeyword();
             case "&=0":
             case "&=":
-            case "bit not contains":
-                return BIT_NOT_CONTAINS.keyword;
+            case "BIT NOT CONTAINS":
+                return SqlKeyword.BIT_NOT_CONTAINS.getKeyword();
             default:
                 throw new IllegalArgumentException("illegal operator: " + operator);
         }
     }
 
-    /**
-     * 判断是否为无参数操作符
-     *
-     * @param operator 操作符
-     * @return boolean 是否为无参数操作符
-     */
-    public static boolean isNoneArgOperator(String operator) {
-        return CONDITION_OPERATORS_NONE.contains(operator);
-    }
 
     /**
-     * 判断是否为单参数操作符
+     * 判断是否为比较相等的操作符
      *
      * @param operator 操作符
      * @return boolean 是否为单参数操作符
      */
-    public static boolean isSingleArgOperator(String operator) {
-        return CONDITION_OPERATORS_SINGLE.contains(operator);
+    public static boolean isEqOperator(String operator) {
+        return SqlKeyword.EQ.getKeyword().equals(operator) || SqlKeyword.NE.getKeyword().equals(operator);
     }
 
     /**
-     * 判断是否为多参数操作符
+     * 判断是否为比较大小的操作符(不包含等于和不等于)
      *
      * @param operator 操作符
-     * @return boolean 是否为多参数操作符
+     * @return boolean 是否为比较操作符
      */
-    public static boolean isMultiArgOperator(String operator) {
-        return CONDITION_OPERATORS_MULTI.contains(operator);
+    public static boolean isCompareOperator(String operator) {
+        return SqlKeyword.LT.getKeyword().equals(operator) || SqlKeyword.LE.getKeyword().equals(operator) ||
+                SqlKeyword.GT.getKeyword().equals(operator) || SqlKeyword.GE.getKeyword().equals(operator);
     }
-
+    
     /**
-     * 判断是否为有效操作符
-     *
-     * @param operator 操作符
-     * @return boolean 是否为有效操作符
-     */
-    public static boolean isOperator(String operator) {
-        return CONDITION_OPERATORS_COMPLETE.contains(operator);
-    }
-
-    /**
-     * 判断是否为LIKE操作符
+     * 判断是否为模糊查询操作符
      *
      * @param operator 操作符
      * @return boolean 是否为LIKE操作符
      */
     public static boolean isLikeOperator(String operator) {
-        return CONDITION_OPERATORS_LIKE.contains(operator);
+        return SqlKeyword.LIKE.getKeyword().equals(operator) || SqlKeyword.NOT_LIKE.getKeyword().equals(operator);
     }
-    
-    
+
+    /**
+     * 判断是否为in批量操作符
+     *
+     * @param operator 操作符
+     * @return boolean 是否为多参数操作符
+     */
+    public static boolean isInOperator(String operator) {
+        return SqlKeyword.IN.getKeyword().equals(operator) || SqlKeyword.NOT_IN.getKeyword().equals(operator);
+    }
+
+    /**
+     * 判断是否为null相关操作符
+     *
+     * @param operator 操作符
+     * @return boolean 是否为无参数操作符
+     */
+    public static boolean isNullOperator(String operator) {
+        return SqlKeyword.IS_NULL.getKeyword().equals(operator) || SqlKeyword.IS_NOT_NULL.getKeyword().equals(operator);
+    }
+
     /**
      * 判断是否为位操作符
      *
@@ -300,7 +238,7 @@ public enum SqlKeyword {
      * @return boolean 是否为BIT操作符
      */
     public static boolean isBitOperator(String operator) {
-        return CONDITION_OPERATORS_BIT.contains(operator);
+        return SqlKeyword.BIT_CONTAINS.getKeyword().equals(operator) || SqlKeyword.BIT_NOT_CONTAINS.getKeyword().equals(operator);
     }
 
 }

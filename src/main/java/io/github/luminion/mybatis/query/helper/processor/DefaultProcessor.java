@@ -31,46 +31,57 @@ public abstract class DefaultProcessor {
     /**
      * 验证SQL条件
      *
-     * @param sqlCondition         SQL条件
-     * @param propertyToColumnAliasMap  字段到数据库列的映射
-     * @param unmapped             未映射参数集合
+     * @param sqlCondition             SQL条件
+     * @param propertyToColumnAliasMap 字段到数据库列的映射
+     * @param extra                    未映射参数集合
      * @return {@link ISqlCondition} 验证后的SQL条件，如果验证失败返回null
      */
-    public static ISqlCondition validateCondition(ISqlCondition sqlCondition, Map<String, String> propertyToColumnAliasMap, Map<String, Object> unmapped) {
+    public static ISqlCondition validateCondition(ISqlCondition sqlCondition, Map<String, String> propertyToColumnAliasMap, Map<String, Object> extra) {
         String field = sqlCondition.getField();
         String operator = sqlCondition.getOperator();
         Object value = sqlCondition.getValue();
         if (field == null || field.isEmpty()) {
             return null;
         }
+        if (value == null) {
+            log.info("condition field [{}] requires a not null value but value is null, it will be removed and put into paramMap", field);
+        }
         String jdbcColumn = propertyToColumnAliasMap.get(field);
         if (jdbcColumn == null) {
             log.info("condition field [{}] not exist in fieldMap , it will be removed and put into paramMap", field);
-            unmapped.putIfAbsent(field, value);
+            extra.putIfAbsent(field, value);
             return null;
         }
         operator = SqlKeyword.replaceOperator(operator);
-        if (!SqlKeyword.isNoneArgOperator(operator) && value == null) {
-            log.info("condition field [{}] requires value but value is null, it will be removed and put into paramMap", field);
-            unmapped.putIfAbsent(field, "");
-            return null;
-        }
-        if (SqlKeyword.isMultiArgOperator(operator)) {
+        if (SqlKeyword.isInOperator(operator)) {
             boolean iterableValue = value instanceof Iterable;
             if (!iterableValue) {
                 log.info("condition field [{}] requires collection but value is not iterable, it will be removed and put into paramMap", field);
-                unmapped.putIfAbsent(field, value);
+                extra.putIfAbsent(field, value);
                 return null;
             }
             Iterable<?> iterable = (Iterable<?>) value;
             if (!iterable.iterator().hasNext()) {
                 log.info("condition field [{}] requires collection but value is empty, it will be removed and put into paramMap", field);
-                unmapped.putIfAbsent(field, value);
+                extra.putIfAbsent(field, value);
                 return null;
             }
         }
-        if (SqlKeyword.isLikeOperator(operator) && value instanceof String) {
-            if (!value.toString().contains("%")){
+        if (SqlKeyword.isBitOperator(operator)) {
+            boolean isNumber = value instanceof Number;
+            if (!isNumber) {
+                log.info("condition field [{}] requires number but value is not a number, it will be removed and put into paramMap", field);
+                extra.putIfAbsent(field, value);
+                return null;
+            }
+        }
+        if (SqlKeyword.isLikeOperator(operator)) {
+//            if(!(value instanceof String)){
+//                log.info("condition field [{}] requires string but value is not string, it will be removed and put into paramMap", field);
+//                extra.putIfAbsent(field, value);
+//                return null;
+//            }
+            if (!value.toString().contains("%")) {
                 value = "%" + value + "%";
             }
         }
@@ -79,7 +90,7 @@ public abstract class DefaultProcessor {
 
     public static ISqlSort validateSort(ISqlSort sqlSort, Map<String, String> field2JdbcColumnMap) {
         String jdbcColumn = field2JdbcColumnMap.get(sqlSort.getField());
-        if (jdbcColumn==null){
+        if (jdbcColumn == null) {
             log.warn("sort field [{}] not exist in fieldMap , it will be removed", sqlSort.getField());
             return null;
         }
@@ -94,20 +105,20 @@ public abstract class DefaultProcessor {
      * @param symbol        连接符号
      */
     public static void warpConditions(AbstractSqlHelper<?, ?> sqlHelper, Collection<ISqlCondition> sqlConditions, String symbol) {
-        if (sqlHelper==null || sqlConditions==null || sqlConditions.isEmpty()) {
+        if (sqlHelper == null || sqlConditions == null || sqlConditions.isEmpty()) {
             return;
         }
         symbol = SqlKeyword.replaceConnector(symbol);
-        if (SqlKeyword.AND.keyword.equals(symbol)) {
+        if (SqlKeyword.AND.getKeyword().equals(symbol)) {
             sqlHelper.getConditions().addAll(sqlConditions);
             return;
         }
-        SqlTree iSqlTrees = new SqlTree(sqlConditions, SqlKeyword.OR.keyword);
+        SqlTree iSqlTrees = new SqlTree(sqlConditions, SqlKeyword.OR.getKeyword());
         sqlHelper.with(iSqlTrees);
     }
 
 
-    public static void wrapSorts(AbstractSqlHelper<?, ?> sqlHelper,Collection<ISqlSort> sqlSorts, Map<String, String> field2JdbcColumnMap) {
+    public static void wrapSorts(AbstractSqlHelper<?, ?> sqlHelper, Collection<ISqlSort> sqlSorts, Map<String, String> field2JdbcColumnMap) {
         for (ISqlSort sqlSort : sqlSorts) {
             ISqlSort iSqlSort = validateSort(sqlSort, field2JdbcColumnMap);
             if (iSqlSort != null) {

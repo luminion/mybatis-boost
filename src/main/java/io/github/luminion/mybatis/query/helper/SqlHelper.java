@@ -58,7 +58,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     @Override
     public SqlHelper<T> or(Consumer<SqlHelper<T>> sqlHelper) {
         SqlHelper<T> child = new SqlHelper<>();
-        child.connector = SqlKeyword.OR.keyword;
+        child.connector = SqlKeyword.OR.getKeyword();
         sqlHelper.accept(child);
         this.addChild(child);
         return this;

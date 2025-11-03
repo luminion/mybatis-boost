@@ -38,7 +38,7 @@ public class SqlTree implements ISqlTree {
 
     {
         this.conditions = new LinkedHashSet<>();
-        connector = SqlKeyword.AND.keyword;
+        connector = SqlKeyword.AND.getKeyword();
     }
 
 
@@ -74,7 +74,7 @@ public class SqlTree implements ISqlTree {
             return this;
         }
         // create a new child to avoid circling reference
-        SqlTree newChild = new SqlTree(child.getConditions(), SqlKeyword.OR.keyword);
+        SqlTree newChild = new SqlTree(child.getConditions(), SqlKeyword.OR.getKeyword());
         SqlTree current = this;
         while (current.getChild() != null) {
             current = current.getChild();
@@ -98,7 +98,7 @@ public class SqlTree implements ISqlTree {
                 continue;
             }
             String symbol1 = node.getConnector();
-            if (SqlKeyword.OR.keyword.equals(symbol1)) {
+            if (SqlKeyword.OR.getKeyword().equals(symbol1)) {
                 // put or conditions as child
                 this.addSingleChild(node);
             } else {

@@ -54,7 +54,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         if (ObjectUtils.isEmpty(keyProperty)) {
             throw new IllegalArgumentException("can't find id property");
         }
-        SqlCondition condition = new SqlCondition(keyProperty, SqlKeyword.EQ.keyword, id);
+        SqlCondition condition = new SqlCondition(keyProperty, SqlKeyword.EQ.getKeyword(), id);
         SqlHelper<T> sqlHelper = SqlHelper.of(this).with(condition);
         return voUnique(sqlHelper);
     }
@@ -82,7 +82,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     default List<V> voListByIds(Collection<? extends Serializable> ids) {
         Class<T> entityClass = BoostUtils.getEntityClass(this);
         String idPropertyName = BoostUtils.getIdPropertyName(entityClass);
-        SqlCondition sqlCondition = new SqlCondition(idPropertyName, SqlKeyword.IN.keyword, ids);
+        SqlCondition sqlCondition = new SqlCondition(idPropertyName, SqlKeyword.IN.getKeyword(), ids);
         SqlHelper<T> sqlHelper = SqlHelper.of(this).with(sqlCondition);
         return voList(sqlHelper);
     }
@@ -196,7 +196,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      *
      * @param params 标准
      * @param page   第页
-     * @return {@link List }<{@link V }>
+     * @return {@link List }
      */
     List<V> selectBySqlEntity(ISqlEntity<T> params, P page);
 }

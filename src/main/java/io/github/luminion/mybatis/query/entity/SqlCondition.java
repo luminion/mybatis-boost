@@ -31,7 +31,8 @@ public class SqlCondition implements ISqlCondition {
     protected Object value;
 
     {
-        this.operator = SqlKeyword.EQ.keyword;
+        this.operator = SqlKeyword.EQ.getKeyword();
+        this.value = "";
     }
 
     /**
@@ -44,7 +45,7 @@ public class SqlCondition implements ISqlCondition {
         this.field = field;
         this.value = value;
     }
-    
+
     public SqlCondition(String field, String operator, Object value) {
         this.field = field;
         this.operator = SqlKeyword.replaceOperator(operator);

@@ -41,7 +41,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.EQ.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.EQ.getKeyword(), value));
         return (S) this;
     }
 
@@ -57,7 +57,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NE.getKeyword(), value));
         return (S) this;
     }
 
@@ -73,7 +73,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.GT.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.GT.getKeyword(), value));
         return (S) this;
     }
 
@@ -89,7 +89,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.GE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.GE.getKeyword(), value));
         return (S) this;
     }
 
@@ -105,7 +105,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LT.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LT.getKeyword(), value));
         return (S) this;
     }
 
@@ -121,7 +121,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LE.getKeyword(), value));
         return (S) this;
     }
 
@@ -137,7 +137,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LIKE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.LIKE.getKeyword(), value));
         return (S) this;
     }
 
@@ -153,7 +153,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NOT_LIKE.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NOT_LIKE.getKeyword(), value));
         return (S) this;
     }
 
@@ -169,7 +169,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IN.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IN.getKeyword(), value));
         return (S) this;
     }
 
@@ -185,7 +185,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NOT_IN.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.NOT_IN.getKeyword(), value));
         return (S) this;
     }
 
@@ -196,7 +196,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default S isNull(MethodReference<T, ?> getter) {
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NULL.keyword, null));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NULL.getKeyword(), null));
         return (S) this;
     }
 
@@ -207,7 +207,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @return this
      */
     default S isNotNull(MethodReference<T, ?> getter) {
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NOT_NULL.keyword, null));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NOT_NULL.getKeyword(), null));
         return (S) this;
     }
 
@@ -245,7 +245,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_CONTAINS.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_CONTAINS.getKeyword(), value));
         return (S) this;
     }
 
@@ -261,7 +261,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_NOT_CONTAINS.keyword, value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_NOT_CONTAINS.getKeyword(), value));
         return (S) this;
     }
 
