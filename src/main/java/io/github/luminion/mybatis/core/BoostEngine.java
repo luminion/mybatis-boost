@@ -3,7 +3,9 @@ package io.github.luminion.mybatis.core;
 import io.github.luminion.mybatis.enums.SqlKeyword;
 import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
+import io.github.luminion.mybatis.query.helper.ISqlHelper;
 import io.github.luminion.mybatis.query.helper.SqlHelper;
+import io.github.luminion.mybatis.query.helper.processor.FieldSuffixProcessor;
 import io.github.luminion.mybatis.util.BoostUtils;
 import io.github.luminion.mybatis.util.ReflectUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -30,6 +32,11 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     @Override
     default V toVo(Object source) {
         return ReflectUtils.toTarget(source, BoostUtils.getViewObjectClass(this));
+    }
+
+    @Override
+    default void voPostProcess(ISqlEntity<T> params, P page, List<V> records) {
+        // do nothing here, only for override
     }
 
     @Override
@@ -112,7 +119,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         if (vs.isEmpty()) {
             return null;
         }
-        if (vs.size() >1){
+        if (vs.size() > 1) {
             throw new TooManyResultsException("error query => expected one but found " + vs.size());
         }
         return vs.get(0);
@@ -132,7 +139,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     default <R> Optional<R> voUniqueOpt(ISqlEntity<T> params, Class<R> voType) {
         return Optional.ofNullable(voUnique(params, voType));
     }
-    
+
     @Override
     default List<V> voList() {
         return voList(null);
@@ -140,7 +147,11 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     @Override
     default List<V> voList(ISqlEntity<T> params) {
-        return selectBySqlEntity(params, null);
+        FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
+        ISqlHelper<T> sqlHelper = SqlHelper.of(this)
+                .with(params)
+                .process(fieldSuffixProcessor::process);
+        return selectBySqlEntity(sqlHelper, null);
     }
 
     @Override
@@ -171,11 +182,13 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
+
+
     /**
      * 最终执行的查询方法
      *
      * @param params 标准
-     * @param page     第页
+     * @param page   第页
      * @return {@link List }<{@link V }>
      */
     List<V> selectBySqlEntity(ISqlEntity<T> params, P page);

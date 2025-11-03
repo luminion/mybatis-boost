@@ -81,7 +81,7 @@ public class FieldSuffixProcessor {
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
         Map<String, Object> extraParams = resultHelper.getExtra();
-        Map<String, String> propertyToColumnAliasMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
+        Map<String, String> entityPropertyToColumnAliasMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
         Set<String> suffixes = suffixToOperatorMap.keySet();
         for (ISqlTree currentHelper : rootHelper) {
             Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();
@@ -90,7 +90,7 @@ public class FieldSuffixProcessor {
             while (conditionIterator.hasNext()) {
                 ISqlCondition sqlCondition = conditionIterator.next();
                 String field = sqlCondition.getField();
-                String jdbcColumn = propertyToColumnAliasMap.get(field);
+                String jdbcColumn = entityPropertyToColumnAliasMap.get(field);
                 if (jdbcColumn == null) {
                     boolean isSuffixMatched = false;
                     for (String suffix : suffixes) {
@@ -100,7 +100,7 @@ public class FieldSuffixProcessor {
                             String operator = suffixToOperatorMap.get(suffix);
                             log.debug("condition field [{}] Matched suffix operator [{}]", field, operator);
                             SqlCondition suffixCondition = new SqlCondition(sourceFiled, operator, sqlCondition.getValue());
-                            ISqlCondition validateSuffixCondition = DefaultProcessor.validateCondition(suffixCondition, propertyToColumnAliasMap, extraParams);
+                            ISqlCondition validateSuffixCondition = DefaultProcessor.validateCondition(suffixCondition, entityPropertyToColumnAliasMap, extraParams);
                             if (validateSuffixCondition == null) {
                                 continue;
                             }
@@ -112,7 +112,7 @@ public class FieldSuffixProcessor {
                         continue;
                     }
                 }
-                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, propertyToColumnAliasMap, extraParams);
+                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, entityPropertyToColumnAliasMap, extraParams);
                 if (validate == null) {
                     continue;
                 }
@@ -120,7 +120,7 @@ public class FieldSuffixProcessor {
             }
             DefaultProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        DefaultProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), propertyToColumnAliasMap);
+        DefaultProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), entityPropertyToColumnAliasMap);
         return resultHelper;
     }
 
