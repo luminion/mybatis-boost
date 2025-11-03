@@ -10,5 +10,4 @@ import io.github.luminion.mybatis.core.MethodRefence;
 public interface GetterColumnProvider {
 
     <T, R> String getGetterColumnName(MethodRefence<T, R> getter);
-
 }

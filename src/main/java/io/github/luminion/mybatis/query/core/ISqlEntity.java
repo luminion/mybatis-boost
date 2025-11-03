@@ -20,9 +20,9 @@ public interface ISqlEntity<T> extends ISqlTree {
     Collection<ISqlSort> getSorts();
 
     /**
-     * 获取未映射的额外字段Map
+     * 非本表字段的条件(key=条件名,value=条件值)
      *
-     * @return {@link Map }<{@link String },{@link Object }>
+     * @return 非本表字段的条件map
      */
     Map<String,Object> getExtra();
 

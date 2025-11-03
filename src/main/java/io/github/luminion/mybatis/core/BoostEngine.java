@@ -38,7 +38,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
             throw new IllegalArgumentException("id can't be null");
         }
         Class<T> clazz = BoostUtils.getEntityClass(this);
-        String keyProperty = BoostUtils.getEntityIdPropertyName(clazz);
+        String keyProperty = BoostUtils.getIdPropertyName(clazz);
         if (ObjectUtils.isEmpty(keyProperty)) {
             throw new IllegalArgumentException("can't find id property");
         }
@@ -69,7 +69,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     @Override
     default List<V> voListByIds(Collection<? extends Serializable> ids) {
         Class<T> entityClass = BoostUtils.getEntityClass(this);
-        MethodRefence<T, Object> idPropertyGetter = BoostUtils.getEntityIdPropertyGetter(entityClass);
+        MethodRefence<T, Object> idPropertyGetter = BoostUtils.getIdPropertyGetter(entityClass);
         SqlHelper<T> sqlHelper = SqlHelper.of(this).in(idPropertyGetter, ids);
         return voList(sqlHelper);
     }

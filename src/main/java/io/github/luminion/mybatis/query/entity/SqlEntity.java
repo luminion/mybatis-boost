@@ -28,7 +28,7 @@ public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
     protected Collection<ISqlSort> sorts;
     
     /**
-     * 映射map，无法自动映射的字段会存放到该map中
+     * 非本表字段的条件
      */
     protected transient Map<String, Object> extra;
 

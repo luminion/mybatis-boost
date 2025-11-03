@@ -32,18 +32,18 @@ public abstract class DefaultProcessor {
      * 验证SQL条件
      *
      * @param sqlCondition         SQL条件
-     * @param field2JdbcColumnMap  字段到数据库列的映射
+     * @param propertyToColumnAliasMap  字段到数据库列的映射
      * @param unmapped             未映射参数集合
      * @return {@link ISqlCondition} 验证后的SQL条件，如果验证失败返回null
      */
-    public static ISqlCondition validateCondition(ISqlCondition sqlCondition, Map<String, String> field2JdbcColumnMap, Map<String, Object> unmapped) {
+    public static ISqlCondition validateCondition(ISqlCondition sqlCondition, Map<String, String> propertyToColumnAliasMap, Map<String, Object> unmapped) {
         String field = sqlCondition.getField();
         String operator = sqlCondition.getOperator();
         Object value = sqlCondition.getValue();
         if (field == null || field.isEmpty()) {
             return null;
         }
-        String jdbcColumn = field2JdbcColumnMap.get(field);
+        String jdbcColumn = propertyToColumnAliasMap.get(field);
         if (jdbcColumn == null) {
             log.info("condition field [{}] not exist in fieldMap , it will be removed and put into paramMap", field);
             unmapped.putIfAbsent(field, value);
@@ -71,7 +71,7 @@ public abstract class DefaultProcessor {
         }
         if (SqlKeyword.isLikeOperator(operator) && value instanceof String) {
             if (!value.toString().contains("%")){
-                value = "%" + value + "%";    
+                value = "%" + value + "%";
             }
         }
         return new SqlCondition(jdbcColumn, operator, value);
@@ -130,7 +130,7 @@ public abstract class DefaultProcessor {
             throw new IllegalArgumentException("can't get entity class from sql helper");
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
-        Map<String, String> field2JdbcColumnMap = BoostUtils.getEntityPropertyToColumnMapForSqlEntity(entityClass);
+        Map<String, String> field2JdbcColumnMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
         Map<String, Object> extraParams = resultHelper.getExtra();
         for (ISqlTree currentHelper : rootHelper) {
             Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();

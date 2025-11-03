@@ -23,23 +23,23 @@ public class FieldSuffixProcessor {
     /**
      * 后缀到操作符的映射关系
      */
-    private final Map<String, String> suffix2OperatorMap;
+    private final Map<String, String> suffixToOperatorMap;
 
     /**
      * 私有构造函数
      */
     private FieldSuffixProcessor() {
-        this.suffix2OperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
+        this.suffixToOperatorMap = SqlExtraSuffix.DEFAULT_COMPLETE_MAP;
     }
 
     /**
      * 带参数的私有构造函数
      */
-    private FieldSuffixProcessor(Map<String, String> suffix2OperatorMap) {
-        if (suffix2OperatorMap == null) {
+    private FieldSuffixProcessor(Map<String, String> suffixToOperatorMap) {
+        if (suffixToOperatorMap == null) {
             throw new IllegalArgumentException("suffix2OperatorMap can't be null");
         }
-        this.suffix2OperatorMap = suffix2OperatorMap;
+        this.suffixToOperatorMap = suffixToOperatorMap;
     }
 
     /**
@@ -81,8 +81,8 @@ public class FieldSuffixProcessor {
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
         Map<String, Object> extraParams = resultHelper.getExtra();
-        Map<String, String> javaFieldToJdbcColumnMap = BoostUtils.getEntityPropertyToColumnMapForSqlEntity(entityClass);
-        Set<String> suffixes = suffix2OperatorMap.keySet();
+        Map<String, String> propertyToColumnAliasMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
+        Set<String> suffixes = suffixToOperatorMap.keySet();
         for (ISqlTree currentHelper : rootHelper) {
             Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();
             Iterator<ISqlCondition> conditionIterator = currentHelperConditions.iterator();
@@ -90,17 +90,17 @@ public class FieldSuffixProcessor {
             while (conditionIterator.hasNext()) {
                 ISqlCondition sqlCondition = conditionIterator.next();
                 String field = sqlCondition.getField();
-                String jdbcColumn = javaFieldToJdbcColumnMap.get(field);
+                String jdbcColumn = propertyToColumnAliasMap.get(field);
                 if (jdbcColumn == null) {
                     boolean isSuffixMatched = false;
                     for (String suffix : suffixes) {
                         if (field.endsWith(suffix)) {
                             isSuffixMatched = true;
                             String sourceFiled = field.substring(0, field.length() - suffix.length());
-                            String operator = suffix2OperatorMap.get(suffix);
+                            String operator = suffixToOperatorMap.get(suffix);
                             log.debug("condition field [{}] Matched suffix operator [{}]", field, operator);
                             SqlCondition suffixCondition = new SqlCondition(sourceFiled, operator, sqlCondition.getValue());
-                            ISqlCondition validateSuffixCondition = DefaultProcessor.validateCondition(suffixCondition, javaFieldToJdbcColumnMap, extraParams);
+                            ISqlCondition validateSuffixCondition = DefaultProcessor.validateCondition(suffixCondition, propertyToColumnAliasMap, extraParams);
                             if (validateSuffixCondition == null) {
                                 continue;
                             }
@@ -112,7 +112,7 @@ public class FieldSuffixProcessor {
                         continue;
                     }
                 }
-                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, javaFieldToJdbcColumnMap, extraParams);
+                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, propertyToColumnAliasMap, extraParams);
                 if (validate == null) {
                     continue;
                 }
@@ -120,7 +120,7 @@ public class FieldSuffixProcessor {
             }
             DefaultProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        DefaultProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), javaFieldToJdbcColumnMap);
+        DefaultProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), propertyToColumnAliasMap);
         return resultHelper;
     }
 

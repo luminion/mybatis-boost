@@ -8,5 +8,4 @@ package io.github.luminion.mybatis.provider;
 public interface TableNameProvider {
     
     <T> String getTableName(Class<T> clazz);
-    
 }

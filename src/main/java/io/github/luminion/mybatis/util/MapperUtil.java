@@ -74,7 +74,7 @@ public abstract class MapperUtil {
      * @return {@link String} SQL内容
      */
     public static <T> String getSqlContent(Class<T> entityClass) {
-        return getSqlContent(BoostUtils.getEntityTableName(entityClass));
+        return getSqlContent(BoostUtils.getTableName(entityClass));
     }
 
     /**

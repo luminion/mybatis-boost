@@ -47,39 +47,40 @@ public abstract class BoostUtils {
         return (Class<V>) GenericTypeResolver.resolveTypeArguments(booster.getClass(), Booster.class)[1];
     }
 
-    public static String getEntityTableName(Class<?> clazz) {
+    public static String getTableName(Class<?> entityClass) {
         for (BoostProvider provider : PROVIDERS) {
-            String tableName = provider.getTableName(clazz);
+            String tableName = provider.getTableName(entityClass);
             if (tableName != null) {
                 return tableName;
             }
         }
-        throw new IllegalStateException("No table name found in " + clazz.getName());
+        throw new IllegalStateException("No table name found in " + entityClass.getName());
     }
 
-    public static String getEntityIdPropertyName(Class<?> clazz) {
+    public static String getIdPropertyName(Class<?> entityClass) {
         for (BoostProvider provider : PROVIDERS) {
-            String idPropertyName = provider.getIdPropertyName(clazz);
+            String idPropertyName = provider.getIdPropertyName(entityClass);
             if (idPropertyName != null) {
+                
                 return idPropertyName;
             }
         }
-        throw new IllegalStateException("No IdProperty found in " + clazz.getName());
+        throw new IllegalStateException("No IdProperty found in " + entityClass.getName());
     }
 
     @SneakyThrows
-    public static <T, R> MethodRefence<T, R> getEntityIdPropertyGetter(Class<T> clazz) {
+    public static <T, R> MethodRefence<T, R> getIdPropertyGetter(Class<T> entityClass) {
         for (BoostProvider provider : PROVIDERS) {
-            MethodRefence<T, R> idPropertyGetter = provider.getIdPropertyGetter(clazz);
+            MethodRefence<T, R> idPropertyGetter = provider.getIdPropertyGetter(entityClass);
             if (idPropertyGetter != null) {
                 return idPropertyGetter;
             }
         }
-        throw new IllegalStateException("No IdPropertyGetter found in " + clazz.getName());
+        throw new IllegalStateException("No IdPropertyGetter found in " + entityClass.getName());
     }
 
     @SneakyThrows
-    public static <T, R> String getEntityGetterPropertyName(MethodRefence<T, R> getter) {
+    public static <T, R> String getGetterPropertyName(MethodRefence<T, R> getter) {
         for (BoostProvider provider : PROVIDERS) {
             String propertyName = provider.getGetterPropertyName(getter);
             if (propertyName != null) {
@@ -89,7 +90,7 @@ public abstract class BoostUtils {
         throw new IllegalStateException("No property name found in " + getter);
     }
 
-    public static Map<String, String> getEntityPropertyToColumnMapForSqlEntity(Class<?> entityClass) {
+    public static Map<String, String> getPropertyToColumnAliasMap(Class<?> entityClass) {
         Map<String, String> map = ENTITY_PROPERTY_TO_COLUMN_MAP.get(entityClass);
         if (map != null) {
             return map;
