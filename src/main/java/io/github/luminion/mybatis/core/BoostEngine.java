@@ -69,7 +69,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     @Override
     default List<V> voListByIds(Collection<? extends Serializable> ids) {
         Class<T> entityClass = BoostUtils.getEntityClass(this);
-        MethodRefence<T, Object> idPropertyGetter = BoostUtils.getIdPropertyGetter(entityClass);
+        MethodReference<T, Object> idPropertyGetter = BoostUtils.getIdPropertyGetter(entityClass);
         SqlHelper<T> sqlHelper = SqlHelper.of(this).in(idPropertyGetter, ids);
         return voList(sqlHelper);
     }

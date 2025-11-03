@@ -1,6 +1,6 @@
 package io.github.luminion.mybatis.query.helper;
 
-import io.github.luminion.mybatis.core.MethodRefence;
+import io.github.luminion.mybatis.core.MethodReference;
 import io.github.luminion.mybatis.enums.SqlKeyword;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
 import io.github.luminion.mybatis.query.entity.SqlSort;
@@ -37,7 +37,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S eq(MethodRefence<T, R> getter, R value) {
+    default <R> S eq(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -53,7 +53,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S ne(MethodRefence<T, R> getter, R value) {
+    default <R> S ne(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -69,7 +69,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S gt(MethodRefence<T, R> getter, R value) {
+    default <R> S gt(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -85,7 +85,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S ge(MethodRefence<T, R> getter, R value) {
+    default <R> S ge(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -101,7 +101,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S lt(MethodRefence<T, R> getter, R value) {
+    default <R> S lt(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -117,7 +117,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S le(MethodRefence<T, R> getter, R value) {
+    default <R> S le(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -133,7 +133,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S like(MethodRefence<T, R> getter, R value) {
+    default <R> S like(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -149,7 +149,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S notLike(MethodRefence<T, R> getter, R value) {
+    default <R> S notLike(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -165,7 +165,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S in(MethodRefence<T, R> getter, Collection<? extends R> value) {
+    default <R> S in(MethodReference<T, R> getter, Collection<? extends R> value) {
         if (value == null) {
             return (S) this;
         }
@@ -181,7 +181,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S notIn(MethodRefence<T, R> getter, Collection<? extends R> value) {
+    default <R> S notIn(MethodReference<T, R> getter, Collection<? extends R> value) {
         if (value == null) {
             return (S) this;
         }
@@ -195,7 +195,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S isNull(MethodRefence<T, ?> getter) {
+    default S isNull(MethodReference<T, ?> getter) {
         getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NULL.keyword, null));
         return (S) this;
     }
@@ -206,7 +206,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S isNotNull(MethodRefence<T, ?> getter) {
+    default S isNotNull(MethodReference<T, ?> getter) {
         getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NOT_NULL.keyword, null));
         return (S) this;
     }
@@ -217,7 +217,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S orderByAsc(MethodRefence<T, ?> getter) {
+    default S orderByAsc(MethodReference<T, ?> getter) {
         getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), false));
         return (S) this;
     }
@@ -228,7 +228,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param getter 对象getter方法
      * @return this
      */
-    default S orderByDesc(MethodRefence<T, ?> getter) {
+    default S orderByDesc(MethodReference<T, ?> getter) {
         getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), true));
         return (S) this;
     }
@@ -241,7 +241,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S bitWith(MethodRefence<T, R> getter, R value) {
+    default <R> S bitWith(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -257,7 +257,7 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
      * @param <R>    值的类型
      * @return this
      */
-    default <R> S bitWithout(MethodRefence<T, R> getter, R value) {
+    default <R> S bitWithout(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }

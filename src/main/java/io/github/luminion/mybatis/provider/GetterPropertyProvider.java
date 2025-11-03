@@ -1,6 +1,6 @@
 package io.github.luminion.mybatis.provider;
 
-import io.github.luminion.mybatis.core.MethodRefence;
+import io.github.luminion.mybatis.core.MethodReference;
 
 /**
  * 根据getter获取属性名
@@ -9,5 +9,5 @@ import io.github.luminion.mybatis.core.MethodRefence;
 @FunctionalInterface
 public interface GetterPropertyProvider {
     
-    <T, R> String getGetterPropertyName(MethodRefence<T, R> getter);
+    <T, R> String getGetterPropertyName(MethodReference<T, R> getter);
 }

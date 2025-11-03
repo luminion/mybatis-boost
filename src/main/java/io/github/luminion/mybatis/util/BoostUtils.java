@@ -1,9 +1,10 @@
 package io.github.luminion.mybatis.util;
 
 import io.github.luminion.mybatis.core.Booster;
-import io.github.luminion.mybatis.core.MethodRefence;
+import io.github.luminion.mybatis.core.MethodReference;
 import io.github.luminion.mybatis.provider.BoostProvider;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.GenericTypeResolver;
 
 import java.util.*;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author luminion
  */
+@Slf4j
 public abstract class BoostUtils {
     /**
      * 实体类字段到数据库列的映射缓存
@@ -54,7 +56,7 @@ public abstract class BoostUtils {
                 return tableName;
             }
         }
-        throw new IllegalStateException("No table name found in " + entityClass.getName());
+        throw new IllegalStateException("No table name found in " + PROVIDERS.size() + " providers, class: " + entityClass.getName());
     }
 
     public static String getIdPropertyName(Class<?> entityClass) {
@@ -65,29 +67,29 @@ public abstract class BoostUtils {
                 return idPropertyName;
             }
         }
-        throw new IllegalStateException("No IdProperty found in " + entityClass.getName());
+        throw new IllegalStateException("No IdProperty found in " + PROVIDERS.size() + " providers, class: " + entityClass.getName());
     }
 
     @SneakyThrows
-    public static <T, R> MethodRefence<T, R> getIdPropertyGetter(Class<T> entityClass) {
+    public static <T, R> MethodReference<T, R> getIdPropertyGetter(Class<T> entityClass) {
         for (BoostProvider provider : PROVIDERS) {
-            MethodRefence<T, R> idPropertyGetter = provider.getIdPropertyGetter(entityClass);
+            MethodReference<T, R> idPropertyGetter = provider.getIdPropertyGetter(entityClass);
             if (idPropertyGetter != null) {
                 return idPropertyGetter;
             }
         }
-        throw new IllegalStateException("No IdPropertyGetter found in " + entityClass.getName());
+        throw new IllegalStateException("No IdPropertyGetter found in " + PROVIDERS.size() + " providers, class: " + entityClass.getName());
     }
 
     @SneakyThrows
-    public static <T, R> String getGetterPropertyName(MethodRefence<T, R> getter) {
+    public static <T, R> String getGetterPropertyName(MethodReference<T, R> getter) {
         for (BoostProvider provider : PROVIDERS) {
             String propertyName = provider.getGetterPropertyName(getter);
             if (propertyName != null) {
                 return propertyName;
             }
         }
-        throw new IllegalStateException("No property name found in " + getter);
+        throw new IllegalStateException("No property name found in " + PROVIDERS.size() + " providers, getter: " + getter);
     }
 
     public static Map<String, String> getPropertyToColumnAliasMap(Class<?> entityClass) {
@@ -105,6 +107,7 @@ public abstract class BoostUtils {
                 });
             }
         }
+        log.warn("No property to column map found in {} providers, class: {}", PROVIDERS.size(), entityClass.getName());
         ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, result);
         return result;
     }
