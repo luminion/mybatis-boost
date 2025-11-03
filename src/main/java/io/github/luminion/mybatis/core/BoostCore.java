@@ -47,11 +47,11 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
     /**
      * 查询结果后处理(在返回之前需要进行的操作)
      *
-     * @param params 查询条件
-     * @param page   分页对象
+     * @param params  查询条件
+     * @param page    分页对象
      * @param records 查询结果
      */
-    void voPostProcess(ISqlEntity<T> params, P page, List<V> records);
+    void voPostProcess(List<V> records, ISqlEntity<T> params, P page);
 
     // ==================== 根据ID查询 ====================
 
@@ -214,9 +214,9 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
     /**
      * 根据条件查询VO对象列表（分页）
      *
-     * @param params    查询条件
-     * @param pageNum   页码
-     * @param pageSize  每页数量
+     * @param params   查询条件
+     * @param pageNum  页码
+     * @param pageSize 每页数量
      * @return 泛型定义的分页返回对象P
      */
     P voPage(ISqlEntity<T> params, int pageNum, int pageSize);
@@ -224,10 +224,10 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
     /**
      * 根据条件查询VO对象列表并转换类型（分页）
      *
-     * @param params    查询条件
-     * @param pageNum   页码
-     * @param pageSize  每页数量
-     * @param voType 目标VO类型
+     * @param params   查询条件
+     * @param pageNum  页码
+     * @param pageSize 每页数量
+     * @param voType   目标VO类型
      * @return 泛型定义的分页返回对象P
      */
     <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType);
@@ -235,9 +235,9 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
     /**
      * 根据条件查询VO对象列表（分页）
      *
-     * @param params    查询条件
-     * @param pageNum   页码
-     * @param pageSize  每页数量
+     * @param params   查询条件
+     * @param pageNum  页码
+     * @param pageSize 每页数量
      * @return 泛型定义的分页返回对象P
      */
     P voPage(ISqlEntity<T> params, long pageNum, long pageSize);
@@ -245,10 +245,10 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
     /**
      * 根据条件查询VO对象列表（分页）
      *
-     * @param params    查询条件
-     * @param pageNum   页码
-     * @param pageSize  每页数量
-     * @param voType    目标VO类型
+     * @param params   查询条件
+     * @param pageNum  页码
+     * @param pageSize 每页数量
+     * @param voType   目标VO类型
      * @return 泛型定义的分页返回对象P
      */
     <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType);

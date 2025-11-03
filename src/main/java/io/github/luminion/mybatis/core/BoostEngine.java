@@ -35,7 +35,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     }
 
     @Override
-    default void voPostProcess(ISqlEntity<T> params, P page, List<V> records) {
+    default void voPostProcess(List<V> records, ISqlEntity<T> params, P page) {
         // do nothing here, only for override
     }
 
@@ -151,7 +151,9 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         ISqlHelper<T> sqlHelper = SqlHelper.of(this)
                 .with(params)
                 .process(fieldSuffixProcessor::process);
-        return selectBySqlEntity(sqlHelper, null);
+        List<V> vs = selectBySqlEntity(sqlHelper, null);
+        voPostProcess(vs, params, null);
+        return vs;
     }
 
     @Override
@@ -181,8 +183,6 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     default <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
         throw new UnsupportedOperationException("Not implemented.");
     }
-
-
 
     /**
      * 最终执行的查询方法
