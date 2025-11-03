@@ -44,8 +44,17 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      */
     V toVo(Object source);
 
+
     /**
-     * 查询结果后处理(在返回之前需要进行的操作)
+     * 查询结果前处理(执行sql前, 需要进行的操作)
+     *
+     * @param params 查询条件
+     * @param page   分页对象
+     */
+    void voPreProcess(ISqlEntity<T> params, P page);
+
+    /**
+     * 查询结果后处理(执行sql并获取到结果后, 需要进行的操作)
      *
      * @param params  查询条件
      * @param page    分页对象

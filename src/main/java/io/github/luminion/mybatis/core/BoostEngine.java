@@ -35,6 +35,11 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     }
 
     @Override
+    default void voPreProcess(ISqlEntity<T> params, P page) {
+        // do nothing here, only for override
+    }
+
+    @Override
     default void voPostProcess(List<V> records, ISqlEntity<T> params, P page) {
         // do nothing here, only for override
     }
@@ -147,6 +152,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     @Override
     default List<V> voList(ISqlEntity<T> params) {
+        voPreProcess(params, null);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
         ISqlHelper<T> sqlHelper = SqlHelper.of(this)
                 .with(params)
