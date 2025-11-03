@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.Locale.ENGLISH;
 
 /**
  * @author luminion
@@ -37,7 +36,7 @@ public class BasicProvider implements BoostProvider {
     public <T, R> MethodReference<T, R> getIdPropertyGetter(Class<T> clazz) {
         String idPropertyName = getIdPropertyName(clazz);
         if (idPropertyName != null){
-            String methodName = idPropertyName.substring(0, 1).toUpperCase(ENGLISH) + idPropertyName.substring(1);
+            String methodName = idPropertyName.substring(0, 1).toUpperCase() + idPropertyName.substring(1);
             PropertyDescriptor propertyDescriptor = BeanUtils.getPropertyDescriptor(clazz, methodName);
             if (propertyDescriptor!=null){
                 Method readMethod = propertyDescriptor.getReadMethod();
