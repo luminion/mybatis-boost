@@ -169,6 +169,9 @@ public abstract class ReflectUtils {
         return copyFieldProperties(source, newInstance(clazz));
     }
 
+
+    
+
     /**
      * 获取方法引用序列化后的Lambda信息
      *
@@ -176,10 +179,32 @@ public abstract class ReflectUtils {
      * @return {@link SerializedLambda} 序列化的Lambda信息
      */
     @SneakyThrows
-    private static <T, R> SerializedLambda getSerializedLambda(MethodReference<T, R> methodReference) {
+    public static <T, R> SerializedLambda getSerializedLambda(MethodReference<T, R> methodReference) {
         Method writeReplaceMethod = methodReference.getClass().getDeclaredMethod("writeReplace");
         writeReplaceMethod.setAccessible(true);
         return (SerializedLambda) writeReplaceMethod.invoke(methodReference);
+    }
+
+    /**
+     * 获取方法引用序列化后的Lambda实现类名
+     *
+     * @param methodReference 方法引用
+     * @return {@link String} Lambda实现类名
+     */
+    public static <T, R> String getSerializedLambdaImplClassName(MethodReference<T, R> methodReference) {
+        SerializedLambda serializedLambda = getSerializedLambda(methodReference);
+        return serializedLambda.getImplClass().replace("/", ".");
+    }
+
+    /**
+     * 获取方法引用序列化后的Lambda实现方法名
+     *
+     * @param methodReference 方法引用
+     * @return {@link String} Lambda实现方法名
+     */
+    public static <T, R> String getSerializedLambdaImplMethodName(MethodReference<T, R> methodReference) {
+        SerializedLambda serializedLambda = getSerializedLambda(methodReference);
+        return serializedLambda.getImplMethodName();
     }
 
     /**
