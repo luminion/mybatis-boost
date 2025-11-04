@@ -43,26 +43,28 @@ public abstract class DefaultProcessor {
         if (field == null || field.isEmpty()) {
             return null;
         }
-        if (value == null) {
-            log.info("condition field [{}] requires a not null value but value is null, it will be removed and put into paramMap", field);
-        }
         String jdbcColumn = propertyToColumnAliasMap.get(field);
         if (jdbcColumn == null) {
-            log.info("condition field [{}] not exist in fieldMap , it will be removed and put into paramMap", field);
+            log.debug("condition field [{}] not exist in fieldMap , it will be removed and put into paramMap", field);
             extra.putIfAbsent(field, value);
             return null;
         }
         operator = SqlKeyword.replaceOperator(operator);
+        if (!SqlKeyword.isNullOperator(operator) && value == null) {
+            log.info("condition field [{}] requires value but value is null, it will be removed and put into paramMap", field);
+            extra.putIfAbsent(field, "null");
+            return null;
+        }
         if (SqlKeyword.isInOperator(operator)) {
             boolean iterableValue = value instanceof Iterable;
             if (!iterableValue) {
-                log.info("condition field [{}] requires collection but value is not iterable, it will be removed and put into paramMap", field);
+                log.debug("condition field [{}] requires collection but value is not iterable, it will be removed and put into paramMap", field);
                 extra.putIfAbsent(field, value);
                 return null;
             }
             Iterable<?> iterable = (Iterable<?>) value;
             if (!iterable.iterator().hasNext()) {
-                log.info("condition field [{}] requires collection but value is empty, it will be removed and put into paramMap", field);
+                log.debug("condition field [{}] requires collection but value is empty, it will be removed and put into paramMap", field);
                 extra.putIfAbsent(field, value);
                 return null;
             }
@@ -70,14 +72,14 @@ public abstract class DefaultProcessor {
         if (SqlKeyword.isBitOperator(operator)) {
             boolean isNumber = value instanceof Number;
             if (!isNumber) {
-                log.info("condition field [{}] requires number but value is not a number, it will be removed and put into paramMap", field);
+                log.debug("condition field [{}] requires number but value is not a number, it will be removed and put into paramMap", field);
                 extra.putIfAbsent(field, value);
                 return null;
             }
         }
         if (SqlKeyword.isLikeOperator(operator)) {
 //            if(!(value instanceof String)){
-//                log.info("condition field [{}] requires string but value is not string, it will be removed and put into paramMap", field);
+//                log.debug("condition field [{}] requires string but value is not string, it will be removed and put into paramMap", field);
 //                extra.putIfAbsent(field, value);
 //                return null;
 //            }
