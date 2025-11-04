@@ -70,9 +70,9 @@ public abstract class ReflectUtils {
         if (isJavaCoreClass(clazz)) {
             throw new IllegalArgumentException("clazz must not be java class");
         }
-        return FIELD_MAP_CACHE.computeIfAbsent(clazz, k -> {
+        return FIELD_MAP_CACHE.computeIfAbsent(clazz, c -> {
             Map<String, Field> map = new HashMap<>();
-            ReflectionUtils.doWithFields(k, 
+            ReflectionUtils.doWithFields(c, 
                     field -> map.putIfAbsent(field.getName(), field),
                     ReflectionUtils.COPYABLE_FIELDS);
             return map;
