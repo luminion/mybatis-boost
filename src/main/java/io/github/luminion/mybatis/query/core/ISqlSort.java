@@ -1,25 +1,28 @@
 package io.github.luminion.mybatis.query.core;
 
 /**
- * SQL排序接口
+ * SQL 排序接口.
  * <p>
- * 定义SQL查询中的排序规则，包括排序字段和排序方向
+ * 定义 SQL 查询中的排序规则, 包括排序字段和排序方向.
  *
  * @author luminion
+ * @since 1.0.0
  */
 public interface ISqlSort {
 
     /**
-     * 获取属性名
+     * 获取排序字段的属性名.
      *
-     * @return {@link String } 属性名
+     * @return 属性名
+     * @since 1.0.0
      */
     String getField();
 
     /**
-     * 是否倒序排列
+     * 是否为降序排列.
      *
-     * @return boolean true表示倒序，false表示正序
+     * @return true 表示降序, false 表示升序
+     * @since 1.0.0
      */
     boolean isDesc();
 

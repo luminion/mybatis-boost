@@ -16,25 +16,27 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 反射工具类
+ * 反射工具类.
  * <p>
- * 提供通用的反射工具方法，包括实例创建、字段映射、属性复制等
+ * 提供通用的反射操作, 包括实例创建、字段缓存、属性复制、方法引用解析等.
  *
  * @author luminion
+ * @since 1.0.0
  */
 public abstract class ReflectUtils {
 
     /**
-     * 类字段映射缓存
+     * 类字段映射缓存, 用于提升性能.
      */
     private static final Map<Class<?>, Map<String, Field>> FIELD_MAP_CACHE = new ConcurrentHashMap<>();
 
 
     /**
-     * 判断是否为Java核心类
+     * 判断一个类是否为 Java 核心库中的类.
      *
-     * @param clazz 类
-     * @return boolean 是否为Java核心类
+     * @param clazz 待检查的类
+     * @return 如果是核心类则返回 true, 否则返回 false
+     * @since 1.0.0
      */
     public static boolean isJavaCoreClass(Class<?> clazz) {
         if (clazz == null) {
@@ -44,11 +46,12 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 新建实例
+     * 使用 Spring 的 {@link BeanUtils} 创建一个新的实例.
      *
-     * @param clazz 类
+     * @param clazz 待实例化的类
      * @param <T>   实例类型
-     * @return {@link T} 新实例
+     * @return 新创建的实例
+     * @since 1.0.0
      */
     public static <T> T newInstance(Class<T> clazz) {
         if (clazz == null) {
@@ -58,10 +61,11 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 获取指定类的字段映射
+     * 获取并缓存指定类的所有字段.
      *
-     * @param clazz 类
-     * @return {@link Map} 字段名到字段的映射
+     * @param clazz 待分析的类
+     * @return 字段名到 {@link Field} 对象的映射
+     * @since 1.0.0
      */
     public static Map<String, Field> fieldMap(Class<?> clazz) {
         if (clazz == null) {
@@ -81,12 +85,13 @@ public abstract class ReflectUtils {
 
 
     /**
-     * 复制属性
+     * 使用 {@link BeanUtils#copyProperties(Object, Object)} 复制对象的属性.
      *
-     * @param source 来源对象
+     * @param source 源对象
      * @param target 目标对象
      * @param <T>    目标对象类型
-     * @return {@link T} 目标对象
+     * @return 复制完属性的目标对象
+     * @since 1.0.0
      */
     public static <T> T copyFieldProperties(Object source, T target) {
         if (source == null || target == null) return target;
@@ -96,10 +101,11 @@ public abstract class ReflectUtils {
 
 
     /**
-     * 对象转map
+     * 将一个对象转换为 {@link Map}.
      *
-     * @param source 来源对象
-     * @return {@link Map} 映射关系
+     * @param source 源对象
+     * @return 转换后的 Map
+     * @since 1.0.0
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")
@@ -118,12 +124,13 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 对象转对象
+     * 将一个对象转换为指定类型的新对象.
      *
-     * @param source 来源对象
+     * @param source 源对象
      * @param clazz  目标类
      * @param <T>    目标类型
-     * @return {@link T} 目标对象
+     * @return 转换后的新对象
+     * @since 1.0.0
      */
     public static <T> T toTarget(Object source, Class<T> clazz) {
         if (source == null) {
@@ -136,11 +143,12 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 解析超类泛型参数
+     * 解析一个类实现的泛型接口或继承的泛型父类的实际类型参数.
      *
-     * @param clazz      指定类
-     * @param superClass 超类
-     * @return {@link Class} 泛型参数数组
+     * @param clazz      待解析的类
+     * @param superClass 泛型接口或父类
+     * @return 实际类型参数的 {@link Class} 数组
+     * @since 1.0.0
      */
     public static Class<?>[] resolveTypeArguments(Class<?> clazz, Class<?> superClass) {
         return GenericTypeResolver.resolveTypeArguments(clazz, superClass);
@@ -148,10 +156,11 @@ public abstract class ReflectUtils {
 
 
     /**
-     * 获取方法引用序列化后的Lambda信息
+     * 从可序列化的方法引用中提取 {@link SerializedLambda} 信息.
      *
      * @param getter 方法引用
-     * @return {@link SerializedLambda} 序列化的Lambda信息
+     * @return {@link SerializedLambda} 实例
+     * @since 1.0.0
      */
     @SneakyThrows
     private static <T, R> SerializedLambda getSerializedLambda(MethodReference<T, R> getter) {
@@ -161,10 +170,11 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 获取getter对应类的名称
+     * 从方法引用中获取其声明所在的类的 {@link Class} 对象.
      *
      * @param getter 方法引用
-     * @return {@link String} Lambda实现类名
+     * @return 声明该方法的类的 {@link Class} 对象
+     * @since 1.0.0
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")
@@ -175,10 +185,11 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 获取getter对应的方法
+     * 从方法引用中获取其对应的 {@link Method} 对象.
      *
      * @param getter 方法引用
-     * @return {@link Method}
+     * @return {@link Method} 对象
+     * @since 1.0.0
      */
     @SneakyThrows
     public static <T, R> Method getGetterMethod(MethodReference<T, R> getter) {
@@ -193,10 +204,11 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 获取getter对应的字段
+     * 从 getter 方法引用中获取其对应的属性 {@link Field} 对象.
      *
      * @param getter 方法引用
-     * @return {@link Field}
+     * @return {@link Field} 对象
+     * @since 1.0.0
      */
     @SneakyThrows
     public static <T, R> Field getGetterField(MethodReference<T, R> getter) {

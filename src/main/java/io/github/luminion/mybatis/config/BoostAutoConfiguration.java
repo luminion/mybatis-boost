@@ -16,12 +16,13 @@ import org.springframework.context.ApplicationContext;
 import java.util.Map;
 
 /**
- * 自动配置类
+ * Mybatis-Boost 自动配置类.
  * <p>
- * 使用 ApplicationRunner 确保在所有Bean初始化完成后再执行SQL片段的配置。
- * 使用 @ConditionalOnBean 确保仅在存在SqlSessionFactory Bean时才激活此配置。
+ * 使用 {@link ApplicationRunner} 确保在所有Bean初始化完成后再执行SQL片段的配置.
+ * 使用 {@link ConditionalOnBean} 确保仅在存在 {@link SqlSessionFactory} Bean时才激活此配置.
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @AutoConfiguration
@@ -30,10 +31,25 @@ public class BoostAutoConfiguration implements ApplicationRunner {
 
     private final ApplicationContext applicationContext;
 
+    /**
+     * 构造函数,注入 {@link ApplicationContext}.
+     *
+     * @param applicationContext Spring应用上下文
+     * @since 1.0.0
+     */
     public BoostAutoConfiguration(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * 在 Spring Boot 应用启动后执行.
+     * <p>
+     * 遍历所有的 {@link SqlSessionFactory} beans, 并为它们初始化SQL片段.
+     * 同时, 注册 {@link BasicProvider} 到 {@link BoostUtils}.
+     *
+     * @param args 应用程序参数
+     * @since 1.0.0
+     */
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Map<String, SqlSessionFactory> sqlSessionFactoryMap = applicationContext.getBeansOfType(SqlSessionFactory.class);

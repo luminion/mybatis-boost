@@ -5,11 +5,12 @@ import io.github.luminion.mybatis.query.core.ISqlCondition;
 import lombok.*;
 
 /**
- * SQL条件实体类
+ * SQL 条件实体类.
  * <p>
- * 实现ISqlCondition接口，用于表示SQL查询中的单个条件，包含字段名、操作符和值
+ * 实现了 {@link ISqlCondition} 接口, 用于表示 SQL 查询中的单个条件, 包括字段名、操作符和值.
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Getter
 @ToString
@@ -18,15 +19,15 @@ import lombok.*;
 public class SqlCondition implements ISqlCondition {
 
     /**
-     * 字段名
+     * 字段名.
      */
     protected String field;
     /**
-     * 操作符
+     * 操作符.
      */
     protected String operator;
     /**
-     * 值
+     * 条件值.
      */
     protected Object value;
 
@@ -36,16 +37,25 @@ public class SqlCondition implements ISqlCondition {
     }
 
     /**
-     * 构造函数，使用字段名和值创建条件，默认操作符为等于(EQ)
+     * 使用字段名和值构造一个默认操作符为等于 (EQ) 的条件.
      *
      * @param field 字段名
-     * @param value 值
+     * @param value 条件值
+     * @since 1.0.0
      */
     public SqlCondition(String field, Object value) {
         this.field = field;
         this.value = value;
     }
 
+    /**
+     * 使用字段名、操作符和值构造一个条件.
+     *
+     * @param field    字段名
+     * @param operator 操作符
+     * @param value    条件值
+     * @since 1.0.0
+     */
     public SqlCondition(String field, String operator, Object value) {
         this.field = field;
         this.operator = SqlKeyword.replaceOperator(operator);
@@ -53,10 +63,11 @@ public class SqlCondition implements ISqlCondition {
     }
 
     /**
-     * 从ISqlCondition创建SqlCondition实例
+     * 从 {@link ISqlCondition} 实例创建 {@link SqlCondition} 实例.
      *
-     * @param sqlCondition SQL条件接口实例
-     * @return {@link SqlCondition} SQL条件实体实例
+     * @param sqlCondition SQL 条件接口实例
+     * @return {@link SqlCondition} SQL 条件实体实例
+     * @since 1.0.0
      */
     public static SqlCondition of(ISqlCondition sqlCondition) {
         return new SqlCondition(sqlCondition.getField(), sqlCondition.getOperator(), sqlCondition.getValue());

@@ -4,11 +4,12 @@ import io.github.luminion.mybatis.query.core.ISqlSort;
 import lombok.*;
 
 /**
- * SQL排序实体类
+ * SQL 排序实体类.
  * <p>
- * 实现ISqlSort接口，用于表示SQL查询中的排序规则
+ * 实现了 {@link ISqlSort} 接口, 用于表示 SQL 查询中的排序规则.
  *
  * @author luminion
+ * @since 1.0.0
  */
 
 @Getter
@@ -19,20 +20,21 @@ import lombok.*;
 public class SqlSort implements ISqlSort {
 
     /**
-     * 排序字段
+     * 排序字段.
      */
     protected String field;
 
     /**
-     * 是否倒序
+     * 是否为降序排列.
      */
     protected boolean desc;
 
     /**
-     * 从ISqlSort创建SqlSort实例
+     * 从 {@link ISqlSort} 实例创建 {@link SqlSort} 实例.
      *
-     * @param sort SQL排序接口实例
-     * @return {@link SqlSort} SQL排序实体实例
+     * @param sort SQL 排序接口实例
+     * @return {@link SqlSort} SQL 排序实体实例
+     * @since 1.0.0
      */
     public static SqlSort of(ISqlSort sort) {
         return new SqlSort(sort.getField(), sort.isDesc());

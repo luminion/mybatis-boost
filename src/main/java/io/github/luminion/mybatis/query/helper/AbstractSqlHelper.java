@@ -11,33 +11,35 @@ import lombok.Getter;
 import java.util.Map;
 
 /**
- * SQL助手抽象基类
+ * SQL 构建助手抽象基类.
  * <p>
- * 提供SQL构建的基本功能，包括条件添加、排序设置等，使用泛型支持链式调用
+ * 提供了 SQL 构建的基本功能, 包括条件添加、排序设置等, 并通过泛型支持链式调用.
  *
  * @param <T> 实体类型
- * @param <S> 返回类型（用于支持链式调用）
+ * @param <S> 返回类型 (用于支持链式调用)
  * @author luminion
+ * @since 1.0.0
  */
 @Getter
 @SuppressWarnings({"unused", "unchecked"})
 public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity<T> implements ISqlHelperLambda<T, S> {
 
     /**
-     * 对应实体类，用于SQL校验/处理
+     * 关联的实体类, 用于 SQL 校验和处理.
      */
     protected transient Class<T> entityClass;
     
     /**
-     * 根据指定对象字段映射条件
+     * 根据指定的对象添加条件或排序规则.
      * <p>
-     * 当对象为{@link ISqlTree}时，将对象作为子条件添加<br>
-     * 当对象为{@link ISqlCondition}时，将对象作为条件添加<br>
-     * 当对象为{@link ISqlSort}时，将对象作为排序添加<br>
-     * 当对象为其他类型时，将对象字段映射为k,v，作为条件添加
+     * - 如果对象是 {@link ISqlTree}, 则将其作为子条件树添加.
+     * - 如果对象是 {@link ISqlCondition}, 则将其作为单个条件添加.
+     * - 如果对象是 {@link ISqlSort}, 则将其作为排序规则添加.
+     * - 对于其他类型的对象, 会将其字段和值映射为等值条件添加.
      *
-     * @param s 任意对象
-     * @return {@link SqlHelper} SQL助手实例
+     * @param s 包含条件或排序信息的对象
+     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
     public S with(Object s) {

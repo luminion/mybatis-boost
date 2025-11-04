@@ -1,32 +1,36 @@
 package io.github.luminion.mybatis.query.core;
 
 /**
- * SQL条件接口
+ * SQL 条件接口.
  * <p>
- * 定义SQL查询条件的基本结构，包含字段名、操作符和值三个基本属性
+ * 定义了 SQL 查询条件的基本结构, 包括字段名、操作符和值.
  *
  * @author luminion
+ * @since 1.0.0
  */
 public interface ISqlCondition {
 
     /**
-     * 获取属性名
+     * 获取条件的字段名.
      *
-     * @return {@link String } 属性名
+     * @return 字段名
+     * @since 1.0.0
      */
     String getField();
 
     /**
-     * 获取操作符
+     * 获取条件的操作符 (例如 =, LIKE, IN).
      *
-     * @return {@link String } 操作符
+     * @return 操作符
+     * @since 1.0.0
      */
     String getOperator();
 
     /**
-     * 获取值
+     * 获取条件的值.
      *
-     * @return {@link Object } 值
+     * @return 条件值
+     * @since 1.0.0
      */
     Object getValue();
 

@@ -8,22 +8,23 @@ import java.util.*;
 import static io.github.luminion.mybatis.util.BoostUtils.*;
 
 /**
- * SQL操作符枚举
+ * SQL 操作符枚举.
  * <p>
- * 定义了常用的SQL操作符及其分类，用于SQL条件构建和验证
+ * 定义了常用的 SQL 操作符及其分类, 用于 SQL 条件构建和验证.
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Getter
 @AllArgsConstructor
 public enum SqlKeyword {
 
     /**
-     * AND连接符
+     * AND 连接符
      */
     AND("AND"),
     /**
-     * OR连接符
+     * OR 连接符
      */
     OR("OR"),
 
@@ -61,20 +62,20 @@ public enum SqlKeyword {
     NOT_LIKE("NOT LIKE"),
 
     /**
-     * IS NULL操作符
+     * IS NULL 操作符
      */
     IS_NULL("IS NULL"),
     /**
-     * IS NOT NULL操作符
+     * IS NOT NULL 操作符
      */
     IS_NOT_NULL("IS NOT NULL"),
 
     /**
-     * IN操作符
+     * IN 操作符
      */
     IN("IN"),
     /**
-     * NOT IN操作符
+     * NOT IN 操作符
      */
     NOT_IN("NOT IN"),
 
@@ -87,25 +88,21 @@ public enum SqlKeyword {
      */
     BIT_NOT_CONTAINS("&="),
 
-//    NOT("NOT"),
-//    EXISTS("EXISTS"),
-//    NOT_EXISTS("NOT EXISTS"),
-//    BETWEEN("BETWEEN"),
-//    NOT_BETWEEN("NOT BETWEEN"),
     ;
     /**
-     * 操作符关键字
+     * 操作符关键字.
      */
     private final String keyword;
 
 
 
     /**
-     * 替换连接符
+     * 标准化 SQL 连接符 (AND/OR).
      *
-     * @param connector 连接符
-     * @return {@link String} 标准化后的连接符
-     * @throws IllegalArgumentException 当连接符非法时抛出
+     * @param connector 连接符字符串
+     * @return 标准化后的连接符 (大写)
+     * @throws IllegalArgumentException 当连接符不是 AND 或 OR 时抛出
+     * @since 1.0.0
      */
     public static String replaceConnector(String connector) {
         if (connector == null || connector.isEmpty()) {
@@ -119,11 +116,12 @@ public enum SqlKeyword {
     }
 
     /**
-     * 替换操作符
+     * 标准化 SQL 操作符.
      *
-     * @param operator 操作符
-     * @return {@link String} 标准化后的操作符
-     * @throws IllegalArgumentException 当操作符非法时抛出
+     * @param operator 操作符字符串
+     * @return 标准化后的操作符
+     * @throws IllegalArgumentException 当操作符不支持时抛出
+     * @since 1.0.0
      */
     public static String replaceOperator(String operator) {
         if (operator == null || operator.isEmpty()) {
@@ -181,20 +179,22 @@ public enum SqlKeyword {
 
 
     /**
-     * 判断是否为比较相等的操作符
+     * 判断是否为相等或不相等操作符.
      *
      * @param operator 操作符
-     * @return boolean 是否为单参数操作符
+     * @return 如果是相等或不相等操作符返回 true, 否则返回 false
+     * @since 1.0.0
      */
     public static boolean isEqOperator(String operator) {
         return SqlKeyword.EQ.getKeyword().equals(operator) || SqlKeyword.NE.getKeyword().equals(operator);
     }
 
     /**
-     * 判断是否为比较大小的操作符(不包含等于和不等于)
+     * 判断是否为比较大小的操作符 (不包含等于和不等于).
      *
      * @param operator 操作符
-     * @return boolean 是否为比较操作符
+     * @return 如果是比较大小的操作符返回 true, 否则返回 false
+     * @since 1.0.0
      */
     public static boolean isCompareOperator(String operator) {
         return SqlKeyword.LT.getKeyword().equals(operator) || SqlKeyword.LE.getKeyword().equals(operator) ||
@@ -202,40 +202,44 @@ public enum SqlKeyword {
     }
     
     /**
-     * 判断是否为模糊查询操作符
+     * 判断是否为 LIKE 或 NOT LIKE 操作符.
      *
      * @param operator 操作符
-     * @return boolean 是否为LIKE操作符
+     * @return 如果是 LIKE 或 NOT LIKE 操作符返回 true, 否则返回 false
+     * @since 1.0.0
      */
     public static boolean isLikeOperator(String operator) {
         return SqlKeyword.LIKE.getKeyword().equals(operator) || SqlKeyword.NOT_LIKE.getKeyword().equals(operator);
     }
 
     /**
-     * 判断是否为in批量操作符
+     * 判断是否为 IN 或 NOT IN 操作符.
      *
      * @param operator 操作符
-     * @return boolean 是否为多参数操作符
+     * @return 如果是 IN 或 NOT IN 操作符返回 true, 否则返回 false
+     * @since 1.0.0
      */
     public static boolean isInOperator(String operator) {
         return SqlKeyword.IN.getKeyword().equals(operator) || SqlKeyword.NOT_IN.getKeyword().equals(operator);
     }
 
     /**
-     * 判断是否为null相关操作符
+     * 判断是否为 IS NULL 或 IS NOT NULL 操作符.
      *
      * @param operator 操作符
-     * @return boolean 是否为无参数操作符
+     * @return 如果是 IS NULL 或 IS NOT NULL 操作符返回 true, 否则返回 false
+     * @since 1.0.0
      */
     public static boolean isNullOperator(String operator) {
         return SqlKeyword.IS_NULL.getKeyword().equals(operator) || SqlKeyword.IS_NOT_NULL.getKeyword().equals(operator);
     }
 
     /**
-     * 判断是否为位操作符
+     * 判断是否为位操作符.
      *
      * @param operator 操作符
-     * @return boolean 是否为BIT操作符
+     * @return 如果是位操作符返回 true, 否则返回 false
+     * @since 1.0.0
      */
     public static boolean isBitOperator(String operator) {
         return SqlKeyword.BIT_CONTAINS.getKeyword().equals(operator) || SqlKeyword.BIT_NOT_CONTAINS.getKeyword().equals(operator);

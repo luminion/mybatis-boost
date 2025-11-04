@@ -12,16 +12,17 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 /**
- * 字段后缀处理器
+ * 字段后缀处理器.
  * <p>
- * 提供基于字段后缀的SQL条件处理功能，支持通过字段后缀自动识别SQL操作符
+ * 提供基于字段后缀的 SQL 条件处理功能, 支持通过字段后缀自动识别 SQL 操作符.
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 public class FieldSuffixProcessor {
     /**
-     * 操作符后缀映射表
+     * 默认的后缀到操作符的映射表.
      */
     private static final Map<String, String> SUFFIX_TO_OPERATOR_MAP;
 
@@ -72,19 +73,21 @@ public class FieldSuffixProcessor {
 
 
     /**
-     * 后缀到操作符的映射关系
+     * 当前处理器实例使用的后缀到操作符的映射.
      */
     private final Map<String, String> suffixToOperatorMap;
 
     /**
-     * 私有构造函数
+     * 私有构造函数, 使用默认的后缀映射.
      */
     private FieldSuffixProcessor() {
         this.suffixToOperatorMap = SUFFIX_TO_OPERATOR_MAP;
     }
 
     /**
-     * 带参数的私有构造函数
+     * 私有构造函数, 使用自定义的后缀映射.
+     *
+     * @param suffixToOperatorMap 自定义的后缀到操作符的映射
      */
     private FieldSuffixProcessor(Map<String, String> suffixToOperatorMap) {
         if (suffixToOperatorMap == null) {
@@ -94,36 +97,39 @@ public class FieldSuffixProcessor {
     }
 
     /**
-     * 单例实例
+     * 默认的单例实例.
      */
     private static final FieldSuffixProcessor instance = new FieldSuffixProcessor();
 
     /**
-     * 获取单例实例
+     * 获取默认的 {@link FieldSuffixProcessor} 单例实例.
      *
-     * @return {@link FieldSuffixProcessor} 单例实例
+     * @return 单例实例
+     * @since 1.0.0
      */
     public static FieldSuffixProcessor of() {
         return instance;
     }
 
     /**
-     * 创建新的字段后缀处理器实例
+     * 创建一个新的 {@link FieldSuffixProcessor} 实例, 使用自定义的后缀映射.
      *
-     * @param suffix2OperatorMap 后缀到操作符的映射关系
-     * @return {@link FieldSuffixProcessor} 字段后缀处理器实例
+     * @param suffix2OperatorMap 自定义的后缀到操作符的映射
+     * @return 新的 {@link FieldSuffixProcessor} 实例
+     * @since 1.0.0
      */
     public static FieldSuffixProcessor of(Map<String, String> suffix2OperatorMap) {
         return new FieldSuffixProcessor(suffix2OperatorMap);
     }
 
     /**
-     * 处理SQL助手
+     * 处理 SQL 助手, 将字段后缀转换为对应的 SQL 操作符.
      *
-     * @param rootHelper 根SQL助手
+     * @param rootHelper 根 SQL 助手
      * @param <T>        实体类型
-     * @return {@link ISqlHelper} 处理后的SQL助手
+     * @return 处理后的 {@link ISqlHelper} 实例
      * @throws IllegalArgumentException 当无法获取实体类时抛出
+     * @since 1.0.0
      */
     public <T> ISqlHelper<T> process(ISqlHelper<T> rootHelper) {
         Class<T> entityClass = rootHelper.getEntityClass();

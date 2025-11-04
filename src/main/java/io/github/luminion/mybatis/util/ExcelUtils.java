@@ -11,25 +11,29 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Excel工具类
+ * Excel 工具类.
  * <p>
- * 提供Excel导入导出功能，支持FastExcel和EasyExcel两种实现
+ * 提供对 Excel 导入和导出功能的抽象封装, 支持通过反射动态切换 FastExcel 和 EasyExcel 等底层实现.
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 public abstract class ExcelUtils {
     /**
-     * Excel库基础包名
+     * 底层 Excel 库的基础包名.
+     * @since 1.0.0
      */
     public static String excelBasePackage = "cn.idev.excel";
     /**
-     * Excel类名
+     * 底层 Excel 库的入口类名.
+     * @since 1.0.0
      */
     public static String excelClassName = "FastExcel";
 
     /**
-     * 使用FastExcel库
+     * 切换底层实现为 FastExcel.
+     * @since 1.0.0
      */
     public static void userFastExcel() {
         excelBasePackage = "cn.idev.excel";
@@ -37,7 +41,8 @@ public abstract class ExcelUtils {
     }
 
     /**
-     * 使用EasyExcel库
+     * 切换底层实现为 EasyExcel.
+     * @since 1.0.0
      */
     public static void userEasyExcel() {
         excelBasePackage = "com.alibaba.excel";
@@ -45,10 +50,10 @@ public abstract class ExcelUtils {
     }
 
     /**
-     * 获取Excel类
+     * 根据当前配置获取底层 Excel 库的入口 Class 对象.
      *
      * @return {@link Class} Excel类
-     * @throws ClassNotFoundException 当找不到Excel类时抛出
+     * @since 1.0.0
      */
     @SneakyThrows
     public static Class<?> excelClass() {
@@ -57,13 +62,13 @@ public abstract class ExcelUtils {
 
 
     /**
-     * 写入Excel文件
+     * 将数据列表写入到 Excel 输出流.
      *
      * @param os            输出流
      * @param clazz         数据类
      * @param dataList      数据列表
-     * @param includeFields 包含的字段
-     * @throws Exception 当写入出现异常时抛出
+     * @param includeFields 要包含的字段
+     * @since 1.0.0
      */
     @SneakyThrows
     public static void write(OutputStream os, Class<?> clazz, List<?> dataList, String... includeFields) {
@@ -77,11 +82,6 @@ public abstract class ExcelUtils {
             dataList = Collections.emptyList();
         }
 
-//        EasyExcel.write(os, clazz)
-//                .includeColumnFieldNames(Arrays.asList(includeFields))
-//                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
-//                .sheet()
-//                .doWrite(dataList);
         try {
             Object invoke = excelClass().getMethod("write", OutputStream.class, Class.class).invoke(null, os, clazz);
             if (includeFields != null && includeFields.length > 0) {
@@ -99,13 +99,13 @@ public abstract class ExcelUtils {
     }
 
     /**
-     * 读取Excel文件
+     * 从 Excel 输入流中读取数据并转换为指定类型的列表.
      *
      * @param is    输入流
      * @param clazz 数据类
      * @param <T>   数据类型
      * @return {@link List} 数据列表
-     * @throws Exception 当读取出现异常时抛出
+     * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
     @SneakyThrows
@@ -117,7 +117,6 @@ public abstract class ExcelUtils {
             throw new IllegalArgumentException("Class cannot be null");
         }
 
-//        List<?> dataList = EasyExcel.read(is).head(clazz).sheet().doReadSync();
         try {
             Object invoke = excelClass().getMethod("read", InputStream.class).invoke(null, is);
             invoke = invoke.getClass().getMethod("head", Class.class).invoke(invoke, clazz);

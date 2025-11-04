@@ -10,32 +10,35 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
- * Lambda SQL助手接口
+ * Lambda 风格的 SQL 构建助手接口.
  * <p>
- * 提供基于Lambda表达式的SQL条件构建方法，支持链式调用
+ * 提供基于 Lambda 表达式的 SQL 条件构建方法, 支持链式调用.
  *
  * @param <T> 实体类型
- * @param <S> 返回类型（用于支持链式调用）
+ * @param <S> 返回类型 (用于支持链式调用)
  * @author luminion
+ * @since 1.0.0
  */
 @SuppressWarnings({"unchecked", "unused"})
 public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends ISqlHelper<T> {
 
     /**
-     * 添加OR条件
+     * 添加一组 OR 连接的条件.
      *
-     * @param consumer 拼装或条件的函数
-     * @return {@link S } 当前实例
+     * @param consumer 用于构建 OR 条件的 Consumer
+     * @return 当前实例
+     * @since 1.0.0
      */
     S or(Consumer<S> consumer);
 
     /**
-     * 等于条件
+     * 添加等于 (EQ) 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S eq(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -46,12 +49,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 不等于条件
+     * 添加不等于 (NE) 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S ne(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -62,12 +66,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 大于条件
+     * 添加大于 (GT) 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S gt(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -78,12 +83,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 大于等于条件
+     * 添加大于等于 (GE) 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S ge(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -94,12 +100,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 小于条件
+     * 添加小于 (LT) 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S lt(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -110,12 +117,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 小于等于条件
+     * 添加小于等于 (LE) 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S le(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -126,12 +134,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 模糊查询条件
+     * 添加 LIKE 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S like(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -142,12 +151,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 不模糊查询条件
+     * 添加 NOT LIKE 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S notLike(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -158,12 +168,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * in查询条件
+     * 添加 IN 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值集合
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S in(MethodReference<T, R> getter, Collection<? extends R> value) {
         if (value == null) {
@@ -174,12 +185,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * not in查询条件
+     * 添加 NOT IN 条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  条件值集合
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S notIn(MethodReference<T, R> getter, Collection<? extends R> value) {
         if (value == null) {
@@ -190,10 +202,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 指定字段为空条件
+     * 添加 IS NULL 条件.
      *
-     * @param getter 对象getter方法
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @return 当前实例
+     * @since 1.0.0
      */
     default S isNull(MethodReference<T, ?> getter) {
         getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NULL.getKeyword(), true));
@@ -201,10 +214,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 指定字段不为空条件
+     * 添加 IS NOT NULL 条件.
      *
-     * @param getter 对象getter方法
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @return 当前实例
+     * @since 1.0.0
      */
     default S isNotNull(MethodReference<T, ?> getter) {
         getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.IS_NOT_NULL.getKeyword(), true));
@@ -212,10 +226,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 按指定字段正序排序
+     * 添加升序排序.
      *
-     * @param getter 对象getter方法
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @return 当前实例
+     * @since 1.0.0
      */
     default S orderByAsc(MethodReference<T, ?> getter) {
         getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), false));
@@ -223,10 +238,11 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 按指定字段倒序排序
+     * 添加降序排序.
      *
-     * @param getter 对象getter方法
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @return 当前实例
+     * @since 1.0.0
      */
     default S orderByDesc(MethodReference<T, ?> getter) {
         getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), true));
@@ -234,12 +250,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 位运算条件，具有指定值对应的位码
+     * 添加位运算包含条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  位码值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S bitWith(MethodReference<T, R> getter, R value) {
         if (value == null) {
@@ -250,12 +267,13 @@ public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends I
     }
 
     /**
-     * 位运算条件，不具有指定值对应的位码
+     * 添加位运算不包含条件.
      *
-     * @param getter 对象getter方法
-     * @param value  值
-     * @param <R>    值的类型
-     * @return this
+     * @param getter 字段的 getter 方法引用
+     * @param value  位码值
+     * @param <R>    字段类型
+     * @return 当前实例
+     * @since 1.0.0
      */
     default <R> S bitWithout(MethodReference<T, R> getter, R value) {
         if (value == null) {

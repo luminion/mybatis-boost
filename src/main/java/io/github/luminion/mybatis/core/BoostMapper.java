@@ -13,9 +13,14 @@ import java.util.List;
  * @param <V> 要返回的视图对象 (VO) 的类型。
  * @param <P> 分页类
  * @author luminion
+ * @since 1.0.0
  */
 public interface BoostMapper<T, V, P> extends BoostEngine<T, V, P> {
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     List<V> selectBySqlEntity(@Param("params") ISqlEntity<T> sqlEntity, @Param("page") P page);
 

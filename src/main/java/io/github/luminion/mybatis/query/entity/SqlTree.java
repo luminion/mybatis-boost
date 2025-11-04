@@ -12,11 +12,12 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 /**
- * SQL条件树实体类
+ * SQL 条件树实体类.
  * <p>
- * 实现ISqlTree接口，用于表示SQL查询条件的树形结构，支持嵌套条件和复杂查询
+ * 实现了 {@link ISqlTree} 接口, 用于表示 SQL 查询条件的树形结构, 支持嵌套和复杂的查询逻辑.
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Getter
 @ToString
@@ -24,15 +25,15 @@ import java.util.LinkedHashSet;
 @NoArgsConstructor
 public class SqlTree implements ISqlTree {
     /**
-     * 条件列表
+     * 当前节点的条件列表.
      */
     protected Collection<ISqlCondition> conditions;
     /**
-     * 条件列表中条件的连接符
+     * 连接当前节点条件的逻辑连接符.
      */
     protected String connector;
     /**
-     * 子条件
+     * 子条件树.
      */
     protected SqlTree child;
 
@@ -43,20 +44,22 @@ public class SqlTree implements ISqlTree {
 
 
     /**
-     * 使用条件集合构造SqlTree
+     * 使用指定的条件集合构造一个新的 {@link SqlTree}.
      *
      * @param conditions 条件集合
+     * @since 1.0.0
      */
     public SqlTree(Collection<ISqlCondition> conditions) {
         this.conditions.addAll(conditions);
     }
 
     /**
-     * 使用条件集合和连接符构造SqlTree
+     * 使用指定的条件集合和连接符构造一个新的 {@link SqlTree}.
      *
      * @param conditions 条件集合
-     * @param connector     连接符，只能是AND或OR
-     * @throws IllegalArgumentException 当symbol不是AND或OR时抛出
+     * @param connector  逻辑连接符 (AND/OR)
+     * @throws IllegalArgumentException 如果连接符不是 AND 或 OR
+     * @since 1.0.0
      */
     public SqlTree(Collection<ISqlCondition> conditions, String connector) {
         this.conditions.addAll(conditions);
@@ -64,10 +67,11 @@ public class SqlTree implements ISqlTree {
     }
 
     /**
-     * 添加单个子节点
+     * 添加一个子节点到当前树的末端.
      *
-     * @param child 子节点
-     * @return {@link SqlTree} 当前实例
+     * @param child 要添加的子树
+     * @return 当前 {@link SqlTree} 实例
+     * @since 1.0.0
      */
     private SqlTree addSingleChild(ISqlTree child) {
         if (child == null || child.getConditions().isEmpty()) {
@@ -84,10 +88,11 @@ public class SqlTree implements ISqlTree {
     }
 
     /**
-     * 添加子节点
+     * 将另一个 {@link ISqlTree} 合并到当前树中.
      *
-     * @param sqlTree SQL树
-     * @return {@link SqlTree} 当前实例
+     * @param sqlTree 要合并的 SQL 树
+     * @return 当前 {@link SqlTree} 实例
+     * @since 1.0.0
      */
     protected SqlTree addChild(ISqlTree sqlTree) {
         if (sqlTree == null) {

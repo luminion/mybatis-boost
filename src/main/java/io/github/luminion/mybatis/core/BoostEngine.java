@@ -19,32 +19,56 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * 定义vo层对象
+ * Boost 核心引擎，提供 VO 查询能力的默认实现.
  *
+ * @param <T> 数据库实体的类型。
+ * @param <V> 要返回的视图对象 (VO) 的类型。
+ * @param <P> 分页类
  * @author luminion
+ * @since 1.0.0
  */
 public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default T toEntity(Object source) {
         return ReflectUtils.toTarget(source, BoostUtils.getEntityClass(this));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default V toVo(Object source) {
         return ReflectUtils.toTarget(source, BoostUtils.getViewObjectClass(this));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default void voPreProcess(ISqlEntity<T> params, P page) {
         // do nothing here, only for override
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default void voPostProcess(List<V> records, ISqlEntity<T> params, P page) {
         // do nothing here, only for override
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default V voById(Serializable id) {
         if (ObjectUtils.isEmpty(id)) {
@@ -60,6 +84,10 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         return voUnique(sqlHelper);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> R voById(Serializable id, Class<R> voType) {
         V v = voById(id);
@@ -69,16 +97,28 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         return ReflectUtils.toTarget(v, voType);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default Optional<V> voByIdOpt(Serializable id) {
         return Optional.ofNullable(voById(id));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> Optional<R> voByIdOpt(Serializable id, Class<R> voType) {
         return Optional.ofNullable(voById(id, voType));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default List<V> voListByIds(Collection<? extends Serializable> ids) {
         Class<T> entityClass = BoostUtils.getEntityClass(this);
@@ -88,6 +128,10 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         return voList(sqlHelper);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> List<R> voListByIds(Collection<? extends Serializable> ids, Class<R> voType) {
         List<V> vs = voListByIds(ids);
@@ -96,6 +140,10 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default V voFirst(ISqlEntity<T> params) {
         List<V> vs = voList(params);
@@ -105,21 +153,37 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         return vs.get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> R voFirst(ISqlEntity<T> params, Class<R> voType) {
         return ReflectUtils.toTarget(voFirst(params), voType);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default Optional<V> voFirstOpt(ISqlEntity<T> params) {
         return Optional.ofNullable(voFirst(params));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> Optional<R> voFirstOpt(ISqlEntity<T> params, Class<R> voType) {
         return Optional.ofNullable(voFirst(params, voType));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default V voUnique(ISqlEntity<T> params) throws TooManyResultsException {
         List<V> vs = voList(params);
@@ -132,26 +196,46 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         return vs.get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> R voUnique(ISqlEntity<T> params, Class<R> voType) throws TooManyResultsException {
         return ReflectUtils.toTarget(voUnique(params), voType);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default Optional<V> voUniqueOpt(ISqlEntity<T> params) throws TooManyResultsException {
         return Optional.ofNullable(voUnique(params));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> Optional<R> voUniqueOpt(ISqlEntity<T> params, Class<R> voType) {
         return Optional.ofNullable(voUnique(params, voType));
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default List<V> voList() {
         return voList(null);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default List<V> voList(ISqlEntity<T> params) {
         voPreProcess(params, null);
@@ -164,6 +248,10 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
         return vs;
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> List<R> voList(ISqlEntity<T> params, Class<R> voType) {
         List<V> vs = voList(params);
@@ -172,30 +260,47 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default P voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default P voPage(ISqlEntity<T> params, long pageNum, long pageSize) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.0.0
+     */
     @Override
     default <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
     /**
-     * lambda助手
+     * 获取 Lambda SQL 助手.
      *
-     * @return {@link BoostSqlHelper } 获取SQL助手
+     * @return {@link BoostSqlHelper} SQL 助手
+     * @since 1.0.0
      */
     default BoostSqlHelper<T, V, P> lambdaHelper() {
         return new BoostSqlHelper<>( this);
@@ -203,11 +308,12 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     
 
     /**
-     * 最终执行的查询方法
+     * 最终执行查询的方法.
      *
-     * @param params 标准
-     * @param page   第页
-     * @return {@link List }
+     * @param params 查询条件
+     * @param page   分页对象
+     * @return {@link List<V>} 查询结果列表
+     * @since 1.0.0
      */
     List<V> selectBySqlEntity(ISqlEntity<T> params, P page);
 }
