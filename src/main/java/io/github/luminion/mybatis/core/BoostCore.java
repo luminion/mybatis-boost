@@ -261,18 +261,6 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      */
     P voPage(ISqlEntity<T> params, int pageNum, int pageSize);
 
-    /**
-     * 根据条件查询VO对象列表并转换类型（分页）.
-     *
-     * @param params   查询条件
-     * @param pageNum  页码
-     * @param pageSize 每页数量
-     * @param voType   目标VO类型
-     * @param <R>      目标VO类型
-     * @return 分页结果对象
-     * @since 1.0.0
-     */
-    <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType);
 
     /**
      * 根据条件查询VO对象列表（分页）.
@@ -285,16 +273,29 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      */
     P voPage(ISqlEntity<T> params, long pageNum, long pageSize);
 
-    /**
-     * 根据条件查询VO对象列表（分页）.
-     *
-     * @param params   查询条件
-     * @param pageNum  页码
-     * @param pageSize 每页数量
-     * @param voType   目标VO类型
-     * @param <R>      目标VO类型
-     * @return 分页结果对象
-     * @since 1.0.0
-     */
-    <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType);
+//    /**
+//     * 根据条件查询VO对象列表并转换类型（分页）.
+//     *
+//     * @param params   查询条件
+//     * @param pageNum  页码
+//     * @param pageSize 每页数量
+//     * @param voType   目标VO类型
+//     * @param <R>      目标VO类型
+//     * @return 分页结果对象
+//     * @since 1.0.0
+//     */
+//    <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType);
+//    
+//    /**
+//     * 根据条件查询VO对象列表（分页）.
+//     *
+//     * @param params   查询条件
+//     * @param pageNum  页码
+//     * @param pageSize 每页数量
+//     * @param voType   目标VO类型
+//     * @param <R>      目标VO类型
+//     * @return 分页结果对象
+//     * @since 1.0.0
+//     */
+//    <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType);
 }

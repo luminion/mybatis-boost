@@ -22,21 +22,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostIService<T, V> extends BoostEngine<T, V, IPage<?>>, IService<T> {
-
-//    @Override
-//    default BPage<V> voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
-//        return voPage(params, (long) pageNum, pageSize);
-//    }
-
-    /**
-     * {@inheritDoc}
-     * @since 1.0.0
-     */
-    @Override
-    default <R> IPage<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
-        return voPage(params, (long) pageNum, pageSize, voType);
-    }
+public interface BoostIService<T, V> extends BoostEngine<T, V, IPage<V>>, IService<T> {
 
     /**
      * {@inheritDoc}
@@ -55,13 +41,22 @@ public interface BoostIService<T, V> extends BoostEngine<T, V, IPage<?>>, IServi
         return page;
     }
 
-    /**
-     * {@inheritDoc}
-     * @since 1.0.0
-     */
-    @Override
-    default <R> IPage<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
-        IPage<V> voPage = voPage(params, pageNum, pageSize);
-        return voPage.convert(v -> ReflectUtils.toTarget(v, voType));
-    }
+//    /**
+//     * {@inheritDoc}
+//     * @since 1.0.0
+//     */
+//    @Override
+//    default <R> IPage<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
+//        return voPage(params, (long) pageNum, pageSize, voType);
+//    }
+//    
+//    /**
+//     * {@inheritDoc}
+//     * @since 1.0.0
+//     */
+//    @Override
+//    default <R> IPage<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
+//        IPage<V> voPage = voPage(params, pageNum, pageSize);
+//        return voPage.convert(v -> ReflectUtils.toTarget(v, voType));
+//    }
 }

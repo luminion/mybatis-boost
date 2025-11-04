@@ -297,29 +297,29 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      * @since 1.0.0
      */
     @Override
-    default <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
-        return voPage(params, (long) pageNum, pageSize, voType);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
-    @Override
     default P voPage(ISqlEntity<T> params, long pageNum, long pageSize) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
-    @Override
-    default <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
-        throw new UnsupportedOperationException("Not implemented.");
-    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * @since 1.0.0
+//     */
+//    @Override
+//    default <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
+//        return voPage(params, (long) pageNum, pageSize, voType);
+//    }
+//    
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * @since 1.0.0
+//     */
+//    @Override
+//    default <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
+//        throw new UnsupportedOperationException("Not implemented.");
+//    }
 
     /**
      * 获取 Lambda SQL 助手.

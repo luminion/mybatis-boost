@@ -12,5 +12,5 @@ import io.github.luminion.mybatis.core.BoostMapper;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostBaseMapper<T, V> extends BoostMapper<T, V, IPage<?>>, BaseMapper<T> {
+public interface BoostBaseMapper<T, V> extends BoostMapper<T, V, IPage<V>>, BaseMapper<T> {
 }

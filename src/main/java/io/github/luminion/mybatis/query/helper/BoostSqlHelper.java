@@ -130,19 +130,6 @@ public class BoostSqlHelper<T, V, P> {
     }
 
     /**
-     * 分页查询 VO 对象, 并转换为指定类型.
-     *
-     * @param pageNum  当前页码
-     * @param pageSize 每页大小
-     * @param voType   目标 VO 类型
-     * @return 分页结果对象
-     * @since 1.0.0
-     */
-    public P page(int pageNum, int pageSize, Class<V> voType) {
-        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
-    }
-
-    /**
      * 分页查询 VO 对象.
      *
      * @param pageNum  当前页码
@@ -154,18 +141,31 @@ public class BoostSqlHelper<T, V, P> {
         return boostCore.voPage(this.sqlHelper, pageNum, pageSize);
     }
 
-    /**
-     * 分页查询 VO 对象, 并转换为指定类型.
-     *
-     * @param pageNum  当前页码
-     * @param pageSize 每页大小
-     * @param voType   目标 VO 类型
-     * @return 分页结果对象
-     * @since 1.0.0
-     */
-    public P page(long pageNum, long pageSize, Class<V> voType) {
-        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
-    }
+//    /**
+//     * 分页查询 VO 对象, 并转换为指定类型.
+//     *
+//     * @param pageNum  当前页码
+//     * @param pageSize 每页大小
+//     * @param voType   目标 VO 类型
+//     * @return 分页结果对象
+//     * @since 1.0.0
+//     */
+//    public P page(int pageNum, int pageSize, Class<R> voType) {
+//        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
+//    }
+//
+//    /**
+//     * 分页查询 VO 对象, 并转换为指定类型.
+//     *
+//     * @param pageNum  当前页码
+//     * @param pageSize 每页大小
+//     * @param voType   目标 VO 类型
+//     * @return 分页结果对象
+//     * @since 1.0.0
+//     */
+//    public P page(long pageNum, long pageSize, Class<V> voType) {
+//        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
+//    }
 
 
 }
