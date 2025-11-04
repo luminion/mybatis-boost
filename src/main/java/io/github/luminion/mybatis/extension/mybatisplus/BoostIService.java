@@ -34,7 +34,7 @@ public interface BoostIService<T, V> extends BoostEngine<T, V, IPage<?>>, IServi
      * @since 1.0.0
      */
     @Override
-    default <R> IPage<V> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
+    default <R> IPage<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
         return voPage(params, (long) pageNum, pageSize, voType);
     }
 
@@ -60,9 +60,8 @@ public interface BoostIService<T, V> extends BoostEngine<T, V, IPage<?>>, IServi
      * @since 1.0.0
      */
     @Override
-    @SuppressWarnings("unchecked")
-    default <R> IPage<V> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
+    default <R> IPage<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
         IPage<V> voPage = voPage(params, pageNum, pageSize);
-        return (IPage<V>) voPage.convert(v -> ReflectUtils.toTarget(v, voType));
+        return voPage.convert(v -> ReflectUtils.toTarget(v, voType));
     }
 }
