@@ -19,14 +19,16 @@ import java.util.List;
  */
 public abstract class BoostServiceImpl<M extends BoostBaseMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoostIService<T, V> {
 
-    /**
-     * 按sql实体选择
-     *
-     * @param params params
-     * @param page   分页参数
-     * @return 执行结果
-     * @since 1.0.0
-     */
+    @Override
+    public <R> IPage<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
+        return BoostIService.super.voPage(params, pageNum, pageSize, voType);
+    }
+
+    @Override
+    public <R> IPage<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
+        return BoostIService.super.voPage(params, pageNum, pageSize, voType);
+    }
+
     @Override
     public List<V> selectBySqlEntity(ISqlEntity<T> params, IPage<?> page) {
         return getBaseMapper().selectBySqlEntity(params, page);
