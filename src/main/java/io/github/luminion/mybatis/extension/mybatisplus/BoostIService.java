@@ -8,7 +8,6 @@ import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.query.helper.ISqlHelper;
 import io.github.luminion.mybatis.query.helper.SqlHelper;
 import io.github.luminion.mybatis.query.helper.processor.FieldSuffixProcessor;
-import io.github.luminion.mybatis.util.ReflectUtils;
 
 import java.util.List;
 
