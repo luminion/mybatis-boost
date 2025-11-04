@@ -1,6 +1,5 @@
 package io.github.luminion.mybatis.core;
 
-
 import io.github.luminion.mybatis.query.core.ISqlEntity;
 
 import java.io.Serializable;

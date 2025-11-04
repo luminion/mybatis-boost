@@ -3,6 +3,7 @@ package io.github.luminion.mybatis.core;
 import io.github.luminion.mybatis.enums.SqlKeyword;
 import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
+import io.github.luminion.mybatis.query.helper.BoostSqlHelper;
 import io.github.luminion.mybatis.query.helper.ISqlHelper;
 import io.github.luminion.mybatis.query.helper.SqlHelper;
 import io.github.luminion.mybatis.query.helper.processor.FieldSuffixProcessor;
@@ -190,6 +191,16 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     default <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
         throw new UnsupportedOperationException("Not implemented.");
     }
+
+    /**
+     * lambda助手
+     *
+     * @return {@link BoostSqlHelper } 获取SQL助手
+     */
+    default BoostSqlHelper<T, V, P> lambdaHelper() {
+        return new BoostSqlHelper<>( this);
+    }
+    
 
     /**
      * 最终执行的查询方法
