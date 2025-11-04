@@ -3,7 +3,6 @@ package io.github.luminion.mybatis.util;
 import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.core.MethodReference;
 import io.github.luminion.mybatis.provider.BoostProvider;
-import io.github.luminion.mybatis.provider.support.BasicProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.GenericTypeResolver;
 
@@ -24,10 +23,6 @@ public abstract class BoostUtils {
      */
     private static final Map<Class<?>, Map<String, String>> ENTITY_PROPERTY_TO_COLUMN_MAP = new ConcurrentHashMap<>();
     private static final TreeSet<BoostProvider> PROVIDERS = new TreeSet<>();
-
-    static {
-        PROVIDERS.add(new BasicProvider());
-    }
 
     public static List<BoostProvider> checkoutProviders() {
         return new ArrayList<>(PROVIDERS);
