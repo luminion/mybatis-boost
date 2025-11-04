@@ -31,6 +31,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -40,6 +41,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -49,6 +51,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -58,6 +61,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -67,6 +71,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -86,6 +91,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -99,6 +105,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -108,6 +115,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -117,6 +125,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -130,6 +139,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -142,6 +152,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -155,6 +166,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -164,6 +176,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -173,6 +186,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -182,10 +196,11 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
-    default V voUnique(ISqlEntity<T> params) throws TooManyResultsException {
+    default V voUnique(ISqlEntity<T> params) {
         List<V> vs = voList(params);
         if (vs.isEmpty()) {
             return null;
@@ -198,24 +213,27 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
-    default <R> R voUnique(ISqlEntity<T> params, Class<R> voType) throws TooManyResultsException {
+    default <R> R voUnique(ISqlEntity<T> params, Class<R> voType) {
         return ReflectUtils.toTarget(voUnique(params), voType);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
-    default Optional<V> voUniqueOpt(ISqlEntity<T> params) throws TooManyResultsException {
+    default Optional<V> voUniqueOpt(ISqlEntity<T> params) {
         return Optional.ofNullable(voUnique(params));
     }
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -225,6 +243,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -234,6 +253,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -250,6 +270,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -262,24 +283,27 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
     default P voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
-        throw new UnsupportedOperationException("Not implemented.");
+        return voPage(params, (long) pageNum, pageSize);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
     default <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
-        throw new UnsupportedOperationException("Not implemented.");
+        return voPage(params, (long) pageNum, pageSize, voType);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -289,6 +313,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
 
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -303,9 +328,8 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      * @since 1.0.0
      */
     default BoostSqlHelper<T, V, P> lambdaHelper() {
-        return new BoostSqlHelper<>( this);
+        return new BoostSqlHelper<>(this);
     }
-    
 
     /**
      * 最终执行查询的方法.
