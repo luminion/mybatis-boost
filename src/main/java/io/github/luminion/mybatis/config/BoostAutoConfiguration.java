@@ -1,8 +1,12 @@
 package io.github.luminion.mybatis.config;
 
+import io.github.luminion.mybatis.provider.support.BasicProvider;
+import io.github.luminion.mybatis.util.BoostUtils;
 import io.github.luminion.mybatis.util.MapperUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -43,6 +47,15 @@ public class BoostAutoConfiguration implements ApplicationRunner {
             } else {
                 log.error("sqlFragments configuration failed for SqlSessionFactory bean: {}, dynamic sql may not work", beanName);
             }
+        }
+        ObjectProvider<SqlSessionFactory> beanProvider = applicationContext.getBeanProvider(SqlSessionFactory.class);
+        SqlSessionFactory sqlSessionFactory = beanProvider.getIfAvailable();
+        if (sqlSessionFactory != null) {
+            Configuration configuration = sqlSessionFactory.getConfiguration();
+            boolean mapUnderscoreToCamelCase = configuration.isMapUnderscoreToCamelCase();
+            BasicProvider basicProvider = new BasicProvider(mapUnderscoreToCamelCase);
+            boolean b = BoostUtils.registerProvider(basicProvider);
+            log.info("BoostUtils Provider register success {}", b);
         }
     }
 }

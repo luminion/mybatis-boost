@@ -36,6 +36,50 @@ public abstract class BoostUtils {
         return PROVIDERS.remove(provider);
     }
 
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param str str
+     * @return 驼峰字符串
+     */
+    public static String underscoreToCamelCase(String str) {
+        StringBuilder sb = new StringBuilder();
+        boolean upperCase = false;
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c == '_') {
+                upperCase = true;
+            } else if (upperCase) {
+                sb.append(Character.toUpperCase(c));
+                upperCase = false;
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 驼峰转下滑线
+     *
+     * @param str str
+     * @return 下划线字符串
+     */
+    public static String camelCaseToUnderscore(String str) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (Character.isUpperCase(c)) {
+                sb.append('_').append(Character.toLowerCase(c));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+    
+
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public static <T, V> Class<T> getEntityClass(Booster<T, V> booster) {
         return (Class<T>) GenericTypeResolver.resolveTypeArguments(booster.getClass(), Booster.class)[0];
