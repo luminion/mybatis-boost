@@ -299,7 +299,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
     /**
      * 获取 Lambda SQL 助手.
      *
-     * @return {@link BoostSqlHelper} SQL 助手
+     * @return SQL 助手
      * @since 1.0.0
      */
     default BoostSqlHelper<T, V, P> lambdaHelper() {
@@ -312,7 +312,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      *
      * @param params 查询条件
      * @param page   分页对象
-     * @return {@link List<V>} 查询结果列表
+     * @return 查询结果列表
      * @since 1.0.0
      */
     List<V> selectBySqlEntity(ISqlEntity<T> params, P page);

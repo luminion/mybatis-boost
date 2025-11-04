@@ -33,7 +33,7 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      * 将源对象转化为实体对象.
      *
      * @param source 源对象
-     * @return {@link T} 实体对象
+     * @return 实体对象
      * @since 1.0.0
      */
     T toEntity(Object source);
@@ -42,7 +42,7 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      * 转换为VO对象.
      *
      * @param source 源对象
-     * @return {@link V} VO对象
+     * @return VO对象
      * @since 1.0.0
      */
     V toVo(Object source);
