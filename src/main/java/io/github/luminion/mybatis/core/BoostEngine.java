@@ -84,7 +84,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
             throw new IllegalArgumentException("can't find id property");
         }
         SqlCondition condition = new SqlCondition(keyProperty, SqlKeyword.EQ.getKeyword(), id);
-        SqlHelper<T> sqlHelper = SqlHelper.of(this).with(condition);
+        SqlHelper<T> sqlHelper = SqlHelper.of(this).merge(condition);
         return voUnique(sqlHelper);
     }
 
@@ -132,7 +132,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
         Class<T> entityClass = BoostUtils.getEntityClass(this);
         String idPropertyName = BoostUtils.getIdPropertyName(entityClass);
         SqlCondition sqlCondition = new SqlCondition(idPropertyName, SqlKeyword.IN.getKeyword(), ids);
-        SqlHelper<T> sqlHelper = SqlHelper.of(this).with(sqlCondition);
+        SqlHelper<T> sqlHelper = SqlHelper.of(this).merge(sqlCondition);
         return voList(sqlHelper);
     }
 
@@ -260,7 +260,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
         voPreProcess(sqlEntity);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
         ISqlHelper<T> sqlHelper = SqlHelper.of(this)
-                .with(sqlEntity)
+                .merge(sqlEntity)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, null);
         voPostProcess(vs, sqlEntity, null);

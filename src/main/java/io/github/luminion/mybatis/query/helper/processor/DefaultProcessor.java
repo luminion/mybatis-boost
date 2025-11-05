@@ -134,7 +134,7 @@ public abstract class DefaultProcessor {
             return;
         }
         SqlTree iSqlTrees = new SqlTree(sqlConditions, SqlKeyword.OR.getKeyword());
-        sqlHelper.with(iSqlTrees);
+        sqlHelper.merge(iSqlTrees);
     }
 
     /**

@@ -22,49 +22,90 @@ import java.util.Map;
  */
 @Getter
 @SuppressWarnings({"unused", "unchecked"})
-public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity<T> implements ISqlHelperLambda<T, S> {
+public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity<T>
+        implements ILambdaSqlHelper<T, S> {
 
     /**
      * 关联的实体类, 用于 SQL 校验和处理.
      */
     protected transient Class<T> entityClass;
-    
+
     /**
-     * 根据指定的对象添加条件或排序规则.
-     * <p>
-     * - 如果对象是 {@link ISqlTree}, 则将其作为子条件树添加.
-     * - 如果对象是 {@link ISqlCondition}, 则将其作为单个条件添加.
-     * - 如果对象是 {@link ISqlSort}, 则将其作为排序规则添加.
-     * - 对于其他类型的对象, 会将其字段和值映射为等值条件添加.
+     * 合并指定条件树的条件
      *
-     * @param s 包含条件或排序信息的对象
+     * @param tree 条件树
      * @return 当前 {@link AbstractSqlHelper} 实例
      * @since 1.0.0
      */
-    @SuppressWarnings("unchecked")
-    public S with(Object s) {
-        if (s == null) {
-            return (S) this;
+    public S merge(ISqlTree tree) {
+        if (tree != null) {
+            super.addChild(tree);
         }
-        if (s instanceof ISqlTree) {
-            return (S) super.addChild((ISqlTree) s);
+        return (S) this;
+    }
+
+    /**
+     * 合并一个查询条件
+     *
+     * @param condition 查询条件
+     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @since 1.0.0
+     */
+    public S merge(ISqlCondition condition) {
+        if (condition != null) {
+            this.getConditions().add(condition);
         }
-        if (s instanceof ISqlCondition) {
-            this.getConditions().add(((ISqlCondition) s));
-            return (S) this;
+        return (S) this;
+    }
+
+    /**
+     * 合并一个排序规则
+     *
+     * @param sort 排序规则
+     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @since 1.0.0
+     */
+    public S merge(ISqlSort sort) {
+        if (sort != null) {
+            this.getSorts().add(sort);
         }
-        if (s instanceof ISqlSort) {
-            this.getSorts().add(((ISqlSort) s));
-            return (S) this;
-        }
-        Map<?, ?> map = ReflectUtils.objectToMap(s);
-        for (Map.Entry<?, ?> next : map.entrySet()) {
-            Object key = next.getKey();
-            Object value = next.getValue();
+        return (S) this;
+    }
+
+    /**
+     * 从一个Map对象加载查询条件.
+     * <p>
+     * 会将Map中的所有键值对映射为等值查询条件.
+     *
+     * @param map 包含查询条件的Map对象
+     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @since 1.0.0
+     */
+    public <K, V> S merge(Map<K, V> map) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            K key = entry.getKey();
+            V value = entry.getValue();
             SqlCondition condition = new SqlCondition(key.toString(), value);
             this.getConditions().add(condition);
         }
         return (S) this;
+    }
+
+    /**
+     * 从一个普通对象(如DTO)加载查询条件.
+     * <p>
+     * 会通过反射将对象的非空字段映射为等值查询条件.
+     *
+     * @param dto 包含查询条件的对象
+     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @since 1.0.0
+     */
+    public S mergeObject(Object dto) {
+        if (dto == null) {
+            return (S) this;
+        }
+        Map<?, ?> map = ReflectUtils.objectToMap(dto);
+        return merge(map);
     }
 
 }

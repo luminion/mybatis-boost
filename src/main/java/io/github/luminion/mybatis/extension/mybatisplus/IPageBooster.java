@@ -18,7 +18,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public interface MybatisPlusBooster<T, V> extends BoostEngine<T, V>{
+public interface IPageBooster<T, V> extends BoostEngine<T, V>{
 
     /**
      * {@inheritDoc}
@@ -31,7 +31,7 @@ public interface MybatisPlusBooster<T, V> extends BoostEngine<T, V>{
         voPreProcess(sqlEntity);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
         ISqlHelper<T> sqlHelper = SqlHelper.of(this)
-                .with(sqlEntity)
+                .merge(sqlEntity)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, page);
         page.setRecords(vs);

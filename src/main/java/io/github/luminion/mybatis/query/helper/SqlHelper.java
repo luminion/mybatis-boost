@@ -3,6 +3,7 @@ package io.github.luminion.mybatis.query.helper;
 import io.github.luminion.mybatis.core.BoostCore;
 import io.github.luminion.mybatis.core.Booster;
 import io.github.luminion.mybatis.enums.SqlKeyword;
+import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.util.BoostUtils;
 
 import java.util.function.Consumer;
@@ -45,6 +46,25 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     }
 
     /**
+     * 创建一个指定 {@link ISqlEntity}的sqlhelper
+     *
+     * @param sqlEntity 源 {@link ISqlEntity} 实例
+     * @param <T>       实体类型
+     * @return {@link SqlHelper} 实例
+     * @since 1.0.0
+     */
+    public static <T> SqlHelper<T> of(ISqlEntity<T> sqlEntity) {
+        if (sqlEntity == null) {
+            return new SqlHelper<>();
+        }
+        if (sqlEntity instanceof SqlHelper) {
+            return (SqlHelper<T>) sqlEntity;
+        }
+        SqlHelper<T> sqlHelper = new SqlHelper<>();
+        return sqlHelper.merge(sqlEntity);
+    }
+
+    /**
      * 创建一个与 {@link Booster} 实例的实体类型绑定的 {@link SqlHelper} 实例.
      *
      * @param booster Booster 实例
@@ -56,7 +76,6 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     public static <T, R> SqlHelper<T> of(Booster<T, R> booster) {
         return SqlHelper.of(BoostUtils.getEntityClass(booster));
     }
-
 
     /**
      * 添加一组 OR 连接的条件.
@@ -75,6 +94,32 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     }
 
     /**
+     * 设置实体类
+     *
+     * @param entityClass 实体类
+     * @return 当前 {@link SqlHelper} 实例
+     * @since 1.0.0
+     */
+    @SuppressWarnings("unchecked")
+    public <R> SqlHelper<R> entity(Class<R> entityClass) {
+        SqlHelper<R> sqlHelper = (SqlHelper<R>) this;
+        sqlHelper.entityClass = entityClass;
+        return sqlHelper;
+    }
+
+    /**
+     * 设置实体类
+     *
+     * @param booster Booster 实例
+     * @return 当前 {@link SqlHelper} 实例
+     * @since 1.0.0
+     */
+    public <V> SqlHelper<T> entity(Booster<T, V> booster) {
+        this.entityClass = BoostUtils.getEntityClass(booster);
+        return this;
+    }
+
+    /**
      * 将当前 {@link SqlHelper} 转换为 {@link BoostSqlHelper}.
      *
      * @param boostCore {@link BoostCore} 实例
@@ -84,6 +129,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * @since 1.0.0
      */
     public <V, P> BoostSqlHelper<T, V> boost(BoostCore<T, V> boostCore) {
+        this.entityClass = BoostUtils.getEntityClass(boostCore);
         return new BoostSqlHelper<>(boostCore);
     }
 

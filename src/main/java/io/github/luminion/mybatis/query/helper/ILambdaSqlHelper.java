@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 @SuppressWarnings({"unchecked", "unused"})
-public interface ISqlHelperLambda<T, S extends ISqlHelperLambda<T, S>> extends ISqlHelper<T> {
+public interface ILambdaSqlHelper<T, S extends ILambdaSqlHelper<T, S>> extends ISqlHelper<T> {
 
     /**
      * 添加一组 OR 连接的条件.
