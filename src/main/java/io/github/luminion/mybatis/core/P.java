@@ -52,5 +52,11 @@ public interface P<T> {
         return pages;
     }
     
-    <R> P<R> convertRecords(Class<R> voType);
+    /**
+     * 转换记录列表的类型
+     *
+     * @param clazz 目标类型
+     * @return 转换后的记录列表
+     */
+    <R> P<R> convertRecords(Class<R> clazz);
 }

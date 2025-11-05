@@ -1,7 +1,6 @@
 package io.github.luminion.mybatis.core;
 
 import io.github.luminion.mybatis.enums.SqlKeyword;
-import io.github.luminion.mybatis.extension.mybatisplus.PPage;
 import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
 import io.github.luminion.mybatis.query.helper.BoostSqlHelper;
@@ -55,7 +54,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default void voPreProcess(ISqlEntity<T> params) {
+    default void voPreProcess(ISqlEntity<T> sqlEntity) {
         // do nothing here, only for override
     }
 
@@ -65,7 +64,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default void voPostProcess(List<V> records, ISqlEntity<T> params, P<?> p) {
+    default void voPostProcess(List<V> records, ISqlEntity<T> sqlEntity, P<V> page) {
         // do nothing here, only for override
     }
 
@@ -95,12 +94,12 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> R voById(Serializable id, Class<R> voType) {
+    default <R> R voById(Serializable id, Class<R> targetType) {
         V v = voById(id);
         if (ObjectUtils.isEmpty(v)) {
             return null;
         }
-        return ReflectUtils.toTarget(v, voType);
+        return ReflectUtils.toTarget(v, targetType);
     }
 
     /**
@@ -119,8 +118,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> Optional<R> voByIdOpt(Serializable id, Class<R> voType) {
-        return Optional.ofNullable(voById(id, voType));
+    default <R> Optional<R> voByIdOpt(Serializable id, Class<R> targetType) {
+        return Optional.ofNullable(voById(id, targetType));
     }
 
     /**
@@ -143,10 +142,10 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> List<R> voListByIds(Collection<? extends Serializable> ids, Class<R> voType) {
+    default <R> List<R> voListByIds(Collection<? extends Serializable> ids, Class<R> targetType) {
         List<V> vs = voListByIds(ids);
         return vs.stream()
-                .map(v -> ReflectUtils.toTarget(v, voType))
+                .map(v -> ReflectUtils.toTarget(v, targetType))
                 .collect(Collectors.toList());
     }
 
@@ -156,8 +155,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default V voFirst(ISqlEntity<T> params) {
-        List<V> vs = voList(params);
+    default V voFirst(ISqlEntity<T> sqlEntity) {
+        List<V> vs = voList(sqlEntity);
         if (vs.isEmpty()) {
             return null;
         }
@@ -170,8 +169,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> R voFirst(ISqlEntity<T> params, Class<R> voType) {
-        return ReflectUtils.toTarget(voFirst(params), voType);
+    default <R> R voFirst(ISqlEntity<T> sqlEntity, Class<R> targetType) {
+        return ReflectUtils.toTarget(voFirst(sqlEntity), targetType);
     }
 
     /**
@@ -180,8 +179,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default Optional<V> voFirstOpt(ISqlEntity<T> params) {
-        return Optional.ofNullable(voFirst(params));
+    default Optional<V> voFirstOpt(ISqlEntity<T> sqlEntity) {
+        return Optional.ofNullable(voFirst(sqlEntity));
     }
 
     /**
@@ -190,8 +189,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> Optional<R> voFirstOpt(ISqlEntity<T> params, Class<R> voType) {
-        return Optional.ofNullable(voFirst(params, voType));
+    default <R> Optional<R> voFirstOpt(ISqlEntity<T> sqlEntity, Class<R> targetType) {
+        return Optional.ofNullable(voFirst(sqlEntity, targetType));
     }
 
     /**
@@ -200,8 +199,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default V voUnique(ISqlEntity<T> params) {
-        List<V> vs = voList(params);
+    default V voUnique(ISqlEntity<T> sqlEntity) {
+        List<V> vs = voList(sqlEntity);
         if (vs.isEmpty()) {
             return null;
         }
@@ -217,8 +216,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> R voUnique(ISqlEntity<T> params, Class<R> voType) {
-        return ReflectUtils.toTarget(voUnique(params), voType);
+    default <R> R voUnique(ISqlEntity<T> sqlEntity, Class<R> targetType) {
+        return ReflectUtils.toTarget(voUnique(sqlEntity), targetType);
     }
 
     /**
@@ -227,8 +226,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default Optional<V> voUniqueOpt(ISqlEntity<T> params) {
-        return Optional.ofNullable(voUnique(params));
+    default Optional<V> voUniqueOpt(ISqlEntity<T> sqlEntity) {
+        return Optional.ofNullable(voUnique(sqlEntity));
     }
 
     /**
@@ -237,8 +236,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> Optional<R> voUniqueOpt(ISqlEntity<T> params, Class<R> voType) {
-        return Optional.ofNullable(voUnique(params, voType));
+    default <R> Optional<R> voUniqueOpt(ISqlEntity<T> sqlEntity, Class<R> targetType) {
+        return Optional.ofNullable(voUnique(sqlEntity, targetType));
     }
 
     /**
@@ -257,14 +256,14 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default List<V> voList(ISqlEntity<T> params) {
-        voPreProcess(params);
+    default List<V> voList(ISqlEntity<T> sqlEntity) {
+        voPreProcess(sqlEntity);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
         ISqlHelper<T> sqlHelper = SqlHelper.of(this)
-                .with(params)
+                .with(sqlEntity)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, null);
-        voPostProcess(vs, params, null);
+        voPostProcess(vs, sqlEntity, null);
         return vs;
     }
 
@@ -274,10 +273,10 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> List<R> voList(ISqlEntity<T> params, Class<R> voType) {
-        List<V> vs = voList(params);
+    default <R> List<R> voList(ISqlEntity<T> sqlEntity, Class<R> targetType) {
+        List<V> vs = voList(sqlEntity);
         return vs.stream()
-                .map(v -> ReflectUtils.toTarget(v, voType))
+                .map(v -> ReflectUtils.toTarget(v, targetType))
                 .collect(Collectors.toList());
     }
 
@@ -287,8 +286,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default P<V> voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
-        return voPage(params, (long) pageNum, pageSize);
+    default P<V> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize) {
+        return voPage(sqlEntity, (long) pageNum, pageSize);
     }
 
     /**
@@ -297,7 +296,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default P<V> voPage(ISqlEntity<T> params, long pageNum, long pageSize) {
+    default P<V> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
@@ -307,8 +306,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> P<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
-        return voPage(params, (long) pageNum, pageSize, voType);
+    default <R> P<R> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize, Class<R> targetType) {
+        return voPage(sqlEntity, (long) pageNum, pageSize, targetType);
     }
 
     /**
@@ -317,8 +316,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> P<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
-        return voPage(params, pageNum, pageSize).convertRecords(voType);
+    default <R> P<R> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize, Class<R> targetType) {
+        return voPage(sqlEntity, pageNum, pageSize).convertRecords(targetType);
     }
 
     /**
@@ -334,10 +333,10 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
     /**
      * 最终执行查询的方法.
      *
-     * @param params 查询条件
-     * @param page   分页对象
+     * @param sqlEntity 查询条件
+     * @param page      分页对象
      * @return 查询结果列表
      * @since 1.0.0
      */
-    List<V> selectBySqlEntity(ISqlEntity<T> params, P<?> page);
+    List<V> selectBySqlEntity(ISqlEntity<T> sqlEntity, P<V> page);
 }

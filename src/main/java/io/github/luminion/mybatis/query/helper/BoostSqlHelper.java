@@ -66,7 +66,6 @@ public class BoostSqlHelper<T, V> {
      * 查询并返回唯一的 VO 对象.
      *
      * @return VO 对象, 如果不存在则返回 null
-     * @throws org.apache.ibatis.exceptions.TooManyResultsException 如果查询到多条记录
      * @since 1.0.0
      */
     public V unique() {
@@ -78,7 +77,6 @@ public class BoostSqlHelper<T, V> {
      *
      * @param voType 目标 VO 类型
      * @return 转换后的 VO 对象, 如果不存在则返回 null
-     * @throws org.apache.ibatis.exceptions.TooManyResultsException 如果查询到多条记录
      * @since 1.0.0
      */
     public V unique(Class<V> voType) {
@@ -89,7 +87,6 @@ public class BoostSqlHelper<T, V> {
      * 查询并返回一个包含唯一 VO 对象的 {@link Optional}.
      *
      * @return 包含 VO 对象的 Optional, 如果不存在则为空
-     * @throws org.apache.ibatis.exceptions.TooManyResultsException 如果查询到多条记录
      * @since 1.0.0
      */
     public Optional<V> uniqueOpt() {

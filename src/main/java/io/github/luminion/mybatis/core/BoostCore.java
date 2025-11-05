@@ -50,21 +50,20 @@ public interface BoostCore<T, V> extends Booster<T, V> {
     /**
      * 执行查询前的预处理操作.
      *
-     * @param params 查询条件
-     * @param page   分页对象
+     * @param sqlEntity 查询条件
      * @since 1.0.0
      */
-    void voPreProcess(ISqlEntity<T> params);
+    void voPreProcess(ISqlEntity<T> sqlEntity);
 
     /**
      * 执行查询后的后处理操作.
      *
-     * @param records 查询结果
-     * @param params  查询条件
-     * @param page    分页对象
+     * @param records   查询结果
+     * @param sqlEntity 查询条件
+     * @param page      分页对象
      * @since 1.0.0
      */
-    void voPostProcess(List<V> records, ISqlEntity<T> params, P<?> p);
+    void voPostProcess(List<V> records, ISqlEntity<T> sqlEntity, P<V> page);
 
     // ==================== 根据ID查询 ====================
 
@@ -80,13 +79,13 @@ public interface BoostCore<T, V> extends Booster<T, V> {
     /**
      * 根据ID查询并转换为指定VO类型.
      *
-     * @param id     主键ID
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param id         主键ID
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    <R> R voById(Serializable id, Class<R> voType);
+    <R> R voById(Serializable id, Class<R> targetType);
 
     /**
      * 根据ID查询VO对象（返回Optional）.
@@ -100,13 +99,13 @@ public interface BoostCore<T, V> extends Booster<T, V> {
     /**
      * 根据ID查询并转换为指定VO类型（返回Optional）.
      *
-     * @param id     主键ID
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param id         主键ID
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    <R> Optional<R> voByIdOpt(Serializable id, Class<R> voType);
+    <R> Optional<R> voByIdOpt(Serializable id, Class<R> targetType);
 
     // ==================== 批量ID查询 ===================
 
@@ -122,13 +121,13 @@ public interface BoostCore<T, V> extends Booster<T, V> {
     /**
      * 根据ID集合批量查询并转换为指定VO类型.
      *
-     * @param ids    ID集合
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param ids        ID集合
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return VO对象列表，无结果返回空列表
      * @since 1.0.0
      */
-    <R> List<R> voListByIds(Collection<? extends Serializable> ids, Class<R> voType);
+    <R> List<R> voListByIds(Collection<? extends Serializable> ids, Class<R> targetType);
 
     // ==================== 查询第一条（voFirst） ====================
 
@@ -137,42 +136,42 @@ public interface BoostCore<T, V> extends Booster<T, V> {
      * <p>如果查询结果有多条，返回第一条.</p>
      * <p>如果无结果，返回null.</p>
      *
-     * @param params 查询条件
+     * @param sqlEntity 查询条件
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    V voFirst(ISqlEntity<T> params);
+    V voFirst(ISqlEntity<T> sqlEntity);
 
     /**
      * 根据条件查询第一个VO对象并转换类型.
      *
-     * @param params 查询条件
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param sqlEntity  查询条件
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    <R> R voFirst(ISqlEntity<T> params, Class<R> voType);
+    <R> R voFirst(ISqlEntity<T> sqlEntity, Class<R> targetType);
 
     /**
      * 根据条件查询第一个VO对象（返回Optional）.
      *
-     * @param params 查询条件
+     * @param sqlEntity 查询条件
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    Optional<V> voFirstOpt(ISqlEntity<T> params);
+    Optional<V> voFirstOpt(ISqlEntity<T> sqlEntity);
 
     /**
      * 根据条件查询第一个VO对象并转换类型（返回Optional）.
      *
-     * @param params 查询条件
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param sqlEntity  查询条件
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    <R> Optional<R> voFirstOpt(ISqlEntity<T> params, Class<R> voType);
+    <R> Optional<R> voFirstOpt(ISqlEntity<T> sqlEntity, Class<R> targetType);
 
     // ==================== 查询唯一记录（voUnique） ====================
 
@@ -181,43 +180,43 @@ public interface BoostCore<T, V> extends Booster<T, V> {
      * <p><b>注意：如果查询结果超过1条，将抛出异常</b></p>
      * <p>如果无结果，返回null.</p>
      *
-     * @param params 查询条件
+     * @param sqlEntity 查询条件
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    V voUnique(ISqlEntity<T> params);
+    V voUnique(ISqlEntity<T> sqlEntity);
 
     /**
      * 根据条件查询唯一VO对象并转换类型.
      * <p><b>注意：如果查询结果超过1条，将抛出异常</b></p>
      *
-     * @param params 查询条件
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param sqlEntity  查询条件
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    <R> R voUnique(ISqlEntity<T> params, Class<R> voType);
+    <R> R voUnique(ISqlEntity<T> sqlEntity, Class<R> targetType);
 
     /**
      * 根据条件查询唯一VO对象（返回Optional）.
      *
-     * @param params 查询条件
+     * @param sqlEntity 查询条件
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    Optional<V> voUniqueOpt(ISqlEntity<T> params);
+    Optional<V> voUniqueOpt(ISqlEntity<T> sqlEntity);
 
     /**
      * 根据条件查询唯一VO对象并转换类型（返回Optional）.
      *
-     * @param params 查询条件
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param sqlEntity  查询条件
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    <R> Optional<R> voUniqueOpt(ISqlEntity<T> params, Class<R> voType);
+    <R> Optional<R> voUniqueOpt(ISqlEntity<T> sqlEntity, Class<R> targetType);
 
     // ==================== 查询列表 ====================
 
@@ -232,69 +231,69 @@ public interface BoostCore<T, V> extends Booster<T, V> {
     /**
      * 根据条件查询VO对象列表.
      *
-     * @param params 查询条件
+     * @param sqlEntity 查询条件
      * @return VO对象列表，无结果返回空列表
      * @since 1.0.0
      */
-    List<V> voList(ISqlEntity<T> params);
+    List<V> voList(ISqlEntity<T> sqlEntity);
 
     /**
      * 根据条件查询VO对象列表并转换类型.
      *
-     * @param params 查询条件
-     * @param voType 目标VO类型
-     * @param <R>    目标VO类型
+     * @param sqlEntity  查询条件
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return 转换后的VO对象列表
      * @since 1.0.0
      */
-    <R> List<R> voList(ISqlEntity<T> params, Class<R> voType);
+    <R> List<R> voList(ISqlEntity<T> sqlEntity, Class<R> targetType);
 
     /**
      * 根据条件查询VO对象列表（分页）.
      *
-     * @param params   查询条件
-     * @param pageNum  页码
-     * @param pageSize 每页数量
+     * @param sqlEntity 查询条件
+     * @param pageNum   页码
+     * @param pageSize  每页数量
      * @return 分页结果对象
      * @since 1.0.0
      */
-    P<V> voPage(ISqlEntity<T> params, int pageNum, int pageSize);
+    P<V> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize);
 
 
     /**
      * 根据条件查询VO对象列表（分页）.
      *
-     * @param params   查询条件
-     * @param pageNum  页码
-     * @param pageSize 每页数量
+     * @param sqlEntity 查询条件
+     * @param pageNum   页码
+     * @param pageSize  每页数量
      * @return 分页结果对象
      * @since 1.0.0
      */
-    P<V> voPage(ISqlEntity<T> params, long pageNum, long pageSize);
+    P<V> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize);
 
     /**
      * 根据条件查询VO对象列表并转换类型（分页）.
      *
-     * @param params   查询条件
-     * @param pageNum  页码
-     * @param pageSize 每页数量
-     * @param voType   目标VO类型
-     * @param <R>      目标VO类型
+     * @param sqlEntity  查询条件
+     * @param pageNum    页码
+     * @param pageSize   每页数量
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return 分页结果对象
      * @since 1.0.0
      */
-    <R> P<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType);
+    <R> P<R> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize, Class<R> targetType);
 
     /**
      * 根据条件查询VO对象列表（分页）.
      *
-     * @param params   查询条件
-     * @param pageNum  页码
-     * @param pageSize 每页数量
-     * @param voType   目标VO类型
-     * @param <R>      目标VO类型
+     * @param sqlEntity  查询条件
+     * @param pageNum    页码
+     * @param pageSize   每页数量
+     * @param targetType 目标VO类型
+     * @param <R>        目标VO类型
      * @return 分页结果对象
      * @since 1.0.0
      */
-    <R> P<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType);
+    <R> P<R> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize, Class<R> targetType);
 }

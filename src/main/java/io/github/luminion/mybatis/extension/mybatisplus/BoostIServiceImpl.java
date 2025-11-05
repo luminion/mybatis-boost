@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class BoostIServiceImpl<M extends BaseMapper<T> & BoostMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoostIService<T, V> {
 
     @Override
-    public List<V> selectBySqlEntity(ISqlEntity<T> params, P<?> page) {
+    public List<V> selectBySqlEntity(ISqlEntity<T> params, P<V> page) {
         return getBaseMapper().selectBySqlEntity(params, page);
     }
 
