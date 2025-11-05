@@ -202,14 +202,11 @@ public abstract class BoostUtils {
         if (map != null) {
             return map;
         }
-        String format = "a.%s";
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
         for (BoostProvider provider : PROVIDERS) {
             Map<String, String> contributedMap = provider.getPropertyToColumnMap(entityClass);
             if (contributedMap != null) {
-                contributedMap.forEach((key, value) -> {
-                    result.putIfAbsent(key, String.format(format, value));
-                });
+                contributedMap.forEach(result::putIfAbsent);
             }
         }
         log.warn("No property to column alias map found in {} providers, class: {}", PROVIDERS.size(), entityClass.getName());

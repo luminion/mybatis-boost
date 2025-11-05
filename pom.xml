@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.luminion</groupId>
-    <artifactId>mybatis-boost</artifactId>
+    <artifactId>query-booster</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -29,9 +29,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/luminion/mybatis-boost.git</connection>
-        <developerConnection>scm:git:ssh://github.com:luminion/mybatis-boost.git</developerConnection>
-        <url>https://github.com/luminion/mybatis-boost/tree/master</url>
+        <connection>scm:git:git://github.com/luminion/query-booster.git</connection>
+        <developerConnection>scm:git:ssh://github.com:luminion/query-booster.git</developerConnection>
+        <url>https://github.com/luminion/query-booster/tree/master</url>
     </scm>
     
     
@@ -46,6 +46,7 @@
         <lombok.version>1.18.34</lombok.version>
         <mybatis.version>3.5.19</mybatis.version>
         <slf4j-api.version>1.7.35</slf4j-api.version>
+        <pagehelper.version>6.1.1</pagehelper.version>
     </properties>
     
     <dependencyManagement>
@@ -73,6 +74,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>${pagehelper.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>

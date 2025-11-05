@@ -6,10 +6,7 @@ import io.github.luminion.mybatis.util.BoostUtils;
 import io.github.luminion.mybatis.util.ReflectUtils;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,13 +22,14 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @EqualsAndHashCode
-public class BasicProvider implements BoostProvider {
+public class MybatisProvider implements BoostProvider {
     private final boolean mapUnderscoreToCamelCase;
 
     /**
      * {@inheritDoc}
      * <p>
      * 默认实现是将类名从驼峰转换为下划线作为表名.
+     *
      * @since 1.0.0
      */
     @Override
@@ -43,6 +41,7 @@ public class BasicProvider implements BoostProvider {
      * {@inheritDoc}
      * <p>
      * 默认实现是查找是否存在名为 "getId" 的方法, 如果存在则返回 "id".
+     *
      * @since 1.0.0
      */
     @Override
@@ -59,6 +58,7 @@ public class BasicProvider implements BoostProvider {
      * {@inheritDoc}
      * <p>
      * 默认实现是通过 {@link ReflectUtils#getGetterField(MethodReference)} 获取属性名.
+     *
      * @since 1.0.0
      */
     @Override
@@ -74,19 +74,22 @@ public class BasicProvider implements BoostProvider {
      * {@inheritDoc}
      * <p>
      * 默认实现是将所有字段名根据 `mapUnderscoreToCamelCase` 配置转换为对应的列名.
+     *
      * @since 1.0.0
      */
     @Override
     public <T> Map<String, String> getPropertyToColumnMap(Class<T> clazz) {
         Set<String> strings = ReflectUtils.fieldMap(clazz).keySet();
-        return strings.stream().collect(Collectors.toMap(e -> e,
-                e -> mapUnderscoreToCamelCase ? BoostUtils.camelCaseToUnderscore(e) : e));
+        return strings.stream()
+                .collect(Collectors.toMap(e -> e, e -> 
+                        String.format("a.%s", mapUnderscoreToCamelCase ? BoostUtils.camelCaseToUnderscore(e) : e)));
     }
 
     /**
      * {@inheritDoc}
      * <p>
      * 返回 Integer.MAX_VALUE, 表示这是一个优先级最低的 Provider.
+     *
      * @since 1.0.0
      */
     @Override

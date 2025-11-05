@@ -18,7 +18,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostMybatisPlusExtension<T, V> extends BoostEngine<T, V>{
+public interface MybatisPlusBooster<T, V> extends BoostEngine<T, V>{
 
     /**
      * {@inheritDoc}
@@ -34,6 +34,7 @@ public interface BoostMybatisPlusExtension<T, V> extends BoostEngine<T, V>{
                 .with(sqlEntity)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, page);
+        page.setRecords(vs);
         voPostProcess(vs, sqlEntity, page);
         return page;
     }

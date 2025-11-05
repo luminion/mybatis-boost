@@ -19,7 +19,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class BoostServiceImpl<M extends BaseMapper<T> & BoostMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoostMybatisPlusExtension<T, V> {
+public abstract class BoostServiceImpl<M extends BaseMapper<T> & BoostMapper<T, V>, T, V> extends ServiceImpl<M, T> implements MybatisPlusBooster<T, V> {
 
     @Override
     public List<V> selectBySqlEntity(ISqlEntity<T> sqlEntity, P<V> page) {
