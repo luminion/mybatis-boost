@@ -1,6 +1,7 @@
 package io.github.luminion.mybatis.query.helper;
 
 import io.github.luminion.mybatis.core.BoostCore;
+import io.github.luminion.mybatis.core.P;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,12 +13,11 @@ import java.util.Optional;
  *
  * @param <T> 实体类型
  * @param <V> VO 类型
- * @param <P> 分页对象类型
  * @author luminion
  * @since 1.0.0
  */
-public class BoostSqlHelper<T, V, P> {
-    private final BoostCore<T, V, P> boostCore;
+public class BoostSqlHelper<T, V> {
+    private final BoostCore<T, V> boostCore;
     private final ISqlHelper<T> sqlHelper;
 
     /**
@@ -26,7 +26,7 @@ public class BoostSqlHelper<T, V, P> {
      * @param boostCore {@link BoostCore} 实例
      * @since 1.0.0
      */
-    public BoostSqlHelper(BoostCore<T, V, P> boostCore) {
+    public BoostSqlHelper(BoostCore<T, V> boostCore) {
         this.sqlHelper = SqlHelper.of(boostCore);
         this.boostCore = boostCore;
     }
@@ -113,7 +113,7 @@ public class BoostSqlHelper<T, V, P> {
      * @return 转换后的 VO 对象列表
      * @since 1.0.0
      */
-    public List<V> list(Class<V> voType) {
+    public <R> List<R> list(Class<R> voType) {
         return boostCore.voList(this.sqlHelper, voType);
     }
 
@@ -125,7 +125,7 @@ public class BoostSqlHelper<T, V, P> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    public P page(int pageNum, int pageSize) {
+    public P<V> page(int pageNum, int pageSize) {
         return boostCore.voPage(this.sqlHelper, pageNum, pageSize);
     }
 
@@ -137,35 +137,35 @@ public class BoostSqlHelper<T, V, P> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    public P page(long pageNum, long pageSize) {
+    public P<V> page(long pageNum, long pageSize) {
         return boostCore.voPage(this.sqlHelper, pageNum, pageSize);
     }
 
-//    /**
-//     * 分页查询 VO 对象, 并转换为指定类型.
-//     *
-//     * @param pageNum  当前页码
-//     * @param pageSize 每页大小
-//     * @param voType   目标 VO 类型
-//     * @return 分页结果对象
-//     * @since 1.0.0
-//     */
-//    public P page(int pageNum, int pageSize, Class<R> voType) {
-//        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
-//    }
-//
-//    /**
-//     * 分页查询 VO 对象, 并转换为指定类型.
-//     *
-//     * @param pageNum  当前页码
-//     * @param pageSize 每页大小
-//     * @param voType   目标 VO 类型
-//     * @return 分页结果对象
-//     * @since 1.0.0
-//     */
-//    public P page(long pageNum, long pageSize, Class<V> voType) {
-//        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
-//    }
+    /**
+     * 分页查询 VO 对象, 并转换为指定类型.
+     *
+     * @param pageNum  当前页码
+     * @param pageSize 每页大小
+     * @param voType   目标 VO 类型
+     * @return 分页结果对象
+     * @since 1.0.0
+     */
+    public <R> P<R> page(int pageNum, int pageSize, Class<R> voType) {
+        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
+    }
+
+    /**
+     * 分页查询 VO 对象, 并转换为指定类型.
+     *
+     * @param pageNum  当前页码
+     * @param pageSize 每页大小
+     * @param voType   目标 VO 类型
+     * @return 分页结果对象
+     * @since 1.0.0
+     */
+    public <R> P<R> page(long pageNum, long pageSize, Class<R> voType) {
+        return boostCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
+    }
 
 
 }

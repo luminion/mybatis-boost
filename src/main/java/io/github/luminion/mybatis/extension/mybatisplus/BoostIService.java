@@ -23,13 +23,9 @@ import java.util.stream.Collectors;
  */
 public interface BoostIService<T, V> extends BoostEngine<T, V>, IService<T> {
 
-    @Override
-    default PPage<V> voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
-        return voPage(params, (long)pageNum, pageSize);
-    }
-
     /**
      * {@inheritDoc}
+     *
      * @since 1.0.0
      */
     @Override
@@ -41,32 +37,8 @@ public interface BoostIService<T, V> extends BoostEngine<T, V>, IService<T> {
                 .with(params)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, page);
-        voPostProcess(vs, params);
+        voPostProcess(vs, params, page);
         return page;
     }
 
-    /**
-     * {@inheritDoc}
-     * @since 1.0.0
-     */
-    @Override
-    default <R> PPage<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
-        return voPage(params, (long) pageNum, pageSize, voType);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @since 1.0.0
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    default <R> PPage<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
-        PPage<V> voPage = voPage(params, pageNum, pageSize);
-        List<R> collect = voPage.getRecords().stream()
-                .map(v -> ReflectUtils.toTarget(v, voType))
-                .collect(Collectors.toList());
-        PPage<R> rPage = (PPage<R>) voPage;
-        rPage.setRecords(collect);
-        return rPage;
-    }
 }

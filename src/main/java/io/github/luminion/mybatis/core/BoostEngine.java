@@ -1,6 +1,7 @@
 package io.github.luminion.mybatis.core;
 
 import io.github.luminion.mybatis.enums.SqlKeyword;
+import io.github.luminion.mybatis.extension.mybatisplus.PPage;
 import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.query.entity.SqlCondition;
 import io.github.luminion.mybatis.query.helper.BoostSqlHelper;
@@ -64,7 +65,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default void voPostProcess(List<V> records, ISqlEntity<T> params) {
+    default void voPostProcess(List<V> records, ISqlEntity<T> params, P<?> p) {
         // do nothing here, only for override
     }
 
@@ -257,7 +258,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      */
     @Override
     default List<V> voList(ISqlEntity<T> params) {
-        voPreProcess(params, null);
+        voPreProcess(params);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
         ISqlHelper<T> sqlHelper = SqlHelper.of(this)
                 .with(params)
@@ -317,7 +318,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      */
     @Override
     default <R> P<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
-        throw new UnsupportedOperationException("Not implemented.");
+        return voPage(params, pageNum, pageSize).convertRecords(voType);
     }
 
     /**
@@ -326,7 +327,7 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
      * @return SQL 助手
      * @since 1.0.0
      */
-    default BoostSqlHelper<T, V, P> lambdaHelper() {
+    default BoostSqlHelper<T, V> lambdaHelper() {
         return new BoostSqlHelper<>(this);
     }
 

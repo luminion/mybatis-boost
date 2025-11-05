@@ -83,7 +83,7 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
      * @return {@link BoostSqlHelper} 实例
      * @since 1.0.0
      */
-    public <V, P> BoostSqlHelper<T, V, P> boost(BoostCore<T, V, P> boostCore) {
+    public <V, P> BoostSqlHelper<T, V> boost(BoostCore<T, V> boostCore) {
         return new BoostSqlHelper<>(boostCore);
     }
 

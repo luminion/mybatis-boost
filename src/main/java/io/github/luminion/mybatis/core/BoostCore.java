@@ -64,7 +64,7 @@ public interface BoostCore<T, V> extends Booster<T, V> {
      * @param page    分页对象
      * @since 1.0.0
      */
-    void voPostProcess(List<V> records, ISqlEntity<T> params);
+    void voPostProcess(List<V> records, ISqlEntity<T> params, P<?> p);
 
     // ==================== 根据ID查询 ====================
 
