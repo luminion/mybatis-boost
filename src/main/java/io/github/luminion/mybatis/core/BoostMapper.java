@@ -15,13 +15,13 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostMapper<T, V, P> extends BoostEngine<T, V, P> {
+public interface BoostMapper<T, V> extends BoostEngine<T, V> {
 
     /**
      * {@inheritDoc}
      * @since 1.0.0
      */
     @Override
-    List<V> selectBySqlEntity(@Param("params") ISqlEntity<T> sqlEntity, @Param("page") P page);
+    List<V> selectBySqlEntity(@Param("params") ISqlEntity<T> sqlEntity, @Param("page") P<?> page);
 
 }

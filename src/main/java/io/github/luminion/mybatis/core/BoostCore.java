@@ -23,11 +23,10 @@ import java.util.Optional;
  *
  * @param <T> 数据库实体的类型。
  * @param <V> 要返回的视图对象 (VO) 的类型。
- * @param <P> 分页类
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostCore<T, V, P> extends Booster<T, V> {
+public interface BoostCore<T, V> extends Booster<T, V> {
 
     /**
      * 将源对象转化为实体对象.
@@ -55,7 +54,7 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      * @param page   分页对象
      * @since 1.0.0
      */
-    void voPreProcess(ISqlEntity<T> params, P page);
+    void voPreProcess(ISqlEntity<T> params);
 
     /**
      * 执行查询后的后处理操作.
@@ -65,7 +64,7 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      * @param page    分页对象
      * @since 1.0.0
      */
-    void voPostProcess(List<V> records, ISqlEntity<T> params, P page);
+    void voPostProcess(List<V> records, ISqlEntity<T> params);
 
     // ==================== 根据ID查询 ====================
 
@@ -259,7 +258,7 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    P voPage(ISqlEntity<T> params, int pageNum, int pageSize);
+    P<V> voPage(ISqlEntity<T> params, int pageNum, int pageSize);
 
 
     /**
@@ -271,31 +270,31 @@ public interface BoostCore<T, V, P> extends Booster<T, V> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    P voPage(ISqlEntity<T> params, long pageNum, long pageSize);
+    P<V> voPage(ISqlEntity<T> params, long pageNum, long pageSize);
 
-//    /**
-//     * 根据条件查询VO对象列表并转换类型（分页）.
-//     *
-//     * @param params   查询条件
-//     * @param pageNum  页码
-//     * @param pageSize 每页数量
-//     * @param voType   目标VO类型
-//     * @param <R>      目标VO类型
-//     * @return 分页结果对象
-//     * @since 1.0.0
-//     */
-//    <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType);
-//    
-//    /**
-//     * 根据条件查询VO对象列表（分页）.
-//     *
-//     * @param params   查询条件
-//     * @param pageNum  页码
-//     * @param pageSize 每页数量
-//     * @param voType   目标VO类型
-//     * @param <R>      目标VO类型
-//     * @return 分页结果对象
-//     * @since 1.0.0
-//     */
-//    <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType);
+    /**
+     * 根据条件查询VO对象列表并转换类型（分页）.
+     *
+     * @param params   查询条件
+     * @param pageNum  页码
+     * @param pageSize 每页数量
+     * @param voType   目标VO类型
+     * @param <R>      目标VO类型
+     * @return 分页结果对象
+     * @since 1.0.0
+     */
+    <R> P<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType);
+
+    /**
+     * 根据条件查询VO对象列表（分页）.
+     *
+     * @param params   查询条件
+     * @param pageNum  页码
+     * @param pageSize 每页数量
+     * @param voType   目标VO类型
+     * @param <R>      目标VO类型
+     * @return 分页结果对象
+     * @since 1.0.0
+     */
+    <R> P<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType);
 }

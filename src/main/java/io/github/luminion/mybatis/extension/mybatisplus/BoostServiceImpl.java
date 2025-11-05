@@ -1,7 +1,9 @@
 package io.github.luminion.mybatis.extension.mybatisplus;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.luminion.mybatis.core.BoostMapper;
+import io.github.luminion.mybatis.core.P;
 import io.github.luminion.mybatis.query.core.ISqlEntity;
 
 import java.util.List;
@@ -17,10 +19,11 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class BoostServiceImpl<M extends BoostBaseMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoostIService<T, V> {
+public abstract class BoostServiceImpl<M extends BaseMapper<T> & BoostMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoostIService<T, V> {
 
     @Override
-    public List<V> selectBySqlEntity(ISqlEntity<T> params, IPage<V> page) {
+    public List<V> selectBySqlEntity(ISqlEntity<T> params, P<?> page) {
         return getBaseMapper().selectBySqlEntity(params, page);
     }
+
 }

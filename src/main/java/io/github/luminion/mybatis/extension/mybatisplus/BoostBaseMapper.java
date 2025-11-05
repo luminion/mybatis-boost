@@ -1,7 +1,6 @@
 package io.github.luminion.mybatis.extension.mybatisplus;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.luminion.mybatis.core.BoostMapper;
 
 /**
@@ -12,5 +11,5 @@ import io.github.luminion.mybatis.core.BoostMapper;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostBaseMapper<T, V> extends BoostMapper<T, V, IPage<V>>, BaseMapper<T> {
+public interface BoostBaseMapper<T, V> extends BoostMapper<T, V>, BaseMapper<T> {
 }

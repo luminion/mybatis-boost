@@ -23,11 +23,10 @@ import java.util.stream.Collectors;
  *
  * @param <T> 数据库实体的类型。
  * @param <V> 要返回的视图对象 (VO) 的类型。
- * @param <P> 分页类
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
+public interface BoostEngine<T, V> extends BoostCore<T, V> {
 
     /**
      * {@inheritDoc}
@@ -55,7 +54,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      * @since 1.0.0
      */
     @Override
-    default void voPreProcess(ISqlEntity<T> params, P page) {
+    default void voPreProcess(ISqlEntity<T> params) {
         // do nothing here, only for override
     }
 
@@ -65,7 +64,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      * @since 1.0.0
      */
     @Override
-    default void voPostProcess(List<V> records, ISqlEntity<T> params, P page) {
+    default void voPostProcess(List<V> records, ISqlEntity<T> params) {
         // do nothing here, only for override
     }
 
@@ -287,7 +286,7 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      * @since 1.0.0
      */
     @Override
-    default P voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
+    default P<V> voPage(ISqlEntity<T> params, int pageNum, int pageSize) {
         return voPage(params, (long) pageNum, pageSize);
     }
 
@@ -297,29 +296,29 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      * @since 1.0.0
      */
     @Override
-    default P voPage(ISqlEntity<T> params, long pageNum, long pageSize) {
+    default P<V> voPage(ISqlEntity<T> params, long pageNum, long pageSize) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * @since 1.0.0
-//     */
-//    @Override
-//    default <R> P voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
-//        return voPage(params, (long) pageNum, pageSize, voType);
-//    }
-//    
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * @since 1.0.0
-//     */
-//    @Override
-//    default <R> P voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
-//        throw new UnsupportedOperationException("Not implemented.");
-//    }
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0
+     */
+    @Override
+    default <R> P<R> voPage(ISqlEntity<T> params, int pageNum, int pageSize, Class<R> voType) {
+        return voPage(params, (long) pageNum, pageSize, voType);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0
+     */
+    @Override
+    default <R> P<R> voPage(ISqlEntity<T> params, long pageNum, long pageSize, Class<R> voType) {
+        throw new UnsupportedOperationException("Not implemented.");
+    }
 
     /**
      * 获取 Lambda SQL 助手.
@@ -339,5 +338,5 @@ public interface BoostEngine<T, V, P> extends BoostCore<T, V, P> {
      * @return 查询结果列表
      * @since 1.0.0
      */
-    List<V> selectBySqlEntity(ISqlEntity<T> params, P page);
+    List<V> selectBySqlEntity(ISqlEntity<T> params, P<?> page);
 }
