@@ -259,8 +259,8 @@ public interface BoostEngine<T, V> extends BoostCore<T, V> {
     default List<V> voList(ISqlEntity<T> sqlEntity) {
         voPreProcess(sqlEntity);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
-        ISqlHelper<T> sqlHelper = SqlHelper.of(this)
-                .merge(sqlEntity)
+        ISqlHelper<T> sqlHelper = SqlHelper.of(sqlEntity)
+                .entity(this)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, null);
         voPostProcess(vs, sqlEntity, null);

@@ -30,8 +30,8 @@ public interface IPageBooster<T, V> extends BoostEngine<T, V>{
         IPageAdapter<V> page = new IPageAdapter<>(pageNum, pageSize);
         voPreProcess(sqlEntity);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
-        ISqlHelper<T> sqlHelper = SqlHelper.of(this)
-                .merge(sqlEntity)
+        ISqlHelper<T> sqlHelper = SqlHelper.of(sqlEntity)
+                .entity(this)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, page);
         page.setRecords(vs);
