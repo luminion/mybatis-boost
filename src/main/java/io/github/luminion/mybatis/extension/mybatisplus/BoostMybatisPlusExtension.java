@@ -1,18 +1,15 @@
 package io.github.luminion.mybatis.extension.mybatisplus;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.luminion.mybatis.core.BoostEngine;
 import io.github.luminion.mybatis.query.core.ISqlEntity;
 import io.github.luminion.mybatis.query.helper.ISqlHelper;
 import io.github.luminion.mybatis.query.helper.SqlHelper;
 import io.github.luminion.mybatis.query.helper.processor.FieldSuffixProcessor;
-import io.github.luminion.mybatis.util.ReflectUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * 针对 Mybatis-Plus 的 IService 扩展接口.
+ * 针对 Mybatis-Plus 的 BoostEngine 扩展接口. 实现分页方法
  * <p>
  * 集成了 {@link BoostEngine} 的能力, 提供VO查询功能.
  *
@@ -21,7 +18,7 @@ import java.util.stream.Collectors;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostIService<T, V> extends BoostEngine<T, V>, IService<T> {
+public interface BoostMybatisPlusExtension<T, V> extends BoostEngine<T, V>{
 
     /**
      * {@inheritDoc}
@@ -29,15 +26,15 @@ public interface BoostIService<T, V> extends BoostEngine<T, V>, IService<T> {
      * @since 1.0.0
      */
     @Override
-    default PPage<V> voPage(ISqlEntity<T> params, long pageNum, long pageSize) {
-        PPage<V> page = new PPage<>(pageNum, pageSize);
-        voPreProcess(params);
+    default IPageAdapter<V> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize) {
+        IPageAdapter<V> page = new IPageAdapter<>(pageNum, pageSize);
+        voPreProcess(sqlEntity);
         FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
         ISqlHelper<T> sqlHelper = SqlHelper.of(this)
-                .with(params)
+                .with(sqlEntity)
                 .process(fieldSuffixProcessor::process);
         List<V> vs = selectBySqlEntity(sqlHelper, page);
-        voPostProcess(vs, params, page);
+        voPostProcess(vs, sqlEntity, page);
         return page;
     }
 
