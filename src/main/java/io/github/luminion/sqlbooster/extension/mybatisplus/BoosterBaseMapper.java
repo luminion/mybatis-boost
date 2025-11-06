@@ -1,7 +1,6 @@
 package io.github.luminion.sqlbooster.extension.mybatisplus;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.github.luminion.sqlbooster.extension.mybatis.BoosterMapper;
 
 /**
  * 针对 Mybatis-Plus 的 BaseMapper 扩展接口.
@@ -14,6 +13,6 @@ import io.github.luminion.sqlbooster.extension.mybatis.BoosterMapper;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoosterBaseMapper<T, V> extends MybatisPlusBooster<T, V>, BoosterMapper<T, V>, BaseMapper<T> {
-    
+public interface BoosterBaseMapper<T, V> extends BaseMapper<T>, MybatisPlusBooster<T, V> {
+
 }

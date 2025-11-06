@@ -337,5 +337,5 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @return 查询结果列表
      * @since 1.0.0
      */
-    List<V> selectByWrapper(Wrapper<T> wrapper, Page<V> page);
+    List<V> selectByWrapper(Wrapper<T> wrapper, Object page);
 }

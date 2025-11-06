@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.github.luminion.sqlbooster.extension.mybatis.BoosterMapper">
+<mapper namespace="io.github.luminion.sqlbooster.core.BoosterEngine">
 
     <sql id="queryFragment">
         <if test="param1 != null">
@@ -42,5 +42,8 @@
             </foreach>
         </if>
     </sql>
+    
+    <select id="selectByWrapper" resultType="java.lang.Object">
+    </select>
 
 </mapper>
