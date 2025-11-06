@@ -33,7 +33,7 @@ public abstract class ExcelUtils {
      * 切换底层实现为 FastExcel.
      * @since 1.0.0
      */
-    public static void userFastExcel() {
+    public static void switchFastExcel() {
         excelBasePackage = "cn.idev.excel";
         excelClassName = "FastExcel";
     }
@@ -42,7 +42,7 @@ public abstract class ExcelUtils {
      * 切换底层实现为 EasyExcel.
      * @since 1.0.0
      */
-    public static void userEasyExcel() {
+    public static void switchEasyExcel() {
         excelBasePackage = "com.alibaba.excel";
         excelClassName = "EasyExcel";
     }
