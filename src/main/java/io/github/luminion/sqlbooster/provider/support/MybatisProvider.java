@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * 基础的 BoostProvider 实现.
+ * 基础的 MybatisBoostProvider 实现
  * <p>
  * 提供了默认的表名、ID 属性名、getter 属性名和属性到列的映射逻辑.
  *
@@ -82,7 +82,7 @@ public class MybatisProvider implements BoostProvider {
      * @since 1.0.0
      */
     @Override
-    public <T> Map<String, String> getPropertyToColumnMap(Class<T> clazz) {
+    public <T> Map<String, String> getPropertyToColumnAliasMap(Class<T> clazz) {
         Set<String> strings = ReflectUtils.fieldMap(clazz).keySet();
         return strings.stream()
                 .collect(Collectors.toMap(e -> e, e -> 

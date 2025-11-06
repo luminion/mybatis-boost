@@ -11,15 +11,15 @@ import java.util.Map;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface PropertyToColumnMapProvider {
+public interface PropertyToColumnAliasMapProvider {
 
     /**
-     * 获取实体类的属性到列的映射.
+     * 获取实体类的属性到数据库列名(别名)的映射.
      *
      * @param clazz 实体类
      * @param <T>   实体类型
-     * @return 属性名到列名的映射 Map
+     * @return 属性名到列名(别名)的映射 Map
      * @since 1.0.0
      */
-    <T> Map<String, String> getPropertyToColumnMap(Class<T> clazz);
+    <T> Map<String, String> getPropertyToColumnAliasMap(Class<T> clazz);
 }

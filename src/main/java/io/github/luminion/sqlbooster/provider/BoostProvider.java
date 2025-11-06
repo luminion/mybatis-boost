@@ -11,7 +11,7 @@ import org.springframework.core.Ordered;
  * @since 1.0.0
  */
 public interface BoostProvider extends Comparable<BoostProvider>, Ordered,
-        TableNameProvider, IdPropertyProvider, GetterPropertyProvider, PropertyToColumnMapProvider {
+        TableNameProvider, IdPropertyProvider, GetterPropertyProvider, PropertyToColumnAliasMapProvider {
 
     /**
      * 比较两个 {@link BoostProvider} 的顺序.

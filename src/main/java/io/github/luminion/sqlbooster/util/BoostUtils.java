@@ -60,6 +60,26 @@ public abstract class BoostUtils {
         return PROVIDERS.remove(provider);
     }
 
+    /**
+     * 移除指定类型的Provider.
+     *
+     * @param providerType 要移除的 Provider 的类型
+     * @return 移除的 Provider 的数量
+     * @since 1.0.0
+     */
+    public static int removeProvider(Class<? extends BoostProvider> providerType) {
+        int count = 0;
+        for (BoostProvider provider : PROVIDERS) {
+            if (provider.getClass().equals(providerType)) {
+                boolean remove = PROVIDERS.remove(provider);
+                if (remove) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    
 
     /**
      * 将下划线命名的字符串转换为驼峰命名.
@@ -204,7 +224,7 @@ public abstract class BoostUtils {
         }
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
         for (BoostProvider provider : PROVIDERS) {
-            Map<String, String> contributedMap = provider.getPropertyToColumnMap(entityClass);
+            Map<String, String> contributedMap = provider.getPropertyToColumnAliasMap(entityClass);
             if (contributedMap != null) {
                 contributedMap.forEach(result::putIfAbsent);
             }
