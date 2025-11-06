@@ -6,7 +6,7 @@ import io.github.luminion.sqlbooster.model.sql.SqlCondition;
 import io.github.luminion.sqlbooster.model.sql.helper.SqlHelperBooster;
 import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
 import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
-import io.github.luminion.sqlbooster.model.sql.helper.processor.FieldSuffixProcessor;
+import io.github.luminion.sqlbooster.model.sql.helper.processor.SuffixProcessor;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.ReflectUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -259,7 +259,7 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
     default List<V> voList(Wrapper<T> wrapper) {
         voPreProcess(wrapper);
 
-        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
+        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(SuffixProcessor.of()::process);
         List<V> vs = selectByBooster(sqlHelper, null);
 
         voPostProcess(vs, sqlHelper, null);

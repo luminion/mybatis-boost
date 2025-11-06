@@ -7,7 +7,7 @@ import io.github.luminion.sqlbooster.core.Page;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
 import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
 import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
-import io.github.luminion.sqlbooster.model.sql.helper.processor.FieldSuffixProcessor;
+import io.github.luminion.sqlbooster.model.sql.helper.processor.SuffixProcessor;
 
 /**
  * 针对 PageHelper 的 BoosterEngine 扩展接口.
@@ -28,7 +28,7 @@ public interface PageHelperBooster<T, V> extends BoosterEngine<T, V> {
     default Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
         voPreProcess(wrapper);
         
-        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
+        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(SuffixProcessor.of()::process);
         PageInfo<V> pageInfo = PageHelper.startPage((int) pageNum, (int) pageSize)
                 .doSelectPageInfo(() -> selectByBooster(sqlHelper, null));
         PageHelperPage<V> page = new PageHelperPage<>(pageInfo);

@@ -6,7 +6,7 @@ import io.github.luminion.sqlbooster.core.Page;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
 import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
 import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
-import io.github.luminion.sqlbooster.model.sql.helper.processor.FieldSuffixProcessor;
+import io.github.luminion.sqlbooster.model.sql.helper.processor.SuffixProcessor;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public interface MybatisPlusBooster<T, V> extends BoosterEngine<T, V> {
     default Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
         voPreProcess(wrapper);
 
-        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
+        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(SuffixProcessor.of()::process);
         PageDTO<V> pageInfo = new PageDTO<>(pageNum, pageSize);
         List<V> vs = selectByBooster(sqlHelper, pageInfo);
         pageInfo.setRecords(vs);

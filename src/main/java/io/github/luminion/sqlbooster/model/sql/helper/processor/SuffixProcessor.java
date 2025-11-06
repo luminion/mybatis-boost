@@ -20,7 +20,7 @@ import java.util.*;
  * @since 1.0.0
  */
 @Slf4j
-public class FieldSuffixProcessor {
+public class SuffixProcessor {
     /**
      * 默认的后缀到操作符的映射表.
      */
@@ -80,7 +80,7 @@ public class FieldSuffixProcessor {
     /**
      * 私有构造函数, 使用默认的后缀映射.
      */
-    private FieldSuffixProcessor() {
+    private SuffixProcessor() {
         this.suffixToOperatorMap = SUFFIX_TO_OPERATOR_MAP;
     }
 
@@ -89,7 +89,7 @@ public class FieldSuffixProcessor {
      *
      * @param suffixToOperatorMap 自定义的后缀到操作符的映射
      */
-    private FieldSuffixProcessor(Map<String, String> suffixToOperatorMap) {
+    private SuffixProcessor(Map<String, String> suffixToOperatorMap) {
         if (suffixToOperatorMap == null) {
             throw new IllegalArgumentException("suffix2OperatorMap can't be null");
         }
@@ -99,27 +99,27 @@ public class FieldSuffixProcessor {
     /**
      * 默认的单例实例.
      */
-    private static final FieldSuffixProcessor instance = new FieldSuffixProcessor();
+    private static final SuffixProcessor instance = new SuffixProcessor();
 
     /**
-     * 获取默认的 {@link FieldSuffixProcessor} 单例实例.
+     * 获取默认的 {@link SuffixProcessor} 单例实例.
      *
      * @return 单例实例
      * @since 1.0.0
      */
-    public static FieldSuffixProcessor of() {
+    public static SuffixProcessor of() {
         return instance;
     }
 
     /**
-     * 创建一个新的 {@link FieldSuffixProcessor} 实例, 使用自定义的后缀映射.
+     * 创建一个新的 {@link SuffixProcessor} 实例, 使用自定义的后缀映射.
      *
      * @param suffix2OperatorMap 自定义的后缀到操作符的映射
-     * @return 新的 {@link FieldSuffixProcessor} 实例
+     * @return 新的 {@link SuffixProcessor} 实例
      * @since 1.0.0
      */
-    public static FieldSuffixProcessor of(Map<String, String> suffix2OperatorMap) {
-        return new FieldSuffixProcessor(suffix2OperatorMap);
+    public static SuffixProcessor of(Map<String, String> suffix2OperatorMap) {
+        return new SuffixProcessor(suffix2OperatorMap);
     }
 
     /**
