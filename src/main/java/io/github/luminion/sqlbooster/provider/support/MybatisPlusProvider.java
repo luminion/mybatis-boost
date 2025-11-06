@@ -1,20 +1,21 @@
 package io.github.luminion.sqlbooster.provider.support;
 
+import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import io.github.luminion.sqlbooster.core.MethodReference;
 import io.github.luminion.sqlbooster.provider.BoostProvider;
 import io.github.luminion.sqlbooster.util.ReflectUtils;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author luminion
  */
 public class MybatisPlusProvider implements BoostProvider {
 
-
     /**
      * {@inheritDoc}
-     * 
      *
      * @since 1.0.0
      */
@@ -30,7 +31,7 @@ public class MybatisPlusProvider implements BoostProvider {
      */
     @Override
     public <T> String getIdPropertyName(Class<T> clazz) {
-        return "";
+        return TableInfoHelper.getTableInfo(clazz).getKeyProperty();
     }
 
     /**
@@ -40,7 +41,9 @@ public class MybatisPlusProvider implements BoostProvider {
      */
     @Override
     public <T> Map<String, String> getPropertyToColumnMap(Class<T> clazz) {
-        return null;
+        return TableInfoHelper.getTableInfo(clazz).getFieldList().stream()
+                .collect(Collectors.toMap(TableFieldInfo::getProperty,
+                        e -> String.format("a.%s", e.getColumn())));
     }
 
     /**
@@ -50,7 +53,7 @@ public class MybatisPlusProvider implements BoostProvider {
      */
     @Override
     public <T> String getTableName(Class<T> clazz) {
-        return "";
+        return TableInfoHelper.getTableInfo(clazz).getTableName();
     }
 
     /**
@@ -60,6 +63,6 @@ public class MybatisPlusProvider implements BoostProvider {
      */
     @Override
     public int getOrder() {
-        return 0;
+        return 100;
     }
 }
