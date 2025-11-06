@@ -1,17 +1,18 @@
 package io.github.luminion.sqlbooster.util;
 
 import io.github.luminion.sqlbooster.core.MethodReference;
+import io.github.luminion.sqlbooster.extension.mybatisplus.MybatisPlusPage;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.util.ReflectionUtils;
 
-import java.beans.PropertyDescriptor;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -76,7 +77,7 @@ public abstract class ReflectUtils {
         }
         return FIELD_MAP_CACHE.computeIfAbsent(clazz, c -> {
             Map<String, Field> map = new HashMap<>();
-            ReflectionUtils.doWithFields(c, 
+            ReflectionUtils.doWithFields(c,
                     field -> map.putIfAbsent(field.getName(), field),
                     ReflectionUtils.COPYABLE_FIELDS);
             return map;
@@ -204,26 +205,27 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 从 getter 方法引用中获取其对应的属性 {@link Field} 对象.
+     * 从 getter 方法引用中获取其对应的属性名
      *
      * @param getter 方法引用
      * @return {@link Field} 对象
      * @since 1.0.0
      */
     @SneakyThrows
-    public static <T, R> Field getGetterField(MethodReference<T, R> getter) {
-        Class<T> getterClass = getGetterClass(getter);
-        Method getterMethod = getGetterMethod(getter);
-        PropertyDescriptor propertyDescriptor = BeanUtils.findPropertyForMethod(getterMethod, getterClass);
-        if (propertyDescriptor == null) {
-            throw new IllegalStateException("Could not find property for method " + getterMethod.getName());
+    public static <T, R> String getGetterPropertyName(MethodReference<T, R> getter) {
+        String name = getSerializedLambda(getter).getImplMethodName();
+        if (name.startsWith("is")) {
+            name = name.substring(2);
+        } else if (name.startsWith("get") || name.startsWith("set")) {
+            name = name.substring(3);
+        } else {
+            throw new IllegalArgumentException("Error parsing property name '" + name +
+                    "'.  Didn't start with 'is', 'get' or 'set'.");
         }
-        String propertyName = propertyDescriptor.getName();
-        Field field = ReflectionUtils.findField(getterClass, propertyName);
-        if (field == null) {
-            throw new IllegalStateException("Could not find field " + propertyName);
+        if (name.length() == 1 || name.length() > 1 && !Character.isUpperCase(name.charAt(1))) {
+            name = name.substring(0, 1).toLowerCase(Locale.ENGLISH) + name.substring(1);
         }
-        return field;
+        return name;
     }
 
 

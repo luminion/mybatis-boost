@@ -61,14 +61,14 @@ public class MybatisProvider implements BoostProvider {
     /**
      * {@inheritDoc}
      * <p>
-     * 默认实现是通过 {@link ReflectUtils#getGetterField(MethodReference)} 获取属性名.
+     * 默认实现是通过 {@link ReflectUtils#getGetterPropertyName(MethodReference)} 获取属性名.
      *
      * @since 1.0.0
      */
     @Override
     public <T, R> String getGetterPropertyName(MethodReference<T, R> getter) {
         try {
-            return ReflectUtils.getGetterField(getter).getName();
+            return ReflectUtils.getGetterPropertyName(getter);
         } catch (Exception e) {
             return null;
         }
