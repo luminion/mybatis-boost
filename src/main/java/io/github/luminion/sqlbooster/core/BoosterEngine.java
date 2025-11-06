@@ -258,9 +258,11 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
     @Override
     default List<V> voList(Wrapper<T> wrapper) {
         voPreProcess(wrapper);
+        
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
         List<V> vs = selectByWrapper(sqlHelper, null);
-        voPostProcess(vs, wrapper, null);
+        
+        voPostProcess(vs, sqlHelper, null);
         return vs;
     }
 

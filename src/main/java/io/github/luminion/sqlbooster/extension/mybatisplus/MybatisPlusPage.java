@@ -1,5 +1,7 @@
 package io.github.luminion.sqlbooster.extension.mybatisplus;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageInfo;
 import io.github.luminion.sqlbooster.core.Page;
 import io.github.luminion.sqlbooster.util.ReflectUtils;
 
@@ -64,11 +66,7 @@ public class MybatisPlusPage<T> extends com.baomidou.mybatisplus.extension.plugi
     @Override
     @SuppressWarnings("unchecked")
     public <R> Page<R> convertRecords(Class<R> targetType) {
-        List<R> collect = this.getRecords().stream()
-                .map(e -> ReflectUtils.toTarget(e, targetType))
-                .collect(Collectors.toList());
-        MybatisPlusPage<R> rp = (MybatisPlusPage<R>) this;
-        rp.setRecords(collect);
-        return rp;
+        IPage<R> convert = this.convert(e -> ReflectUtils.toTarget(e, targetType));
+        return (Page<R>) convert;
     }
 }

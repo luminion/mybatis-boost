@@ -1,9 +1,15 @@
 package io.github.luminion.sqlbooster.extension.pagehelper;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.github.luminion.sqlbooster.core.BoosterEngine;
 import io.github.luminion.sqlbooster.core.Page;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
+import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.processor.FieldSuffixProcessor;
+
+import java.util.List;
 
 /**
  * @author luminion
@@ -11,8 +17,14 @@ import io.github.luminion.sqlbooster.model.api.Wrapper;
 public interface PageHelperBooster<T, V> extends BoosterEngine<T, V> {
     @Override
     default Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
+        voPreProcess(wrapper);
+        
+        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
         PageHelper.startPage((int) pageNum, (int) pageSize);
-        // todo pageHelper
-        return BoosterEngine.super.voPage(wrapper, pageNum, pageSize);
+        List<V> vs = selectByWrapper(sqlHelper, null);
+        PageHelperPage<V> page = new PageHelperPage<>(new PageInfo<>(vs));
+        
+        voPostProcess(vs, sqlHelper, page);
+        return page;
     }
 }
