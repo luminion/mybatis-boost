@@ -65,7 +65,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * 合并一个排序规则
      *
      * @param sort 排序规则
-     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @return 当前实例
      * @since 1.0.0
      */
     public S merge(Sort sort) {
@@ -81,7 +81,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * 会将Map中的所有键值对映射为等值查询条件.
      *
      * @param map 包含查询条件的Map对象
-     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @return 当前实例
      * @since 1.0.0
      */
     public <K, V> S merge(Map<K, V> map) {
@@ -100,7 +100,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * 会通过反射将对象的非空字段映射为等值查询条件.
      *
      * @param dto 包含查询条件的对象
-     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @return 当前实例
      * @since 1.0.0
      */
     public S merge(Object dto) {
