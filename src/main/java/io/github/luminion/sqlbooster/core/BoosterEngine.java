@@ -258,10 +258,10 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
     @Override
     default List<V> voList(Wrapper<T> wrapper) {
         voPreProcess(wrapper);
-        
+
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
         List<V> vs = selectByWrapper(sqlHelper, null);
-        
+
         voPostProcess(vs, sqlHelper, null);
         return vs;
     }
@@ -333,7 +333,7 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * 最终执行查询的方法.
      *
      * @param wrapper 查询条件
-     * @param page      分页对象
+     * @param page    分页对象
      * @return 查询结果列表
      * @since 1.0.0
      */
