@@ -4,18 +4,15 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.github.luminion.sqlbooster.provider.BoostProvider;
 import io.github.luminion.sqlbooster.provider.support.BasicProvider;
 import io.github.luminion.sqlbooster.provider.support.MybatisPlusProvider;
-import io.github.luminion.sqlbooster.provider.support.MybatisProvider;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.MapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,6 +63,7 @@ public class BoosterAutoConfiguration implements InitializingBean {
         @Bean
 //        @ConditionalOnMissingBean
         public BoostProvider mybatisPlusProvider() {
+            log.debug("MybatisPlusProvider configured");
             return new MybatisPlusProvider();
         }
     }
@@ -76,13 +74,11 @@ public class BoosterAutoConfiguration implements InitializingBean {
 
         @Bean
 //        @ConditionalOnMissingBean
-        public BoostProvider mybatisProvider(ObjectProvider<SqlSessionFactory> sqlSessionFactoryProvider) {
-            SqlSessionFactory sqlSessionFactory = sqlSessionFactoryProvider.getIfAvailable();
-            if (sqlSessionFactory != null) {
-                boolean mapUnderscoreToCamelCase = sqlSessionFactory.getConfiguration().isMapUnderscoreToCamelCase();
-                return new BasicProvider(mapUnderscoreToCamelCase);
-            }
-            return new BasicProvider(true);
+        @ConditionalOnBean(SqlSessionFactory.class)
+        public BoostProvider mybatisProvider(SqlSessionFactory sqlSessionFactory) {
+            boolean mapUnderscoreToCamelCase = sqlSessionFactory.getConfiguration().isMapUnderscoreToCamelCase();
+            log.debug("BasicProvider for mybatis configured");
+            return new BasicProvider(mapUnderscoreToCamelCase);
         }
     }
 }

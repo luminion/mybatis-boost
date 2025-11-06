@@ -24,6 +24,6 @@ public interface BoostProvider extends Comparable<BoostProvider>, Ordered,
      */
     @Override
     default int compareTo(BoostProvider o) {
-        return o.getOrder() - this.getOrder();
+        return this.getOrder() - o.getOrder();
     }
 }

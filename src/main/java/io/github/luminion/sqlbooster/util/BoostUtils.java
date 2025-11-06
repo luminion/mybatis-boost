@@ -222,15 +222,16 @@ public abstract class BoostUtils {
         if (map != null) {
             return map;
         }
-        LinkedHashMap<String, String> result = new LinkedHashMap<>();
         for (BoostProvider provider : PROVIDERS) {
             Map<String, String> contributedMap = provider.getPropertyToColumnAliasMap(entityClass);
-            if (contributedMap != null) {
-                contributedMap.forEach(result::putIfAbsent);
+            if (contributedMap != null && !contributedMap.isEmpty()) {
+                log.debug("found alias map for class: {}, provider: {}", entityClass.getName(), provider.getClass().getName());
+                ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, contributedMap);
+                return contributedMap;
             }
         }
         log.warn("No property to column alias map found in {} providers, class: {}", PROVIDERS.size(), entityClass.getName());
-        ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, result);
-        return result;
+        ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, new HashMap<>());
+        return ENTITY_PROPERTY_TO_COLUMN_MAP.get(entityClass);
     }
 }
