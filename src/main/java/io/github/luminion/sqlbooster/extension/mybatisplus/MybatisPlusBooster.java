@@ -26,8 +26,8 @@ public interface MybatisPlusBooster<T, V> extends BoosterEngine<T, V> {
      * @since 1.0.0
      */
     @Override
-    default MybatisplusPage<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
-        MybatisplusPage<V> page = new MybatisplusPage<>(pageNum, pageSize);
+    default MybatisPlusPage<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
+        MybatisPlusPage<V> page = new MybatisPlusPage<>(pageNum, pageSize);
         voPreProcess(wrapper);
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
         List<V> vs = selectByWrapper(sqlHelper, page);

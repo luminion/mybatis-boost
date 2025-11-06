@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
  * @author luminion
  * @since 1.0.0
  */
-public class MybatisplusPage<T> extends com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> implements Page<T> {
+public class MybatisPlusPage<T> extends com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> implements Page<T> {
     /**
      * {@inheritDoc}
      * @since 1.0.0
      */
-    public MybatisplusPage() {
+    public MybatisPlusPage() {
         super();
     }
 
@@ -29,7 +29,7 @@ public class MybatisplusPage<T> extends com.baomidou.mybatisplus.extension.plugi
      * {@inheritDoc}
      * @since 1.0.0
      */
-    public MybatisplusPage(long current, long size) {
+    public MybatisPlusPage(long current, long size) {
         super(current, size);
     }
 
@@ -37,7 +37,7 @@ public class MybatisplusPage<T> extends com.baomidou.mybatisplus.extension.plugi
      * {@inheritDoc}
      * @since 1.0.0
      */
-    public MybatisplusPage(long current, long size, long total) {
+    public MybatisPlusPage(long current, long size, long total) {
         super(current, size, total);
     }
 
@@ -45,7 +45,7 @@ public class MybatisplusPage<T> extends com.baomidou.mybatisplus.extension.plugi
      * {@inheritDoc}
      * @since 1.0.0
      */
-    public MybatisplusPage(long current, long size, boolean searchCount) {
+    public MybatisPlusPage(long current, long size, boolean searchCount) {
         super(current, size, searchCount);
     }
 
@@ -53,7 +53,7 @@ public class MybatisplusPage<T> extends com.baomidou.mybatisplus.extension.plugi
      * {@inheritDoc}
      * @since 1.0.0
      */
-    public MybatisplusPage(long current, long size, long total, boolean searchCount) {
+    public MybatisPlusPage(long current, long size, long total, boolean searchCount) {
         super(current, size, total, searchCount);
     }
 
@@ -67,7 +67,7 @@ public class MybatisplusPage<T> extends com.baomidou.mybatisplus.extension.plugi
         List<R> collect = this.getRecords().stream()
                 .map(e -> ReflectUtils.toTarget(e, targetType))
                 .collect(Collectors.toList());
-        MybatisplusPage<R> rp = (MybatisplusPage<R>) this;
+        MybatisPlusPage<R> rp = (MybatisPlusPage<R>) this;
         rp.setRecords(collect);
         return rp;
     }
