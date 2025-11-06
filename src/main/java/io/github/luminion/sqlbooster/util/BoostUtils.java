@@ -8,6 +8,7 @@ import org.springframework.core.GenericTypeResolver;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * MyBatis Boost 反射工具类.
@@ -22,7 +23,7 @@ public abstract class BoostUtils {
     /**
      * 已注册的 BoostProvider 实例.
      */
-    private static final TreeSet<BoostProvider> PROVIDERS = new TreeSet<>();
+    private static final ConcurrentSkipListSet<BoostProvider> PROVIDERS = new ConcurrentSkipListSet<>();
 
     /**
      * 获取所有已注册的 Provider.
