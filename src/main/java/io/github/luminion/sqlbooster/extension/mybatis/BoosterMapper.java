@@ -23,6 +23,6 @@
 //     * @since 1.0.0
 //     */
 //    @Override
-//    List<V> selectByWrapper(@Param("wrapper") Wrapper<T> wrapper, @Param("page") Page<V> page);
+//    List<V> selectByBooster(@Param("wrapper") Wrapper<T> wrapper, @Param("page") Object page);
 //
 //}

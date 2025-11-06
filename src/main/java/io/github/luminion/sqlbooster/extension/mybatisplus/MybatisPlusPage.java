@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 /**
- * Mybatis-Plus 分页对象适配器.
- * <p>
- * 实现了 {@link Page} 接口, 用于将 Mybatis-Plus 的 {@link com.baomidou.mybatisplus.extension.plugins.pagination.Page} 对象适配为 Booster 的分页模型.
+ * Mybatis-Plus 分页适配对象
  *
  * @param <T> 记录的类型
  * @author luminion

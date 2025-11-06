@@ -25,8 +25,8 @@ public abstract class BoosterServiceImpl<M extends BoosterBaseMapper<T, V>, T, V
      * @since 1.0.0
      */
     @Override
-    public List<V> selectByWrapper(Wrapper<T> wrapper, Object page) {
-        return getBaseMapper().selectByWrapper(wrapper, page);
+    public List<V> selectByBooster(Wrapper<T> wrapper, Object page) {
+        return getBaseMapper().selectByBooster(wrapper, page);
     }
 
 }

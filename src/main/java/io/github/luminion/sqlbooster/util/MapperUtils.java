@@ -55,8 +55,7 @@ public abstract class MapperUtils {
      */
     public static <T, V> String getMapperContent(Class<? extends Booster<T, V>> boostClass) {
         Class<?>[] classes = ReflectUtils.resolveTypeArguments(boostClass, Booster.class);
-        @SuppressWarnings("unchecked")
-        Class<T> entityClass = (Class<T>) classes[0];
+        Class<?> entityClass = classes[0];
         Class<?> voClass = classes[1];
         return getMapperContent(entityClass, voClass);
     }
@@ -71,7 +70,7 @@ public abstract class MapperUtils {
      * @since 1.0.0
      */
     public static <T> String getMapperContent(Class<T> entityClass, Class<?> voClass) {
-        return "    <select id=\"selectByWrapper\" resultType=\"" + voClass.getName() + "\">\n" +
+        return "    <select id=\"selectByBooster\" resultType=\"" + voClass.getName() + "\">\n" +
                 getSqlContent(entityClass) +
                 "    </select>";
     }
@@ -85,13 +84,21 @@ public abstract class MapperUtils {
      * @since 1.0.0
      */
     public static <T> String getSqlContent(Class<T> entityClass) {
-        return getSqlContent(BoostUtils.getTableName(entityClass));
+        String tableName;
+        try {
+            tableName = BoostUtils.getTableName(entityClass);
+        } catch (IllegalStateException e) {
+            tableName = BoostUtils.camelCaseToUnderscore(entityClass.getName());
+            if (tableName.startsWith("_")) {
+                return tableName.substring(1);
+            }
+        }
+        return getSqlContent(tableName);
     }
 
     /**
      * 根据表名生成 SQL 查询语句的核心内容.
      * <p>
-     * SQL 语句包含了对 'queryFragment' 和 'sortFragment' 的引用.
      *
      * @param tableName 数据库表名
      * @return 生成的 SQL 语句字符串
@@ -103,10 +110,10 @@ public abstract class MapperUtils {
                 "        FROM\n" +
                 "        " + tableName + " a\n" +
                 "        <where>\n" +
-                "            <include refid=\"io.github.luminion.mybatis.core.BoosterMapper.queryFragment\"/>\n" +
+                "            <include refid=\"sqlbooster.conditions\"/>\n" +
                 "        </where>\n" +
                 "        <trim prefix=\"ORDER BY\" prefixOverrides=\",\">\n" +
-                "            <include refid=\"io.github.luminion.mybatis.core.BoosterMapper.sortFragment\"/>\n" +
+                "            <include refid=\"sqlbooster.sorts\"/>\n" +
                 "        </trim>";
     }
 

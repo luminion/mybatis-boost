@@ -8,7 +8,11 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 /**
+ * PageHelper 分页适配对象
+ *
+ * @param <T> 记录的类型
  * @author luminion
+ * @since 1.0.0
  */
 @RequiredArgsConstructor
 public class PageHelperPage<T> implements Page<T> {

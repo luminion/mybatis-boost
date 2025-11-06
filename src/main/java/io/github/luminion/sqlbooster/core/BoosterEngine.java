@@ -260,7 +260,7 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
         voPreProcess(wrapper);
 
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
-        List<V> vs = selectByWrapper(sqlHelper, null);
+        List<V> vs = selectByBooster(sqlHelper, null);
 
         voPostProcess(vs, sqlHelper, null);
         return vs;
@@ -337,5 +337,5 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @return 查询结果列表
      * @since 1.0.0
      */
-    List<V> selectByWrapper(Wrapper<T> wrapper, Object page);
+    List<V> selectByBooster(Wrapper<T> wrapper, Object page);
 }

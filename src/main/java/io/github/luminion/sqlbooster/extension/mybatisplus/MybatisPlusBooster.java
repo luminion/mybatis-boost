@@ -34,7 +34,7 @@ public interface MybatisPlusBooster<T, V> extends BoosterEngine<T, V> {
 
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
         PageDTO<V> pageInfo = new PageDTO<>(pageNum, pageSize);
-        List<V> vs = selectByWrapper(sqlHelper, pageInfo);
+        List<V> vs = selectByBooster(sqlHelper, pageInfo);
         pageInfo.setRecords(vs);
         MybatisPlusPage<V> page = new MybatisPlusPage<>(pageInfo);
         
