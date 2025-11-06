@@ -7,7 +7,7 @@ import io.github.luminion.sqlbooster.model.api.Tree;
 import io.github.luminion.sqlbooster.model.sql.SqlCondition;
 import io.github.luminion.sqlbooster.model.sql.SqlSort;
 import io.github.luminion.sqlbooster.model.sql.SqlTree;
-import io.github.luminion.sqlbooster.model.sql.helper.AbstractSqlHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.AbstractHelper;
 import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
 import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
 import io.github.luminion.sqlbooster.util.BoostUtils;
@@ -117,14 +117,14 @@ public abstract class BasicProcessor {
     }
 
     /**
-     * 将一组 SQL 条件包装到 {@link AbstractSqlHelper} 中.
+     * 将一组 SQL 条件包装到 {@link AbstractHelper} 中.
      *
      * @param sqlHelper     目标 SQL 助手
      * @param conditions 待包装的 SQL 条件集合
      * @param symbol        连接这些条件的逻辑符号 (AND/OR)
      * @since 1.0.0
      */
-    public static void warpConditions(AbstractSqlHelper<?, ?> sqlHelper, Collection<Condition> conditions, String symbol) {
+    public static void warpConditions(AbstractHelper<?, ?> sqlHelper, Collection<Condition> conditions, String symbol) {
         if (sqlHelper == null || conditions == null || conditions.isEmpty()) {
             return;
         }
@@ -138,14 +138,14 @@ public abstract class BasicProcessor {
     }
 
     /**
-     * 将一组 SQL 排序规则包装到 {@link AbstractSqlHelper} 中.
+     * 将一组 SQL 排序规则包装到 {@link AbstractHelper} 中.
      *
      * @param sqlHelper           目标 SQL 助手
      * @param sorts            待包装的 SQL 排序规则集合
      * @param field2JdbcColumnMap 属性名到数据库列名的映射
      * @since 1.0.0
      */
-    public static void wrapSorts(AbstractSqlHelper<?, ?> sqlHelper, Collection<Sort> sorts, Map<String, String> field2JdbcColumnMap) {
+    public static void wrapSorts(AbstractHelper<?, ?> sqlHelper, Collection<Sort> sorts, Map<String, String> field2JdbcColumnMap) {
         for (Sort sort : sorts) {
             Sort validateSort = validateSort(sort, field2JdbcColumnMap);
             if (validateSort != null) {

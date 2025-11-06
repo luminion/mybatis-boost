@@ -1,6 +1,5 @@
 package io.github.luminion.sqlbooster.model.sql.helper;
 
-import io.github.luminion.sqlbooster.core.BoosterCore;
 import io.github.luminion.sqlbooster.core.Booster;
 import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
+public class SqlHelper<T> extends AbstractHelper<T, SqlHelper<T>> {
 
     @Getter
     protected transient Class<T> entityClass;

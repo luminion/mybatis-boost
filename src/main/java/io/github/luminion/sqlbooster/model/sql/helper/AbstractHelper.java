@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Getter
 @SuppressWarnings({"unused", "unchecked"})
-public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlWrapper<T>
+public abstract class AbstractHelper<T, S extends AbstractHelper<T, S>> extends SqlWrapper<T>
         implements LambdaHelper<T, S> {
 
     /**
