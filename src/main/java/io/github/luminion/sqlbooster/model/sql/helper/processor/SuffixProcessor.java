@@ -24,7 +24,7 @@ public class SuffixProcessor {
     /**
      * 默认的后缀到操作符的映射表.
      */
-    private static final Map<String, String> suffixMap = new HashMap<>();
+    private static final Map<String, String> suffixMap = new LinkedHashMap<>();
 
     static {
         add("Ne", SqlKeyword.NE.getKeyword());
@@ -60,7 +60,7 @@ public class SuffixProcessor {
      * 私有构造函数, 使用默认的后缀映射.
      */
     private SuffixProcessor() {
-        this.suffixToOperatorMap = SUFFIX_TO_OPERATOR_MAP;
+        this.suffixToOperatorMap = suffixMap;
     }
 
     /**
