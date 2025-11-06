@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Mybatis-Plus 分页对象适配器.
  * <p>
- * 实现了 {@link Page} 接口, 用于将 Mybatis-Plus 的 {@link com.baomidou.mybatisplus.extension.plugins.pagination.Page} 对象适配为 Boost 的分页模型.
+ * 实现了 {@link Page} 接口, 用于将 Mybatis-Plus 的 {@link com.baomidou.mybatisplus.extension.plugins.pagination.Page} 对象适配为 Booster 的分页模型.
  *
  * @param <T> 记录的类型
  * @author luminion

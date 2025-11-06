@@ -38,14 +38,14 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     /**
      * 创建一个与指定实体类绑定的 {@link SqlHelper} 实例.
      *
-     * @param clazz 实体类
+     * @param entityClass 实体类
      * @param <T>   实体类型
      * @return {@link SqlHelper} 实例
      * @since 1.0.0
      */
-    public static <T> SqlHelper<T> of(Class<T> clazz) {
+    public static <T> SqlHelper<T> of(Class<T> entityClass) {
         SqlHelper<T> sqlHelper = new SqlHelper<>();
-        sqlHelper.entityClass = clazz;
+        sqlHelper.entityClass = entityClass;
         return sqlHelper;
     }
 
@@ -98,43 +98,18 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     }
 
     /**
-     * 设置实体类
+     * 转化为指定实体类对应的 {@link SqlHelper} 实例.
      *
      * @param entityClass 实体类
      * @return 当前 {@link SqlHelper} 实例
      * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
-    public <R> SqlHelper<R> entity(Class<R> entityClass) {
+    public <R> SqlHelper<R> convert(Class<R> entityClass) {
         SqlHelper<R> sqlHelper = (SqlHelper<R>) this;
         sqlHelper.entityClass = entityClass;
         return sqlHelper;
     }
 
-    /**
-     * 设置实体类
-     *
-     * @param booster Booster 实例
-     * @return 当前 {@link SqlHelper} 实例
-     * @since 1.0.0
-     */
-    public <V> SqlHelper<T> entity(Booster<T, V> booster) {
-        this.entityClass = BoostUtils.getEntityClass(booster);
-        return this;
-    }
-
-    /**
-     * 将当前 {@link SqlHelper} 转换为 {@link SqlHelperBooster}.
-     *
-     * @param boosterCore {@link BoosterCore} 实例
-     * @param <V>       VO 类型
-     * @param <P>       分页对象类型
-     * @return {@link SqlHelperBooster} 实例
-     * @since 1.0.0
-     */
-    public <V, P> SqlHelperBooster<T, V> boost(BoosterCore<T, V> boosterCore) {
-        this.entityClass = BoostUtils.getEntityClass(boosterCore);
-        return new SqlHelperBooster<>(boosterCore);
-    }
 
 }

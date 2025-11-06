@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * SQL 实体接口.
+ * 查询包装器接口.
  * <p>
  * 扩展自 {@link Tree} 接口, 增加了排序和额外查询条件的功能.
  *

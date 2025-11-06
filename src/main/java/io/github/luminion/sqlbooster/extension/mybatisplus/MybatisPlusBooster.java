@@ -11,7 +11,8 @@ import java.util.List;
 /**
  * 针对 Mybatis-Plus 的 BoosterEngine 扩展接口. 实现分页方法
  * <p>
- * 集成了 {@link BoosterEngine} 的能力, 提供VO查询功能.
+ * 集成了 {@link BoosterEngine} 的能力,
+ * 提供增强的数据库操作能力, 包括链式查询构建、Lambda 表达式支持等.
  *
  * @param <T> 实体类型
  * @param <V> VO 类型

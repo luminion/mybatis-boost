@@ -1,9 +1,9 @@
 package io.github.luminion.sqlbooster.model.api;
 
 /**
- * SQL 排序接口.
+ * 排序接口.
  * <p>
- * 定义 SQL 查询中的排序规则, 包括排序字段和排序方向.
+ * 定义查询中的排序规则, 包括排序字段和排序方向.
  *
  * @author luminion
  * @since 1.0.0

@@ -12,7 +12,8 @@ import java.util.List;
 /**
  * 针对 Mybatis-Plus 的 ServiceImpl的扩展.
  * <p>
- * 集成了 {@link BoosterEngine} 的能力, 为 Mybatis-Plus 的 Service 实现层提供 VO 查询功能.
+ * 集成了 {@link MybatisPlusBooster} 的能力,
+ * 提供增强的数据库操作能力, 包括链式查询构建、Lambda 表达式支持等.
  *
  * @param <M> Mapper 类型
  * @param <T> 实体类型
@@ -22,6 +23,11 @@ import java.util.List;
  */
 public abstract class BoosterServiceImpl<M extends BaseMapper<T> & BoosterMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoosterService<T, V> {
 
+    /**
+     * {@inheritDoc}
+     *
+     * @since 1.0.0
+     */
     @Override
     public List<V> selectByWrapper(Wrapper<T> wrapper, Page<V> page) {
         return getBaseMapper().selectByWrapper(wrapper, page);

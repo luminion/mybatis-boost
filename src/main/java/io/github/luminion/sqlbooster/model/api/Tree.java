@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * SQL 条件树接口.
+ * 条件树接口.
  * <p>
- * 定义了用于构建复杂 SQL 查询的树形结构. 每个节点可以包含一组条件和逻辑连接符, 并可以拥有一个子树.
+ * 定义了用于构建复杂查询的树形结构. 每个节点可以包含一组条件和逻辑连接符, 并可以拥有一个子树.
  *
  * @author luminion
  * @since 1.0.0

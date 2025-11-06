@@ -1,10 +1,13 @@
 package io.github.luminion.sqlbooster.model.sql.helper;
 
+import io.github.luminion.sqlbooster.core.Booster;
+import io.github.luminion.sqlbooster.core.BoosterCore;
 import io.github.luminion.sqlbooster.model.api.Condition;
 import io.github.luminion.sqlbooster.model.api.Sort;
 import io.github.luminion.sqlbooster.model.api.Tree;
 import io.github.luminion.sqlbooster.model.sql.SqlCondition;
 import io.github.luminion.sqlbooster.model.sql.SqlWrapper;
+import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.ReflectUtils;
 import lombok.Getter;
 
@@ -34,7 +37,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * 合并指定条件树的条件
      *
      * @param tree 条件树
-     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @return 当前实例
      * @since 1.0.0
      */
     public S merge(Tree tree) {
@@ -48,7 +51,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * 合并一个查询条件
      *
      * @param condition 查询条件
-     * @return 当前 {@link AbstractSqlHelper} 实例
+     * @return 当前实例
      * @since 1.0.0
      */
     public S merge(Condition condition) {
@@ -100,12 +103,38 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * @return 当前 {@link AbstractSqlHelper} 实例
      * @since 1.0.0
      */
-    public S mergeObject(Object dto) {
+    public S merge(Object dto) {
         if (dto == null) {
             return (S) this;
         }
         Map<?, ?> map = ReflectUtils.objectToMap(dto);
         return merge(map);
+    }
+
+    /**
+     * 设置实体类
+     *
+     * @param booster Booster 实例
+     * @return 当前实例
+     * @since 1.0.0
+     */
+    public <V> S entity(Booster<T, V> booster) {
+        this.entityClass = BoostUtils.getEntityClass(booster);
+        return (S) this;
+    }
+
+    /**
+     * 转换为 {@link SqlHelperBooster}.
+     *
+     * @param boosterCore {@link BoosterCore} 实例
+     * @param <V>       VO 类型
+     * @param <P>       分页对象类型
+     * @return {@link SqlHelperBooster} 实例
+     * @since 1.0.0
+     */
+    public <V, P> SqlHelperBooster<T, V> boost(BoosterCore<T, V> boosterCore) {
+        this.entityClass = BoostUtils.getEntityClass(boosterCore);
+        return new SqlHelperBooster<>(boosterCore);
     }
 
 }

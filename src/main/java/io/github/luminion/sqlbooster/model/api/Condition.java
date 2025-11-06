@@ -1,9 +1,9 @@
 package io.github.luminion.sqlbooster.model.api;
 
 /**
- * SQL 条件接口.
+ * 条件接口.
  * <p>
- * 定义了 SQL 查询条件的基本结构, 包括字段名、操作符和值.
+ * 查询条件的基本结构, 包括字段名、操作符和值.
  *
  * @author luminion
  * @since 1.0.0
