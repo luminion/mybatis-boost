@@ -20,10 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public abstract class BoostUtils {
     /**
-     * 实体类字段到数据库列的映射缓存.
-     */
-    private static final Map<Class<?>, Map<String, String>> ENTITY_PROPERTY_TO_COLUMN_MAP = new ConcurrentHashMap<>();
-    /**
      * 已注册的 BoostProvider 实例.
      */
     private static final TreeSet<BoostProvider> PROVIDERS = new TreeSet<>();
@@ -218,20 +214,14 @@ public abstract class BoostUtils {
      * @since 1.0.0
      */
     public static Map<String, String> getPropertyToColumnAliasMap(Class<?> entityClass) {
-        Map<String, String> map = ENTITY_PROPERTY_TO_COLUMN_MAP.get(entityClass);
-        if (map != null) {
-            return map;
-        }
         for (BoostProvider provider : PROVIDERS) {
             Map<String, String> contributedMap = provider.getPropertyToColumnAliasMap(entityClass);
             if (contributedMap != null && !contributedMap.isEmpty()) {
-                log.debug("found alias map for class: {}, provider: {}", entityClass.getName(), provider.getClass().getName());
-                ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, contributedMap);
+                log.debug("found alias map provider: [{}], class: [{}]", entityClass.getName(), provider.getClass().getName());
                 return contributedMap;
             }
         }
         log.warn("No property to column alias map found in {} providers, class: {}", PROVIDERS.size(), entityClass.getName());
-        ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, new HashMap<>());
-        return ENTITY_PROPERTY_TO_COLUMN_MAP.get(entityClass);
+        return Collections.emptyNavigableMap();
     }
 }

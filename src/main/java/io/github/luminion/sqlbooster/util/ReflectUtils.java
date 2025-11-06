@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 反射工具类.
@@ -25,12 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0.0
  */
 public abstract class ReflectUtils {
-
-    /**
-     * 类字段映射缓存, 用于提升性能.
-     */
-    private static final Map<Class<?>, Map<String, Field>> FIELD_MAP_CACHE = new ConcurrentHashMap<>();
-
 
     /**
      * 判断一个类是否为 Java 核心库中的类.
@@ -62,7 +55,7 @@ public abstract class ReflectUtils {
     }
 
     /**
-     * 获取并缓存指定类的所有字段.
+     * 获取指定类的所有字段.
      *
      * @param clazz 待分析的类
      * @return 字段名到 {@link Field} 对象的映射
@@ -75,13 +68,11 @@ public abstract class ReflectUtils {
         if (isJavaCoreClass(clazz)) {
             throw new IllegalArgumentException("clazz must not be java class");
         }
-        return FIELD_MAP_CACHE.computeIfAbsent(clazz, c -> {
-            Map<String, Field> map = new HashMap<>();
-            ReflectionUtils.doWithFields(c,
-                    field -> map.putIfAbsent(field.getName(), field),
-                    ReflectionUtils.COPYABLE_FIELDS);
-            return map;
-        });
+        Map<String, Field> map = new HashMap<>();
+        ReflectionUtils.doWithFields(clazz,
+                field -> map.putIfAbsent(field.getName(), field),
+                ReflectionUtils.COPYABLE_FIELDS);
+        return map;
     }
 
 
