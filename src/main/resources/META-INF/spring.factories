@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.github.luminion.mybatis.config.BoostAutoConfiguration
+  io.github.luminion.sqlbooster.config.BoostAutoConfiguration
 
 
 

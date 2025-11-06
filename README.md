@@ -61,9 +61,9 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
 ### 2. 扩展mapper接口
 * 创建或指定`VO类`, 用于展示查询结果
-* 使`mapper`接口继承[EnhancedMapper](src/main/java/io/github/luminion/mybatis/EnhancedMapper.java), 并指定泛型为VO类
+* 使`mapper`接口继承[EnhancedMapper](src/main/java/io/github/luminion/sqlbooster/EnhancedMapper.java), 并指定泛型为VO类
 * 通过`工具类`获取`mapper.xml`内容, 并将其复制到对应xml文件中
-* (可选) 若有service层, 可使service实现[EnhancedService](src/main/java/io/github/luminion/mybatis/EnhancedService.java)接口, 即可拥有mapper对应所有方法
+* (可选) 若有service层, 可使service实现[EnhancedService](src/main/java/io/github/luminion/sqlbooster/EnhancedService.java)接口, 即可拥有mapper对应所有方法
 
 
 ```java
