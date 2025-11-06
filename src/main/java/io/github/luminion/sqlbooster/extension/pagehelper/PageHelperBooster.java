@@ -21,10 +21,11 @@ public interface PageHelperBooster<T, V> extends BoosterEngine<T, V> {
         
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
         PageHelper.startPage((int) pageNum, (int) pageSize);
-        List<V> vs = selectByWrapper(sqlHelper, null);
-        PageHelperPage<V> page = new PageHelperPage<>(new PageInfo<>(vs));
+        PageInfo<V> pageInfo = PageHelper.startPage(1, 10)
+                .doSelectPageInfo(() -> selectByWrapper(sqlHelper, null));
+        PageHelperPage<V> page = new PageHelperPage<>(pageInfo);
         
-        voPostProcess(vs, sqlHelper, page);
+        voPostProcess(page.getRecords(), sqlHelper, page);
         return page;
     }
 }
