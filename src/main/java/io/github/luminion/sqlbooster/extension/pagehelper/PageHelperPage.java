@@ -7,13 +7,12 @@ import io.github.luminion.sqlbooster.util.ReflectUtils;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author luminion
  */
 @RequiredArgsConstructor
-public class PageHelperPage<T>  implements Page<T> {
+public class PageHelperPage<T> implements Page<T> {
     private final PageInfo<T> pageInfo;
 
     @Override
