@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.github.luminion.sqlbooster.core.BoosterEngine">
+<mapper namespace="sqlbooster">
 
-    <sql id="queryFragment">
+    <sql id="conditions">
         <if test="param1 != null">
             <foreach collection="param1" item="gen">
                 <if test="gen.conditions != null and gen.conditions.size() > 0">
@@ -35,7 +35,7 @@
         </if>
     </sql>
 
-    <sql id="sortFragment">
+    <sql id="sorts">
         <if test="param1 != null and param1.sorts != null and param1.sorts.size() > 0">
             <foreach collection="param1.sorts" item="item" separator="," open=",">
                 ${item.field}<if test="item.isDesc()"> DESC</if>
