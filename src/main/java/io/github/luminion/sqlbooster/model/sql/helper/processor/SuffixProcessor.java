@@ -24,51 +24,30 @@ public class SuffixProcessor {
     /**
      * 默认的后缀到操作符的映射表.
      */
-    private static final Map<String, String> SUFFIX_TO_OPERATOR_MAP;
+    private static final Map<String, String> suffixMap = new HashMap<>();
 
     static {
-        Map<String, String> suffixMap = new LinkedHashMap<>();
+        add("Ne", SqlKeyword.NE.getKeyword());
+        add("Lt", SqlKeyword.LT.getKeyword());
+        add("Le", SqlKeyword.LE.getKeyword());
+        add("Gt", SqlKeyword.GT.getKeyword());
+        add("Ge", SqlKeyword.GE.getKeyword());
+        add("Like", SqlKeyword.LIKE.getKeyword());
+        add("NotLike", SqlKeyword.NOT_LIKE.getKeyword());
+        add("In", SqlKeyword.IN.getKeyword());
+        add("NotIn", SqlKeyword.NOT_IN.getKeyword());
+        add("Null", SqlKeyword.IS_NULL.getKeyword());
+        add("IsNull", SqlKeyword.IS_NULL.getKeyword());
+        add("NotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
+        add("IsNotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
+        add("BitIn", SqlKeyword.BIT_IN.getKeyword());
+        add("BitNotIn", SqlKeyword.BIT_NOT_IN.getKeyword());
+    }
 
-        suffixMap.put("Ne", SqlKeyword.NE.getKeyword());
-        suffixMap.put("_ne", SqlKeyword.NE.getKeyword());
-
-        suffixMap.put("Lt", SqlKeyword.LT.getKeyword());
-        suffixMap.put("_lt", SqlKeyword.LT.getKeyword());
-
-        suffixMap.put("Le", SqlKeyword.LE.getKeyword());
-        suffixMap.put("_le", SqlKeyword.LE.getKeyword());
-
-        suffixMap.put("Gt", SqlKeyword.GT.getKeyword());
-        suffixMap.put("_gt", SqlKeyword.GT.getKeyword());
-
-        suffixMap.put("Ge", SqlKeyword.GE.getKeyword());
-        suffixMap.put("_ge", SqlKeyword.GE.getKeyword());
-
-        suffixMap.put("Like", SqlKeyword.LIKE.getKeyword());
-        suffixMap.put("_like", SqlKeyword.LIKE.getKeyword());
-
-        suffixMap.put("NotLike", SqlKeyword.NOT_LIKE.getKeyword());
-        suffixMap.put("_not_like", SqlKeyword.NOT_LIKE.getKeyword());
-
-        suffixMap.put("In", SqlKeyword.IN.getKeyword());
-        suffixMap.put("_in", SqlKeyword.IN.getKeyword());
-
-        suffixMap.put("NotIn", SqlKeyword.NOT_IN.getKeyword());
-        suffixMap.put("_not_in", SqlKeyword.NOT_IN.getKeyword());
-
-        suffixMap.put("IsNull", SqlKeyword.IS_NULL.getKeyword());
-        suffixMap.put("_is_null", SqlKeyword.IS_NULL.getKeyword());
-
-        suffixMap.put("IsNotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
-        suffixMap.put("_is_not_null", SqlKeyword.IS_NOT_NULL.getKeyword());
-
-        suffixMap.put("BitContains", SqlKeyword.BIT_CONTAINS.getKeyword());
-        suffixMap.put("_bit_contains", SqlKeyword.BIT_CONTAINS.getKeyword());
-
-        suffixMap.put("BitNotContains", SqlKeyword.BIT_NOT_CONTAINS.getKeyword());
-        suffixMap.put("_bit_not_contains", SqlKeyword.BIT_NOT_CONTAINS.getKeyword());
-
-        SUFFIX_TO_OPERATOR_MAP = Collections.unmodifiableMap(suffixMap);
+    private static void add(String camelCase, String operator) {
+        suffixMap.put(camelCase, operator);
+        String underscore = BoostUtils.camelCaseToUnderscore(camelCase);
+        suffixMap.put(underscore, operator);
     }
 
 

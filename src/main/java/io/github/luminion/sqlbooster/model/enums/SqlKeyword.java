@@ -78,11 +78,11 @@ public enum SqlKeyword {
     /**
      * 位运算包含操作符
      */
-    BIT_CONTAINS("&>"),
+    BIT_IN("&>"),
     /**
      * 位运算不包含操作符
      */
-    BIT_NOT_CONTAINS("&="),
+    BIT_NOT_IN("&="),
 
     ;
     /**
@@ -163,11 +163,11 @@ public enum SqlKeyword {
             case "&>0":
             case "&>":
             case "BIT CONTAINS":
-                return SqlKeyword.BIT_CONTAINS.getKeyword();
+                return SqlKeyword.BIT_IN.getKeyword();
             case "&=0":
             case "&=":
             case "BIT NOT CONTAINS":
-                return SqlKeyword.BIT_NOT_CONTAINS.getKeyword();
+                return SqlKeyword.BIT_NOT_IN.getKeyword();
             default:
                 throw new IllegalArgumentException("illegal operator: " + operator);
         }
@@ -238,7 +238,7 @@ public enum SqlKeyword {
      * @since 1.0.0
      */
     public static boolean isBitOperator(String operator) {
-        return SqlKeyword.BIT_CONTAINS.getKeyword().equals(operator) || SqlKeyword.BIT_NOT_CONTAINS.getKeyword().equals(operator);
+        return SqlKeyword.BIT_IN.getKeyword().equals(operator) || SqlKeyword.BIT_NOT_IN.getKeyword().equals(operator);
     }
 
 }

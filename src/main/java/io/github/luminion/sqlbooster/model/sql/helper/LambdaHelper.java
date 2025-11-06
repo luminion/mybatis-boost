@@ -262,7 +262,7 @@ public interface LambdaHelper<T, S extends LambdaHelper<T, S>> extends BaseHelpe
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_CONTAINS.getKeyword(), value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_IN.getKeyword(), value));
         return (S) this;
     }
 
@@ -279,7 +279,7 @@ public interface LambdaHelper<T, S extends LambdaHelper<T, S>> extends BaseHelpe
         if (value == null) {
             return (S) this;
         }
-        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_NOT_CONTAINS.getKeyword(), value));
+        getConditions().add(new SqlCondition(BoostUtils.getGetterPropertyName(getter), SqlKeyword.BIT_NOT_IN.getKeyword(), value));
         return (S) this;
     }
 
