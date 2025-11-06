@@ -20,9 +20,6 @@ import java.util.function.Consumer;
 @SuppressWarnings("unused")
 public class SqlHelper<T> extends AbstractHelper<T, SqlHelper<T>> {
 
-    @Getter
-    protected transient Class<T> entityClass;
-
     /**
      * 创建一个新的 {@link SqlHelper} 实例.
      *

@@ -6,6 +6,7 @@ import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +33,7 @@ public abstract class MapperUtils {
      */
     public static boolean initSqlFragment(SqlSessionFactory sqlSessionFactory) {
         Configuration configuration = sqlSessionFactory.getConfiguration();
-        String resource = "luminion/mapper/BoostMapper.xml";
+        String resource = "luminion/mapper/BoosterMapper.xml";
         try (InputStream inputStream = Resources.getResourceAsStream(resource)) {
             XMLMapperBuilder mapperBuilder = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
             mapperBuilder.parse();

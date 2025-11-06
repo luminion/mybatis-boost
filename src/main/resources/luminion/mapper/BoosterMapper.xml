@@ -42,8 +42,5 @@
             </foreach>
         </if>
     </sql>
-    
-    <select id="selectByWrapper" resultType="java.lang.Object">
-    </select>
 
 </mapper>
