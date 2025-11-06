@@ -6,7 +6,6 @@ import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +24,7 @@ public abstract class MapperUtils {
     /**
      * 初始化 Mybatis-Boost 的核心 SQL 片段.
      * <p>
-     * 从 "luminion/mapper/BoosterMapper.xml" 资源文件中加载 SQL 片段,并注册到 MyBatis 的 {@link Configuration} 中.
+     * 从 "luminion/mapper/BoosterEngine.xml" 资源文件中加载 SQL 片段,并注册到 MyBatis 的 {@link Configuration} 中.
      *
      * @param sqlSessionFactory SQL 会话工厂
      * @return 如果初始化成功返回 true, 否则返回 false
@@ -33,7 +32,7 @@ public abstract class MapperUtils {
      */
     public static boolean initSqlFragment(SqlSessionFactory sqlSessionFactory) {
         Configuration configuration = sqlSessionFactory.getConfiguration();
-        String resource = "luminion/mapper/BoosterMapper.xml";
+        String resource = "luminion/mapper/BoosterEngine.xml";
         try (InputStream inputStream = Resources.getResourceAsStream(resource)) {
             XMLMapperBuilder mapperBuilder = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
             mapperBuilder.parse();
