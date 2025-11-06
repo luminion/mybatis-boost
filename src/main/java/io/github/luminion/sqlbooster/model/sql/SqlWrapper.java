@@ -1,8 +1,8 @@
-package io.github.luminion.sqlbooster.model.impl;
+package io.github.luminion.sqlbooster.model.sql;
 
-import io.github.luminion.sqlbooster.model.api.ISqlEntity;
-import io.github.luminion.sqlbooster.model.api.ISqlSort;
-import io.github.luminion.sqlbooster.model.api.ISqlTree;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
+import io.github.luminion.sqlbooster.model.api.Sort;
+import io.github.luminion.sqlbooster.model.api.Tree;
 import lombok.*;
 
 import java.util.Collection;
@@ -22,12 +22,12 @@ import java.util.Map;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
+public class SqlWrapper<T> extends SqlTree implements Wrapper<T> {
 
     /**
      * 排序字段列表.
      */
-    protected Collection<ISqlSort> sorts;
+    protected Collection<Sort> sorts;
     
     /**
      * 非本表字段的额外条件.
@@ -45,13 +45,13 @@ public class SqlEntity<T> extends SqlTree implements ISqlEntity<T> {
      */
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    protected SqlTree addChild(ISqlTree sqlTree) {
+    protected SqlTree addChild(Tree sqlTree) {
         if (sqlTree==null){
             return this;
         }
-        if (sqlTree instanceof SqlEntity){
-            SqlEntity sqlEntity = (SqlEntity) sqlTree;
-            this.sorts.addAll(sqlEntity.getSorts());
+        if (sqlTree instanceof SqlWrapper){
+            SqlWrapper sqlWrapper = (SqlWrapper) sqlTree;
+            this.sorts.addAll(sqlWrapper.getSorts());
         }
         return super.addChild(sqlTree);
     }

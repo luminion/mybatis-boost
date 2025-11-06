@@ -1,13 +1,13 @@
-package io.github.luminion.sqlbooster.model.impl;
+package io.github.luminion.sqlbooster.model.sql;
 
-import io.github.luminion.sqlbooster.enums.SqlKeyword;
-import io.github.luminion.sqlbooster.model.api.ISqlCondition;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
+import io.github.luminion.sqlbooster.model.api.Condition;
 import lombok.*;
 
 /**
  * SQL 条件实体类.
  * <p>
- * 实现了 {@link ISqlCondition} 接口, 用于表示 SQL 查询中的单个条件, 包括字段名、操作符和值.
+ * 实现了 {@link Condition} 接口, 用于表示 SQL 查询中的单个条件, 包括字段名、操作符和值.
  *
  * @author luminion
  * @since 1.0.0
@@ -16,7 +16,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class SqlCondition implements ISqlCondition {
+public class SqlCondition implements Condition {
 
     /**
      * 字段名.
@@ -63,13 +63,13 @@ public class SqlCondition implements ISqlCondition {
     }
 
     /**
-     * 从 {@link ISqlCondition} 实例创建 {@link SqlCondition} 实例.
+     * 从 {@link Condition} 实例创建 {@link SqlCondition} 实例.
      *
      * @param sqlCondition SQL 条件接口实例
      * @return {@link SqlCondition} SQL 条件实体实例
      * @since 1.0.0
      */
-    public static SqlCondition of(ISqlCondition sqlCondition) {
+    public static SqlCondition of(Condition sqlCondition) {
         return new SqlCondition(sqlCondition.getField(), sqlCondition.getOperator(), sqlCondition.getValue());
     }
 

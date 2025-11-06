@@ -1,10 +1,11 @@
-package io.github.luminion.sqlbooster.model.helper;
+package io.github.luminion.sqlbooster.model.sql.helper;
 
 import io.github.luminion.sqlbooster.core.BoosterCore;
 import io.github.luminion.sqlbooster.core.Booster;
-import io.github.luminion.sqlbooster.enums.SqlKeyword;
-import io.github.luminion.sqlbooster.model.api.ISqlEntity;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 import io.github.luminion.sqlbooster.util.BoostUtils;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
@@ -19,6 +20,9 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("unused")
 public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
+
+    @Getter
+    protected transient Class<T> entityClass;
 
     /**
      * 创建一个新的 {@link SqlHelper} 实例.
@@ -46,22 +50,22 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     }
 
     /**
-     * 创建一个指定 {@link ISqlEntity}的sqlhelper
+     * 创建一个指定 {@link Wrapper}的实例
      *
-     * @param sqlEntity 源 {@link ISqlEntity} 实例
+     * @param wrapper 源 {@link Wrapper} 实例
      * @param <T>       实体类型
      * @return {@link SqlHelper} 实例
      * @since 1.0.0
      */
-    public static <T> SqlHelper<T> of(ISqlEntity<T> sqlEntity) {
-        if (sqlEntity == null) {
+    public static <T> SqlHelper<T> of(Wrapper<T> wrapper) {
+        if (wrapper == null) {
             return new SqlHelper<>();
         }
-        if (sqlEntity instanceof SqlHelper) {
-            return (SqlHelper<T>) sqlEntity;
+        if (wrapper instanceof SqlHelper) {
+            return (SqlHelper<T>) wrapper;
         }
         SqlHelper<T> sqlHelper = new SqlHelper<>();
-        return sqlHelper.merge(sqlEntity);
+        return sqlHelper.merge(wrapper);
     }
 
     /**
@@ -120,17 +124,17 @@ public class SqlHelper<T> extends AbstractSqlHelper<T, SqlHelper<T>> {
     }
 
     /**
-     * 将当前 {@link SqlHelper} 转换为 {@link BoostSqlHelper}.
+     * 将当前 {@link SqlHelper} 转换为 {@link SqlHelperBooster}.
      *
      * @param boosterCore {@link BoosterCore} 实例
      * @param <V>       VO 类型
      * @param <P>       分页对象类型
-     * @return {@link BoostSqlHelper} 实例
+     * @return {@link SqlHelperBooster} 实例
      * @since 1.0.0
      */
-    public <V, P> BoostSqlHelper<T, V> boost(BoosterCore<T, V> boosterCore) {
+    public <V, P> SqlHelperBooster<T, V> boost(BoosterCore<T, V> boosterCore) {
         this.entityClass = BoostUtils.getEntityClass(boosterCore);
-        return new BoostSqlHelper<>(boosterCore);
+        return new SqlHelperBooster<>(boosterCore);
     }
 
 }

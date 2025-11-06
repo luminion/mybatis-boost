@@ -6,13 +6,13 @@ import java.util.Map;
 /**
  * SQL 实体接口.
  * <p>
- * 扩展自 {@link ISqlTree} 接口, 增加了排序和额外查询条件的功能.
+ * 扩展自 {@link Tree} 接口, 增加了排序和额外查询条件的功能.
  *
  * @param <T> 实体类型
  * @author luminion
  * @since 1.0.0
  */
-public interface ISqlEntity<T> extends ISqlTree {
+public interface Wrapper<T> extends Tree {
 
     /**
      * 获取排序规则列表.
@@ -20,7 +20,7 @@ public interface ISqlEntity<T> extends ISqlTree {
      * @return 排序规则列表
      * @since 1.0.0
      */
-    Collection<ISqlSort> getSorts();
+    Collection<Sort> getSorts();
 
     /**
      * 获取不属于实体本身的额外查询条件.

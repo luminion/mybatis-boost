@@ -24,7 +24,7 @@ public abstract class MapperUtils {
     /**
      * 初始化 Mybatis-Boost 的核心 SQL 片段.
      * <p>
-     * 从 "luminion/mapper/BoostMapper.xml" 资源文件中加载 SQL 片段,并注册到 MyBatis 的 {@link Configuration} 中.
+     * 从 "luminion/mapper/BoosterMapper.xml" 资源文件中加载 SQL 片段,并注册到 MyBatis 的 {@link Configuration} 中.
      *
      * @param sqlSessionFactory SQL 会话工厂
      * @return 如果初始化成功返回 true, 否则返回 false
@@ -103,10 +103,10 @@ public abstract class MapperUtils {
                 "        FROM\n" +
                 "        " + tableName + " a\n" +
                 "        <where>\n" +
-                "            <include refid=\"io.github.luminion.mybatis.core.BoostMapper.queryFragment\"/>\n" +
+                "            <include refid=\"io.github.luminion.mybatis.core.BoosterMapper.queryFragment\"/>\n" +
                 "        </where>\n" +
                 "        <trim prefix=\"ORDER BY\" prefixOverrides=\",\">\n" +
-                "            <include refid=\"io.github.luminion.mybatis.core.BoostMapper.sortFragment\"/>\n" +
+                "            <include refid=\"io.github.luminion.mybatis.core.BoosterMapper.sortFragment\"/>\n" +
                 "        </trim>";
     }
 

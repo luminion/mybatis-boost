@@ -1,15 +1,15 @@
-package io.github.luminion.sqlbooster.model.helper.processor;
+package io.github.luminion.sqlbooster.model.sql.helper.processor;
 
-import io.github.luminion.sqlbooster.enums.SqlKeyword;
-import io.github.luminion.sqlbooster.model.api.ISqlCondition;
-import io.github.luminion.sqlbooster.model.api.ISqlSort;
-import io.github.luminion.sqlbooster.model.api.ISqlTree;
-import io.github.luminion.sqlbooster.model.impl.SqlCondition;
-import io.github.luminion.sqlbooster.model.impl.SqlSort;
-import io.github.luminion.sqlbooster.model.impl.SqlTree;
-import io.github.luminion.sqlbooster.model.helper.AbstractSqlHelper;
-import io.github.luminion.sqlbooster.model.helper.ISqlHelper;
-import io.github.luminion.sqlbooster.model.helper.SqlHelper;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
+import io.github.luminion.sqlbooster.model.api.Condition;
+import io.github.luminion.sqlbooster.model.api.Sort;
+import io.github.luminion.sqlbooster.model.api.Tree;
+import io.github.luminion.sqlbooster.model.sql.SqlCondition;
+import io.github.luminion.sqlbooster.model.sql.SqlSort;
+import io.github.luminion.sqlbooster.model.sql.SqlTree;
+import io.github.luminion.sqlbooster.model.sql.helper.AbstractSqlHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Slf4j
-public abstract class DefaultProcessor {
+public abstract class BasicProcessor {
 
     /**
      * 验证并处理单个 SQL 条件.
@@ -39,16 +39,16 @@ public abstract class DefaultProcessor {
      *     <li>将不符合条件的字段或无法处理的条件放入 `extra` Map 中.</li>
      * </ul>
      *
-     * @param sqlCondition             待验证的 SQL 条件
+     * @param condition             待验证的 SQL 条件
      * @param propertyToColumnAliasMap 属性名到数据库列别名的映射
      * @param extra                    用于存储额外参数的 Map
-     * @return 验证并处理后的 {@link ISqlCondition}, 如果条件无效则返回 null
+     * @return 验证并处理后的 {@link Condition}, 如果条件无效则返回 null
      * @since 1.0.0
      */
-    public static ISqlCondition validateCondition(ISqlCondition sqlCondition, Map<String, String> propertyToColumnAliasMap, Map<String, Object> extra) {
-        String field = sqlCondition.getField();
-        String operator = sqlCondition.getOperator();
-        Object value = sqlCondition.getValue();
+    public static Condition validateCondition(Condition condition, Map<String, String> propertyToColumnAliasMap, Map<String, Object> extra) {
+        String field = condition.getField();
+        String operator = condition.getOperator();
+        Object value = condition.getValue();
         if (field == null || field.isEmpty()) {
             return null;
         }
@@ -102,38 +102,38 @@ public abstract class DefaultProcessor {
     /**
      * 验证并处理单个 SQL 排序规则.
      *
-     * @param sqlSort             待验证的 SQL 排序规则
+     * @param sort             待验证的 SQL 排序规则
      * @param field2JdbcColumnMap 属性名到数据库列名的映射
-     * @return 验证并处理后的 {@link ISqlSort}, 如果排序字段无效则返回 null
+     * @return 验证并处理后的 {@link Sort}, 如果排序字段无效则返回 null
      * @since 1.0.0
      */
-    public static ISqlSort validateSort(ISqlSort sqlSort, Map<String, String> field2JdbcColumnMap) {
-        String jdbcColumn = field2JdbcColumnMap.get(sqlSort.getField());
+    public static Sort validateSort(Sort sort, Map<String, String> field2JdbcColumnMap) {
+        String jdbcColumn = field2JdbcColumnMap.get(sort.getField());
         if (jdbcColumn == null) {
-            log.warn("sort field [{}] not exist in fieldMap , it will be removed", sqlSort.getField());
+            log.warn("sort field [{}] not exist in fieldMap , it will be removed", sort.getField());
             return null;
         }
-        return new SqlSort(jdbcColumn, sqlSort.isDesc());
+        return new SqlSort(jdbcColumn, sort.isDesc());
     }
 
     /**
      * 将一组 SQL 条件包装到 {@link AbstractSqlHelper} 中.
      *
      * @param sqlHelper     目标 SQL 助手
-     * @param sqlConditions 待包装的 SQL 条件集合
+     * @param conditions 待包装的 SQL 条件集合
      * @param symbol        连接这些条件的逻辑符号 (AND/OR)
      * @since 1.0.0
      */
-    public static void warpConditions(AbstractSqlHelper<?, ?> sqlHelper, Collection<ISqlCondition> sqlConditions, String symbol) {
-        if (sqlHelper == null || sqlConditions == null || sqlConditions.isEmpty()) {
+    public static void warpConditions(AbstractSqlHelper<?, ?> sqlHelper, Collection<Condition> conditions, String symbol) {
+        if (sqlHelper == null || conditions == null || conditions.isEmpty()) {
             return;
         }
         symbol = SqlKeyword.replaceConnector(symbol);
         if (SqlKeyword.AND.getKeyword().equals(symbol)) {
-            sqlHelper.getConditions().addAll(sqlConditions);
+            sqlHelper.getConditions().addAll(conditions);
             return;
         }
-        SqlTree iSqlTrees = new SqlTree(sqlConditions, SqlKeyword.OR.getKeyword());
+        SqlTree iSqlTrees = new SqlTree(conditions, SqlKeyword.OR.getKeyword());
         sqlHelper.merge(iSqlTrees);
     }
 
@@ -141,15 +141,15 @@ public abstract class DefaultProcessor {
      * 将一组 SQL 排序规则包装到 {@link AbstractSqlHelper} 中.
      *
      * @param sqlHelper           目标 SQL 助手
-     * @param sqlSorts            待包装的 SQL 排序规则集合
+     * @param sorts            待包装的 SQL 排序规则集合
      * @param field2JdbcColumnMap 属性名到数据库列名的映射
      * @since 1.0.0
      */
-    public static void wrapSorts(AbstractSqlHelper<?, ?> sqlHelper, Collection<ISqlSort> sqlSorts, Map<String, String> field2JdbcColumnMap) {
-        for (ISqlSort sqlSort : sqlSorts) {
-            ISqlSort iSqlSort = validateSort(sqlSort, field2JdbcColumnMap);
-            if (iSqlSort != null) {
-                sqlHelper.getSorts().add(iSqlSort);
+    public static void wrapSorts(AbstractSqlHelper<?, ?> sqlHelper, Collection<Sort> sorts, Map<String, String> field2JdbcColumnMap) {
+        for (Sort sort : sorts) {
+            Sort validateSort = validateSort(sort, field2JdbcColumnMap);
+            if (validateSort != null) {
+                sqlHelper.getSorts().add(validateSort);
             }
         }
     }
@@ -159,11 +159,11 @@ public abstract class DefaultProcessor {
      *
      * @param rootHelper 根 SQL 助手
      * @param <T>        实体类型
-     * @return 处理后的 {@link ISqlHelper} 实例
+     * @return 处理后的 {@link BaseHelper} 实例
      * @throws IllegalArgumentException 当无法获取实体类时抛出
      * @since 1.0.0
      */
-    public static <T> ISqlHelper<T> process(ISqlHelper<T> rootHelper) {
+    public static <T> BaseHelper<T> process(BaseHelper<T> rootHelper) {
         Class<T> entityClass = rootHelper.getEntityClass();
         if (entityClass == null) {
             throw new IllegalArgumentException("can't get entity class from sql helper");
@@ -171,21 +171,21 @@ public abstract class DefaultProcessor {
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
         Map<String, String> field2JdbcColumnMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
         Map<String, Object> extraParams = resultHelper.getExtra();
-        for (ISqlTree currentHelper : rootHelper) {
-            Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();
-            Iterator<ISqlCondition> conditionIterator = currentHelperConditions.iterator();
-            LinkedHashSet<ISqlCondition> validatedConditions = new LinkedHashSet<>(currentHelperConditions.size());
+        for (Tree currentHelper : rootHelper) {
+            Collection<Condition> currentHelperConditions = currentHelper.getConditions();
+            Iterator<Condition> conditionIterator = currentHelperConditions.iterator();
+            LinkedHashSet<Condition> validatedConditions = new LinkedHashSet<>(currentHelperConditions.size());
             while (conditionIterator.hasNext()) {
-                ISqlCondition sqlCondition = conditionIterator.next();
-                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, field2JdbcColumnMap, extraParams);
+                Condition condition = conditionIterator.next();
+                Condition validate = BasicProcessor.validateCondition(condition, field2JdbcColumnMap, extraParams);
                 if (validate == null) {
                     continue;
                 }
                 validatedConditions.add(validate);
             }
-            DefaultProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
+            BasicProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        DefaultProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), field2JdbcColumnMap);
+        BasicProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), field2JdbcColumnMap);
         return resultHelper;
     }
 

@@ -1,6 +1,6 @@
-package io.github.luminion.sqlbooster.model.helper;
+package io.github.luminion.sqlbooster.model.sql.helper;
 
-import io.github.luminion.sqlbooster.model.api.ISqlEntity;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 
 import java.util.function.Function;
 
@@ -13,7 +13,7 @@ import java.util.function.Function;
  * @author luminion
  * @since 1.0.0
  */
-public interface ISqlHelper<T> extends ISqlEntity<T> {
+public interface BaseHelper<T> extends Wrapper<T> {
 
     /**
      * 获取与此 SQL 助手关联的实体类.
@@ -27,10 +27,10 @@ public interface ISqlHelper<T> extends ISqlEntity<T> {
      * 应用一个处理器对当前的 SQL 助手进行转换或处理.
      *
      * @param processor 处理器函数
-     * @return 处理后的 {@link ISqlHelper}
+     * @return 处理后的 {@link BaseHelper}
      * @since 1.0.0
      */
-    default ISqlHelper<T> process(Function<ISqlHelper<T>,ISqlHelper<T>> processor){
+    default BaseHelper<T> process(Function<BaseHelper<T>, BaseHelper<T>> processor){
         return processor.apply(this);
     }
     

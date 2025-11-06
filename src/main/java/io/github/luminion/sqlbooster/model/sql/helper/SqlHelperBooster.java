@@ -1,7 +1,8 @@
-package io.github.luminion.sqlbooster.model.helper;
+package io.github.luminion.sqlbooster.model.sql.helper;
 
 import io.github.luminion.sqlbooster.core.BoosterCore;
-import io.github.luminion.sqlbooster.core.P;
+import io.github.luminion.sqlbooster.core.Page;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,25 +10,30 @@ import java.util.Optional;
 /**
  * 具备扩展查询功能的 SQL 构建助手.
  * <p>
- * 封装了 {@link BoosterCore} 和 {@link ISqlHelper}, 提供了方便的链式调用查询方法.
+ * 封装了 {@link BoosterCore} 和 {@link BaseHelper}, 提供了方便的链式调用查询方法.
  *
  * @param <T> 实体类型
  * @param <V> VO 类型
  * @author luminion
  * @since 1.0.0
  */
-public class BoostSqlHelper<T, V> {
+public class SqlHelperBooster<T, V> {
     private final BoosterCore<T, V> boosterCore;
-    private final ISqlHelper<T> sqlHelper;
+    private final Wrapper<T> wrapper;
 
+    public SqlHelperBooster(BoosterCore<T, V> boosterCore, Wrapper<T> wrapper){
+        this.boosterCore = boosterCore;
+        this.wrapper = wrapper;
+    }
+    
     /**
-     * 构造一个新的 {@link BoostSqlHelper} 实例.
+     * 构造一个新的 {@link SqlHelperBooster} 实例.
      *
      * @param boosterCore {@link BoosterCore} 实例
      * @since 1.0.0
      */
-    public BoostSqlHelper(BoosterCore<T, V> boosterCore) {
-        this.sqlHelper = SqlHelper.of(boosterCore);
+    public SqlHelperBooster(BoosterCore<T, V> boosterCore) {
+        this.wrapper = SqlHelper.of(boosterCore);
         this.boosterCore = boosterCore;
     }
 
@@ -38,18 +44,18 @@ public class BoostSqlHelper<T, V> {
      * @since 1.0.0
      */
     public V first() {
-        return boosterCore.voFirst(this.sqlHelper);
+        return boosterCore.voFirst(this.wrapper);
     }
 
     /**
      * 查询并返回结果列表中的第一个 VO 对象, 并转换为指定类型.
      *
-     * @param voType 目标 VO 类型
+     * @param targetType 目标 VO 类型
      * @return 转换后的 VO 对象, 如果不存在则返回 null
      * @since 1.0.0
      */
-    public V first(Class<V> voType) {
-        return boosterCore.voFirst(this.sqlHelper, voType);
+    public V first(Class<V> targetType) {
+        return boosterCore.voFirst(this.wrapper, targetType);
     }
 
     /**
@@ -59,7 +65,7 @@ public class BoostSqlHelper<T, V> {
      * @since 1.0.0
      */
     public Optional<V> firstOpt() {
-        return boosterCore.voFirstOpt(this.sqlHelper);
+        return boosterCore.voFirstOpt(this.wrapper);
     }
 
     /**
@@ -69,18 +75,18 @@ public class BoostSqlHelper<T, V> {
      * @since 1.0.0
      */
     public V unique() {
-        return boosterCore.voUnique(this.sqlHelper);
+        return boosterCore.voUnique(this.wrapper);
     }
 
     /**
      * 查询并返回唯一的 VO 对象, 并转换为指定类型.
      *
-     * @param voType 目标 VO 类型
+     * @param targetType 目标 VO 类型
      * @return 转换后的 VO 对象, 如果不存在则返回 null
      * @since 1.0.0
      */
-    public V unique(Class<V> voType) {
-        return boosterCore.voUnique(this.sqlHelper, voType);
+    public V unique(Class<V> targetType) {
+        return boosterCore.voUnique(this.wrapper, targetType);
     }
 
     /**
@@ -90,7 +96,7 @@ public class BoostSqlHelper<T, V> {
      * @since 1.0.0
      */
     public Optional<V> uniqueOpt() {
-        return boosterCore.voUniqueOpt(this.sqlHelper);
+        return boosterCore.voUniqueOpt(this.wrapper);
     }
 
     /**
@@ -100,18 +106,18 @@ public class BoostSqlHelper<T, V> {
      * @since 1.0.0
      */
     public List<V> list() {
-        return boosterCore.voList(this.sqlHelper);
+        return boosterCore.voList(this.wrapper);
     }
 
     /**
      * 查询并返回指定类型的 VO 对象列表.
      *
-     * @param voType 目标 VO 类型
+     * @param targetType 目标 VO 类型
      * @return 转换后的 VO 对象列表
      * @since 1.0.0
      */
-    public <R> List<R> list(Class<R> voType) {
-        return boosterCore.voList(this.sqlHelper, voType);
+    public <R> List<R> list(Class<R> targetType) {
+        return boosterCore.voList(this.wrapper, targetType);
     }
 
     /**
@@ -122,8 +128,8 @@ public class BoostSqlHelper<T, V> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    public P<V> page(int pageNum, int pageSize) {
-        return boosterCore.voPage(this.sqlHelper, pageNum, pageSize);
+    public Page<V> page(int pageNum, int pageSize) {
+        return boosterCore.voPage(this.wrapper, pageNum, pageSize);
     }
 
     /**
@@ -134,8 +140,8 @@ public class BoostSqlHelper<T, V> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    public P<V> page(long pageNum, long pageSize) {
-        return boosterCore.voPage(this.sqlHelper, pageNum, pageSize);
+    public Page<V> page(long pageNum, long pageSize) {
+        return boosterCore.voPage(this.wrapper, pageNum, pageSize);
     }
 
     /**
@@ -143,12 +149,12 @@ public class BoostSqlHelper<T, V> {
      *
      * @param pageNum  当前页码
      * @param pageSize 每页大小
-     * @param voType   目标 VO 类型
+     * @param targetType   目标 VO 类型
      * @return 分页结果对象
      * @since 1.0.0
      */
-    public <R> P<R> page(int pageNum, int pageSize, Class<R> voType) {
-        return boosterCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
+    public <R> Page<R> page(int pageNum, int pageSize, Class<R> targetType) {
+        return boosterCore.voPage(this.wrapper, pageNum, pageSize, targetType);
     }
 
     /**
@@ -156,12 +162,12 @@ public class BoostSqlHelper<T, V> {
      *
      * @param pageNum  当前页码
      * @param pageSize 每页大小
-     * @param voType   目标 VO 类型
+     * @param targetType   目标 VO 类型
      * @return 分页结果对象
      * @since 1.0.0
      */
-    public <R> P<R> page(long pageNum, long pageSize, Class<R> voType) {
-        return boosterCore.voPage(this.sqlHelper, pageNum, pageSize, voType);
+    public <R> Page<R> page(long pageNum, long pageSize, Class<R> targetType) {
+        return boosterCore.voPage(this.wrapper, pageNum, pageSize, targetType);
     }
 
 

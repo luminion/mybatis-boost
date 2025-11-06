@@ -1,6 +1,6 @@
 package io.github.luminion.sqlbooster.core;
 
-import io.github.luminion.sqlbooster.model.api.ISqlEntity;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -50,20 +50,20 @@ public interface BoosterCore<T, V> extends Booster<T, V> {
     /**
      * 执行查询前的预处理操作.
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @since 1.0.0
      */
-    void voPreProcess(ISqlEntity<T> sqlEntity);
+    void voPreProcess(Wrapper<T> wrapper);
 
     /**
      * 执行查询后的后处理操作.
      *
      * @param records   查询结果
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @param page      分页对象
      * @since 1.0.0
      */
-    void voPostProcess(List<V> records, ISqlEntity<T> sqlEntity, P<V> page);
+    void voPostProcess(List<V> records, Wrapper<T> wrapper, Page<V> page);
 
     // ==================== 根据ID查询 ====================
 
@@ -136,42 +136,42 @@ public interface BoosterCore<T, V> extends Booster<T, V> {
      * <p>如果查询结果有多条，返回第一条.</p>
      * <p>如果无结果，返回null.</p>
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    V voFirst(ISqlEntity<T> sqlEntity);
+    V voFirst(Wrapper<T> wrapper);
 
     /**
      * 根据条件查询第一个VO对象并转换类型.
      *
-     * @param sqlEntity  查询条件
+     * @param wrapper  查询条件
      * @param targetType 目标VO类型
      * @param <R>        目标VO类型
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    <R> R voFirst(ISqlEntity<T> sqlEntity, Class<R> targetType);
+    <R> R voFirst(Wrapper<T> wrapper, Class<R> targetType);
 
     /**
      * 根据条件查询第一个VO对象（返回Optional）.
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    Optional<V> voFirstOpt(ISqlEntity<T> sqlEntity);
+    Optional<V> voFirstOpt(Wrapper<T> wrapper);
 
     /**
      * 根据条件查询第一个VO对象并转换类型（返回Optional）.
      *
-     * @param sqlEntity  查询条件
+     * @param wrapper  查询条件
      * @param targetType 目标VO类型
      * @param <R>        目标VO类型
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    <R> Optional<R> voFirstOpt(ISqlEntity<T> sqlEntity, Class<R> targetType);
+    <R> Optional<R> voFirstOpt(Wrapper<T> wrapper, Class<R> targetType);
 
     // ==================== 查询唯一记录（voUnique） ====================
 
@@ -180,43 +180,43 @@ public interface BoosterCore<T, V> extends Booster<T, V> {
      * <p><b>注意：如果查询结果超过1条，将抛出异常</b></p>
      * <p>如果无结果，返回null.</p>
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    V voUnique(ISqlEntity<T> sqlEntity);
+    V voUnique(Wrapper<T> wrapper);
 
     /**
      * 根据条件查询唯一VO对象并转换类型.
      * <p><b>注意：如果查询结果超过1条，将抛出异常</b></p>
      *
-     * @param sqlEntity  查询条件
+     * @param wrapper  查询条件
      * @param targetType 目标VO类型
      * @param <R>        目标VO类型
      * @return VO对象，不存在返回null
      * @since 1.0.0
      */
-    <R> R voUnique(ISqlEntity<T> sqlEntity, Class<R> targetType);
+    <R> R voUnique(Wrapper<T> wrapper, Class<R> targetType);
 
     /**
      * 根据条件查询唯一VO对象（返回Optional）.
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    Optional<V> voUniqueOpt(ISqlEntity<T> sqlEntity);
+    Optional<V> voUniqueOpt(Wrapper<T> wrapper);
 
     /**
      * 根据条件查询唯一VO对象并转换类型（返回Optional）.
      *
-     * @param sqlEntity  查询条件
+     * @param wrapper  查询条件
      * @param targetType 目标VO类型
      * @param <R>        目标VO类型
      * @return Optional包装的VO对象
      * @since 1.0.0
      */
-    <R> Optional<R> voUniqueOpt(ISqlEntity<T> sqlEntity, Class<R> targetType);
+    <R> Optional<R> voUniqueOpt(Wrapper<T> wrapper, Class<R> targetType);
 
     // ==================== 查询列表 ====================
 
@@ -231,50 +231,50 @@ public interface BoosterCore<T, V> extends Booster<T, V> {
     /**
      * 根据条件查询VO对象列表.
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @return VO对象列表，无结果返回空列表
      * @since 1.0.0
      */
-    List<V> voList(ISqlEntity<T> sqlEntity);
+    List<V> voList(Wrapper<T> wrapper);
 
     /**
      * 根据条件查询VO对象列表并转换类型.
      *
-     * @param sqlEntity  查询条件
+     * @param wrapper  查询条件
      * @param targetType 目标VO类型
      * @param <R>        目标VO类型
      * @return 转换后的VO对象列表
      * @since 1.0.0
      */
-    <R> List<R> voList(ISqlEntity<T> sqlEntity, Class<R> targetType);
+    <R> List<R> voList(Wrapper<T> wrapper, Class<R> targetType);
 
     /**
      * 根据条件查询VO对象列表（分页）.
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @param pageNum   页码
      * @param pageSize  每页数量
      * @return 分页结果对象
      * @since 1.0.0
      */
-    P<V> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize);
+    Page<V> voPage(Wrapper<T> wrapper, int pageNum, int pageSize);
 
 
     /**
      * 根据条件查询VO对象列表（分页）.
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @param pageNum   页码
      * @param pageSize  每页数量
      * @return 分页结果对象
      * @since 1.0.0
      */
-    P<V> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize);
+    Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize);
 
     /**
      * 根据条件查询VO对象列表并转换类型（分页）.
      *
-     * @param sqlEntity  查询条件
+     * @param wrapper  查询条件
      * @param pageNum    页码
      * @param pageSize   每页数量
      * @param targetType 目标VO类型
@@ -282,12 +282,12 @@ public interface BoosterCore<T, V> extends Booster<T, V> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    <R> P<R> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize, Class<R> targetType);
+    <R> Page<R> voPage(Wrapper<T> wrapper, int pageNum, int pageSize, Class<R> targetType);
 
     /**
      * 根据条件查询VO对象列表（分页）.
      *
-     * @param sqlEntity  查询条件
+     * @param wrapper  查询条件
      * @param pageNum    页码
      * @param pageSize   每页数量
      * @param targetType 目标VO类型
@@ -295,5 +295,5 @@ public interface BoosterCore<T, V> extends Booster<T, V> {
      * @return 分页结果对象
      * @since 1.0.0
      */
-    <R> P<R> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize, Class<R> targetType);
+    <R> Page<R> voPage(Wrapper<T> wrapper, long pageNum, long pageSize, Class<R> targetType);
 }

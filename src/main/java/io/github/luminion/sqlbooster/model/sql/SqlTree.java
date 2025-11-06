@@ -1,8 +1,8 @@
-package io.github.luminion.sqlbooster.model.impl;
+package io.github.luminion.sqlbooster.model.sql;
 
-import io.github.luminion.sqlbooster.enums.SqlKeyword;
-import io.github.luminion.sqlbooster.model.api.ISqlCondition;
-import io.github.luminion.sqlbooster.model.api.ISqlTree;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
+import io.github.luminion.sqlbooster.model.api.Condition;
+import io.github.luminion.sqlbooster.model.api.Tree;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.LinkedHashSet;
 /**
  * SQL 条件树实体类.
  * <p>
- * 实现了 {@link ISqlTree} 接口, 用于表示 SQL 查询条件的树形结构, 支持嵌套和复杂的查询逻辑.
+ * 实现了 {@link Tree} 接口, 用于表示 SQL 查询条件的树形结构, 支持嵌套和复杂的查询逻辑.
  *
  * @author luminion
  * @since 1.0.0
@@ -23,11 +23,11 @@ import java.util.LinkedHashSet;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class SqlTree implements ISqlTree {
+public class SqlTree implements Tree {
     /**
      * 当前节点的条件列表.
      */
-    protected Collection<ISqlCondition> conditions;
+    protected Collection<Condition> conditions;
     /**
      * 连接当前节点条件的逻辑连接符.
      */
@@ -49,7 +49,7 @@ public class SqlTree implements ISqlTree {
      * @param conditions 条件集合
      * @since 1.0.0
      */
-    public SqlTree(Collection<ISqlCondition> conditions) {
+    public SqlTree(Collection<Condition> conditions) {
         this.conditions.addAll(conditions);
     }
 
@@ -61,7 +61,7 @@ public class SqlTree implements ISqlTree {
      * @throws IllegalArgumentException 如果连接符不是 AND 或 OR
      * @since 1.0.0
      */
-    public SqlTree(Collection<ISqlCondition> conditions, String connector) {
+    public SqlTree(Collection<Condition> conditions, String connector) {
         this.conditions.addAll(conditions);
         this.connector = SqlKeyword.replaceConnector(connector);
     }
@@ -73,7 +73,7 @@ public class SqlTree implements ISqlTree {
      * @return 当前 {@link SqlTree} 实例
      * @since 1.0.0
      */
-    private SqlTree addSingleChild(ISqlTree child) {
+    private SqlTree addSingleChild(Tree child) {
         if (child == null || child.getConditions().isEmpty()) {
             return this;
         }
@@ -88,17 +88,17 @@ public class SqlTree implements ISqlTree {
     }
 
     /**
-     * 将另一个 {@link ISqlTree} 合并到当前树中.
+     * 将另一个 {@link Tree} 合并到当前树中.
      *
      * @param sqlTree 要合并的 SQL 树
      * @return 当前 {@link SqlTree} 实例
      * @since 1.0.0
      */
-    protected SqlTree addChild(ISqlTree sqlTree) {
+    protected SqlTree addChild(Tree sqlTree) {
         if (sqlTree == null) {
             return this;
         }
-        for (ISqlTree node : sqlTree) {
+        for (Tree node : sqlTree) {
             if (node.getConditions().isEmpty()) {
                 continue;
             }

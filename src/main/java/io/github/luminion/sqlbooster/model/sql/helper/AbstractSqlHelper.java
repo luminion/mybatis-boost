@@ -1,10 +1,10 @@
-package io.github.luminion.sqlbooster.model.helper;
+package io.github.luminion.sqlbooster.model.sql.helper;
 
-import io.github.luminion.sqlbooster.model.api.ISqlCondition;
-import io.github.luminion.sqlbooster.model.api.ISqlSort;
-import io.github.luminion.sqlbooster.model.api.ISqlTree;
-import io.github.luminion.sqlbooster.model.impl.SqlCondition;
-import io.github.luminion.sqlbooster.model.impl.SqlEntity;
+import io.github.luminion.sqlbooster.model.api.Condition;
+import io.github.luminion.sqlbooster.model.api.Sort;
+import io.github.luminion.sqlbooster.model.api.Tree;
+import io.github.luminion.sqlbooster.model.sql.SqlCondition;
+import io.github.luminion.sqlbooster.model.sql.SqlWrapper;
 import io.github.luminion.sqlbooster.util.ReflectUtils;
 import lombok.Getter;
 
@@ -22,8 +22,8 @@ import java.util.Map;
  */
 @Getter
 @SuppressWarnings({"unused", "unchecked"})
-public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlEntity<T>
-        implements ILambdaSqlHelper<T, S> {
+public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> extends SqlWrapper<T>
+        implements LambdaHelper<T, S> {
 
     /**
      * 关联的实体类, 用于 SQL 校验和处理.
@@ -37,7 +37,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * @return 当前 {@link AbstractSqlHelper} 实例
      * @since 1.0.0
      */
-    public S merge(ISqlTree tree) {
+    public S merge(Tree tree) {
         if (tree != null) {
             super.addChild(tree);
         }
@@ -51,7 +51,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * @return 当前 {@link AbstractSqlHelper} 实例
      * @since 1.0.0
      */
-    public S merge(ISqlCondition condition) {
+    public S merge(Condition condition) {
         if (condition != null) {
             this.getConditions().add(condition);
         }
@@ -65,7 +65,7 @@ public abstract class AbstractSqlHelper<T, S extends AbstractSqlHelper<T, S>> ex
      * @return 当前 {@link AbstractSqlHelper} 实例
      * @since 1.0.0
      */
-    public S merge(ISqlSort sort) {
+    public S merge(Sort sort) {
         if (sort != null) {
             this.getSorts().add(sort);
         }

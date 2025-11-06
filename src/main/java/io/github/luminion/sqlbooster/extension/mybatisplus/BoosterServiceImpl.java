@@ -3,9 +3,9 @@ package io.github.luminion.sqlbooster.extension.mybatisplus;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.luminion.sqlbooster.core.BoosterEngine;
-import io.github.luminion.sqlbooster.extension.mybatis.BoostMapper;
-import io.github.luminion.sqlbooster.core.P;
-import io.github.luminion.sqlbooster.model.api.ISqlEntity;
+import io.github.luminion.sqlbooster.extension.mybatis.BoosterMapper;
+import io.github.luminion.sqlbooster.core.Page;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class BoostServiceImpl<M extends BaseMapper<T> & BoostMapper<T, V>, T, V> extends ServiceImpl<M, T> implements IPageBooster<T, V> {
+public abstract class BoosterServiceImpl<M extends BaseMapper<T> & BoosterMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoosterService<T, V> {
 
     @Override
-    public List<V> selectBySqlEntity(ISqlEntity<T> sqlEntity, P<V> page) {
-        return getBaseMapper().selectBySqlEntity(sqlEntity, page);
+    public List<V> selectByWrapper(Wrapper<T> wrapper, Page<V> page) {
+        return getBaseMapper().selectByWrapper(wrapper, page);
     }
 
 }

@@ -1,12 +1,12 @@
 package io.github.luminion.sqlbooster.core;
 
-import io.github.luminion.sqlbooster.enums.SqlKeyword;
-import io.github.luminion.sqlbooster.model.api.ISqlEntity;
-import io.github.luminion.sqlbooster.model.impl.SqlCondition;
-import io.github.luminion.sqlbooster.model.helper.BoostSqlHelper;
-import io.github.luminion.sqlbooster.model.helper.ISqlHelper;
-import io.github.luminion.sqlbooster.model.helper.SqlHelper;
-import io.github.luminion.sqlbooster.model.helper.processor.FieldSuffixProcessor;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
+import io.github.luminion.sqlbooster.model.sql.SqlCondition;
+import io.github.luminion.sqlbooster.model.sql.helper.SqlHelperBooster;
+import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.processor.FieldSuffixProcessor;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.ReflectUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
@@ -54,7 +54,7 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default void voPreProcess(ISqlEntity<T> sqlEntity) {
+    default void voPreProcess(Wrapper<T> wrapper) {
         // do nothing here, only for override
     }
 
@@ -64,7 +64,7 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default void voPostProcess(List<V> records, ISqlEntity<T> sqlEntity, P<V> page) {
+    default void voPostProcess(List<V> records, Wrapper<T> wrapper, Page<V> page) {
         // do nothing here, only for override
     }
 
@@ -155,8 +155,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default V voFirst(ISqlEntity<T> sqlEntity) {
-        List<V> vs = voList(sqlEntity);
+    default V voFirst(Wrapper<T> wrapper) {
+        List<V> vs = voList(wrapper);
         if (vs.isEmpty()) {
             return null;
         }
@@ -169,8 +169,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> R voFirst(ISqlEntity<T> sqlEntity, Class<R> targetType) {
-        return ReflectUtils.toTarget(voFirst(sqlEntity), targetType);
+    default <R> R voFirst(Wrapper<T> wrapper, Class<R> targetType) {
+        return ReflectUtils.toTarget(voFirst(wrapper), targetType);
     }
 
     /**
@@ -179,8 +179,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default Optional<V> voFirstOpt(ISqlEntity<T> sqlEntity) {
-        return Optional.ofNullable(voFirst(sqlEntity));
+    default Optional<V> voFirstOpt(Wrapper<T> wrapper) {
+        return Optional.ofNullable(voFirst(wrapper));
     }
 
     /**
@@ -189,8 +189,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> Optional<R> voFirstOpt(ISqlEntity<T> sqlEntity, Class<R> targetType) {
-        return Optional.ofNullable(voFirst(sqlEntity, targetType));
+    default <R> Optional<R> voFirstOpt(Wrapper<T> wrapper, Class<R> targetType) {
+        return Optional.ofNullable(voFirst(wrapper, targetType));
     }
 
     /**
@@ -199,8 +199,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default V voUnique(ISqlEntity<T> sqlEntity) {
-        List<V> vs = voList(sqlEntity);
+    default V voUnique(Wrapper<T> wrapper) {
+        List<V> vs = voList(wrapper);
         if (vs.isEmpty()) {
             return null;
         }
@@ -216,8 +216,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> R voUnique(ISqlEntity<T> sqlEntity, Class<R> targetType) {
-        return ReflectUtils.toTarget(voUnique(sqlEntity), targetType);
+    default <R> R voUnique(Wrapper<T> wrapper, Class<R> targetType) {
+        return ReflectUtils.toTarget(voUnique(wrapper), targetType);
     }
 
     /**
@@ -226,8 +226,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default Optional<V> voUniqueOpt(ISqlEntity<T> sqlEntity) {
-        return Optional.ofNullable(voUnique(sqlEntity));
+    default Optional<V> voUniqueOpt(Wrapper<T> wrapper) {
+        return Optional.ofNullable(voUnique(wrapper));
     }
 
     /**
@@ -236,8 +236,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> Optional<R> voUniqueOpt(ISqlEntity<T> sqlEntity, Class<R> targetType) {
-        return Optional.ofNullable(voUnique(sqlEntity, targetType));
+    default <R> Optional<R> voUniqueOpt(Wrapper<T> wrapper, Class<R> targetType) {
+        return Optional.ofNullable(voUnique(wrapper, targetType));
     }
 
     /**
@@ -256,14 +256,11 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default List<V> voList(ISqlEntity<T> sqlEntity) {
-        voPreProcess(sqlEntity);
-        FieldSuffixProcessor fieldSuffixProcessor = FieldSuffixProcessor.of();
-        ISqlHelper<T> sqlHelper = SqlHelper.of(sqlEntity)
-                .entity(this)
-                .process(fieldSuffixProcessor::process);
-        List<V> vs = selectBySqlEntity(sqlHelper, null);
-        voPostProcess(vs, sqlEntity, null);
+    default List<V> voList(Wrapper<T> wrapper) {
+        voPreProcess(wrapper);
+        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
+        List<V> vs = selectByWrapper(sqlHelper, null);
+        voPostProcess(vs, wrapper, null);
         return vs;
     }
 
@@ -273,8 +270,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> List<R> voList(ISqlEntity<T> sqlEntity, Class<R> targetType) {
-        List<V> vs = voList(sqlEntity);
+    default <R> List<R> voList(Wrapper<T> wrapper, Class<R> targetType) {
+        List<V> vs = voList(wrapper);
         return vs.stream()
                 .map(v -> ReflectUtils.toTarget(v, targetType))
                 .collect(Collectors.toList());
@@ -286,8 +283,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default P<V> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize) {
-        return voPage(sqlEntity, (long) pageNum, pageSize);
+    default Page<V> voPage(Wrapper<T> wrapper, int pageNum, int pageSize) {
+        return voPage(wrapper, (long) pageNum, pageSize);
     }
 
     /**
@@ -296,7 +293,7 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default P<V> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize) {
+    default Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
@@ -306,8 +303,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> P<R> voPage(ISqlEntity<T> sqlEntity, int pageNum, int pageSize, Class<R> targetType) {
-        return voPage(sqlEntity, (long) pageNum, pageSize, targetType);
+    default <R> Page<R> voPage(Wrapper<T> wrapper, int pageNum, int pageSize, Class<R> targetType) {
+        return voPage(wrapper, (long) pageNum, pageSize, targetType);
     }
 
     /**
@@ -316,8 +313,8 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @since 1.0.0
      */
     @Override
-    default <R> P<R> voPage(ISqlEntity<T> sqlEntity, long pageNum, long pageSize, Class<R> targetType) {
-        return voPage(sqlEntity, pageNum, pageSize).convertRecords(targetType);
+    default <R> Page<R> voPage(Wrapper<T> wrapper, long pageNum, long pageSize, Class<R> targetType) {
+        return voPage(wrapper, pageNum, pageSize).convertRecords(targetType);
     }
 
     /**
@@ -326,17 +323,17 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
      * @return SQL 助手
      * @since 1.0.0
      */
-    default BoostSqlHelper<T, V> lambdaHelper() {
-        return new BoostSqlHelper<>(this);
+    default SqlHelperBooster<T, V> lambdaHelper() {
+        return new SqlHelperBooster<>(this);
     }
 
     /**
      * 最终执行查询的方法.
      *
-     * @param sqlEntity 查询条件
+     * @param wrapper 查询条件
      * @param page      分页对象
      * @return 查询结果列表
      * @since 1.0.0
      */
-    List<V> selectBySqlEntity(ISqlEntity<T> sqlEntity, P<V> page);
+    List<V> selectByWrapper(Wrapper<T> wrapper, Page<V> page);
 }

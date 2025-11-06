@@ -8,7 +8,7 @@ package io.github.luminion.sqlbooster.model.api;
  * @author luminion
  * @since 1.0.0
  */
-public interface ISqlCondition {
+public interface Condition {
 
     /**
      * 获取条件的字段名.

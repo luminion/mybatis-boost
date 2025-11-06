@@ -7,7 +7,7 @@ import java.util.List;
  * @param <T> 记录的类型
  * @author luminion
  */
-public interface P<T> {
+public interface Page<T> {
     /**
      * 获取记录列表
      *
@@ -58,5 +58,5 @@ public interface P<T> {
      * @param clazz 目标类型
      * @return 转换后的记录列表
      */
-    <R> P<R> convertRecords(Class<R> clazz);
+    <R> Page<R> convertRecords(Class<R> clazz);
 }

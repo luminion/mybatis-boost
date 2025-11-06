@@ -1,8 +1,8 @@
 package io.github.luminion.sqlbooster.extension.mybatis;
 
 import io.github.luminion.sqlbooster.core.BoosterEngine;
-import io.github.luminion.sqlbooster.core.P;
-import io.github.luminion.sqlbooster.model.api.ISqlEntity;
+import io.github.luminion.sqlbooster.core.Page;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoostMapper<T, V> extends BoosterEngine<T, V> {
+public interface BoosterMapper<T, V> extends BoosterEngine<T, V> {
 
     /**
      * {@inheritDoc}
      * @since 1.0.0
      */
     @Override
-    List<V> selectBySqlEntity(@Param("wrapper") ISqlEntity<T> sqlEntity, @Param("page") P<V> page);
+    List<V> selectByWrapper(@Param("wrapper") Wrapper<T> wrapper, @Param("page") Page<V> page);
 
 }

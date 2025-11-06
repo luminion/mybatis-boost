@@ -1,11 +1,11 @@
-package io.github.luminion.sqlbooster.model.helper.processor;
+package io.github.luminion.sqlbooster.model.sql.helper.processor;
 
-import io.github.luminion.sqlbooster.enums.SqlKeyword;
-import io.github.luminion.sqlbooster.model.api.ISqlCondition;
-import io.github.luminion.sqlbooster.model.api.ISqlTree;
-import io.github.luminion.sqlbooster.model.impl.SqlCondition;
-import io.github.luminion.sqlbooster.model.helper.ISqlHelper;
-import io.github.luminion.sqlbooster.model.helper.SqlHelper;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
+import io.github.luminion.sqlbooster.model.api.Condition;
+import io.github.luminion.sqlbooster.model.api.Tree;
+import io.github.luminion.sqlbooster.model.sql.SqlCondition;
+import io.github.luminion.sqlbooster.model.sql.helper.BaseHelper;
+import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -127,11 +127,11 @@ public class FieldSuffixProcessor {
      *
      * @param rootHelper 根 SQL 助手
      * @param <T>        实体类型
-     * @return 处理后的 {@link ISqlHelper} 实例
+     * @return 处理后的 {@link BaseHelper} 实例
      * @throws IllegalArgumentException 当无法获取实体类时抛出
      * @since 1.0.0
      */
-    public <T> ISqlHelper<T> process(ISqlHelper<T> rootHelper) {
+    public <T> BaseHelper<T> process(BaseHelper<T> rootHelper) {
         Class<T> entityClass = rootHelper.getEntityClass();
         if (entityClass == null) {
             throw new IllegalArgumentException("can't get entity class from sql helper");
@@ -140,13 +140,13 @@ public class FieldSuffixProcessor {
         Map<String, Object> extraParams = resultHelper.getExtra();
         Map<String, String> entityPropertyToColumnAliasMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
         Set<String> suffixes = suffixToOperatorMap.keySet();
-        for (ISqlTree currentHelper : rootHelper) {
-            Collection<ISqlCondition> currentHelperConditions = currentHelper.getConditions();
-            Iterator<ISqlCondition> conditionIterator = currentHelperConditions.iterator();
-            LinkedHashSet<ISqlCondition> validatedConditions = new LinkedHashSet<>(currentHelperConditions.size());
+        for (Tree currentHelper : rootHelper) {
+            Collection<Condition> currentHelperConditions = currentHelper.getConditions();
+            Iterator<Condition> conditionIterator = currentHelperConditions.iterator();
+            LinkedHashSet<Condition> validatedConditions = new LinkedHashSet<>(currentHelperConditions.size());
             while (conditionIterator.hasNext()) {
-                ISqlCondition sqlCondition = conditionIterator.next();
-                String field = sqlCondition.getField();
+                Condition condition = conditionIterator.next();
+                String field = condition.getField();
                 String jdbcColumn = entityPropertyToColumnAliasMap.get(field);
                 if (jdbcColumn == null) {
                     boolean isSuffixMatched = false;
@@ -156,8 +156,8 @@ public class FieldSuffixProcessor {
                             String sourceFiled = field.substring(0, field.length() - suffix.length());
                             String operator = suffixToOperatorMap.get(suffix);
                             log.debug("condition field [{}] Matched suffix operator [{}]", field, operator);
-                            SqlCondition suffixCondition = new SqlCondition(sourceFiled, operator, sqlCondition.getValue());
-                            ISqlCondition validateSuffixCondition = DefaultProcessor.validateCondition(suffixCondition, entityPropertyToColumnAliasMap, extraParams);
+                            SqlCondition suffixCondition = new SqlCondition(sourceFiled, operator, condition.getValue());
+                            Condition validateSuffixCondition = BasicProcessor.validateCondition(suffixCondition, entityPropertyToColumnAliasMap, extraParams);
                             if (validateSuffixCondition == null) {
                                 continue;
                             }
@@ -169,15 +169,15 @@ public class FieldSuffixProcessor {
                         continue;
                     }
                 }
-                ISqlCondition validate = DefaultProcessor.validateCondition(sqlCondition, entityPropertyToColumnAliasMap, extraParams);
+                Condition validate = BasicProcessor.validateCondition(condition, entityPropertyToColumnAliasMap, extraParams);
                 if (validate == null) {
                     continue;
                 }
                 validatedConditions.add(validate);
             }
-            DefaultProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
+            BasicProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        DefaultProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), entityPropertyToColumnAliasMap);
+        BasicProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), entityPropertyToColumnAliasMap);
         return resultHelper;
     }
 

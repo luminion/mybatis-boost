@@ -8,7 +8,7 @@ package io.github.luminion.sqlbooster.model.api;
  * @author luminion
  * @since 1.0.0
  */
-public interface ISqlSort {
+public interface Sort {
 
     /**
      * 获取排序字段的属性名.

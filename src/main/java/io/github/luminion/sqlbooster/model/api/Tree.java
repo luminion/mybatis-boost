@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
  * @author luminion
  * @since 1.0.0
  */
-public interface ISqlTree extends Iterable<ISqlTree> {
+public interface Tree extends Iterable<Tree> {
 
     /**
      * 获取当前节点的条件列表.
@@ -20,7 +20,7 @@ public interface ISqlTree extends Iterable<ISqlTree> {
      * @return 条件列表
      * @since 1.0.0
      */
-    Collection<ISqlCondition> getConditions();
+    Collection<Condition> getConditions();
 
     /**
      * 获取用于连接当前节点条件的逻辑连接符 (例如 AND, OR).
@@ -36,7 +36,7 @@ public interface ISqlTree extends Iterable<ISqlTree> {
      * @return 子条件树, 可能为 null
      * @since 1.0.0
      */
-    ISqlTree getChild();
+    Tree getChild();
 
     /**
      * 返回一个用于遍历 SQL 树节点的迭代器.
@@ -46,7 +46,7 @@ public interface ISqlTree extends Iterable<ISqlTree> {
      */
     @Override
     @SuppressWarnings("all")
-    default Iterator<ISqlTree> iterator() {
+    default Iterator<Tree> iterator() {
         return new Itr(this);
     }
 
@@ -54,9 +54,9 @@ public interface ISqlTree extends Iterable<ISqlTree> {
      * SQL 树的迭代器实现.
      * @since 1.0.0
      */
-    class Itr implements Iterator<ISqlTree> {
+    class Itr implements Iterator<Tree> {
 
-        private ISqlTree current;
+        private Tree current;
 
         /**
          * 构造一个从指定根节点开始的迭代器.
@@ -64,7 +64,7 @@ public interface ISqlTree extends Iterable<ISqlTree> {
          * @param root 树的根节点
          * @since 1.0.0
          */
-        public Itr(ISqlTree root) {
+        public Itr(Tree root) {
             current = root;
         }
 
@@ -82,11 +82,11 @@ public interface ISqlTree extends Iterable<ISqlTree> {
          * @since 1.0.0
          */
         @Override
-        public ISqlTree next() {
+        public Tree next() {
             if (current == null) {
                 throw new NoSuchElementException();
             }
-            ISqlTree result = current;
+            Tree result = current;
             current = current.getChild();
             return result;
         }

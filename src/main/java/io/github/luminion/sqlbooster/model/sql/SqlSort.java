@@ -1,12 +1,12 @@
-package io.github.luminion.sqlbooster.model.impl;
+package io.github.luminion.sqlbooster.model.sql;
 
-import io.github.luminion.sqlbooster.model.api.ISqlSort;
+import io.github.luminion.sqlbooster.model.api.Sort;
 import lombok.*;
 
 /**
  * SQL 排序实体类.
  * <p>
- * 实现了 {@link ISqlSort} 接口, 用于表示 SQL 查询中的排序规则.
+ * 实现了 {@link Sort} 接口, 用于表示 SQL 查询中的排序规则.
  *
  * @author luminion
  * @since 1.0.0
@@ -17,7 +17,7 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class SqlSort implements ISqlSort {
+public class SqlSort implements Sort {
 
     /**
      * 排序字段.
@@ -30,13 +30,13 @@ public class SqlSort implements ISqlSort {
     protected boolean desc;
 
     /**
-     * 从 {@link ISqlSort} 实例创建 {@link SqlSort} 实例.
+     * 从 {@link Sort} 实例创建 {@link SqlSort} 实例.
      *
      * @param sort SQL 排序接口实例
      * @return {@link SqlSort} SQL 排序实体实例
      * @since 1.0.0
      */
-    public static SqlSort of(ISqlSort sort) {
+    public static SqlSort of(Sort sort) {
         return new SqlSort(sort.getField(), sort.isDesc());
     }
 

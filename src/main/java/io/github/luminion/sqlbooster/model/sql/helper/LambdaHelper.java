@@ -1,9 +1,9 @@
-package io.github.luminion.sqlbooster.model.helper;
+package io.github.luminion.sqlbooster.model.sql.helper;
 
 import io.github.luminion.sqlbooster.core.MethodReference;
-import io.github.luminion.sqlbooster.enums.SqlKeyword;
-import io.github.luminion.sqlbooster.model.impl.SqlCondition;
-import io.github.luminion.sqlbooster.model.impl.SqlSort;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
+import io.github.luminion.sqlbooster.model.sql.SqlCondition;
+import io.github.luminion.sqlbooster.model.sql.SqlSort;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 
 import java.util.Collection;
@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 @SuppressWarnings({"unchecked", "unused"})
-public interface ILambdaSqlHelper<T, S extends ILambdaSqlHelper<T, S>> extends ISqlHelper<T> {
+public interface LambdaHelper<T, S extends LambdaHelper<T, S>> extends BaseHelper<T> {
 
     /**
      * 添加一组 OR 连接的条件.

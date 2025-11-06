@@ -1,4 +1,4 @@
-package io.github.luminion.sqlbooster.enums;
+package io.github.luminion.sqlbooster.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
