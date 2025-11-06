@@ -27,7 +27,7 @@ import java.util.Map;
 @Slf4j
 @AutoConfiguration
 @ConditionalOnBean(SqlSessionFactory.class)
-public class BoostAutoConfiguration implements ApplicationRunner {
+public class BoosterAutoConfiguration implements ApplicationRunner {
 
     private final ApplicationContext applicationContext;
 
@@ -37,7 +37,7 @@ public class BoostAutoConfiguration implements ApplicationRunner {
      * @param applicationContext Spring应用上下文
      * @since 1.0.0
      */
-    public BoostAutoConfiguration(ApplicationContext applicationContext) {
+    public BoosterAutoConfiguration(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
