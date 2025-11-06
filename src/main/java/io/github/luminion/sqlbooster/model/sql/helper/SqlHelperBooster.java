@@ -18,9 +18,22 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public class SqlHelperBooster<T, V> {
+    /**
+     * Booster 核心实例
+     */
     private final BoosterCore<T, V> boosterCore;
+    /**
+     * 查询条件
+     */
     private final Wrapper<T> wrapper;
 
+    /**
+     * 构造一个新的 {@link SqlHelperBooster} 实例.
+     *
+     * @param boosterCore {@link BoosterCore} 实例
+     * @param wrapper     {@link Wrapper} 实例
+     * @since 1.0.0
+     */
     public SqlHelperBooster(BoosterCore<T, V> boosterCore, Wrapper<T> wrapper){
         this.boosterCore = boosterCore;
         this.wrapper = wrapper;

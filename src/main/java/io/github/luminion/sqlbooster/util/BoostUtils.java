@@ -79,7 +79,7 @@ public abstract class BoostUtils {
         }
         return count;
     }
-    
+
 
     /**
      * 将下划线命名的字符串转换为驼峰命名.
@@ -124,7 +124,7 @@ public abstract class BoostUtils {
         }
         return sb.toString();
     }
-    
+
 
     /**
      * 从 Booster 实现类中获取实体类的 Class 对象.

@@ -23,6 +23,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 public class MybatisProvider implements BoostProvider {
+
+    /**
+     * 是否将驼峰命名转换为下划线命名
+     */
     private final boolean mapUnderscoreToCamelCase;
 
     /**

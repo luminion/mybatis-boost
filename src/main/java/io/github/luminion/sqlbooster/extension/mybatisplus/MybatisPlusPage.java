@@ -16,6 +16,10 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class MybatisPlusPage<T> implements Page<T> {
+
+    /**
+     * Mybatis-Plus 的分页对象
+     */
     private final IPage<T> pageInfo;
 
     @Override

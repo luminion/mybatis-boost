@@ -22,12 +22,10 @@ import java.util.List;
 public abstract class ExcelUtils {
     /**
      * 底层 Excel 库的基础包名.
-     * @since 1.0.0
      */
     public static String excelBasePackage = "cn.idev.excel";
     /**
      * 底层 Excel 库的入口类名.
-     * @since 1.0.0
      */
     public static String excelClassName = "FastExcel";
 
