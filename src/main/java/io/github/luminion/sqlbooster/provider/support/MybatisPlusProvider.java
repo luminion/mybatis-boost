@@ -72,6 +72,6 @@ public class MybatisPlusProvider implements BoostProvider {
      */
     @Override
     public int getOrder() {
-        return Integer.MAX_VALUE;
+        return Integer.MAX_VALUE - 100;
     }
 }
