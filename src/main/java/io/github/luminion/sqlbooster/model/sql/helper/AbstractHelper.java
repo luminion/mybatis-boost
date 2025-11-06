@@ -134,7 +134,7 @@ public abstract class AbstractHelper<T, S extends AbstractHelper<T, S>> extends 
      */
     public <V, P> SqlHelperBooster<T, V> boost(BoosterCore<T, V> boosterCore) {
         this.entityClass = BoostUtils.getEntityClass(boosterCore);
-        return new SqlHelperBooster<>(boosterCore);
+        return new SqlHelperBooster<>(boosterCore,this);
     }
 
 }
