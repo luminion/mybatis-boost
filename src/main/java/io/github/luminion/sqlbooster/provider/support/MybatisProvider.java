@@ -34,7 +34,11 @@ public class MybatisProvider implements BoostProvider {
      */
     @Override
     public <T> String getTableName(Class<T> clazz) {
-        return BoostUtils.camelCaseToUnderscore(clazz.getName());
+        String tableName = BoostUtils.camelCaseToUnderscore(clazz.getName());
+        if (tableName.startsWith("_")){
+            return tableName.substring(1);
+        }
+        return tableName;
     }
 
     /**
