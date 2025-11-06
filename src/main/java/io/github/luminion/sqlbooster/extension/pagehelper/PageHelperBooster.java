@@ -18,7 +18,7 @@ public interface PageHelperBooster<T, V> extends BoosterEngine<T, V> {
         voPreProcess(wrapper);
         
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this).process(FieldSuffixProcessor.of()::process);
-        PageInfo<V> pageInfo = PageHelper.startPage(1, 10)
+        PageInfo<V> pageInfo = PageHelper.startPage((int) pageNum, (int) pageSize)
                 .doSelectPageInfo(() -> selectByWrapper(sqlHelper, null));
         PageHelperPage<V> page = new PageHelperPage<>(pageInfo);
         

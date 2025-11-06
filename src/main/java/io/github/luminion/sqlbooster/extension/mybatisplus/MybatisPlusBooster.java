@@ -35,10 +35,10 @@ public interface MybatisPlusBooster<T, V> extends BoosterEngine<T, V> {
         PageDTO<V> pageInfo = new PageDTO<>(pageNum, pageSize);
         List<V> vs = selectByWrapper(sqlHelper, pageInfo);
         pageInfo.setRecords(vs);
-        MybatisPlusPage<V> plusPage = new MybatisPlusPage<>(pageInfo);
+        MybatisPlusPage<V> page = new MybatisPlusPage<>(pageInfo);
         
-        voPostProcess(vs, sqlHelper, plusPage);
-        return plusPage;
+        voPostProcess(page.getRecords(), sqlHelper, page);
+        return page;
     }
 
 }
