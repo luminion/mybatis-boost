@@ -1,7 +1,6 @@
 package io.github.luminion.sqlbooster.extension.mybatisplus;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.luminion.sqlbooster.core.Page;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
 
 import java.util.List;
