@@ -364,7 +364,7 @@ public class SysUserController {
 - 修改`SuffixProcessor`的默认后缀, 来改变默认的后缀映射
 - 重写`BoosterEngine`验证调用的方法, 改变指定实例的后缀映射
 - 创建`SqlHelper<T>`时, 调用`process()`处理方法, 处理单次映射
-- 可用操作符见[后缀映射表](#后缀映射表)
+- 可用操作符见[动态后缀映射表](#动态后缀映射表)
 
 自定义示例:
 
@@ -400,7 +400,6 @@ public class App {
 - 支持复杂条件自由组合
 
 #### 入参格式
-
 支持动态sql的入参类为[SqlHelper](src/main/java/io/github/luminion/sqlbooster/model/sql/helper/SqlHelper.java)类,
 其格式如下:
 
