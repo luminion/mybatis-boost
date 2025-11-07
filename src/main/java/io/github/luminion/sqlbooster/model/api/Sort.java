@@ -19,11 +19,11 @@ public interface Sort {
     String getField();
 
     /**
-     * 是否为降序排列.
+     * 是否为升序排列
      *
-     * @return true 表示降序, false 表示升序
+     * @return true 表示升序, false 表示降序
      * @since 1.0.0
      */
-    boolean isDesc();
+    boolean isAsc();
 
 }

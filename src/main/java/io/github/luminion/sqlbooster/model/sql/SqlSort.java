@@ -25,9 +25,9 @@ public class SqlSort implements Sort {
     protected String field;
 
     /**
-     * 是否为降序排列.
+     * 是否为升序排列.
      */
-    protected boolean desc;
+    protected boolean asc;
 
     /**
      * 从 {@link Sort} 实例创建 {@link SqlSort} 实例.
@@ -37,7 +37,7 @@ public class SqlSort implements Sort {
      * @since 1.0.0
      */
     public static SqlSort of(Sort sort) {
-        return new SqlSort(sort.getField(), sort.isDesc());
+        return new SqlSort(sort.getField(), sort.isAsc());
     }
 
 }
