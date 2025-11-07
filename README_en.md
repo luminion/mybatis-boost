@@ -1,10 +1,12 @@
 # SQL Booster
 
-[中文](README.md)
-
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/luminion/sql-booster?style=social)](https://github.com/luminion/sql-booster)
+
+[简体中文](README.md) | English
+
+SQL Booster is an enhancement toolkit for database query design, aimed at simplifying and enhancing the development of the data access layer. It provides powerful dynamic SQL dynamic conditions and suffix query mapping functions.
 
 - [SQL Booster](#sql-booster)
   - [Features](#features)
@@ -30,8 +32,6 @@
       - [Specify Sort Fields](#specify-sort-fields)
       - [Full Function / Complex Query](#full-function--complex-query)
   - [Package Structure Description](#package-structure-description)
-
-SQL Booster is an enhancement toolkit for database query design, aimed at simplifying and enhancing the development of the data access layer. It provides powerful dynamic SQL dynamic conditions and suffix query mapping functions.
 
 ## Features
 

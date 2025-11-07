@@ -1,10 +1,12 @@
 # SQL Booster
 
-[English](README_en.md)
-
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/luminion/sql-booster?style=social)](https://github.com/luminion/sql-booster)
+
+简体中文 | [English](README_en.md)
+
+SQL Booster 是一个数据库查询设计的增强工具包，旨在简化和增强数据访问层的开发。提供了强大的动态SQL动态条件和后缀查询映射功能。
 
 - [SQL Booster](#sql-booster)
   - [功能特性](#功能特性)
@@ -31,7 +33,6 @@
       - [完整功能 / 复杂查询](#完整功能--复杂查询)
   - [包结构说明](#包结构说明)
 
-SQL Booster 是一个数据库查询设计的增强工具包，旨在简化和增强数据访问层的开发。提供了强大的动态SQL动态条件和后缀查询映射功能。
 
 ## 功能特性
 
