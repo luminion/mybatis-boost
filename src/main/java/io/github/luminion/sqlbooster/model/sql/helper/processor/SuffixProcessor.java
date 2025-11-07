@@ -24,44 +24,56 @@ public class SuffixProcessor {
     /**
      * 默认的后缀到操作符的映射表.
      */
-    private static final Map<String, String> suffixMap = new LinkedHashMap<>();
-
-    static {
-        add("Ne", SqlKeyword.NE.getKeyword());
-        add("Lt", SqlKeyword.LT.getKeyword());
-        add("Le", SqlKeyword.LE.getKeyword());
-        add("Gt", SqlKeyword.GT.getKeyword());
-        add("Ge", SqlKeyword.GE.getKeyword());
-        add("Like", SqlKeyword.LIKE.getKeyword());
-        add("NotLike", SqlKeyword.NOT_LIKE.getKeyword());
-        add("In", SqlKeyword.IN.getKeyword());
-        add("NotIn", SqlKeyword.NOT_IN.getKeyword());
-        add("Null", SqlKeyword.IS_NULL.getKeyword());
-        add("IsNull", SqlKeyword.IS_NULL.getKeyword());
-        add("NotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
-        add("IsNotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
-        add("BitIn", SqlKeyword.BIT_IN.getKeyword());
-        add("BitNotIn", SqlKeyword.BIT_NOT_IN.getKeyword());
-    }
-
-    private static void add(String camelCase, String operator) {
-        suffixMap.put(camelCase, operator);
-        String underscore = BoostUtils.camelCaseToUnderscore(camelCase);
-        suffixMap.put(underscore, operator);
-    }
-
-
+    private static Map<String, String> defaultSuffixToOperatorMap;
     /**
      * 当前处理器实例使用的后缀到操作符的映射.
      */
     private final Map<String, String> suffixToOperatorMap;
 
     /**
-     * 私有构造函数, 使用默认的后缀映射.
+     * 设置默认的后缀到操作符的映射表.
+     *
+     * @param suffixToOperatorMap 后缀到操作符的映射表
+     * @since 1.0.0
      */
-    private SuffixProcessor() {
-        this.suffixToOperatorMap = suffixMap;
+    public static void defaultSuffixMap(Map<String, String> suffixToOperatorMap) {
+        SuffixProcessor.defaultSuffixToOperatorMap = Collections.unmodifiableMap(suffixToOperatorMap);
     }
+
+    static {
+        HashMap<String, String> map = new HashMap<>();
+        addBothCamelCaseAndUnderscore(map, "Ne", SqlKeyword.NE.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "Lt", SqlKeyword.LT.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "Le", SqlKeyword.LE.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "Gt", SqlKeyword.GT.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "Ge", SqlKeyword.GE.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "Like", SqlKeyword.LIKE.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "NotLike", SqlKeyword.NOT_LIKE.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "In", SqlKeyword.IN.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "NotIn", SqlKeyword.NOT_IN.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "Null", SqlKeyword.IS_NULL.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "IsNull", SqlKeyword.IS_NULL.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "NotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "IsNotNull", SqlKeyword.IS_NOT_NULL.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "BitIn", SqlKeyword.BIT_IN.getKeyword());
+        addBothCamelCaseAndUnderscore(map, "BitNotIn", SqlKeyword.BIT_NOT_IN.getKeyword());
+        defaultSuffixToOperatorMap = Collections.unmodifiableMap(map);
+    }
+
+    /**
+     * 向map中同时添加驼峰式和下划线式后缀的映射
+     *
+     * @param map      映射关系表
+     * @param suffix   后缀
+     * @param operator 操作符
+     * @since 1.0.0
+     */
+    public static void addBothCamelCaseAndUnderscore(Map<String, String> map, String suffix, String operator) {
+        map.put(suffix, operator);
+        String underscore = BoostUtils.camelCaseToUnderscore(suffix);
+        map.putIfAbsent(underscore, operator);
+    }
+
 
     /**
      * 私有构造函数, 使用自定义的后缀映射.
@@ -75,19 +87,15 @@ public class SuffixProcessor {
         this.suffixToOperatorMap = suffixToOperatorMap;
     }
 
-    /**
-     * 默认的单例实例.
-     */
-    private static final SuffixProcessor instance = new SuffixProcessor();
 
     /**
-     * 获取默认的 {@link SuffixProcessor} 单例实例.
+     * 获取默认的 {@link SuffixProcessor}
      *
      * @return 单例实例
      * @since 1.0.0
      */
     public static SuffixProcessor of() {
-        return instance;
+        return new SuffixProcessor(defaultSuffixToOperatorMap);
     }
 
     /**
