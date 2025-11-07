@@ -19,47 +19,12 @@ SQL Booster 是一个数据库查询设计的增强工具包，旨在简化和�
 
 ---
 
-## 包结构说明
-
-```
-io.github.luminion.sqlbooster
-├── core                  # 核心的 SQL 构建器和引擎
-│   ├── Page.java
-│   ├── Booster.java
-│   ├── BoosterCore.java
-│   ├── BoosterEngine.java
-│   └── MethodReference.java
-├── util                  # 提供项目使用的各种工具类
-│   ├── BoostUtils.java
-│   ├── ExcelUtils.java
-│   ├── MapperUtils.java
-│   └── ReflectUtils.java
-├── model                 # 定义了 API、SQL 和枚举等数据模型
-│   ├── api
-│   ├── sql
-│   └── enums
-├── config                # 提供 Spring Boot 的自动配置功能
-│   └── BoosterAutoConfiguration.java
-├── provider              # 包含各种提供者接口和实现，用于扩展和自定义
-│   ├── support
-│   ├── BoostProvider.java
-│   ├── TableNameProvider.java
-│   ├── IdPropertyProvider.java
-│   ├── GetterPropertyProvider.java
-│   └── PropertyToColumnAliasMapProvider.java
-└── extension             # 提供了与 MyBatis、MyBatis-Plus 和 PageHelper 等第三方库的集成
-    ├── mybatis
-    ├── pagehelper
-    └── mybatisplus
-```
-
----
-
 ## Maven 依赖
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
 
 ```xml
+
 <dependency>
     <groupId>io.github.luminion</groupId>
     <artifactId>sql-booster</artifactId>
@@ -70,10 +35,13 @@ io.github.luminion.sqlbooster
 ---
 
 ## 快速开始
+
 [code-generator](https://github.com/luminion/code-generator)代码生成器已适配该框架, 可以一键生成代码, 开箱即用
 
 ### 1. 创建实体类
+
 若已有实体类, 可忽略该步骤
+
 ```java
 // 数据库对应的实体类
 public class SysUser {
@@ -83,6 +51,7 @@ public class SysUser {
     // getter/setter...
 }
 ```
+
 ```java
 // 用于封装查询结果的VO类, 可以继承自实体类, 也可以直接使用实体类
 public class SysUserVO {
@@ -92,9 +61,11 @@ public class SysUserVO {
     // getter/setter...
 }
 ```
+
 ### 2. 扩展mapper接口
 
 获取xml文件内容
+
 ```java
 import io.github.luminion.sqlbooster.util.MapperUtils;
 
@@ -103,18 +74,20 @@ public static void main(String[] args) {
     System.out.println(mapperContent);
 }
 ```
+
 将获取的内容粘贴到mapper.xml文件中, 并根据需要`连表`/`添加条件`/`添加排序`
+
 ```xml
 <!--复制工具类生成的该sql片段到mapper.xml文件中-->
 <select id="selectByWrapper" resultType="com.example.test.vo.SysUserVO">
-    SELECT 
-    a.* 
-    FROM 
+    SELECT
+    a.*
+    FROM
     sys_user a
     <where>
         <include refid="sqlbooster.conditions"/>
         <!--此处编写自定义条件SQL, 未自动映射的条件可通过param1.extra获取, 编写时以AND开头以兼容自动映射的查询条件-->
-        AND a.deleted = 0 
+        AND a.deleted = 0
         <if test="param1.extra.userDeptName != null">
             AND a.dept_id in (SELECT id FROM sys_department WHERE name = #{param1.extra.userDeptName})
         </if>
@@ -128,29 +101,32 @@ public static void main(String[] args) {
 ```
 
 ### 3. Mapper接口继承指定类
+
 继承后可获得`voById`、`voByIds`、`voFirst`、`voUnique`、`voList`、`voPage`等方法
 
 提供以下几种继承, 任选其一
+
 * 继承`BoosterEngine`, 无分页功能
 * 继承`PageHelperBooster`, 完整功能, 使用`PageHelper`分页(需自行引入`PageHelper`依赖)
 * 继承`MybatisPlusBooster`, 完整功能, 使用`IPage`分页(需自行引入`Mybatis-plus`依赖),
 
+#### Mybatis环境, 使用`PageHelperBooster`
 
-####  Mybatis环境, 使用`PageHelperBooster`
 ```java
 import io.github.luminion.sqlbooster.extension.pagehelper.PageHelperBooster;
 
 // 继承PageHelperBooster
-public interface SysUserMapper extends PageHelperBooster<SysUser, SysUserVO>{
+public interface SysUserMapper extends PageHelperBooster<SysUser, SysUserVO> {
 
 }
 
 ```
+
 > **下一步阅读: [使用示例](#使用示例)**
 
 ---
 
-####  Mybatis-plus环境, 使用`MybatisPlusBooster`
+#### Mybatis-plus环境, 使用`MybatisPlusBooster`
 
 针对Mybatis-plus环境, 提供了细分接口供`Service`/`ServiceImpl`/`Mapper`进行继承
 
@@ -188,12 +164,12 @@ public class SysUserService extends BoosterMpService<SysUser, SysUserVO> {
 }
 ```
 
-
 > **下一步阅读: [使用示例](#使用示例)**
 
 ---
 
 #### 自定义环境, 使用`BoosterEngine`, 不使用分页
+
 * `BoosterEngine`提供了核心功能的多个默认实现, 但不包含分页功能
 * `BoosterEngine`提供了`voById`、`voByIds`、`voFirst`、`voUnique`、`voList`等方法的实现
 * `BoosterEngine`分页查询`voPage`方法在不调用时对业务逻辑无影响
@@ -204,7 +180,7 @@ import io.github.luminion.sqlbooster.core.BoosterEngine;
 
 // mapper继承BoosterEngine
 public interface SysUserMapper extends BoosterEngine<SysUser, SysUserVO> {
-    
+
 }
 ```
 
@@ -213,10 +189,10 @@ public interface SysUserMapper extends BoosterEngine<SysUser, SysUserVO> {
 ---
 
 #### 自定义环境, 使用`BoosterEngine`, 并重写分页逻辑
+
 * 默认该接口有4个不同参数的`voPage()`分页方法, 不使用分页功能时无需实现或重写
 * 实际运行时会所有分页方法会最终重载到`voPage(Wrapper, long, long)`这个方法中
 * 需要分页时, 仅重写`voPage(Wrapper, long, long)`方法, 添加分页的实现逻辑即可
-
 
 建议抽象一个父接口书写逻辑, 继承`BoosterEngine`, 其他Mapper再继承该接口, 以免多次重写:
 
@@ -230,12 +206,12 @@ public interface CustomBooster<T> extends BoosterEngine<SysUser, SysUserVO> {
     default Page<SysUserVO> voPage(Wrapper<SysUser> wrapper, long pageNum, long pageSize) {
         // 查询预处理 - 提供给子类重写的方法, 可用于对wrapper进行预处理, 可以不调用, 但建议调用以规范行为
         voPreProcess(wrapper);
-        
+
         // !!!重要!!!, 记得调用SqlHelper.process()方法
         // SqlHelper.process()方法用于处理动态映射和后缀映射, 同时检查条件合法性, 防止sql注入
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this)
                 .process(SuffixProcessor.of()::process);
-        
+
         // 分页逻辑, 以下为Mybatis-plus的分页示例, 实际实现时替换为自己的即可
         PageDTO<V> pageInfo = new PageDTO<>(pageNum, pageSize);
         List<V> vs = selectByBooster(sqlHelper, pageInfo); // 真正执行查询的mapper层方法
@@ -247,7 +223,7 @@ public interface CustomBooster<T> extends BoosterEngine<SysUser, SysUserVO> {
         voPostProcess(page.getRecords(), sqlHelper, page);
         return null;
     }
-    
+
 }
 ```
 
@@ -255,7 +231,7 @@ public interface CustomBooster<T> extends BoosterEngine<SysUser, SysUserVO> {
 // mapper继承自定义接口
 public interface SysUserMapper extends CustomBooster<SysUser, SysUserVO> {
 
-    
+
 }
 ```
 
@@ -326,7 +302,7 @@ public class SysUserController {
                                         @PathVariable("size") Long size) {
         return sysUserMapper.voPage(params, current, size);
     }
-    
+
     // 2025年11月
     // 因EasyExcel停更, 续作FastExcel变更为Apache fesod
     // Apache fesod暂未孵化, 待api稳定后, 再提供Excel相关功能
@@ -344,12 +320,13 @@ public class SysUserController {
 
 ## 核心功能
 
-### 后缀动态映射SQL
+### 动态后缀映射SQL
+
 - 在`参数`名称后添加特殊的后缀, 可以`动态映射`为`不同类型`的查询
 - 在不添加后缀时, 等同于`等于`查询
 - 后端可用`实体类`或`Map`接收参数
 
-#### 后缀映射表
+#### 动态后缀映射表
 
 | 后缀                           | 操作符           | 操作说明      | 示例 (JSON Key)                                           | 值类型                         |
 |------------------------------|---------------|-----------|---------------------------------------------------------|-----------------------------|
@@ -383,23 +360,25 @@ public class SysUserController {
 ```
 
 #### 自定义后缀映射
+
 - 修改`SuffixProcessor`的默认后缀, 来改变默认的后缀映射
 - 重写`BoosterEngine`验证调用的方法, 改变指定实例的后缀映射
 - 创建`SqlHelper<T>`时, 调用`process()`处理方法, 处理单次映射
 - 可用操作符见[后缀映射表](#后缀映射表)
 
-全局修改示例:
+自定义示例:
+
 ```java
 import io.github.luminion.sqlbooster.model.sql.helper.processor.SuffixProcessor;
 
 @SpringBootApplication
 public class App {
-    
+
     public static void main(String[] args) throws Exception {
         SpringApplication.run(App.class, args);
 
         // 指定后缀和操作符的映射关系
-        HashMap<String, String> map = new HashMap<String, String>(); 
+        HashMap<String, String> map = new HashMap<String, String>();
         map.put("_like", "LIKE");
         map.put("_ge", ">=");
         map.put("_le", "<=");
@@ -412,48 +391,83 @@ public class App {
 }
 ```
 
----
 
 ### 条件动态拼装SQL
 
 - 入参自由指定`查询条件`/`查询类型`/`查询值`
 - 入参自由指定`排序条件`和`升降序`
-- 入参嵌套`子条件`和`or`条件
-- 自动验证入参防`SQL注入`
+- 支持嵌套`子条件`和`or`条件
+- 自动验证参数, 防止`SQL注入`
+- 支持复杂条件自由组合
 
-#### 入参示例
 
-原始字段:
+#### 入参格式
+
+支持动态sql的入参类为[SqlHelper](src/main/java/io/github/luminion/sqlbooster/model/sql/helper/SqlHelper.java)类, 其格式如下:
+
 ```json
 {
-  "name": "mike",
-  "version": 1,
-  "age": 18,
-  "state": 1
+  "conditions": [
+    {
+      "field": "name",
+      "operator": "=",
+      "value": "mike"
+    },
+    {
+      "field": "age",
+      "operator": ">=",
+      "value": 18
+    }
+  ],
+  "sorts": [
+    {
+      "field": "id",
+      "desc": true
+    },
+    {
+      "field": "age",
+      "desc": false
+    }
+  ]
 }
 ```
+属性说明:
+* `conditions`用于存放一组查询条件,
+    * `field` 指定需要查询的字段
+    * `operator` 指定查询类型
+    * `value` 指定查询的值
+* `sorts`用于存放一组排序条件, `可选值`
+    * `field`指定需要排序的字段
+    * `desc`指定是否降序, 不传递时默认为升序
 
-[//]: # ( todo 把这个内容指定表格 ,表格有4列, sql符号,  说明, operator可用值 , 值类型)
-#### 指定字段检索条件
-- 通过`conditions`字段指定查询条件,
-- 其中每个条件对象`field`表示字段,`value`表示值,`operator`表示操作符号
-- `operator`不填写时,默认为等于, 可选值(不区分大小写)：
-  - `=` - 等于(默认),
-  - `<>` - 不等于
-  - `>` - 大于
-  - `>=` - 大于等于
-  - `<` - 小于
-  - `<=` - 小于等于
-  - `LIKE` - 模糊匹配
-  - `NOT LIKE` - 反模糊匹配
-  - `IN` - IN查询
-  - `NOT IN` - NOT IN查询
-  - `IS NULL` - 指定字段为NULL
-  - `IS NOT NULL` - 指定字段不为NULL
-  - `$>` - 位运算, 包含指定bit位
-  - `$=` - 位运算, 不包含指定bit位
+#### 查询类型映射表
+
+| sql查询类型       | 说明        | operator参数值                        | 值类型                         |
+|:--------------|:----------|:-----------------------------------|:----------------------------|
+| `=`           | 等于(默认)    | `=`, `==`, `eq`, `EQ`              | String, Number, Boolean     |
+| `<>`          | 不等于       | `<>`, `!=`, `ne`, `NE`             | String, Number, Boolean     |
+| `>`           | 大于        | `>`, `gt`, `GT`                    | Number, Date                |
+| `>=`          | 大于等于      | `>=`, `ge`, `GE`                   | Number, Date                |
+| `<`           | 小于        | `<`, `lt`, `LT`                    | Number, Date                |
+| `<=`          | 小于等于      | `<=`, `le`, `LE`                   | Number, Date                |
+| `LIKE`        | 模糊匹配      | `$`,`like`, `LIKE`                 | String                      |
+| `NOT LIKE`    | 反模糊匹配     | `!$`,`not_like`, `NOT_LIKE`        | String                      |
+| `IN`          | 在指定列表中    | `@`,`in`, `IN`                     | List/Array (String, Number) |
+| `NOT IN`      | 不在指定列表中   | `!@`,`not_in`, `NOT_IN`            | List/Array (String, Number) |
+| `IS NULL`     | 为空        | `?`, `is_null`, `IS_NULL`          | Boolean (true)              |
+| `IS NOT NULL` | 不为空       | `!?`, `is_not_null`, `IS_NOT_NULL` | Boolean (true)              |
+| `&`           | 包含指定bit位  | `&`, `bit_in`, `BIT_IN`            | Number                      |
+| `!&`          | 不包含指定bit位 | `!&`, `bit_not_in`, `BIT_NOT_IN`   | Number                      |
+
+> **提示: 其中 `=` 为默认值, 当查询的类型为`=`时无需传递operator参数**
+
+
+
+
+#### 基本使用
 
 查询`name`为`mike`, `version`大于等于`1`, `state`为`1`或`2`或`3`的数据
+
 ```json
 {
   "conditions": [
@@ -469,16 +483,23 @@ public class App {
     {
       "field": "state",
       "operator": "IN",
-      "value": [1, 2, 3]
+      "value": [
+        1,
+        2,
+        3
+      ]
     }
   ]
 }
 ```
+
 #### 指定排序字段
-- 通过`sorts`字段指定排序字段, 
+
+- 通过`sorts`字段指定排序字段,
 - 其中每个条件对象`field`表示排序的字段,`isDesc`表示是否倒序(未指定时默认升序)
 
 查询`name`为`mike`, `version`为`1`的数据, 并将结果按照`id`降序, `age`升序排列
+
 ```json
 {
   "conditions": [
@@ -502,22 +523,16 @@ public class App {
   ]
 }
 ```
-#### 复杂条件拼接
-SqlHelper完整结构
-- `conditions` - 查询条件
-- `sorts` - 排序字段, 仅根节点有效
-- `connector` - 条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
-- `child` - 子节点, 一般用于组合嵌套`OR`条件
-  - `conditions` - 子节点查询条件
-  - `connector` - 子节点条件间的连接符号, `AND`或`OR`, 不指定时默认`AND`
-  - `child` - 子子节点(可重复嵌套)
 
-使用建议:
-- 根节点的`conditions`字段用于组合`AND`条件 
-- 当需要组合`OR`条件时, 将`OR`条件组合在`child`中
+
+
+
+最佳实践:
+- 需要同时满足的条件都放在根节点的`conditions`中
 - `connector`默认为`AND`,不组合`OR`条件时无需传递
 - `child`不使用时, 无需传递
-- 
+- 当同时遇到即需要满足几个必要条件, 又存在多个条件任意满足其一时, 将这组条件放入一个`child`节点中,指定`connector`为`OR`
+
 ```json
 {
   "conditions": [],
@@ -527,34 +542,91 @@ SqlHelper完整结构
     "connector": "OR",
     "child": {
       "conditions": [],
-      "connector": "AND",
-      "child": {
-        "conditions": []
-      }
+      "connector": "OR"
     }
   }
 }
 ```
-查询 `version`大于`1`,`state`为`1`, `name`为`mike`或`john`, `age`小于`18`或大于`60`的数据
-```sql
-select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or name = 'john') and (age < 18 or age > 60)
+
+
+#### SqlHelper完整结构
+
+* `connector`用于指定`conditions`中条件之间的关系
+    * 该属性为可忽略属性 , 无需传递, 默认为`and`
+    * 可选值: `and`并且 / `or`或者
+* `conditions`用于存放一组查询条件,
+    * `field` 指定需要查询的字段
+    * `operator` 指定查询类型
+    * `value` 指定查询的值
+* `sorts`用于存放一组排序条件, `可选值`
+    * `field`指定需要排序的字段
+    * `desc`指定是否降序, 不传递时默认为升序
+* `child`为可嵌套的子条件, `仅复杂条件时`
+    * 无需嵌套时可忽略该属性
+    * 嵌套层级下不接受`sorts`参数
+    * 必要时,嵌套层级下还可继续嵌套`child`
+
+```json
+{
+  "connector": "and",
+  "conditions": [
+    {
+      "field": "name",
+      "operator": "=",
+      "value": "mike"
+    },
+    {
+      "field": "age",
+      "operator": ">=",
+      "value": 18
+    }
+  ],
+  "sorts": [
+    {
+      "field": "id",
+      "desc": true
+    },
+    {
+      "field": "age",
+      "desc": false
+    }
+  ],
+  "child": {
+    "conditions": [],
+    "connector": "or",
+    "child": null
+  }
+}
 ```
+
+
+复杂条件示例: 查询国籍为中国, 手机号不为空,姓名为mike或者john, 年龄小于18岁或者大于60岁的数据
+
+```sql
+SELECT *
+FROM sys_user
+WHERE (country = 'china' AND mobile IS NOT NULL)
+  AND (name = 'mike' OR name = 'john')
+  AND (age < 18 OR age > 60)
+```
+
 输入参数:
+
 ```json
 {
   "conditions": [
     {
-      "field": "version",
-      "operator": ">",
-      "value": 1
+      "field": "country",
+      "value": "china"
     },
     {
-      "field": "state",
-      "value": 1
+      "field": "mobile",
+      "operator": "is_not_null",
+      "value": true
     }
   ],
   "child": {
-    "connector": "OR",
+    "connector": "or",
     "conditions": [
       {
         "field": "name",
@@ -566,7 +638,7 @@ select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or n
       }
     ],
     "child": {
-      "connector": "OR",
+      "connector": "or",
       "conditions": [
         {
           "field": "age",
@@ -584,83 +656,36 @@ select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or n
 }
 ```
 
-## 字段映射
-默认字段映射规则为:
-- 通过Mybatis-plus的配置和注解来获取字段和数据库列的映射关系
-- 满足后缀查询时, 会自动去掉后缀并转化为对应类型查询
-- 若后缀查询和字段冲突, 则使用字段映射关系, 例如`nameLike`字段已存在时, 不会映射为`name`的模糊查询
-- 若找不到对应的字段映射关系, 则会自动将字段放入`unmapped`中, 供后续处理
-- 默认字段映射关系如下:
-  - 获取实体类对应的表信息
-  - 获取实体类字段信息
-  - 获取`@TableField`注解的属性
-  - 获取`EnhancedEntity`接口映射的属性
+## 包结构说明
 
-## 多表联查
-支持以下方式查询非本表字段
-- 自动映射, 兼容`动态SQL`和`动态后缀`查询
-  - 通过`@TableField(exist = false, value="xxx")`注解, 将字段封装为指定数据表的指定列
-  - 实现`EnhancedEntity`接口, 在`extraFieldColumnMap()`方法中定义字段名和数据库表/列的映射关系
-- 在`mapper.xml`文件中自行手动指定
-
-自动映射时, 需要在xml文件中添加需要连接的表和表名
-
-### 通过`@TableFiled`指定
-
-```java
-public class SysUserVO {
-
-  @TableField("user_name") // 字段为user_name
-  private String userName;
-
-  @TableField(exist = false, value = "role.name") // 映射为role表的name字段
-  private String roleName;
-
-  @TableField(exist = false, value = "dept.name") // 映射为dept表的name字段
-  private String deptName;
-}
-``` 
-
-### 实现EnhancedEntity接口
-
-```java
-public class SysUserVO implements EnhancedEntity {
-  // 属性列表....
-    
-  @Override
-  public Map<String, String> extraFieldColumnMap() {
-    var map = new HashMap<Object, Object>();
-    map.put("userName", "user_name"); // 将userName映射为实体类对应表的user_name字段
-    map.put("roleId", "role.id"); // 将roleId映射为role表的id字段
-    map.put("deptId", "dept.id"); // 将deptId映射为dept表的id字段
-    return map;
-  }
-}
-``` 
-
-### 在`mapper.xml`文件中自行手动指定
-所有不能自动映射的字段和值, 会作为`K`,`V`放入`param1.unmapped`中, 供后续处理, 可以在`mapper.xml`文件中自行手动指定, 如下:
-
-```xml
-
-<select id="voQueryByXml" resultType="com.example.test.vo.SysUserVO">
-    SELECT a.* FROM
-    sys_user a
-    left join sys_role b on a.role_id = b.id
-    left join sys_dept c on a.dept_id = c.id
-    <where>
-        <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.queryFragment"/>
-        <!--判断并字段是否存在值, 存在则添加条件-->
-        <if test="param1.unmapped.roleName!=null">
-            AND b.name = #{param1.unmapped.roleName}
-        </if>
-        <if test="param1.unmapped.deptName!=null">
-            AND c.name = #{param1.unmapped.deptName}
-        </if>
-    </where>
-    <trim prefix="ORDER BY" prefixOverrides=",">
-        <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
-        <!--添加自定义排序条件-->
-        , a.create_time DESC, a.id DESC
-    </trim>
-</select>
+```
+io.github.luminion.sqlbooster
+├── core                  # 核心的 SQL 构建器和引擎
+│   ├── Page.java
+│   ├── Booster.java
+│   ├── BoosterCore.java
+│   ├── BoosterEngine.java
+│   └── MethodReference.java
+├── util                  # 提供项目使用的各种工具类
+│   ├── BoostUtils.java
+│   ├── ExcelUtils.java
+│   ├── MapperUtils.java
+│   └── ReflectUtils.java
+├── model                 # 定义了 API、SQL 和枚举等数据模型
+│   ├── api
+│   ├── sql
+│   └── enums
+├── config                # 提供 Spring Boot 的自动配置功能
+│   └── BoosterAutoConfiguration.java
+├── provider              # 包含各种提供者接口和实现，用于扩展和自定义
+│   ├── support
+│   ├── BoostProvider.java
+│   ├── TableNameProvider.java
+│   ├── IdPropertyProvider.java
+│   ├── GetterPropertyProvider.java
+│   └── PropertyToColumnAliasMapProvider.java
+└── extension             # 提供了与 MyBatis、MyBatis-Plus 和 PageHelper 等第三方库的集成
+    ├── mybatis
+    ├── pagehelper
+    └── mybatisplus
+```
