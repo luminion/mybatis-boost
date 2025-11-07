@@ -1,8 +1,35 @@
 # SQL Booster
 
+[English](README_en.md)
+
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/luminion/sql-booster?style=social)](https://github.com/luminion/sql-booster)
+
+- [SQL Booster](#sql-booster)
+  - [功能特性](#功能特性)
+  - [Maven 依赖](#maven-依赖)
+  - [快速开始](#快速开始)
+    - [1. 创建实体类](#1-创建实体类)
+    - [2. 扩展mapper接口](#2-扩展mapper接口)
+    - [3. Mapper接口继承指定类](#3-mapper接口继承指定类)
+      - [Mybatis环境, 使用`PageHelperBooster`](#mybatis环境-使用pagehelperbooster)
+      - [Mybatis-plus环境, 使用`MybatisPlusBooster`](#mybatis-plus环境-使用mybatisplusbooster)
+      - [自定义环境, 使用`BoosterEngine`, 不使用分页](#自定义环境-使用boosterengine-不使用分页)
+      - [自定义环境, 使用`BoosterEngine`, 并重写分页逻辑](#自定义环境-使用boosterengine-并重写分页逻辑)
+  - [使用示例](#使用示例)
+  - [核心功能](#核心功能)
+    - [动态后缀映射SQL](#动态后缀映射sql)
+      - [动态后缀映射表](#动态后缀映射表)
+      - [入参示例](#入参示例)
+      - [自定义后缀映射](#自定义后缀映射)
+    - [动态条件组合SQL](#动态条件组合sql)
+      - [入参格式](#入参格式)
+      - [查询类型映射表](#查询类型映射表)
+      - [基本使用](#基本使用)
+      - [指定排序字段](#指定排序字段)
+      - [完整功能 / 复杂查询](#完整功能--复杂查询)
+  - [包结构说明](#包结构说明)
 
 SQL Booster 是一个数据库查询设计的增强工具包，旨在简化和增强数据访问层的开发。提供了强大的动态SQL动态条件和后缀查询映射功能。
 
@@ -576,7 +603,7 @@ public class App {
     * `value` 指定查询的值
 * `sorts`用于存放一组排序条件
     * `field`指定需要排序的字段
-    * `asc`指定是否升序, 不传递时默认为`false`, 其中`true`为升序,`false`为降序
+    * `asc`指定是否升序, `true`为升序,`false`为降序, 不传递时默认为`false`
 * `child`为可嵌套的子条件, `仅复杂条件时`
     * 无需嵌套时可忽略该属性
     * 嵌套层级下不接受`sorts`参数
