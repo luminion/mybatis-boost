@@ -122,12 +122,14 @@ public static void main(String[] args) {
     <trim prefix="ORDER BY" prefixOverrides=",">
         <include refid="sqlbooster.sorts"/>
         <!--此处编写排序字段SQL, 编写时以,开头以兼容自动映射的排序-->
-        , a.created_time desc , a.id desc
+        , a.created_time DESC , a.id DESC
     </trim>
 </select>
 ```
 
 ### 3. Mapper接口继承指定类
+继承后可获得`voById`、`voByIds`、`voFirst`、`voUnique`、`voList`、`voPage`等方法
+
 提供以下几种继承, 任选其一
 * 继承`BoosterEngine`, 无分页功能
 * 继承`PageHelperBooster`, 完整功能, 使用`PageHelper`分页(需自行引入`PageHelper`依赖)
@@ -144,6 +146,8 @@ public interface SysUserMapper extends PageHelperBooster<SysUser, SysUserVO>{
 }
 ```
 ####  Mybatis-plus环境, 使用`MybatisPlusBooster`
+
+针对Mybatis-plus环境, 提供了细分接口供`Service`/`ServiceImpl`/`Mapper`进行继承
 
 - `BoosterMpMapper`继承了`BaseMapper`和`MybatisPlusBooster`
 - `BoosterMpServiceImpl`继承`ServiceImpl`和`MybatisPlusBooster`
@@ -251,6 +255,8 @@ public interface SysUserMapper extends CustomBooster<SysUser, SysUserVO> {
 
 ```java
 import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -280,19 +286,20 @@ public class SysUserController {
         return sysUserMapper.voList(params);
     }
 
-    // 入参拼装动态sql查询
+    // 使用SqlHelper作为参数时, 前端可通过入参动态指定条件及排序
     @PostMapping("/sql")
     public List<SysUserVO> getUsersBySql(@RequestBody SqlHelper<SysUser> sqlHelper) {
         return sysUserMapper.voList(sqlHelper);
     }
 
-    // lambda调用,封装必须条件
+    // lambda调用,添加必要条件, 例如权限角色等
     @PostMapping("/lambda")
     public List<SysUserVO> getUsersBySql(@RequestBody Map<String, Object> params) {
         return SqlHelper.of(SysUser.class)
                 .merge(params) // 合并或添加条件, 支持实体类, DTO对象, map, SqlHelper等
-                .eq(SysUser::getState,1) // state=1
+                .eq(SysUser::getState, 1) // state=1
                 .ge(SysUser::getAge, 18) // age>=18
+                .in(SysUser::getRoleId, Arrays.asList(1, 2))
                 .like(SysUser::getUserName, "tom") // userName like '%tom%'
                 .wrap(sysUserMapper)
                 .voList();
@@ -305,24 +312,17 @@ public class SysUserController {
                                         @PathVariable("size") Long size) {
         return sysUserMapper.voPage(params, current, size);
     }
-
-    // Excel导入
-    @PostMapping("/excel/import")
-    public int importExcel(@RequestParam("file") MultipartFile file) {
-        // 返回导入条数
-        return sysUserMapper.importExcel(file, SysUserVO.class);
-        ;
-    }
-
-    // Excel导出
-    @PostMapping("/excel/export/{current}/{size}")
-    public void exportExcel(@RequestBody Map<String, Object> params,
-                            @PathVariable("current") Long current,
-                            @PathVariable("size") Long size) {
-        sysUserMapper.exportExcel(fileName, SysUserVO.class);
-    }
-
-
+    
+    // 2025年11月
+    // 因EasyExcel停更, 续作FastExcel变更为Apache fesod
+    // Apache fesod暂未孵化, 待api稳定后, 再提供Excel相关功能
+//    // Excel导出
+//    @PostMapping("/excel/export/{current}/{size}")
+//    public void exportExcel(@RequestBody Map<String, Object> params,
+//                            @PathVariable("current") Long current,
+//                            @PathVariable("size") Long size) {
+//        sysUserMapper.exportExcel(fileName, SysUserVO.class);
+//    }
 }
 ```
 
