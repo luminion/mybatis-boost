@@ -8,8 +8,8 @@ SQL Booster 是一个数据库查询设计的增强工具包，旨在简化和�
 
 ## 功能特性
 
-- **后缀SQL构建**：支持`字段`+`后缀`自动映射不同类型查询
-- **动态SQL构建**：支持根据入参动态拼接条件
+- **后缀动态映射SQL**：支持`字段`+`后缀`自动映射不同类型查询
+- **条件动态拼装SQL**：支持根据入参动态拼接条件
 - **Map查询条件**：自动转化Map参数
 - **数据字段映射**：自动转换属性为数据库字段
 - **SQL反注入**：通过预编译SQL, 防止SQL注入
@@ -144,7 +144,12 @@ import io.github.luminion.sqlbooster.extension.pagehelper.PageHelperBooster;
 public interface SysUserMapper extends PageHelperBooster<SysUser, SysUserVO>{
 
 }
+
 ```
+> **下一步阅读: [使用示例](#使用示例)**
+
+---
+
 ####  Mybatis-plus环境, 使用`MybatisPlusBooster`
 
 针对Mybatis-plus环境, 提供了细分接口供`Service`/`ServiceImpl`/`Mapper`进行继承
@@ -183,7 +188,12 @@ public class SysUserService extends BoosterMpService<SysUser, SysUserVO> {
 }
 ```
 
-#### 使用`BoosterEngine`, 不使用分页
+
+> **下一步阅读: [使用示例](#使用示例)**
+
+---
+
+#### 自定义环境, 使用`BoosterEngine`, 不使用分页
 * `BoosterEngine`提供了核心功能的多个默认实现, 但不包含分页功能
 * `BoosterEngine`提供了`voById`、`voByIds`、`voFirst`、`voUnique`、`voList`等方法的实现
 * `BoosterEngine`分页查询`voPage`方法在不调用时对业务逻辑无影响
@@ -198,12 +208,14 @@ public interface SysUserMapper extends BoosterEngine<SysUser, SysUserVO> {
 }
 ```
 
-#### 使用`BoosterEngine`, 并重写分页逻辑
+> **下一步阅读: [使用示例](#使用示例)**
+
+---
+
+#### 自定义环境, 使用`BoosterEngine`, 并重写分页逻辑
 * 默认该接口有4个不同参数的`voPage()`分页方法, 不使用分页功能时无需实现或重写
 * 实际运行时会所有分页方法会最终重载到`voPage(Wrapper, long, long)`这个方法中
 * 需要分页时, 仅重写`voPage(Wrapper, long, long)`方法, 添加分页的实现逻辑即可
-
-
 
 
 建议抽象一个父接口书写逻辑, 继承`BoosterEngine`, 其他Mapper再继承该接口, 以免多次重写:
@@ -246,6 +258,8 @@ public interface SysUserMapper extends CustomBooster<SysUser, SysUserVO> {
     
 }
 ```
+
+> **下一步阅读: [使用示例](#使用示例)**
 
 <br/>
 
@@ -330,7 +344,7 @@ public class SysUserController {
 
 ## 核心功能
 
-### 后缀动态映射
+### 后缀动态映射SQL
 - 在`参数`名称后添加特殊的后缀, 可以`动态映射`为`不同类型`的查询
 - 在不添加后缀时, 等同于`等于`查询
 - 后端可用`实体类`或`Map`接收参数
@@ -400,10 +414,12 @@ public class App {
 
 ---
 
-### 动态SQL
+### 条件动态拼装SQL
 
-- 前端可以自由指定需要查询的`字段`和`值`, 并自由指定查询类型, 拼接, 排序, 组合多条件
-- 后端使用`SqlHelper`对象接收参数
+- 入参自由指定`查询条件`/`查询类型`/`查询值`
+- 入参自由指定`排序条件`和`升降序`
+- 入参嵌套`子条件`和`or`条件
+- 自动验证入参防`SQL注入`
 
 #### 入参示例
 
@@ -416,6 +432,8 @@ public class App {
   "state": 1
 }
 ```
+
+[//]: # ( todo 把这个内容指定表格 ,表格有4列, sql符号,  说明, operator可用值 , 值类型)
 #### 指定字段检索条件
 - 通过`conditions`字段指定查询条件,
 - 其中每个条件对象`field`表示字段,`value`表示值,`operator`表示操作符号
@@ -529,7 +547,8 @@ select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or n
       "field": "version",
       "operator": ">",
       "value": 1
-    },\n    {
+    },
+    {
       "field": "state",
       "value": 1
     }
