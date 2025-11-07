@@ -57,6 +57,8 @@ io.github.luminion.sqlbooster
 
 ## Maven 依赖
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
+
 ```xml
 <dependency>
     <groupId>io.github.luminion</groupId>
@@ -118,24 +120,14 @@ public static void main(String[] args) {
 </select>
 ```
 
-### 3. 在Mapper接口上添加方法
-提供以下几种方式, 任选其一
-* 继承`PageHelperBooster`, 使用`PageHelper`分页(需自行引入`PageHelper`依赖)
-* 继承`MybatisPlusBooster`, 使用`IPage`分页(需自行引入`Mybatis-plus`依赖), 
-  * 针对`MybatisPlus`已封装以下更细分的接口, 可直接引入对应接口
-  * Mapper继承`BoosterMpMapper`
-  * ServiceImpl继承`BoosterMpServiceImpl` 或实现`BoosterMpService`(引入接口即可,无需实现方法)
-  * Service继承`BoosterMpService`
-* 继承`BoosterEngine`, 需要分页时需自行提供`voPage`分页实现
-* 手动在Mapper上添加方法, 需要分页时需自行提供`voPage`分页实现
-
-建议:
-- 在mybatis环境中使用`PageHelperBooster`
-- 在mybatis-plus中使用细分的`BoosterMpMapper`/`BoosterMpServiceImpl`/`BoosterMpService`等
-- 其他环境继承`BoosterEngine`, 重写`voPage`方法,  提供自己的分页实现
+### 3. Mapper接口继承指定类
+提供以下几种继承, 任选其一
+* 继承`BoosterEngine`, 无分页功能
+* 继承`PageHelperBooster`, 完整功能, 使用`PageHelper`分页(需自行引入`PageHelper`依赖)
+* 继承`MybatisPlusBooster`, 完整功能, 使用`IPage`分页(需自行引入`Mybatis-plus`依赖),
 
 
-####  Mybatis环境, 继承`PageHelperBooster`
+####  Mybatis环境, 使用`PageHelperBooster`
 ```java
 import io.github.luminion.sqlbooster.extension.pagehelper.PageHelperBooster;
 
@@ -144,7 +136,11 @@ public interface SysUserMapper extends PageHelperBooster<SysUser, SysUserVO>{
 
 }
 ```
-####  Mybatis-plus环境, 分别继承`BoosterMpMapper`/`BoosterMpServiceImpl`/`BoosterMpService`
+####  Mybatis-plus环境, 使用`MybatisPlusBooster`
+
+- `BoosterMpMapper`继承了`BaseMapper`和`MybatisPlusBooster`
+- `BoosterMpServiceImpl`继承`ServiceImpl`和`MybatisPlusBooster`
+- `BoosterMpService`继承了`IService`和`MybatisPlusBooster`
 
 ```java
 import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper;
@@ -176,20 +172,66 @@ public class SysUserService extends BoosterMpService<SysUser, SysUserVO> {
 }
 ```
 
-#### 不使用默认实现,  继承或实现`BoosterEngine`, 需要时重写自己的分页逻辑
+#### 使用`BoosterEngine`, 不使用分页
+* `BoosterEngine`提供了核心功能的多个默认实现, 但不包含分页功能
+* `BoosterEngine`提供了`voById`、`voByIds`、`voFirst`、`voUnique`、`voList`等方法的实现
+* `BoosterEngine`分页查询`voPage`方法在不调用时对业务逻辑无影响
+* `BoosterEngine`分页查询`voPage`方法在调用时会抛出一个`UnsupportedOperationException`异常
 
 ```java
 import io.github.luminion.sqlbooster.core.BoosterEngine;
 
-// 继承BoosterEngine
+// mapper继承BoosterEngine
 public interface SysUserMapper extends BoosterEngine<SysUser, SysUserVO> {
+    
+}
+```
+
+#### 使用`BoosterEngine`, 并重写分页逻辑
+* 默认该接口有4个不同参数的`voPage()`分页方法, 不使用分页功能时无需实现或重写
+* 实际运行时会所有分页方法会最终重载到`voPage(Wrapper, long, long)`这个方法中
+* 需要分页时, 仅重写`voPage(Wrapper, long, long)`方法, 添加分页的实现逻辑即可
+
+
+
+
+建议抽象一个父接口书写逻辑, 继承`BoosterEngine`, 其他Mapper再继承该接口, 以免多次重写:
+
+```java
+import io.github.luminion.sqlbooster.core.BoosterEngine;
+
+// 自定义接口, 继承BoosterEngine
+public interface CustomBooster<T> extends BoosterEngine<SysUser, SysUserVO> {
 
     @Override
     default Page<SysUserVO> voPage(Wrapper<SysUser> wrapper, long pageNum, long pageSize) {
-        // 重写该方法, 并添加自己的分页逻辑
-        // 默认情况下, 其他几个参数不同的重载的voPage()分页, 最终都会调用该方法, 所需只需要重写这一个分页方法即可
+        // 查询预处理
+        voPreProcess(wrapper);
+        
+        // 重要, 记得调用process()方法
+        // SqlHelper.process()方法用于处理动态映射和后缀映射, 同时检查条件合法性, 防止sql注入
+        BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this)
+                .process(SuffixProcessor.of()::process);
+        
+        // 分页逻辑, 以下为Mybatis-plus的分页示例, 实际实现时替换为自己的即可
+        PageDTO<V> pageInfo = new PageDTO<>(pageNum, pageSize);
+        List<V> vs = selectByBooster(sqlHelper, pageInfo); // 核心的查询方法, 必须调用
+        pageInfo.setRecords(vs);
+        MybatisPlusPage<V> page = new MybatisPlusPage<>(pageInfo);
+
+
+        // 查询后处理
+        voPostProcess(page.getRecords(), sqlHelper, page);
         return null;
     }
+    
+}
+```
+
+```java
+// mapper继承自定义接口
+public interface SysUserMapper extends CustomBooster<SysUser, SysUserVO> {
+
     
 }
 ```
