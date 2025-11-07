@@ -38,7 +38,7 @@
     <sql id="sorts">
         <if test="param1 != null and param1.sorts != null and param1.sorts.size() > 0">
             <foreach collection="param1.sorts" item="item" separator="," open=",">
-                ${item.field}<if test="item.isDesc()"> DESC</if>
+                ${item.field}<if test="!item.isAsc()"> DESC</if>
             </foreach>
         </if>
     </sql>

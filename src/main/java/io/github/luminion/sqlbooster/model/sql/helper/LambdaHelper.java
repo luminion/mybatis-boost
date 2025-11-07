@@ -233,7 +233,7 @@ public interface LambdaHelper<T, S extends LambdaHelper<T, S>> extends BaseHelpe
      * @since 1.0.0
      */
     default S orderByAsc(MethodReference<T, ?> getter) {
-        getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), false));
+        getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), true));
         return (S) this;
     }
 
@@ -245,7 +245,7 @@ public interface LambdaHelper<T, S extends LambdaHelper<T, S>> extends BaseHelpe
      * @since 1.0.0
      */
     default S orderByDesc(MethodReference<T, ?> getter) {
-        getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), true));
+        getSorts().add(new SqlSort(BoostUtils.getGetterPropertyName(getter), false));
         return (S) this;
     }
 
@@ -258,7 +258,7 @@ public interface LambdaHelper<T, S extends LambdaHelper<T, S>> extends BaseHelpe
      * @return 当前实例
      * @since 1.0.0
      */
-    default <R> S bitWith(MethodReference<T, R> getter, R value) {
+    default <R> S bitIn(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
@@ -275,7 +275,7 @@ public interface LambdaHelper<T, S extends LambdaHelper<T, S>> extends BaseHelpe
      * @return 当前实例
      * @since 1.0.0
      */
-    default <R> S bitWithout(MethodReference<T, R> getter, R value) {
+    default <R> S bitNotIn(MethodReference<T, R> getter, R value) {
         if (value == null) {
             return (S) this;
         }
