@@ -277,6 +277,8 @@ public class SysUserController {
 }
 ```
 
+---
+
 ## 核心功能
 
 ### 后缀动态映射
@@ -284,7 +286,7 @@ public class SysUserController {
 - 在不添加后缀时, 等同于`等于`查询
 - 后端可用`实体类`或`Map`接收参数
 
-#### 后缀关键字：
+#### 后缀映射表
 
 | 后缀                           | 操作符           | 操作说明      | 示例 (JSON Key)                                           | 值类型                         |
 |------------------------------|---------------|-----------|---------------------------------------------------------|-----------------------------|
@@ -304,7 +306,7 @@ public class SysUserController {
 | `BitNot` / `_bit_not`        | `& = 0`       | 位运算 (不包含) | `"permissionBitNot": 4` / `"permission_bit_not": 4`     | Number                      |
 
 #### 入参示例
-```
+
 查询`name`包含`mike`, `version`为`1`, `age`在`18-60`之间, `state`为`1`或`2`或`3`数据:
 
 ```json
@@ -317,47 +319,38 @@ public class SysUserController {
 }
 ```
 
-#### 自定义后缀
-- 在`BoosterEngine`或其子类中,可以重写`selectByBooster`方法实现自定义的逻辑
-- 框架提供`SuffixProcessor`用于便捷的封装自定义后缀
-- 支持的操作符(不区分大小写): 
-  - `=` - 等于,
-  - `<>` - 不等于
-  - `>` - 大于
-  - `>=` - 大于等于
-  - `<` - 小于
-  - `<=` - 小于等于
-  - `LIKE` - 模糊匹配
-  - `NOT LIKE` - 反模糊匹配
-  - `IN` - IN查询
-  - `NOT IN` - NOT IN查询
-  - `IS NULL` - 指定字段为NULL
-  - `IS NOT NULL` - 指定字段不为NULL
-  - `$>` - 位运算, 包含指定bit位
-  - `$=` - 位运算, 不包含指定bit位
+#### 自定义后缀映射
+- 修改`SuffixProcessor`的默认后缀, 来改变默认的后缀映射
+- 重写`BoosterEngine`验证调用的方法, 改变指定实例的后缀映射
+- 创建`SqlHelper<T>`时, 调用`process()`处理方法, 处理单次映射
+- 可用操作符见[后缀映射表](#后缀映射表)
 
+全局修改示例:
 ```java
-public interface SysUserMapper extends BaseMapper<SysUser>, EnhancedMapper<SysUserVO> {
+import io.github.luminion.sqlbooster.model.sql.helper.processor.SuffixProcessor;
+
+@SpringBootApplication
+public class App {
     
-  @Override
-  default List<V> slectByBooster(Object param, Object<V> page) {
-    Class<?> entityClass = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), BaseMapper.class)[0];
-    HashMap<String, String> map = new HashMap<String, String>(); // 指定后缀和操作符的映射关系
-    map.put("_like", "LIKE");
-    map.put("_ge", ">=");
-    map.put("_le", "<=");
-    map.put("_not_eq", "<>");
-    map.put("_like", "LIKE");
-    SqlHelper<SysUser> sqlHelper = SqlHelper.of(SysUser.class) // 创建对应实体类的sqlHelper
-            .merge(param) // 封装原来的参数
-            .process(SuffixProcessor.of(map)::process) // 字段校验/二次封装
-            ;
-    return voQueryByXml(sqlHelper, page);
-  }
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(App.class, args);
 
+        // 指定后缀和操作符的映射关系
+        HashMap<String, String> map = new HashMap<String, String>(); 
+        map.put("_like", "LIKE");
+        map.put("_ge", ">=");
+        map.put("_le", "<=");
+        map.put();
+        map.put("_like", "LIKE");
+        map.put("_not_eq", "<>");
+        // 设置默认后缀映射
+        SuffixProcessor.defaultSuffixMap(map);
+    }
 }
-
 ```
+
+---
+
 ### 动态SQL
 
 - 前端可以自由指定需要查询的`字段`和`值`, 并自由指定查询类型, 拼接, 排序, 组合多条件
@@ -603,4 +596,3 @@ public class SysUserVO implements EnhancedEntity {
         , a.create_time DESC, a.id DESC
     </trim>
 </select>
-```
