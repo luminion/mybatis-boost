@@ -69,7 +69,9 @@ public class SuffixProcessor {
      * @since 1.0.0
      */
     public static void addBothCamelCaseAndUnderscore(Map<String, String> map, String suffix, String operator) {
-        map.put(suffix, operator);
+        map.putIfAbsent(suffix, operator);
+        String camelCase = BoostUtils.underscoreToCamelCase(suffix);
+        map.putIfAbsent(camelCase, operator);
         String underscore = BoostUtils.camelCaseToUnderscore(suffix);
         map.putIfAbsent(underscore, operator);
     }
