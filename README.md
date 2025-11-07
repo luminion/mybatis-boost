@@ -1,71 +1,86 @@
-# mybatis-plus-enhancer
+# SQL Booster
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-enhancer)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-enhancer)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![GitHub](https://img.shields.io/github/stars/luminion/mybatis-plus-enhancer?style=social)](https://github.com/luminion/mybatis-plus-enhancer)
+[![GitHub](https://img.shields.io/github/stars/luminion/sql-booster?style=social)](https://github.com/luminion/sql-booster)
 
-MyBatis-Plus 增强工具包，提供动态SQL构建、后缀映射查询、IService和BaseMapper增强功能，以及Excel导入导出支持。
+SQL Booster 是一个数据库查询设计的增强工具包，旨在简化和增强数据访问层的开发。提供了强大的动态SQL动态条件和后缀查询映射功能。
 
 ## 功能特性
 
 - **后缀SQL构建**：支持`字段`+`后缀`自动映射不同类型查询
 - **动态SQL构建**：支持根据入参动态拼接条件
-- **联表属性查询**：支持非本表字段的查询自动映射
 - **Map查询条件**：自动转化Map参数
 - **数据字段映射**：自动转换属性为数据库字段
 - **SQL反注入**：通过预编译SQL, 防止SQL注入
 - **Lambda链式调用**：支持链式调用追加参数条件
 - **VO类型转化**：自动将查询结果转化为指定类
-- **BaseMapper增强**：添加`voById`、`voList`、`voPage`等方法
-- **IService查询增强**：添加`voById`、`voList`、`voPage` 等方法
-- **IService业务增强**：添加`insertByDTO`、`updateByDTO`等方法
-- **IService集成Excel**：集成`FastExcel`和`EasyExcel`, 支持Excel导入/导出
+- **额外查询方法**：添加`voById`、`voByIds`、`voFirst`、`voUnique`、`voList`、`voPage`等方法
 
+---
 
-## 仓库地址
+## 包结构说明
 
-- GitHub: https://github.com/luminion/mybatis-plus-enhancer
-- Maven Central: https://central.sonatype.com/artifact/io.github.luminion/mybatis-plus-enhancer
+```
+io.github.luminion.sqlbooster
+├── core                  # 核心的 SQL 构建器和引擎
+│   ├── Page.java
+│   ├── Booster.java
+│   ├── BoosterCore.java
+│   ├── BoosterEngine.java
+│   └── MethodReference.java
+├── util                  # 提供项目使用的各种工具类
+│   ├── BoostUtils.java
+│   ├── ExcelUtils.java
+│   ├── MapperUtils.java
+│   └── ReflectUtils.java
+├── model                 # 定义了 API、SQL 和枚举等数据模型
+│   ├── api
+│   ├── sql
+│   └── enums
+├── config                # 提供 Spring Boot 的自动配置功能
+│   └── BoosterAutoConfiguration.java
+├── provider              # 包含各种提供者接口和实现，用于扩展和自定义
+│   ├── support
+│   ├── BoostProvider.java
+│   ├── TableNameProvider.java
+│   ├── IdPropertyProvider.java
+│   ├── GetterPropertyProvider.java
+│   └── PropertyToColumnAliasMapProvider.java
+└── extension             # 提供了与 MyBatis、MyBatis-Plus 和 PageHelper 等第三方库的集成
+    ├── mybatis
+    ├── pagehelper
+    └── mybatisplus
+```
 
-## maven依赖
-当前最新版本为:  
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-enhancer)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-enhancer)
+---
+
+## Maven 依赖
+
 ```xml
 <dependency>
     <groupId>io.github.luminion</groupId>
-    <artifactId>mybatis-plus-enhancer</artifactId>
+    <artifactId>sql-booster</artifactId>
     <version>latest</version>
 </dependency>
 ```
 
+---
+
 ## 快速开始
+[code-generator](https://github.com/luminion/code-generator)代码生成器已适配该框架, 可以一键生成代码, 开箱即用
 
-### 1. 创建mybatis-plus实体类和BaseMapper 
-若已有mybatis-plus实体类和BaseMapper, 可跳过此步骤
-
+### 1. 创建实体类
+若已有实体类, 可忽略该步骤
 ```java
-@TableName("sys_user")
+// 数据库对应的实体类
 public class SysUser {
-    @TableId(type = IdType.AUTO)
     private Long id;
     private String name;
     private Integer age;
     // getter/setter...
 }
 ```
-```java
-public interface SysUserMapper extends BaseMapper<SysUser> {
-    
-}
-```
-
-### 2. 扩展mapper接口
-* 创建或指定`VO类`, 用于展示查询结果
-* 使`mapper`接口继承[EnhancedMapper](src/main/java/io/github/luminion/sqlbooster/EnhancedMapper.java), 并指定泛型为VO类
-* 通过`工具类`获取`mapper.xml`内容, 并将其复制到对应xml文件中
-* (可选) 若有service层, 可使service实现[EnhancedService](src/main/java/io/github/luminion/sqlbooster/EnhancedService.java)接口, 即可拥有mapper对应所有方法
-
-
 ```java
 // 用于封装查询结果的VO类, 可以继承自实体类, 也可以直接使用实体类
 public class SysUserVO {
@@ -75,40 +90,118 @@ public class SysUserVO {
     // getter/setter...
 }
 ```
-```java
-// mapper接口文件, 使其继承EnhancedMapper接口
-public interface SysUserMapper extends BaseMapper<SysUser>, 
-        EnhancedMapper<SysUserVO> {
-}
-```
+### 2. 扩展mapper接口
 
+获取xml文件内容
 ```java
-import util.io.github.luminion.mybatisplus.enhancer.MapperUtil;
+import io.github.luminion.sqlbooster.util.MapperUtils;
 
-// 通过工具类获取mapper.xml文件的sql片段
 public static void main(String[] args) {
-    var mapperContent = MapperUtil.getMapperContent(SysUserMapper.class);
+    String mapperContent = MapperUtils.getMapperContent(SysUser.class, SysUserVO.class);
     System.out.println(mapperContent);
 }
 ```
-
+将获取的内容粘贴到mapper.xml文件中
 ```xml
 <!--复制工具类生成的该sql片段到mapper.xml文件中-->
-<select id="voQueryByXml" resultType="com.example.test.vo.SysUserVO">
-    SELECT a.* FROM sys_user a
+<select id="selectByWrapper" resultType="com.example.mybatis.boost.vo.SysUserVO">
+    SELECT 
+    a.* 
+    FROM 
+    sys_user a
     <where>
-        <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.queryFragment"/>
+        <include refid="sqlbooster.conditions"/>
     </where>
     <trim prefix="ORDER BY" prefixOverrides=",">
-        <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
+        <include refid="sqlbooster.sorts"/>
     </trim>
 </select>
 ```
 
-### 3. 使用示例
+### 3. 在Mapper接口上添加方法
+提供以下几种方式, 任选其一
+* 继承`PageHelperBooster`, 使用`PageHelper`分页(需自行引入`PageHelper`依赖)
+* 继承`MybatisPlusBooster`, 使用`IPage`分页(需自行引入`Mybatis-plus`依赖), 
+  * 针对`MybatisPlus`已封装以下更细分的接口, 可直接引入对应接口
+  * Mapper继承`BoosterMpMapper`
+  * ServiceImpl继承`BoosterMpServiceImpl` 或实现`BoosterMpService`(引入接口即可,无需实现方法)
+  * Service继承`BoosterMpService`
+* 继承`BoosterEngine`, 需要分页时需自行提供`voPage`分页实现
+* 手动在Mapper上添加方法, 需要分页时需自行提供`voPage`分页实现
+
+建议:
+- 在mybatis环境中使用`PageHelperBooster`
+- 在mybatis-plus中使用细分的`BoosterMpMapper`/`BoosterMpServiceImpl`/`BoosterMpService`等
+- 其他环境继承`BoosterEngine`, 重写`voPage`方法,  提供自己的分页实现
+
+
+####  Mybatis环境, 继承`PageHelperBooster`
+```java
+import io.github.luminion.sqlbooster.extension.pagehelper.PageHelperBooster;
+
+// 继承PageHelperBooster
+public interface SysUserMapper extends PageHelperBooster<SysUser, SysUserVO>{
+
+}
+```
+####  Mybatis-plus环境, 分别继承`BoosterMpMapper`/`BoosterMpServiceImpl`/`BoosterMpService`
 
 ```java
-import helper.query.io.github.luminion.mybatisplus.enhancer.SqlHelper;
+import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper;
+
+// 继承BoosterBaseMapper
+// eg: BoosterBaseMapper已继承BaseMapper, SysUserMapper无需继承原BaseMapper
+public interface SysUserMapper extends BoosterMpMapper<SysUser, SysUserVO> {
+
+}
+```
+
+```java
+import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl;
+
+// 继承BoosterMpServiceImpl
+// eg: BoosterMpServiceImpl已继承ServicImpl, SysUserServiceImpl无需继承原ServiceImpl
+public class SysUserServiceImpl extends BoosterMpServiceImpl<SysUser, SysUserVO> {
+
+}
+```
+
+```java
+import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService;
+
+// BoosterMpService
+// eg: BoosterMpService已继承IService, SysUserService无需继承原IService
+public class SysUserService extends BoosterMpService<SysUser, SysUserVO> {
+
+}
+```
+
+#### 不使用默认实现,  继承或实现`BoosterEngine`, 需要时重写自己的分页逻辑
+
+```java
+import io.github.luminion.sqlbooster.core.BoosterEngine;
+
+// 继承BoosterEngine
+public interface SysUserMapper extends BoosterEngine<SysUser, SysUserVO> {
+
+    @Override
+    default Page<SysUserVO> voPage(Wrapper<SysUser> wrapper, long pageNum, long pageSize) {
+        // 重写该方法, 并添加自己的分页逻辑
+        // 默认情况下, 其他几个参数不同的重载的voPage()分页, 最终都会调用该方法, 所需只需要重写这一个分页方法即可
+        return null;
+    }
+    
+}
+```
+
+<br/>
+
+---
+
+## 使用示例
+
+```java
+import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
 import java.util.List;
 import java.util.Map;
 
@@ -116,42 +209,43 @@ import java.util.Map;
 @RequestMapping("/user")
 public class SysUserController {
 
+    // 此处引入Mapper接口或Service接口
     @Autowired
-    private SysUserService sysUserService;
+    private SysUserMapper sysUserMapper;
 
     // 根据ID查询VO
     @GetMapping("/{id}")
     public SysUserVO getUserById(@PathVariable Long id) {
-        return sysUserService.voById(id);
+        return sysUserMapper.voById(id);
     }
 
     // 通过DTO对象查询
     @PostMapping("/dto")
     public List<SysUserVO> getUsersByDTO(@RequestBody SysUserDTO dto) {
-        return sysUserService.voList(dto);
+        return sysUserMapper.voList(dto);
     }
 
     // 通过map条件查询(支持后缀映射不同类型查询)
     @PostMapping("/map")
     public List<SysUserVO> getUsersByMap(@RequestBody Map<String, Object> params) {
-        return sysUserService.voList(params);
+        return sysUserMapper.voList(params);
     }
 
     // 入参拼装动态sql查询
     @PostMapping("/sql")
     public List<SysUserVO> getUsersBySql(@RequestBody SqlHelper<SysUser> sqlHelper) {
-        return sysUserService.voList(sqlHelper);
+        return sysUserMapper.voList(sqlHelper);
     }
 
     // lambda调用,封装必须条件
     @PostMapping("/lambda")
     public List<SysUserVO> getUsersBySql(@RequestBody Map<String, Object> params) {
         return SqlHelper.of(SysUser.class)
-                .with(params) // 添加参数, 支持实体类, DTO对象, map, SqlHelper等
+                .merge(params) // 合并或添加条件, 支持实体类, DTO对象, map, SqlHelper等
                 .eq(SysUser::getState,1) // state=1
                 .ge(SysUser::getAge, 18) // age>=18
                 .like(SysUser::getUserName, "tom") // userName like '%tom%'
-                .wrap(sysUserService)
+                .wrap(sysUserMapper)
                 .voList();
     }
 
@@ -160,14 +254,14 @@ public class SysUserController {
     public IPage<SysUserVO> getUserPage(@RequestBody Map<String, Object> params,
                                         @PathVariable("current") Long current,
                                         @PathVariable("size") Long size) {
-        return sysUserService.voPage(params, current, size);
+        return sysUserMapper.voPage(params, current, size);
     }
 
     // Excel导入
     @PostMapping("/excel/import")
     public int importExcel(@RequestParam("file") MultipartFile file) {
         // 返回导入条数
-        return sysUserService.importExcel(file, SysUserVO.class);
+        return sysUserMapper.importExcel(file, SysUserVO.class);
         ;
     }
 
@@ -176,32 +270,42 @@ public class SysUserController {
     public void exportExcel(@RequestBody Map<String, Object> params,
                             @PathVariable("current") Long current,
                             @PathVariable("size") Long size) {
-        sysUserService.exportExcel(fileName, SysUserVO.class);
+        sysUserMapper.exportExcel(fileName, SysUserVO.class);
     }
 
 
 }
 ```
-java代码使用方式请参考:[测试用例](src/test/java/com/example)
 
 ## 核心功能
 
-### 后缀查询
-- 前端可以在传入参数中添加`字段后缀`轻松实现各种查询需求
-- 前端入参在不添加后缀时, 等同于`等于`查询
+### 后缀动态映射
+- 在`参数`名称后添加特殊的后缀, 可以`动态映射`为`不同类型`的查询
+- 在不添加后缀时, 等同于`等于`查询
 - 后端可用`实体类`或`Map`接收参数
 
-#### 前端入参示例
-若实体属性如下
-```json
-{
-  "name": "mike",
-  "version": 1,
-  "age": 18,
-  "state": 1
-}
+#### 后缀关键字：
+
+| 后缀                           | 操作符           | 操作说明      | 示例 (JSON Key)                                           | 值类型                         |
+|------------------------------|---------------|-----------|---------------------------------------------------------|-----------------------------|
+| (无)                          | `=`           | 等于        | `"name": "mike"`                                        | String, Number, Boolean     |
+| `Ne` / `_ne`                 | `<>`          | 不等于       | `"ageNe": 18` / `"age_ne": 18`                          | String, Number, Boolean     |
+| `Lt` / `_lt`                 | `<`           | 小于        | `"ageLt": 18` / `"age_lt": 18`                          | Number, Date                |
+| `Le` / `_le`                 | `<=`          | 小于等于      | `"ageLe": 18` / `"age_le": 18`                          | Number, Date                |
+| `Gt` / `_gt`                 | `>`           | 大于        | `"ageGt": 18` / `"age_gt": 18`                          | Number, Date                |
+| `Ge` / `_ge`                 | `>=`          | 大于等于      | `"ageGe": 18` / `"age_ge": 18`                          | Number, Date                |
+| `Like` / `_like`             | `LIKE`        | 模糊匹配      | `"nameLike": "mike"` / `"name_like": "mike"`            | String                      |
+| `NotLike` / `_not_like`      | `NOT LIKE`    | 反模糊匹配     | `"nameNotLike": "mike"` / `"name_not_like": "mike"`     | String                      |
+| `In` / `_in`                 | `IN`          | IN 查询     | `"stateIn": [1, 2, 3]` / `"state_in": [1, 2, 3]`        | List/Array (String, Number) |
+| `NotIn` / `_not_in`          | `NOT IN`      | NOT IN 查询 | `"stateNotIn": [1, 2, 3]` / `"state_not_in": [1, 2, 3]` | List/Array (String, Number) |
+| `IsNull` / `_is_null`        | `IS NULL`     | 为空        | `"nameIsNull": true` / `"name_is_null": true`           | Boolean (true)              |
+| `IsNotNull` / `_is_not_null` | `IS NOT NULL` | 不为空       | `"nameIsNotNull": true` / `"name_is_not_null": true`    | Boolean (true)              |
+| `BitIn` / `_bit_in`          | `& =`         | 位运算 (包含)  | `"permissionBitIn": 4` / `"permission_bit_in": 4`       | Number                      |
+| `BitNot` / `_bit_not`        | `& = 0`       | 位运算 (不包含) | `"permissionBitNot": 4` / `"permission_bit_not": 4`     | Number                      |
+
+#### 入参示例
 ```
-查询`name`包含`mike`, `version`为`1`, `age`在`18-60`之间, `state`为`1`或`2`或`3`数据: 
+查询`name`包含`mike`, `version`为`1`, `age`在`18-60`之间, `state`为`1`或`2`或`3`数据:
 
 ```json
 {
@@ -213,24 +317,9 @@ java代码使用方式请参考:[测试用例](src/test/java/com/example)
 }
 ```
 
-#### 默认的后缀关键字：
-- `Ne` - 不等于
-- `Lt` - 小于
-- `Le` - 小于等于
-- `Gt` - 大于
-- `Ge` - 大于等于
-- `Like` - 模糊匹配
-- `NotLike` - 反模糊匹配
-- `In` - IN查询
-- `NotIn` - NOT IN查询
-- `IsNull` - IS NULL
-- `IsNotNull` - IS NOT NULL
-- `BitWith` - 位运算, 包含指定bit位
-- `BitWithout` - 位运算, 不包含指定bit位
-
 #### 自定义后缀
-- 在`EnhancedMapper`的子类中,可以重写`voQuery`方法实现自定义的逻辑
-- 框架提供`FieldSuffixProcessor`用于便捷的封装自定义后缀
+- 在`BoosterEngine`或其子类中,可以重写`selectByBooster`方法实现自定义的逻辑
+- 框架提供`SuffixProcessor`用于便捷的封装自定义后缀
 - 支持的操作符(不区分大小写): 
   - `=` - 等于,
   - `<>` - 不等于
@@ -246,11 +335,12 @@ java代码使用方式请参考:[测试用例](src/test/java/com/example)
   - `IS NOT NULL` - 指定字段不为NULL
   - `$>` - 位运算, 包含指定bit位
   - `$=` - 位运算, 不包含指定bit位
+
 ```java
 public interface SysUserMapper extends BaseMapper<SysUser>, EnhancedMapper<SysUserVO> {
     
   @Override
-  default List<V> voQuery(Object param, IPage<V> page) {
+  default List<V> slectByBooster(Object param, Object<V> page) {
     Class<?> entityClass = MybatisPlusReflectUtil.resolveTypeArguments(getClass(), BaseMapper.class)[0];
     HashMap<String, String> map = new HashMap<String, String>(); // 指定后缀和操作符的映射关系
     map.put("_like", "LIKE");
@@ -259,8 +349,8 @@ public interface SysUserMapper extends BaseMapper<SysUser>, EnhancedMapper<SysUs
     map.put("_not_eq", "<>");
     map.put("_like", "LIKE");
     SqlHelper<SysUser> sqlHelper = SqlHelper.of(SysUser.class) // 创建对应实体类的sqlHelper
-            .with(param) // 封装原来的参数
-            .process(FieldSuffixProcessor.of(map)::process) // 字段校验/二次封装
+            .merge(param) // 封装原来的参数
+            .process(SuffixProcessor.of(map)::process) // 字段校验/二次封装
             ;
     return voQueryByXml(sqlHelper, page);
   }
@@ -397,8 +487,7 @@ select * from sys_user where (version > 1 and state = 1) and (name = 'mike' or n
       "field": "version",
       "operator": ">",
       "value": 1
-    },
-    {
+    },\n    {
       "field": "state",
       "value": 1
     }
