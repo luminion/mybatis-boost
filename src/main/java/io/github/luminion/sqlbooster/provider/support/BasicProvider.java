@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * 基础的 MybatisBoostProvider 实现
+ * 基础的 Provider 实现
  * <p>
  * 提供了默认的表名、ID 属性名、getter 属性名和属性到列的映射逻辑.
  *

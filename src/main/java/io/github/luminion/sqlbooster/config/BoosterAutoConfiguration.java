@@ -1,15 +1,14 @@
 package io.github.luminion.sqlbooster.config;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.github.luminion.sqlbooster.extension.mybatisplus.MybatisPlusProvider;
 import io.github.luminion.sqlbooster.provider.BoostProvider;
 import io.github.luminion.sqlbooster.provider.support.BasicProvider;
-import io.github.luminion.sqlbooster.provider.support.MybatisPlusProvider;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.MapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -54,6 +53,7 @@ public class BoosterAutoConfiguration implements InitializingBean {
         for (BoostProvider provider : providerMap.values()) {
             BoostUtils.registerProvider(provider);
         }
+        log.debug("{} boost providers registered", providerMap.size());
     }
 
     @Configuration(proxyBeanMethods = false)
