@@ -1,4 +1,4 @@
-package io.github.luminion.sqlbooster.provider.support;
+package io.github.luminion.sqlbooster.extension.mybatisplus;
 
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;

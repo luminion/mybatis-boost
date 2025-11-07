@@ -1,6 +1,6 @@
 package io.github.luminion.sqlbooster.config;
 
-import io.github.luminion.sqlbooster.provider.support.MybatisProvider;
+import io.github.luminion.sqlbooster.provider.support.BasicProvider;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.MapperUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class BoosterAutoConfiguration implements ApplicationRunner {
      * 在 Spring Boot 应用启动后执行.
      * <p>
      * 遍历所有的 {@link SqlSessionFactory} beans, 并为它们初始化SQL片段.
-     * 同时, 注册 {@link MybatisProvider} 到 {@link BoostUtils}.
+     * 同时, 注册 {@link BasicProvider} 到 {@link BoostUtils}.
      *
      * @param args 应用程序参数
      * @since 1.0.0
@@ -69,7 +69,7 @@ public class BoosterAutoConfiguration implements ApplicationRunner {
         if (sqlSessionFactory != null) {
             Configuration configuration = sqlSessionFactory.getConfiguration();
             boolean mapUnderscoreToCamelCase = configuration.isMapUnderscoreToCamelCase();
-            MybatisProvider mybatisProvider = new MybatisProvider(mapUnderscoreToCamelCase);
+            BasicProvider mybatisProvider = new BasicProvider(mapUnderscoreToCamelCase);
             boolean b = BoostUtils.registerProvider(mybatisProvider);
             log.info("BoostUtils Provider register success {}", b);
         }

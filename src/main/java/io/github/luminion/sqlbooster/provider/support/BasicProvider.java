@@ -5,6 +5,7 @@ import io.github.luminion.sqlbooster.provider.BoostProvider;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.ReflectUtils;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
@@ -20,9 +21,9 @@ import java.util.stream.Collectors;
  * @author luminion
  * @since 1.0.0
  */
-@RequiredArgsConstructor
 @EqualsAndHashCode
-public class MybatisProvider implements BoostProvider {
+@RequiredArgsConstructor
+public class BasicProvider implements BoostProvider {
 
     /**
      * 是否将驼峰命名转换为下划线命名
@@ -39,7 +40,7 @@ public class MybatisProvider implements BoostProvider {
     @Override
     public <T> String getTableName(Class<T> clazz) {
         String tableName = BoostUtils.camelCaseToUnderscore(clazz.getName());
-        if (tableName.startsWith("_")){
+        if (tableName.startsWith("_")) {
             return tableName.substring(1);
         }
         return tableName;
@@ -89,7 +90,7 @@ public class MybatisProvider implements BoostProvider {
     public <T> Map<String, String> getPropertyToColumnAliasMap(Class<T> clazz) {
         Set<String> strings = ReflectUtils.fieldMap(clazz).keySet();
         return strings.stream()
-                .collect(Collectors.toMap(e -> e, e -> 
+                .collect(Collectors.toMap(e -> e, e ->
                         String.format("a.%s", mapUnderscoreToCamelCase ? BoostUtils.camelCaseToUnderscore(e) : e)));
     }
 
