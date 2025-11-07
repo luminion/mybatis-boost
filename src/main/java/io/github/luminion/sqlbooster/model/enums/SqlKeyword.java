@@ -78,18 +78,17 @@ public enum SqlKeyword {
     /**
      * 位运算包含操作符
      */
-    BIT_IN("&>"),
+    BIT_IN("&"),
     /**
      * 位运算不包含操作符
      */
-    BIT_NOT_IN("&="),
+    BIT_NOT_IN("!&"),
 
     ;
     /**
      * 操作符关键字.
      */
     private final String keyword;
-
 
 
     /**
@@ -145,28 +144,34 @@ public enum SqlKeyword {
             case ">=":
             case "GE":
                 return SqlKeyword.GE.getKeyword();
+            case "$":
             case "LIKE":
                 return SqlKeyword.LIKE.getKeyword();
+            case "!$":
             case "NOT LIKE":
+            case "NOT_LIKE":
                 return SqlKeyword.NOT_LIKE.getKeyword();
+            case "@":
             case "IN":
                 return SqlKeyword.IN.getKeyword();
+            case "!@":
             case "NOT IN":
                 return SqlKeyword.NOT_IN.getKeyword();
-            case "NULL":
-            case "ISNULL":
+            case "?":
             case "IS NULL":
+            case "IS_NULL":
                 return SqlKeyword.IS_NULL.getKeyword();
-            case "NOT NULL":
+            case "!?":
             case "IS NOT NULL":
+            case "IS_NOT_NULL":
                 return SqlKeyword.IS_NOT_NULL.getKeyword();
-            case "&>0":
-            case "&>":
-            case "BIT CONTAINS":
+            case "&":
+            case "BIT IN":
+            case "BIT_IN":
                 return SqlKeyword.BIT_IN.getKeyword();
-            case "&=0":
-            case "&=":
-            case "BIT NOT CONTAINS":
+            case "!&":
+            case "BIT NOT IN":
+            case "BIT_NOT_IN":
                 return SqlKeyword.BIT_NOT_IN.getKeyword();
             default:
                 throw new IllegalArgumentException("illegal operator: " + operator);
@@ -196,7 +201,7 @@ public enum SqlKeyword {
         return SqlKeyword.LT.getKeyword().equals(operator) || SqlKeyword.LE.getKeyword().equals(operator) ||
                 SqlKeyword.GT.getKeyword().equals(operator) || SqlKeyword.GE.getKeyword().equals(operator);
     }
-    
+
     /**
      * 判断是否为 LIKE 或 NOT LIKE 操作符.
      *

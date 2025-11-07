@@ -18,10 +18,10 @@
                                 <when test="item.operator == 'IS NULL' or item.operator == 'IS NOT NULL'">
                                     ${item.field} ${item.operator}
                                 </when>
-                                <when test="item.operator == '&amp;&gt;'">
+                                <when test="item.operator == '&amp;'">
                                     ${item.field} &amp; #{item.value} &gt; 0
                                 </when>
-                                <when test="item.operator == '&amp;='">
+                                <when test="item.operator == '!&amp;'">
                                     ${item.field} &amp; #{item.value} = 0
                                 </when>
                                 <otherwise>
