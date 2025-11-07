@@ -6,8 +6,11 @@ import io.github.luminion.sqlbooster.provider.BoostProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.GenericTypeResolver;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * MyBatis Boost 反射工具类.
@@ -20,13 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public abstract class BoostUtils {
     /**
-     * 实体类字段到数据库列的映射缓存.
-     */
-    private static final Map<Class<?>, Map<String, String>> ENTITY_PROPERTY_TO_COLUMN_MAP = new ConcurrentHashMap<>();
-    /**
      * 已注册的 BoostProvider 实例.
      */
-    private static final TreeSet<BoostProvider> PROVIDERS = new TreeSet<>();
+    private static final ConcurrentSkipListSet<BoostProvider> PROVIDERS = new ConcurrentSkipListSet<>();
 
     /**
      * 获取所有已注册的 Provider.
@@ -218,19 +217,14 @@ public abstract class BoostUtils {
      * @since 1.0.0
      */
     public static Map<String, String> getPropertyToColumnAliasMap(Class<?> entityClass) {
-        Map<String, String> map = ENTITY_PROPERTY_TO_COLUMN_MAP.get(entityClass);
-        if (map != null) {
-            return map;
-        }
-        LinkedHashMap<String, String> result = new LinkedHashMap<>();
         for (BoostProvider provider : PROVIDERS) {
             Map<String, String> contributedMap = provider.getPropertyToColumnAliasMap(entityClass);
-            if (contributedMap != null) {
-                contributedMap.forEach(result::putIfAbsent);
+            if (contributedMap != null && !contributedMap.isEmpty()) {
+                log.debug("found alias map provider: [{}], class: [{}]", entityClass.getName(), provider.getClass().getName());
+                return contributedMap;
             }
         }
         log.warn("No property to column alias map found in {} providers, class: {}", PROVIDERS.size(), entityClass.getName());
-        ENTITY_PROPERTY_TO_COLUMN_MAP.put(entityClass, result);
-        return result;
+        return Collections.emptyNavigableMap();
     }
 }

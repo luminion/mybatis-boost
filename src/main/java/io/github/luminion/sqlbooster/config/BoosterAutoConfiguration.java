@@ -1,57 +1,42 @@
 package io.github.luminion.sqlbooster.config;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.github.luminion.sqlbooster.provider.BoostProvider;
 import io.github.luminion.sqlbooster.provider.support.BasicProvider;
+import io.github.luminion.sqlbooster.provider.support.MybatisPlusProvider;
 import io.github.luminion.sqlbooster.util.BoostUtils;
 import io.github.luminion.sqlbooster.util.MapperUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
 
 /**
  * Mybatis-Boost 自动配置类.
- * <p>
- * 使用 {@link ApplicationRunner} 确保在所有Bean初始化完成后再执行SQL片段的配置.
- * 使用 {@link ConditionalOnBean} 确保仅在存在 {@link SqlSessionFactory} Bean时才激活此配置.
  *
  * @author luminion
  * @since 1.0.0
  */
 @Slf4j
 @AutoConfiguration
-@ConditionalOnBean(SqlSessionFactory.class)
-public class BoosterAutoConfiguration implements ApplicationRunner {
+public class BoosterAutoConfiguration implements InitializingBean {
 
     private final ApplicationContext applicationContext;
 
-    /**
-     * 构造函数,注入 {@link ApplicationContext}.
-     *
-     * @param applicationContext Spring应用上下文
-     * @since 1.0.0
-     */
     public BoosterAutoConfiguration(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    /**
-     * 在 Spring Boot 应用启动后执行.
-     * <p>
-     * 遍历所有的 {@link SqlSessionFactory} beans, 并为它们初始化SQL片段.
-     * 同时, 注册 {@link BasicProvider} 到 {@link BoostUtils}.
-     *
-     * @param args 应用程序参数
-     * @since 1.0.0
-     */
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void afterPropertiesSet() {
         Map<String, SqlSessionFactory> sqlSessionFactoryMap = applicationContext.getBeansOfType(SqlSessionFactory.class);
         log.info("Found {} SqlSessionFactory bean(s), starting to configure sqlFragments...", sqlSessionFactoryMap.size());
         for (Map.Entry<String, SqlSessionFactory> entry : sqlSessionFactoryMap.entrySet()) {
@@ -64,14 +49,36 @@ public class BoosterAutoConfiguration implements ApplicationRunner {
                 log.error("sqlFragments configuration failed for SqlSessionFactory bean: {}, dynamic sql may not work", beanName);
             }
         }
-        ObjectProvider<SqlSessionFactory> beanProvider = applicationContext.getBeanProvider(SqlSessionFactory.class);
-        SqlSessionFactory sqlSessionFactory = beanProvider.getIfAvailable();
-        if (sqlSessionFactory != null) {
-            Configuration configuration = sqlSessionFactory.getConfiguration();
-            boolean mapUnderscoreToCamelCase = configuration.isMapUnderscoreToCamelCase();
-            BasicProvider mybatisProvider = new BasicProvider(mapUnderscoreToCamelCase);
-            boolean b = BoostUtils.registerProvider(mybatisProvider);
-            log.info("BoostUtils Provider register success {}", b);
+
+        Map<String, BoostProvider> providerMap = applicationContext.getBeansOfType(BoostProvider.class);
+        for (BoostProvider provider : providerMap.values()) {
+            BoostUtils.registerProvider(provider);
+        }
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnClass(BaseMapper.class)
+    static class MybatisPlusConfiguration {
+
+        @Bean
+//        @ConditionalOnMissingBean
+        public BoostProvider mybatisPlusProvider() {
+            log.debug("MybatisPlusProvider configured");
+            return new MybatisPlusProvider();
+        }
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnClass(SqlSessionFactory.class)
+    static class MybatisConfiguration {
+
+        @Bean
+//        @ConditionalOnMissingBean
+        @ConditionalOnBean(SqlSessionFactory.class)
+        public BoostProvider mybatisProvider(SqlSessionFactory sqlSessionFactory) {
+            boolean mapUnderscoreToCamelCase = sqlSessionFactory.getConfiguration().isMapUnderscoreToCamelCase();
+            log.debug("BasicProvider for mybatis configured");
+            return new BasicProvider(mapUnderscoreToCamelCase);
         }
     }
 }
