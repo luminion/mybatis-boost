@@ -328,22 +328,22 @@ public class SysUserController {
 
 #### 动态后缀映射表
 
-| 后缀                           | 操作符           | 操作说明      | 示例 (JSON Key)                                           | 值类型                         |
-|------------------------------|---------------|-----------|---------------------------------------------------------|-----------------------------|
-| (无)                          | `=`           | 等于        | `"name": "mike"`                                        | String, Number, Boolean     |
-| `Ne` / `_ne`                 | `<>`          | 不等于       | `"ageNe": 18` / `"age_ne": 18`                          | String, Number, Boolean     |
-| `Lt` / `_lt`                 | `<`           | 小于        | `"ageLt": 18` / `"age_lt": 18`                          | Number, Date                |
-| `Le` / `_le`                 | `<=`          | 小于等于      | `"ageLe": 18` / `"age_le": 18`                          | Number, Date                |
-| `Gt` / `_gt`                 | `>`           | 大于        | `"ageGt": 18` / `"age_gt": 18`                          | Number, Date                |
-| `Ge` / `_ge`                 | `>=`          | 大于等于      | `"ageGe": 18` / `"age_ge": 18`                          | Number, Date                |
-| `Like` / `_like`             | `LIKE`        | 模糊匹配      | `"nameLike": "mike"` / `"name_like": "mike"`            | String                      |
-| `NotLike` / `_not_like`      | `NOT LIKE`    | 反模糊匹配     | `"nameNotLike": "mike"` / `"name_not_like": "mike"`     | String                      |
-| `In` / `_in`                 | `IN`          | IN 查询     | `"stateIn": [1, 2, 3]` / `"state_in": [1, 2, 3]`        | List/Array (String, Number) |
-| `NotIn` / `_not_in`          | `NOT IN`      | NOT IN 查询 | `"stateNotIn": [1, 2, 3]` / `"state_not_in": [1, 2, 3]` | List/Array (String, Number) |
-| `IsNull` / `_is_null`        | `IS NULL`     | 为空        | `"nameIsNull": true` / `"name_is_null": true`           | Boolean (true)              |
-| `IsNotNull` / `_is_not_null` | `IS NOT NULL` | 不为空       | `"nameIsNotNull": true` / `"name_is_not_null": true`    | Boolean (true)              |
-| `BitIn` / `_bit_in`          | `& =`         | 位运算 (包含)  | `"permissionBitIn": 4` / `"permission_bit_in": 4`       | Number                      |
-| `BitNot` / `_bit_not`        | `& = 0`       | 位运算 (不包含) | `"permissionBitNot": 4` / `"permission_bit_not": 4`     | Number                      |
+| 操作符           | 操作说明      | 后缀                           | 示例 (JSON Key)                                           | 值类型                         |
+|---------------|-----------|------------------------------|---------------------------------------------------------|-----------------------------|
+| `=`           | 等于        | (无)                          | `"name": "mike"`                                        | String, Number, Boolean     |
+| `<>`          | 不等于       | `Ne` / `_ne`                 | `"ageNe": 18` / `"age_ne": 18`                          | String, Number, Boolean     |
+| `<`           | 小于        | `Lt` / `_lt`                 | `"ageLt": 18` / `"age_lt": 18`                          | Number, Date                |
+| `<=`          | 小于等于      | `Le` / `_le`                 | `"ageLe": 18` / `"age_le": 18`                          | Number, Date                |
+| `>`           | 大于        | `Gt` / `_gt`                 | `"ageGt": 18` / `"age_gt": 18`                          | Number, Date                |
+| `>=`          | 大于等于      | `Ge` / `_ge`                 | `"ageGe": 18` / `"age_ge": 18`                          | Number, Date                |
+| `LIKE`        | 模糊匹配      | `Like` / `_like`             | `"nameLike": "mike"` / `"name_like": "mike"`            | String                      |
+| `NOT LIKE`    | 反模糊匹配     | `NotLike` / `_not_like`      | `"nameNotLike": "mike"` / `"name_not_like": "mike"`     | String                      |
+| `IN`          | IN 查询     | `In` / `_in`                 | `"stateIn": [1, 2, 3]` / `"state_in": [1, 2, 3]`        | List/Array (String, Number) |
+| `NOT IN`      | NOT IN 查询 | `NotIn` / `_not_in`          | `"stateNotIn": [1, 2, 3]` / `"state_not_in": [1, 2, 3]` | List/Array (String, Number) |
+| `IS NULL`     | 为空        | `IsNull` / `_is_null`        | `"nameIsNull": true` / `"name_is_null": true`           | Boolean (true)              |
+| `IS NOT NULL` | 不为空       | `IsNotNull` / `_is_not_null` | `"nameIsNotNull": true` / `"name_is_not_null": true`    | Boolean (true)              |
+| `& =`         | 位运算 (包含)  | `BitIn` / `_bit_in`          | `"permissionBitIn": 4` / `"permission_bit_in": 4`       | Number                      |
+| `& = 0`       | 位运算 (不包含) | `BitNot` / `_bit_not`        | `"permissionBitNot": 4` / `"permission_bit_not": 4`     | Number                      |
 
 #### 入参示例
 
@@ -391,8 +391,7 @@ public class App {
 }
 ```
 
-
-### 条件动态拼装SQL
+### 动态条件组合SQL
 
 - 入参自由指定`查询条件`/`查询类型`/`查询值`
 - 入参自由指定`排序条件`和`升降序`
@@ -400,10 +399,10 @@ public class App {
 - 自动验证参数, 防止`SQL注入`
 - 支持复杂条件自由组合
 
-
 #### 入参格式
 
-支持动态sql的入参类为[SqlHelper](src/main/java/io/github/luminion/sqlbooster/model/sql/helper/SqlHelper.java)类, 其格式如下:
+支持动态sql的入参类为[SqlHelper](src/main/java/io/github/luminion/sqlbooster/model/sql/helper/SqlHelper.java)类,
+其格式如下:
 
 ```json
 {
@@ -422,23 +421,25 @@ public class App {
   "sorts": [
     {
       "field": "id",
-      "desc": true
+      "asc": true
     },
     {
       "field": "age",
-      "desc": false
+      "asc": false
     }
   ]
 }
 ```
+
 属性说明:
+
 * `conditions`用于存放一组查询条件,
     * `field` 指定需要查询的字段
-    * `operator` 指定查询类型
+    * `operator` 指定查询类型, 不传递时默认为`=`
     * `value` 指定查询的值
-* `sorts`用于存放一组排序条件, `可选值`
+* `sorts`用于存放一组排序条件
     * `field`指定需要排序的字段
-    * `desc`指定是否降序, 不传递时默认为升序
+    * `asc`指定是否升序, `true`为升序,`false`为降序, 不传递时默认为`false`
 
 #### 查询类型映射表
 
@@ -461,9 +462,6 @@ public class App {
 
 > **提示: 其中 `=` 为默认值, 当查询的类型为`=`时无需传递operator参数**
 
-
-
-
 #### 基本使用
 
 查询`name`为`mike`, `version`大于等于`1`, `state`为`1`或`2`或`3`的数据
@@ -483,20 +481,13 @@ public class App {
     {
       "field": "state",
       "operator": "IN",
-      "value": [
-        1,
-        2,
-        3
-      ]
+      "value": [1, 2, 3]
     }
   ]
 }
 ```
 
 #### 指定排序字段
-
-- 通过`sorts`字段指定排序字段,
-- 其中每个条件对象`field`表示排序的字段,`isDesc`表示是否倒序(未指定时默认升序)
 
 查询`name`为`mike`, `version`为`1`的数据, 并将结果按照`id`降序, `age`升序排列
 
@@ -514,17 +505,66 @@ public class App {
   ],
   "sorts": [
     {
-      "field": "id",
-      "isDesc": true
+      "field": "id"
     },
     {
-      "field": "age"
+      "field": "age",
+      "asc": true
     }
   ]
 }
 ```
 
+#### 完整功能 / 复杂查询
 
+上文内容简化了SqlHelper结构, 实际结构为:
+
+```json
+{
+  "connector": "and",
+  "conditions": [
+    {
+      "field": "name",
+      "operator": "=",
+      "value": "mike"
+    },
+    {
+      "field": "age",
+      "operator": ">=",
+      "value": 18
+    }
+  ],
+  "sorts": [
+    {
+      "field": "id"
+    },
+    {
+      "field": "age",
+      "asc": true
+    }
+  ],
+  "child": {
+    "conditions": [],
+    "connector": "or",
+    "child": null
+  }
+}
+```
+字段属性说明:
+* `connector`用于指定`conditions`中条件之间的关系
+    * 该属性为可忽略属性 , 无需传递, 默认为`and`
+    * 可选值: `and`并且 / `or`或者
+* `conditions`用于存放一组查询条件,
+    * `field` 指定需要查询的字段
+    * `operator` 指定查询类型, 不传递时默认为`=`
+    * `value` 指定查询的值
+* `sorts`用于存放一组排序条件
+    * `field`指定需要排序的字段
+    * `asc`指定是否升序, 不传递时默认为`false`, 其中`true`为升序,`false`为降序
+* `child`为可嵌套的子条件, `仅复杂条件时`
+    * 无需嵌套时可忽略该属性
+    * 嵌套层级下不接受`sorts`参数
+    * 必要时,嵌套层级下还可继续嵌套`child`
 
 
 最佳实践:
@@ -544,57 +584,6 @@ public class App {
       "conditions": [],
       "connector": "OR"
     }
-  }
-}
-```
-
-
-#### SqlHelper完整结构
-
-* `connector`用于指定`conditions`中条件之间的关系
-    * 该属性为可忽略属性 , 无需传递, 默认为`and`
-    * 可选值: `and`并且 / `or`或者
-* `conditions`用于存放一组查询条件,
-    * `field` 指定需要查询的字段
-    * `operator` 指定查询类型
-    * `value` 指定查询的值
-* `sorts`用于存放一组排序条件, `可选值`
-    * `field`指定需要排序的字段
-    * `desc`指定是否降序, 不传递时默认为升序
-* `child`为可嵌套的子条件, `仅复杂条件时`
-    * 无需嵌套时可忽略该属性
-    * 嵌套层级下不接受`sorts`参数
-    * 必要时,嵌套层级下还可继续嵌套`child`
-
-```json
-{
-  "connector": "and",
-  "conditions": [
-    {
-      "field": "name",
-      "operator": "=",
-      "value": "mike"
-    },
-    {
-      "field": "age",
-      "operator": ">=",
-      "value": 18
-    }
-  ],
-  "sorts": [
-    {
-      "field": "id",
-      "desc": true
-    },
-    {
-      "field": "age",
-      "desc": false
-    }
-  ],
-  "child": {
-    "conditions": [],
-    "connector": "or",
-    "child": null
   }
 }
 ```
