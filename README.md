@@ -103,19 +103,26 @@ public static void main(String[] args) {
     System.out.println(mapperContent);
 }
 ```
-将获取的内容粘贴到mapper.xml文件中
+将获取的内容粘贴到mapper.xml文件中, 并根据需要`连表`/`添加条件`/`添加排序`
 ```xml
 <!--复制工具类生成的该sql片段到mapper.xml文件中-->
-<select id="selectByWrapper" resultType="com.example.mybatis.boost.vo.SysUserVO">
+<select id="selectByWrapper" resultType="com.example.test.vo.SysUserVO">
     SELECT 
     a.* 
     FROM 
     sys_user a
     <where>
         <include refid="sqlbooster.conditions"/>
+        <!--此处编写自定义条件SQL, 未自动映射的条件可通过param1.extra获取, 编写时以AND开头以兼容自动映射的查询条件-->
+        AND a.deleted = 0 
+        <if test="param1.extra.userDeptName != null">
+            AND a.dept_id in (SELECT id FROM sys_department WHERE name = #{param1.extra.userDeptName})
+        </if>
     </where>
     <trim prefix="ORDER BY" prefixOverrides=",">
         <include refid="sqlbooster.sorts"/>
+        <!--此处编写排序字段SQL, 编写时以,开头以兼容自动映射的排序-->
+        , a.created_time desc , a.id desc
     </trim>
 </select>
 ```
@@ -200,27 +207,27 @@ public interface SysUserMapper extends BoosterEngine<SysUser, SysUserVO> {
 ```java
 import io.github.luminion.sqlbooster.core.BoosterEngine;
 
-// 自定义接口, 继承BoosterEngine
+// 自定义全局接口, 继承BoosterEngine
 public interface CustomBooster<T> extends BoosterEngine<SysUser, SysUserVO> {
 
     @Override
     default Page<SysUserVO> voPage(Wrapper<SysUser> wrapper, long pageNum, long pageSize) {
-        // 查询预处理
+        // 查询预处理 - 提供给子类重写的方法, 可用于对wrapper进行预处理, 可以不调用, 但建议调用以规范行为
         voPreProcess(wrapper);
         
-        // 重要, 记得调用process()方法
+        // !!!重要!!!, 记得调用SqlHelper.process()方法
         // SqlHelper.process()方法用于处理动态映射和后缀映射, 同时检查条件合法性, 防止sql注入
         BaseHelper<T> sqlHelper = SqlHelper.of(wrapper).entity(this)
                 .process(SuffixProcessor.of()::process);
         
         // 分页逻辑, 以下为Mybatis-plus的分页示例, 实际实现时替换为自己的即可
         PageDTO<V> pageInfo = new PageDTO<>(pageNum, pageSize);
-        List<V> vs = selectByBooster(sqlHelper, pageInfo); // 核心的查询方法, 必须调用
+        List<V> vs = selectByBooster(sqlHelper, pageInfo); // 真正执行查询的mapper层方法
         pageInfo.setRecords(vs);
         MybatisPlusPage<V> page = new MybatisPlusPage<>(pageInfo);
 
 
-        // 查询后处理
+        // 查询后处理 - 提供给子类重写的方法, 可用于对查询结果进行后处理, 可以不调用, 但建议调用以规范行为
         voPostProcess(page.getRecords(), sqlHelper, page);
         return null;
     }
