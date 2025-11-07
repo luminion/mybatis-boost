@@ -17,7 +17,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class BoosterServiceImpl<M extends BoosterBaseMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoosterService<T, V> {
+public abstract class BoosterMpServiceImpl<M extends BoosterMpMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoosterMpService<T, V> {
 
     /**
      * {@inheritDoc}

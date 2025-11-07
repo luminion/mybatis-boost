@@ -13,6 +13,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoosterBaseMapper<T, V> extends BaseMapper<T>, MybatisPlusBooster<T, V> {
+public interface BoosterMpMapper<T, V> extends BaseMapper<T>, MybatisPlusBooster<T, V> {
 
 }

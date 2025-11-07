@@ -16,7 +16,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public interface BoosterService<T, V> extends IService<T>, MybatisPlusBooster<T, V> {
+public interface BoosterMpService<T, V> extends IService<T>, MybatisPlusBooster<T, V> {
 
     /**
      * {@inheritDoc}
@@ -24,7 +24,7 @@ public interface BoosterService<T, V> extends IService<T>, MybatisPlusBooster<T,
      */
     @Override
     default List<V> selectByBooster(Wrapper<T> wrapper, Object page) {
-        BoosterBaseMapper<T, V> baseMapper = (BoosterBaseMapper<T, V>) getBaseMapper();
+        BoosterMpMapper<T, V> baseMapper = (BoosterMpMapper<T, V>) getBaseMapper();
         return baseMapper.selectByBooster(wrapper, page);
     }
 }
