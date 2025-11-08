@@ -13,7 +13,7 @@ SQL Booster 是一个数据库查询设计的增强工具包，旨在简化和�
   - [Maven 依赖](#maven-依赖)
   - [快速开始](#快速开始)
     - [1. 创建实体类](#1-创建实体类)
-    - [2. 扩展mapper接口](#2-扩展mapper接口)
+    - [2. mapper对应xml文件引用sql片段](#2-mapper对应xml文件引用sql片段)
     - [3. Mapper接口继承指定类](#3-mapper接口继承指定类)
       - [Mybatis环境, 使用`PageHelperBooster`](#mybatis环境-使用pagehelperbooster)
       - [Mybatis-plus环境, 使用`MybatisPlusBooster`](#mybatis-plus环境-使用mybatisplusbooster)
@@ -107,7 +107,7 @@ public class SysUserVO {
 }
 ```
 
-### 2. 扩展mapper接口
+### 2. mapper对应xml文件引用sql片段
 
 获取xml文件内容
 

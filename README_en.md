@@ -13,7 +13,7 @@ SQL Booster is an enhancement toolkit for database query design, aimed at simpli
   - [Maven Dependency](#maven-dependency)
   - [Quick Start](#quick-start)
     - [1. Create Entity Class](#1-create-entity-class)
-    - [2. Extend Mapper Interface](#2-extend-mapper-interface)
+    - [2. Mapper Xml File References SQL Fragment](#2-mapper-xml-file-references-SQL-fragment)
     - [3. Mapper Interface Inherits Specified Class](#3-mapper-interface-inherits-specified-class)
       - [Mybatis Environment, Use `PageHelperBooster`](#mybatis-environment-use-pagehelperbooster)
       - [Mybatis-plus Environment, Use `MybatisPlusBooster`](#mybatis-plus-environment-use-mybatisplusbooster)
@@ -106,7 +106,7 @@ public class SysUserVO {
 }
 ```
 
-### 2. Extend Mapper Interface
+### 2. Mapper Xml File References SQL Fragment
 
 Get xml file content
 
