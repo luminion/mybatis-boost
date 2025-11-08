@@ -23,11 +23,6 @@ import java.util.List;
  */
 public interface MybatisPlusBooster<T, V> extends BoosterEngine<T, V> {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
         voPreProcess(wrapper);

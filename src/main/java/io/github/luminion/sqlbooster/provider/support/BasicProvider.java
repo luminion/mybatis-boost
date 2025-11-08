@@ -29,13 +29,6 @@ public class BasicProvider implements BoostProvider {
      */
     private final boolean mapUnderscoreToCamelCase;
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * 默认实现是将类名从驼峰转换为下划线作为表名.
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T> String getTableName(Class<T> clazz) {
         String tableName = BoostUtils.camelCaseToUnderscore(clazz.getName());
@@ -45,13 +38,6 @@ public class BasicProvider implements BoostProvider {
         return tableName;
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * 默认实现是查找是否存在名为 "getId" 的方法, 如果存在则返回 "id".
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T> String getIdPropertyName(Class<T> clazz) {
         try {
@@ -62,13 +48,6 @@ public class BasicProvider implements BoostProvider {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * 默认实现是通过 {@link ReflectUtils#getGetterPropertyName(MethodReference)} 获取属性名.
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T, R> String getGetterPropertyName(MethodReference<T, R> getter) {
         try {
@@ -78,13 +57,6 @@ public class BasicProvider implements BoostProvider {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * 默认实现是将所有字段名根据 `mapUnderscoreToCamelCase` 配置转换为对应的列名.
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T> Map<String, String> getPropertyToColumnAliasMap(Class<T> clazz) {
         Set<String> strings = ReflectUtils.fieldMap(clazz).keySet();
@@ -93,13 +65,6 @@ public class BasicProvider implements BoostProvider {
                         String.format("a.%s", mapUnderscoreToCamelCase ? BoostUtils.camelCaseToUnderscore(e) : e)));
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * 返回 Integer.MAX_VALUE, 表示这是一个优先级最低的 Provider.
-     *
-     * @since 1.0.0
-     */
     @Override
     public int getOrder() {
         return Integer.MAX_VALUE;

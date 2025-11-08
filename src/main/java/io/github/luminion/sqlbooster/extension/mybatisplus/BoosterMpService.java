@@ -18,10 +18,6 @@ import java.util.List;
  */
 public interface BoosterMpService<T, V> extends IService<T>, MybatisPlusBooster<T, V> {
 
-    /**
-     * {@inheritDoc}
-     * @since 1.0.0
-     */
     @Override
     default List<V> selectByBooster(Wrapper<T> wrapper, Object page) {
         BoosterMpMapper<T, V> baseMapper = (BoosterMpMapper<T, V>) getBaseMapper();

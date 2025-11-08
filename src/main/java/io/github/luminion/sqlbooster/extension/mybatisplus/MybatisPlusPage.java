@@ -42,11 +42,6 @@ public class MybatisPlusPage<T> implements Page<T> {
         return pageInfo.getSize();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public <R> Page<R> convertRecords(Class<R> targetType) {
         IPage<R> convert = pageInfo.convert(e -> ReflectUtils.toTarget(e, targetType));

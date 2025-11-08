@@ -19,11 +19,6 @@ import java.util.List;
  */
 public abstract class BoosterMpServiceImpl<M extends BoosterMpMapper<T, V>, T, V> extends ServiceImpl<M, T> implements BoosterMpService<T, V> {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public List<V> selectByBooster(Wrapper<T> wrapper, Object page) {
         return getBaseMapper().selectByBooster(wrapper, page);
