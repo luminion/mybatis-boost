@@ -220,7 +220,7 @@ public abstract class BoostUtils {
         for (BoostProvider provider : PROVIDERS) {
             Map<String, String> contributedMap = provider.getPropertyToColumnAliasMap(entityClass);
             if (contributedMap != null && !contributedMap.isEmpty()) {
-                log.debug("found alias map provider: [{}], class: [{}]", entityClass.getName(), provider.getClass().getName());
+                log.debug("found alias map provider: [{}], class: [{}]", provider.getClass().getName(), entityClass.getName());
                 return contributedMap;
             }
         }
