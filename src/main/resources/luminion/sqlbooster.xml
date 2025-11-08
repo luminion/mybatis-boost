@@ -4,7 +4,7 @@
     <sql id="conditions">
         <if test="param1 != null">
             <foreach collection="param1" item="gen">
-                <if test="gen.conditions != null and gen.conditions.size() > 0">
+                <if test='gen.conditions != null and !gen.conditions.isEmpty()'>
                     <trim prefix="AND (" suffix=")" prefixOverrides="AND|OR">
                         <foreach collection="gen.conditions" item="item">
                             ${gen.connector}
