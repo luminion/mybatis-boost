@@ -336,7 +336,7 @@ public class SysUserController {
                 .ge(SysUser::getAge, 18) // age>=18
                 .in(SysUser::getRoleId, Arrays.asList(1, 2))
                 .like(SysUser::getUserName, "tom") // userName like '%tom%'
-                .wrap(sysUserMapper)
+                .boost(sysUserMapper)
                 .voList();
     }
 
