@@ -361,8 +361,8 @@ public class SysUserController {
 | `NOT IN`      | NOT IN 查询 | `NotIn` / `_not_in`          | `"stateNotIn": [1, 2, 3]` / `"state_not_in": [1, 2, 3]`  | List/Array (String, Number) |
 | `IS NULL`     | 为空        | `IsNull` / `_is_null`        | `"nameIsNull": true` / `"name_is_null": true`            | Boolean (true)              |
 | `IS NOT NULL` | 不为空       | `IsNotNull` / `_is_not_null` | `"nameIsNotNull": true` / `"name_is_not_null": true`     | Boolean (true)              |
-| `& =`         | 位运算 (包含)  | `BitIn` / `_bit_in`          | `"permissionBitIn": 4` / `"permission_bit_in": 4`        | Number                      |
-| `& = 0`       | 位运算 (不包含) | `BitNotIn` / `_bit_not_in`   | `"permissionBitNotIn": 4` / `"permission_bit_not_in": 4` | Number                      |
+| `&`           | 位运算 (包含)  | `BitIn` / `_bit_in`          | `"permissionBitIn": 4` / `"permission_bit_in": 4`        | Number                      |
+| `!&`          | 位运算 (不包含) | `BitNotIn` / `_bit_not_in`   | `"permissionBitNotIn": 4` / `"permission_bit_not_in": 4` | Number                      |
 
 #### 入参示例
 
