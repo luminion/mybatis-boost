@@ -23,31 +23,16 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class MybatisPlusProvider implements BoostProvider {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T, R> String getGetterPropertyName(MethodReference<T, R> getter) {
         return ReflectUtils.getGetterPropertyName(getter);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T> String getIdPropertyName(Class<T> clazz) {
         return TableInfoHelper.getTableInfo(clazz).getKeyProperty();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T> Map<String, String> getPropertyToColumnAliasMap(Class<T> clazz) {
         return TableInfoHelper.getTableInfo(clazz).getFieldList().stream()
@@ -55,21 +40,11 @@ public class MybatisPlusProvider implements BoostProvider {
                         e -> String.format("a.%s", e.getColumn())));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public <T> String getTableName(Class<T> clazz) {
         return TableInfoHelper.getTableInfo(clazz).getTableName();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public int getOrder() {
         return Integer.MAX_VALUE - 100;

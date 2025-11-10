@@ -28,51 +28,26 @@ import java.util.stream.Collectors;
  */
 public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default T toEntity(Object source) {
         return ReflectUtils.toTarget(source, BoostUtils.getEntityClass(this));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default V toVo(Object source) {
         return ReflectUtils.toTarget(source, BoostUtils.getViewObjectClass(this));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default void voPreProcess(Wrapper<T> wrapper) {
         // do nothing here, only for override
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default void voPostProcess(List<V> records, Wrapper<T> wrapper, Page<V> page) {
         // do nothing here, only for override
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default V voById(Serializable id) {
         if (ObjectUtils.isEmpty(id)) {
@@ -88,11 +63,6 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
         return voUnique(sqlHelper);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> R voById(Serializable id, Class<R> targetType) {
         V v = voById(id);
@@ -102,31 +72,16 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
         return ReflectUtils.toTarget(v, targetType);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default Optional<V> voByIdOpt(Serializable id) {
         return Optional.ofNullable(voById(id));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> Optional<R> voByIdOpt(Serializable id, Class<R> targetType) {
         return Optional.ofNullable(voById(id, targetType));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default List<V> voListByIds(Collection<? extends Serializable> ids) {
         Class<T> entityClass = BoostUtils.getEntityClass(this);
@@ -136,11 +91,6 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
         return voList(sqlHelper);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> List<R> voListByIds(Collection<? extends Serializable> ids, Class<R> targetType) {
         List<V> vs = voListByIds(ids);
@@ -149,11 +99,6 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default V voFirst(Wrapper<T> wrapper) {
         List<V> vs = voList(wrapper);
@@ -163,41 +108,21 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
         return vs.get(0);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> R voFirst(Wrapper<T> wrapper, Class<R> targetType) {
         return ReflectUtils.toTarget(voFirst(wrapper), targetType);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default Optional<V> voFirstOpt(Wrapper<T> wrapper) {
         return Optional.ofNullable(voFirst(wrapper));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> Optional<R> voFirstOpt(Wrapper<T> wrapper, Class<R> targetType) {
         return Optional.ofNullable(voFirst(wrapper, targetType));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default V voUnique(Wrapper<T> wrapper) {
         List<V> vs = voList(wrapper);
@@ -210,51 +135,26 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
         return vs.get(0);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> R voUnique(Wrapper<T> wrapper, Class<R> targetType) {
         return ReflectUtils.toTarget(voUnique(wrapper), targetType);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default Optional<V> voUniqueOpt(Wrapper<T> wrapper) {
         return Optional.ofNullable(voUnique(wrapper));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> Optional<R> voUniqueOpt(Wrapper<T> wrapper, Class<R> targetType) {
         return Optional.ofNullable(voUnique(wrapper, targetType));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default List<V> voList() {
         return voList(null);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default List<V> voList(Wrapper<T> wrapper) {
         voPreProcess(wrapper);
@@ -266,11 +166,6 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
         return vs;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> List<R> voList(Wrapper<T> wrapper, Class<R> targetType) {
         List<V> vs = voList(wrapper);
@@ -279,41 +174,21 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default Page<V> voPage(Wrapper<T> wrapper, int pageNum, int pageSize) {
         return voPage(wrapper, (long) pageNum, pageSize);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> Page<R> voPage(Wrapper<T> wrapper, int pageNum, int pageSize, Class<R> targetType) {
         return voPage(wrapper, (long) pageNum, pageSize, targetType);
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     default <R> Page<R> voPage(Wrapper<T> wrapper, long pageNum, long pageSize, Class<R> targetType) {
         return voPage(wrapper, pageNum, pageSize).convertRecords(targetType);

@@ -22,51 +22,26 @@ public class PageHelperPage<T> implements Page<T> {
      */
     private final PageInfo<T> pageInfo;
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public List<T> getRecords() {
         return pageInfo.getList();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public long getTotal() {
         return pageInfo.getTotal();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public long getCurrent() {
         return pageInfo.getPageNum();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public long getSize() {
         return pageInfo.getSize();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.0
-     */
     @Override
     public <R> Page<R> convertRecords(Class<R> targetType) {
         PageInfo<R> convert = pageInfo.convert(e -> ReflectUtils.toTarget(e, targetType));

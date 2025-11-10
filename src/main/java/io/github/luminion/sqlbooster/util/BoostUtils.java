@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
- * MyBatis Boost 反射工具类.
+ * Booster运行时核心工具类.
  * <p>
- * 提供可扩展的、针对实体和VO的反射功能。通过注册 {@link BoostProvider}，可以插入自定义逻辑.
+ * 提供可扩展的、针对实体和VO的功能。通过注册 {@link BoostProvider}，可以插入自定义逻辑.
  *
  * @author luminion
  * @since 1.0.0
@@ -220,7 +220,7 @@ public abstract class BoostUtils {
         for (BoostProvider provider : PROVIDERS) {
             Map<String, String> contributedMap = provider.getPropertyToColumnAliasMap(entityClass);
             if (contributedMap != null && !contributedMap.isEmpty()) {
-                log.debug("found alias map provider: [{}], class: [{}]", entityClass.getName(), provider.getClass().getName());
+                log.debug("found alias map provider: [{}], class: [{}]", provider.getClass().getName(), entityClass.getName());
                 return contributedMap;
             }
         }

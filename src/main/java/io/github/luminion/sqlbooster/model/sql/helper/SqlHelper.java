@@ -1,10 +1,9 @@
 package io.github.luminion.sqlbooster.model.sql.helper;
 
 import io.github.luminion.sqlbooster.core.Booster;
-import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
+import io.github.luminion.sqlbooster.model.enums.SqlKeyword;
 import io.github.luminion.sqlbooster.util.BoostUtils;
-import lombok.Getter;
 
 import java.util.function.Consumer;
 
@@ -35,7 +34,7 @@ public class SqlHelper<T> extends AbstractHelper<T, SqlHelper<T>> {
      * 创建一个与指定实体类绑定的 {@link SqlHelper} 实例.
      *
      * @param entityClass 实体类
-     * @param <T>   实体类型
+     * @param <T>         实体类型
      * @return {@link SqlHelper} 实例
      * @since 1.0.0
      */
@@ -49,7 +48,7 @@ public class SqlHelper<T> extends AbstractHelper<T, SqlHelper<T>> {
      * 创建一个指定 {@link Wrapper}的实例
      *
      * @param wrapper 源 {@link Wrapper} 实例
-     * @param <T>       实体类型
+     * @param <T>     实体类型
      * @return {@link SqlHelper} 实例
      * @since 1.0.0
      */

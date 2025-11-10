@@ -20,10 +20,7 @@ import io.github.luminion.sqlbooster.model.sql.helper.processor.SuffixProcessor;
  * @since 1.0.0
  */
 public interface PageHelperBooster<T, V> extends BoosterEngine<T, V> {
-    /**
-     * {@inheritDoc}
-     * @since 1.0.0
-     */
+
     @Override
     default Page<V> voPage(Wrapper<T> wrapper, long pageNum, long pageSize) {
         voPreProcess(wrapper);

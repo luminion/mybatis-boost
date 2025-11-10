@@ -39,7 +39,7 @@ public abstract class BasicProcessor {
      *     <li>将不符合条件的字段或无法处理的条件放入 `extra` Map 中.</li>
      * </ul>
      *
-     * @param condition             待验证的 SQL 条件
+     * @param condition                待验证的 SQL 条件
      * @param propertyToColumnAliasMap 属性名到数据库列别名的映射
      * @param extra                    用于存储额外参数的 Map
      * @return 验证并处理后的 {@link Condition}, 如果条件无效则返回 null
@@ -102,26 +102,26 @@ public abstract class BasicProcessor {
     /**
      * 验证并处理单个 SQL 排序规则.
      *
-     * @param sort             待验证的 SQL 排序规则
-     * @param field2JdbcColumnMap 属性名到数据库列名的映射
+     * @param sort                     待验证的 SQL 排序规则
+     * @param propertyToColumnAliasMap 属性名到数据库列名的映射
      * @return 验证并处理后的 {@link Sort}, 如果排序字段无效则返回 null
      * @since 1.0.0
      */
-    public static Sort validateSort(Sort sort, Map<String, String> field2JdbcColumnMap) {
-        String jdbcColumn = field2JdbcColumnMap.get(sort.getField());
+    public static Sort validateSort(Sort sort, Map<String, String> propertyToColumnAliasMap) {
+        String jdbcColumn = propertyToColumnAliasMap.get(sort.getField());
         if (jdbcColumn == null) {
             log.warn("sort field [{}] not exist in fieldMap , it will be removed", sort.getField());
             return null;
         }
-        return new SqlSort(jdbcColumn, sort.isDesc());
+        return new SqlSort(jdbcColumn, sort.isAsc());
     }
 
     /**
      * 将一组 SQL 条件包装到 {@link AbstractHelper} 中.
      *
-     * @param sqlHelper     目标 SQL 助手
+     * @param sqlHelper  目标 SQL 助手
      * @param conditions 待包装的 SQL 条件集合
-     * @param symbol        连接这些条件的逻辑符号 (AND/OR)
+     * @param symbol     连接这些条件的逻辑符号 (AND/OR)
      * @since 1.0.0
      */
     public static void warpConditions(AbstractHelper<?, ?> sqlHelper, Collection<Condition> conditions, String symbol) {
@@ -140,14 +140,14 @@ public abstract class BasicProcessor {
     /**
      * 将一组 SQL 排序规则包装到 {@link AbstractHelper} 中.
      *
-     * @param sqlHelper           目标 SQL 助手
-     * @param sorts            待包装的 SQL 排序规则集合
-     * @param field2JdbcColumnMap 属性名到数据库列名的映射
+     * @param sqlHelper                目标 SQL 助手
+     * @param sorts                    待包装的 SQL 排序规则集合
+     * @param propertyToColumnAliasMap 属性名到数据库列名的映射
      * @since 1.0.0
      */
-    public static void wrapSorts(AbstractHelper<?, ?> sqlHelper, Collection<Sort> sorts, Map<String, String> field2JdbcColumnMap) {
+    public static void wrapSorts(AbstractHelper<?, ?> sqlHelper, Collection<Sort> sorts, Map<String, String> propertyToColumnAliasMap) {
         for (Sort sort : sorts) {
-            Sort validateSort = validateSort(sort, field2JdbcColumnMap);
+            Sort validateSort = validateSort(sort, propertyToColumnAliasMap);
             if (validateSort != null) {
                 sqlHelper.getSorts().add(validateSort);
             }
@@ -169,7 +169,7 @@ public abstract class BasicProcessor {
             throw new IllegalArgumentException("can't get entity class from sql helper");
         }
         SqlHelper<T> resultHelper = SqlHelper.of(entityClass);
-        Map<String, String> field2JdbcColumnMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
+        Map<String, String> propertyToColumnAliasMap = BoostUtils.getPropertyToColumnAliasMap(entityClass);
         Map<String, Object> extraParams = resultHelper.getExtra();
         for (Tree currentHelper : rootHelper) {
             Collection<Condition> currentHelperConditions = currentHelper.getConditions();
@@ -177,7 +177,7 @@ public abstract class BasicProcessor {
             LinkedHashSet<Condition> validatedConditions = new LinkedHashSet<>(currentHelperConditions.size());
             while (conditionIterator.hasNext()) {
                 Condition condition = conditionIterator.next();
-                Condition validate = BasicProcessor.validateCondition(condition, field2JdbcColumnMap, extraParams);
+                Condition validate = BasicProcessor.validateCondition(condition, propertyToColumnAliasMap, extraParams);
                 if (validate == null) {
                     continue;
                 }
@@ -185,7 +185,7 @@ public abstract class BasicProcessor {
             }
             BasicProcessor.warpConditions(resultHelper, validatedConditions, currentHelper.getConnector());
         }
-        BasicProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), field2JdbcColumnMap);
+        BasicProcessor.wrapSorts(resultHelper, rootHelper.getSorts(), propertyToColumnAliasMap);
         return resultHelper;
     }
 

@@ -18,10 +18,6 @@
 // */
 //public interface BoosterMapper<T, V> extends BoosterEngine<T, V> {
 //
-//    /**
-//     * {@inheritDoc}
-//     * @since 1.0.0
-//     */
 //    @Override
 //    List<V> selectByBooster(@Param("wrapper") Wrapper<T> wrapper, @Param("page") Object page);
 //
