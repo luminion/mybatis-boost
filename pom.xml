@@ -9,7 +9,7 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Provides enhanced features for MyBatis-Plus, including advanced query capabilities and a more powerful base service layer, to simplify development and improve efficiency.</description>
+    <description>an enhancement toolkit for database query</description>
     <url>https://github.com/luminion</url>
 
     <licenses>
