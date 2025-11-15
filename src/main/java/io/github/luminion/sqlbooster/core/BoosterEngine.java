@@ -51,12 +51,12 @@ public interface BoosterEngine<T, V> extends BoosterCore<T, V> {
     @Override
     default V voById(Serializable id) {
         if (ObjectUtils.isEmpty(id)) {
-            throw new IllegalArgumentException("id can't be null");
+            throw new NullPointerException("id can't be null");
         }
         Class<T> clazz = BoostUtils.getEntityClass(this);
         String keyProperty = BoostUtils.getIdPropertyName(clazz);
         if (ObjectUtils.isEmpty(keyProperty)) {
-            throw new IllegalArgumentException("can't find id property");
+            throw new IllegalStateException("can't find id property");
         }
         SqlCondition condition = new SqlCondition(keyProperty, SqlKeyword.EQ.getKeyword(), id);
         SqlHelper<T> sqlHelper = SqlHelper.of(this).merge(condition);
