@@ -1,14 +1,6 @@
 spring:
   profiles:
     active: datasource
-springdoc:
-  swagger-ui:
-    enabled: true
-    path: /swagger
-    doc-expansion: none
-  api-docs:
-    enabled: true
-  packages-to-scan: com.example.test
 ---
 mybatis-plus:
   mapper-locations: classpath:com/example/test/**/*.xml
@@ -30,9 +22,9 @@ server:
     session:
       timeout: 30m
 ---
-pagehelper:
-  page-size-zero: true
-  helper-dialect: mysql
-  reasonable: true
-  support-methods-arguments: true
-  params: count=countSql
+#pagehelper:
+#  page-size-zero: true
+#  helper-dialect: mysql
+#  reasonable: true
+#  support-methods-arguments: true
+#  params: count=countSql
