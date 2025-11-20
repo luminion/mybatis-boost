@@ -15,7 +15,7 @@ CREATE TABLE sys_user
     deleted     INT          NULL DEFAULT 0 COMMENT '删除标志',
     description VARCHAR(255) NULL DEFAULT NULL COMMENT '描述',
     PRIMARY KEY (id)
-);
+) COMMENT = '系统用户表';
 
 DELETE
 FROM sys_user;

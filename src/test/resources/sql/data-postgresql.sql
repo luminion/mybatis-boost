@@ -19,7 +19,7 @@ CREATE TABLE sys_user
 );
 
 -- 添加表和列的注释
-COMMENT ON TABLE sys_user IS '用户表';
+COMMENT ON TABLE sys_user IS '系统用户表';
 COMMENT ON COLUMN sys_user.id IS '主键ID';
 COMMENT ON COLUMN sys_user.name IS '姓名';
 COMMENT ON COLUMN sys_user.name_like IS '模糊查询姓名';
