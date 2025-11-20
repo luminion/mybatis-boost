@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    dynamic:
+      primary: mysql
+      strict: false
+      datasource:
+        mysql:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+          username: root
+          password: root
+        postgresql:
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+          username: postgres
+          password: root
+      
